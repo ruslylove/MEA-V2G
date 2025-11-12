@@ -206,16 +206,26 @@ $ sudo .venv/bin/python3 Application.py eth -i eth0 -m c4:93:00:33:33:33 -r EV
 ## CONFIGURATION
 
 You can set the configuration via a configuration file in json format.
-
-**Currently only EV mode supports a configuration file.**
-
-Run the application with configuration file
-
-```console
-$ sudo .venv/bin/python3 Application.py eth -i eth0 -m c4:93:00:33:33:33 -r EV -c $PATH_TO_CONFIG_FILE
-```
-
-If no path is given the configuration file defaults to ./ev.json. An example configuration can be found in ev.json.
+ 
+### EV Configuration
+ 
+Run the application with an EV configuration file using the `-c` argument:
+ 
+ ```console
+ $ sudo .venv/bin/python3 Application.py eth -i eth0 -r EV -c $PATH_TO_CONFIG_FILE
+ ```
+ 
+ If no path is given, the configuration file defaults to `./ev.json`. An example configuration can be found in `ev.json`. A MAC address in the file will override one provided on the command line.
+ 
+### EVSE Configuration
+ 
+Run the application with an EVSE configuration file using the `-ec` argument:
+ 
+ ```console
+ $ sudo .venv/bin/python3 Application.py eth -i eth0 -r EVSE -ec $PATH_TO_CONFIG_FILE
+ ```
+ 
+ If no path is given, the configuration file defaults to `./evse.json`. An example configuration can be found in `evse.json`. A MAC address in the file will override one provided on the command line.
 
 ## RASPBERRY PI SPI
 
@@ -251,10 +261,10 @@ sudo .venv/bin/python3 Application.py spi -i spidev0.0 -m 00:01:01:63:77:33 -r E
 
 EVSE
 ```bash
-sudo .venv/bin/python3 Application.py eth -i enp3s0 -m c4:93:00:48:ac:f0 -r EVSE
+sudo .venv/bin/python3 Application.py eth -i enp3s0 -r EVSE -ec evse.json
 ```
 
 EV
 ```bash
-sudo .venv/bin/python3 Application.py eth -i enx00e09909a99b -m c4:93:00:47:cd:e7 -r EV
+sudo .venv/bin/python3 Application.py eth -i enx00e09909a99b -r EV -c ev.json
 ```

@@ -1,0 +1,35 @@
+{
+    "mac": "c4:93:00:48:ac:f0",
+    "charger": {
+        "delta_voltage": 0.5,
+        "delta_current": 0.05,
+        "max_voltage": 400,
+        "max_current": 100,
+        "max_power": 25000
+    },
+    "schedule": {
+        "code": 0,
+        "schedule_tuples": [
+            {
+                "schedule_tuple_id": 1,
+                "schedules": [
+                    {
+                        "start": 0,
+                        "interval": 0,
+                        "power": 25000
+                    },
+                    {
+                        "start": 1800,
+                        "interval": 0,
+                        "power": 18750
+                    },
+                    {
+                        "start": 3600,
+                        "interval": 82800,
+                        "power": 12500
+                    }
+                ]
+            }
+        ]
+    }
+}
