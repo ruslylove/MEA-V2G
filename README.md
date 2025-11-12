@@ -246,3 +246,15 @@ Power up the WHITE-beet and run the application in SPI mode with the following c
 ```console
 sudo .venv/bin/python3 Application.py spi -i spidev0.0 -m 00:01:01:63:77:33 -r EVSE
 ```
+
+## MEA Project
+
+EVSE
+```bash
+sudo .venv/bin/python3 Application.py eth -i enp3s0 -m c4:93:00:48:ac:f0 -r EVSE
+```
+
+EV
+```bash
+sudo .venv/bin/python3 Application.py eth -i enx00e09909a99b -m c4:93:00:47:cd:e7 -r EV
+```
