@@ -4,12 +4,13 @@ from Charger import *
 
 class Evse():
 
-    def __init__(self, iftype, iface, mac):
+    def __init__(self, iftype, iface, mac, auto_authorize=False):
         self.whitebeet = Whitebeet(iftype, iface, mac)
         print(f"WHITE-beet-EI firmware version: {self.whitebeet.version}")
         self.charger = Charger()
         self.schedule = None
         self.evse_config = None
+        self.auto_authorize = auto_authorize
         self.charging = False
 
     def __enter__(self):
@@ -230,26 +231,27 @@ class Evse():
         print("\"Request Authorization\" received")
         message = self.whitebeet.v2gEvseParseAuthorizationStatusRequested(data)
         print(message['timeout'])
-        timeout = int(message['timeout'] / 1000) - 1
-        # Promt for authorization status
-        auth_str = input("Authorize the vehicle? Type \"yes\" or \"no\" in the next {}s: ".format(timeout))
-        auth_str = "yes"
-        if auth_str is not None and auth_str == "yes":
-            print("Vehicle was authorized by user!")
+
+        if self.auto_authorize:
+            print("Vehicle was authorized automatically via --auto flag!")
             try:
                 self.whitebeet.v2gEvseSetAuthorizationStatus(True)
             except Warning as e:
                 print("Warning: {}".format(e))
             except ConnectionError as e:
                 print("ConnectionError: {}".format(e))
-        else:
-            print("Vehicle was NOT authorized by user!")
-            try:
-                self.whitebeet.v2gEvseSetAuthorizationStatus(False)
-            except Warning as e:
-                print("Warning: {}".format(e))
-            except ConnectionError as e:
-                print("ConnectionError: {}".format(e))
+            return
+
+        timeout = int(message['timeout'] / 1000) - 1
+        # Promt for authorization status
+        auth_str = input("Authorize the vehicle? Type \"yes\" or \"no\" in the next {}s: ".format(timeout))
+        authorized = auth_str is not None and auth_str.lower() == "yes"
+
+        print(f"Vehicle was {'authorized' if authorized else 'NOT authorized'} by user!")
+        try:
+            self.whitebeet.v2gEvseSetAuthorizationStatus(authorized)
+        except (Warning, ConnectionError) as e:
+            print(f"{type(e).__name__}: {e}")
 
     def _handleEnergyTransferModeSelected(self, data):
         """
