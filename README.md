@@ -66,6 +66,37 @@ SLAC is performed automatically by the WHITE-beet. A notification is received an
 
 When SLAC was succefully performed the EVSE and the EV are in same network and the high-level communication can be started. The EV will try to discover the EVSE with the SDP protocol and will then connect to the EVSE. The EVSE will choose one of the protocols the EV provided and a V2G session will be started. The service discovery, charge parameter discovery and authorization is performed and the charging loop is started. The EV will continue to charge until it decides to stop the session.
 
+### ISO 15118 Communication Parameters
+
+During the initial high-level communication, the EV and EVSE negotiate several key parameters to establish a charging session. These are configured in `Evse.py` and are fundamental to the ISO 15118 standard.
+
+#### Protocol Number
+
+This number identifies the specific version of the communication standard (like ISO 15118-2 or DIN SPEC 70121) that the EV and EVSE will use.
+
+*   **How it works:** The EVSE advertises the protocol versions it supports (e.g., `[0, 1]`). The EV receives this list and chooses one protocol that it also supports. All subsequent communication uses this selected protocol.
+*   **Example:** The output `Protocol: 2` indicates that the EV and EVSE have agreed to use the protocol identified by the number `2` for the session.
+
+#### Payment Method
+
+This defines how the charging session will be authorized and paid for. The two main methods are:
+
+*   `0`: **External Identification Means (EIM):** This requires a manual authorization step "external" to the core communication. This can be tapping an RFID card, using a mobile app, or, in the case of this project, **typing 'yes' in the console**. The default configuration for this project uses EIM.
+*   `1`: **Plug & Charge (PnC):** This is a secure, automated method where the EV uses an installed digital certificate to identify and authorize itself with the EVSE. No manual user interaction is needed.
+
+#### Energy Transfer Mode
+
+This specifies the different ways the EVSE can transfer energy, defining the type of current (AC/DC) and other characteristics.
+
+*   **How it works:** The EVSE advertises all the modes it supports. The EV then selects one compatible mode for the charging session.
+*   **Common Modes:**
+    *   `0`: AC Single-Phase
+    *   `1`: AC Three-Phase
+    *   `2`: DC (Basic)
+    *   `3`: DC (Extended)
+    *   `4`: DC (Common)
+    *   `5`: DC (with Bidirectional Power Transfer, i.e., Vehicle-to-Grid)
+
 ## GETTING FreeV2G
 
 To get started first clone the repository. This will get you the latest version of the repository.
