@@ -258,6 +258,48 @@ Run the application with an EVSE configuration file using the `-ec` argument:
  
  If no path is given, the configuration file defaults to `./evse.json`. An example configuration can be found in `evse.json`. A MAC address in the file will override one provided on the command line.
 
+## GUI LAUNCHER
+
+For easier use, a graphical user interface is provided to configure and run the simulation without using the command line. The GUI launcher handles the virtual environment and `sudo` permissions automatically.
+
+### Running the GUI
+
+To start the GUI, run the following command from the project's root directory:
+
+```console
+$ python3 gui_launcher.py
+```
+
+The GUI provides fields for all command-line options. For operations requiring `sudo`, a password field is provided in the interface. Simply enter your password there before clicking "Start". All output from the application will be displayed in the log area within the window.
+
+## DASHBOARD API (FOR GRAFANA)
+
+The application includes a simple REST API to expose real-time simulation data, which is ideal for creating live dashboards with tools like Grafana.
+
+### Installation
+
+The API requires the **Flask** library. Install it into your virtual environment:
+
+```console
+$ .venv/bin/python3 -m pip install Flask
+```
+
+### Enabling the API
+
+You can enable the API either through the GUI or the command line:
+
+*   **From the GUI**: Enter a port number (e.g., `5000`) in the "API Port" field.
+*   **From the command line**: Add the `--api-port` argument when running `Application.py`:
+    ```console
+    $ sudo .venv/bin/python3 Application.py eth -i enp3s0 -r EVSE --api-port 5000
+    ```
+
+### API Endpoint
+
+Once the simulation is running with the API enabled, you can access the status data by making a GET request to the `/status` endpoint.
+
+**URL**: `http://<your-ip-address>:5000/status`
+
 ## RASPBERRY PI SPI
 
 Install the python packages needed

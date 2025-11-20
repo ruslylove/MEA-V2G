@@ -14,6 +14,7 @@ if __name__ == "__main__":
     parser.add_argument('-ec', '--evse-config', type=str, help='Path to EVSE configuration file. Defaults to ./evse.json.\nA MAC present in the config file will override a MAC provided with -m argument.', nargs='?', const="./evse.json")
     parser.add_argument('-p', '--portmirror', help='Enables port mirror.', action='store_true')
     parser.add_argument('--auto', action='store_true', help='Automatically authorize the EV connection for EVSE mode.')
+    parser.add_argument('--api-port', type=int, help='Enable the Grafana/Dashboard API on the specified port (e.g., 5000).')
     args = parser.parse_args()
 
     print(f'Welcome to Codico Whitebeet {args.role} reference implementation')
@@ -43,7 +44,7 @@ if __name__ == "__main__":
             print("Error: A MAC address must be provided for an ethernet interface via command line (-m) or a config file (-c).")
             exit(1)
 
-        with Ev(args.interface_type, args.interface, mac) as ev:
+        with Ev(args.interface_type, args.interface, mac, api_port=args.api_port) as ev:
             # Apply config to ev
             if config is not None:
                 print("EV configuration: " + str(config))
@@ -70,7 +71,7 @@ if __name__ == "__main__":
                 evse_config_data = None # Ensure config is None if JSON is bad
 
 
-        with Evse(args.interface_type, args.interface, evse_mac, auto_authorize=args.auto) as evse:
+        with Evse(args.interface_type, args.interface, evse_mac, auto_authorize=args.auto, api_port=args.api_port) as evse:
             if evse_config_data and 'charger' in evse_config_data:
                 charger_config = evse_config_data['charger']
                 evse.getCharger().setEvseDeltaVoltage(charger_config.get('delta_voltage', 0.5))

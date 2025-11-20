@@ -1,10 +1,10 @@
 import time
 from Whitebeet import *
 from Charger import *
+from api_server import ApiServer
 
 class Evse():
-
-    def __init__(self, iftype, iface, mac, auto_authorize=False):
+    def __init__(self, iftype, iface, mac, auto_authorize=False, api_port=None):
         self.whitebeet = Whitebeet(iftype, iface, mac)
         print(f"WHITE-beet-EI firmware version: {self.whitebeet.version}")
         self.charger = Charger()
@@ -12,15 +12,24 @@ class Evse():
         self.evse_config = None
         self.auto_authorize = auto_authorize
         self.charging = False
+        self.api_server = None
+
+        if api_port:
+            self.api_server = ApiServer(self, port=api_port)
+            self.api_server.start()
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
+        if self.api_server:
+            self.api_server.shutdown()
         if hasattr(self, "whitebeet"):
             del self.whitebeet
 
     def __del__(self):
+        if self.api_server:
+            self.api_server.shutdown()
         if hasattr(self, "whitebeet"):
             del self.whitebeet
 
@@ -135,6 +144,10 @@ class Evse():
         self.whitebeet.v2gEvseStartListen()
         while True:
             if self.charging:
+                # Continuously update the charger's simulated output
+                self.charger.getEvsePresentVoltage()
+                self.charger.getEvsePresentCurrent()
+
                 id, data = self.whitebeet.v2gEvseReceiveRequestSilent()
 
                 charging_parameters = {
@@ -364,7 +377,6 @@ class Evse():
         if 'remaining_time_to_bulk_soc' in message:
             print("Remaining time to bulk SOC: {}s".format(message['remaining_time_to_bulk_soc']))
     
-
         charging_parameters = {
             'isolation_level': 0,
             'present_voltage': int(self.charger.getEvsePresentVoltage()),
