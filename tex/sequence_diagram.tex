@@ -1,0 +1,33 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=8]{EVSE}
+
+    \begin{umlcall}[dt=5, op=ChargeParameterDiscoveryReq, type=synchron, return=ChargeParameterDiscoveryRes]{EV}{EVSE}
+    \end{umlcall}
+
+    \begin{umlcall}[dt=5, op=PowerDeliveryReq (Start), type=synchron, return=PowerDeliveryRes]{EV}{EVSE}
+    \end{umlcall}
+
+    \umlfragment[type=loop, label=Charging Loop, inner xsep=8]{
+      \begin{umlcall}[dt=5, op=CurrentDemandReq, type=synchron, return=CurrentDemandRes]{EV}{EVSE}
+      \end{umlcall}
+    }
+
+    \begin{umlcall}[dt=5, op=PowerDeliveryReq (Stop), type=synchron, return=PowerDeliveryRes]{EV}{EVSE}
+    \end{umlcall}
+
+    \begin{umlcall}[dt=5, op=SessionStopReq, type=synchron, return=SessionStopRes]{EV}{EVSE}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+
+\end{tikzpicture}
+
+\end{document}

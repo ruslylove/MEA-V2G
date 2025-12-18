@@ -1,0 +1,47 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  % Actors
+  \umlactor[x=-2, y=-4]{User}
+  \umlactor[x=-2, y=-7]{Dashboard}
+  \umlactor[x=10, y=-5]{EV}
+
+  % System
+  \begin{umlsystem}[x=4, fill=white!10]{MEA-V2G System}
+      \umlusecase[y=0, name=config]{Configure (JSON/CLI)}
+      \umlusecase[y=-1.5, name=start]{Start Application}
+      \umlusecase[y=-3, name=slac]{SLAC Matching}
+      \umlusecase[y=-4.5, name=auth]{Authorize Payment}
+      \umlusecase[y=-6, name=charge_loop]{Charging Session}
+      \umlusecase[y=-7.5, name=monitor]{Monitor Status}
+      \umlusecase[y=-9, name=stop]{Stop Charging}
+  \end{umlsystem}
+
+  % Relations - User
+  \umlassoc{User}{config}
+  \umlassoc{User}{start}
+  \umlassoc{User}{auth}
+  \umlassoc{User}{stop}
+
+  % Relations - EV
+  \umlassoc{EV}{slac}
+  \umlassoc{EV}{charge_loop}
+  \umlassoc{EV}{stop}
+
+  % Relations - Dashboard
+  \umlassoc{Dashboard}{monitor}
+
+  % Internal Relationships
+  \umlinclude{start}{config}
+  \umlinclude{slac}{start}
+  \umlinclude{charge_loop}{auth}
+  \umlextend{charge_loop}{monitor}
+
+\end{tikzpicture}
+
+\end{document}

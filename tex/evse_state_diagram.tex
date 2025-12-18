@@ -1,0 +1,34 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usetikzlibrary{automata, positioning, arrows, calc}
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth', shorten >=1pt, auto, node distance=2cm, semithick]
+  \tikzstyle{every state}=[fill=white, draw=black, text=black]
+
+  \node[initial, state] (init) {Init};
+  \node[state] (Wait) [below of=init] {Wait};
+  \node[state] (SLAC) [below of=Wait] {SLAC};
+  \node[state] (Session) [below of=SLAC] {Session};
+  \node[state] (Auth) [right of=Session, xshift=2.5cm] {Authorization};
+  \node[state] (Param) [right of=SLAC, xshift=2.5cm] {Params};
+  \node[state] (Cable) [above of=Param] {Cable};
+  \node[state] (Pre) [above of=Cable] {PreCharge};
+  \node[state] (Charge) [left of=Pre, xshift=-2.5cm] {Charge};
+  \node[state, accepting] (Stop) [left of=Charge, xshift=-1cm] {Stop};
+
+  \path[->] 
+    (init) edge node {} (Wait)
+    (Wait) edge node {Connected} (SLAC)
+    (SLAC) edge node {Matched} (Session)
+    (Session) edge node {} (Auth)
+    (Auth) edge node {} (Param)
+    (Param) edge node {} (Cable)
+    (Cable) edge node {} (Pre)
+    (Pre) edge node {} (Charge)
+    (Charge) edge node {} (Stop)
+    (Charge) edge [loop above] node {Loop} (Charge);
+
+\end{tikzpicture}
+
+\end{document}

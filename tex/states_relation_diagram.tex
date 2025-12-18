@@ -1,0 +1,55 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usetikzlibrary{positioning, arrows, fit, shapes}
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth', remember picture, auto, node distance=1.5cm, semithick]
+  \tikzstyle{block} = [rectangle, draw, fill=white, text width=3cm, text centered, rounded corners, minimum height=1cm]
+  \tikzstyle{line} = [draw, -latex']
+  \tikzstyle{dashed_line} = [draw, dashed, <->, color=blue!70!black]
+
+  % Headers
+  \node[font=\bfseries\Large] (ev_header) at (0,0) {EV};
+  \node[font=\bfseries\Large] (evse_header) at (6,0) {EVSE};
+
+  % EV States
+  \node[block] (ev_init) [below of=ev_header, yshift=-0.5cm] {Init};
+  \node[block] (ev_session) [below of=ev_init] {SessionStarted};
+  \node[block] (ev_cable) [below of=ev_session] {CableCheck};
+  \node[block] (ev_pre) [below of=ev_cable] {PreCharging};
+  \node[block] (ev_charge) [below of=ev_pre] {Charging};
+  \node[block] (ev_stop) [below of=ev_charge] {ChargingStopped};
+
+  % EVSE States
+  \node[block] (evse_init) [below of=evse_header, yshift=-0.5cm] {Init / Wait};
+  \node[block] (evse_session) [below of=evse_init] {Session / Auth / Params};
+  \node[block] (evse_cable) [below of=evse_session] {CableCheck};
+  \node[block] (evse_pre) [below of=evse_cable] {PreCharge};
+  \node[block] (evse_charge) [below of=evse_pre] {Charge};
+  \node[block] (evse_stop) [below of=evse_charge] {Stop};
+
+  % Connect EV states
+  \path[line] (ev_init) -- (ev_session);
+  \path[line] (ev_session) -- (ev_cable);
+  \path[line] (ev_cable) -- (ev_pre);
+  \path[line] (ev_pre) -- (ev_charge);
+  \path[line] (ev_charge) -- (ev_stop);
+
+  % Connect EVSE states
+  \path[line] (evse_init) -- (evse_session);
+  \path[line] (evse_session) -- (evse_cable);
+  \path[line] (evse_cable) -- (evse_pre);
+  \path[line] (evse_pre) -- (evse_charge);
+  \path[line] (evse_charge) -- (evse_stop);
+
+  % Synchronization lines
+  \draw[dashed_line] (ev_init) -- node[above, font=\small, color=black] {Discovery} (evse_init);
+  \draw[dashed_line] (ev_session) -- node[above, font=\small, color=black] {Setup} (evse_session);
+  \draw[dashed_line] (ev_cable) -- node[above, font=\small, color=black] {Safety} (evse_cable);
+  \draw[dashed_line] (ev_pre) -- node[above, font=\small, color=black] {Sync} (evse_pre);
+  \draw[dashed_line] (ev_charge) -- node[above, font=\small, color=black] {Power} (evse_charge);
+  \draw[dashed_line] (ev_stop) -- node[above, font=\small, color=black] {Term} (evse_stop);
+
+\end{tikzpicture}
+
+\end{document}

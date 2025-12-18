@@ -1,0 +1,63 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  % Core Hardware Interface
+  \umlclass[x=5, y=0]{Whitebeet}{
+    + mac : str \\
+    + version : str
+  }{
+    + controlPilotStart() \\
+    + controlPilotSetDutyCycle() \\
+    + controlPilotSetMode()
+  }
+
+  % EV Side
+  \umlclass[x=0, y=5]{Ev}{
+    + whitebeet : Whitebeet \\
+    + battery : Battery
+  }{
+    + loop() \\
+    + \_initialize() \\
+    + \_handleEvseConnected()
+  }
+
+  \umlclass[x=0, y=2]{Battery}{
+    + soc : int \\
+    + voltage : float
+  }{
+    + getRequiredPower()
+  }
+
+  % EVSE Side
+  \umlclass[x=10, y=5]{Evse}{
+    + whitebeet : Whitebeet \\
+    + charger : Charger
+  }{
+    + loop() \\
+    + \_initialize() \\
+    + \_waitEvConnected()
+  }
+
+  \umlclass[x=10, y=2]{Charger}{
+    + maxPower : float \\
+    + maxCurrent : float
+  }{
+    + start() \\
+    + setSchedule()
+  }
+
+  % Relationships
+  \umluniassoc{Ev}{Whitebeet}
+  \umluniassoc{Ev}{Battery}
+  
+  \umluniassoc{Evse}{Whitebeet}
+  \umluniassoc{Evse}{Charger}
+
+\end{tikzpicture}
+
+\end{document}
