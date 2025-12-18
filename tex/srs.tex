@@ -105,6 +105,50 @@ The system obeys a modular object-oriented architecture. The core logic handles 
     \label{fig:classdiagram}
 \end{figure}
 
+\section{Core Components}
+The system comprises the following key software components:
+
+\subsection{Whitebeet Component}
+The \texttt{Whitebeet} class serves as the Hardware Abstraction Layer (HAL). It manages the low-level communication with the physical ISO 15118 module via Ethernet or SPI.
+\begin{itemize}
+    \item \textbf{Packet Framing}: Handles the encapsulation of Host Control Interface (HCI) commands.
+    \item \textbf{Event Dispatching}: Receives raw data from the hardware and dispatches events (e.g., \texttt{EV\_CONNECTED}, \texttt{V2G\_MESSAGE}) to the higher-level logic.
+    \item \textbf{Service Management}: Exposes methods to control Control Pilot (CP) state, SLAC, and V2G messaging.
+\end{itemize}
+
+\subsection{EV Component}
+The \texttt{EV} class is the central controller for the client side. It orchestrates the charging session from the vehicle's perspective.
+\begin{itemize}
+    \item \textbf{State Machine}: Implements the ISO 15118 client flow (Session Setup $\rightarrow$ Charge Parameter Discovery $\rightarrow$ Power Delivery).
+    \item \textbf{Hardware Aggregation}: Owning instance of \texttt{Whitebeet} (for comms) and \texttt{Battery} (for energy simulation).
+\end{itemize}
+
+\subsection{EVSE Component}
+The \texttt{EVSE} class is the central controller for the station side. It manages the server-side logic and power delivery authorization.
+\begin{itemize}
+    \item \textbf{State Machine}: Implements the ISO 15118 server flow, including Service Discovery and Plug \& Charge authorization.
+    \item \textbf{Hardware Aggregation}: Owning instance of \texttt{Whitebeet} (for comms) and \texttt{Charger} (for power delivery simulation).
+    \item \textbf{Scheduling}: Manages SASchedules based on configuration.
+\end{itemize}
+
+\section{Charger Component}
+The \texttt{Charger} class performs a physical simulation of the power electronics, ensuring realistic behavior during the charging session. Its key functions include:
+\begin{itemize}
+    \item \textbf{Output Ramping}: Instead of instantaneous jumps, the charger simulates the physical "slewing" of voltage and current over time. It uses defined $\Delta U$ and $\Delta I$ rates to ramp the output toward the target setpoint.
+    \item \textbf{Limit Enforcement}: It strictly enforces hard safety limits for the system (e.g., \texttt{evse\_max\_current}, \texttt{evse\_max\_power}), protecting the modeled hardware.
+    \item \textbf{Setpoint Control}: The EV provides dynamic target values (\textit{Target Voltage}, \textit{Target Current}), which the charger attempts to follow within its safety constraints.
+    \item \textbf{Fault Detection}: The class includes methods like \texttt{isVoltageLimitExceeded()} and \texttt{isPowerLimitExceeded()} to trigger immediate session termination if operating conditions are violated.
+\end{itemize}
+
+\section{Battery Component}
+The \texttt{Battery} class provides a logical model of the EV's energy storage, managing State of Charge (SOC) and physical limits.
+\begin{itemize}
+    \item \textbf{Energy Tracking}: Maintains the battery capacity (Wh) and current energy level. SOC is dynamically calculated as $\frac{\textit{Current Level}}{\textit{Capacity}} \times 100$.
+    \item \textbf{Charging Process}: The \texttt{tickSimulation()} method accumulates energy over time intervals based on the instantaneous input voltage and current ($E = V \times I \times \Delta t$).
+    \item \textbf{Configurable Limits}: Supports defining maximum Voltage, Current, and Power constraints specific to the chosen Energy Transfer Mode (AC vs. DC).
+    \item \textbf{Status Reporting}: Continuously updates the SOC and charging status ('is\_full', 'is\_charging'), which are reported back to the EVSE via ISO 15118 messages.
+\end{itemize}
+
 \chapter{Specific Requirements}
 
 \section{External Interfaces}
@@ -215,26 +259,6 @@ The charging process relies on the tight synchronization between the EV and EVSE
     \caption{EV-EVSE State Synchronization}
     \label{fig:staterelation}
 \end{figure}
-
-\section{Charger Simulation}
-The \texttt{Charger} class performs a physical simulation of the power electronics, ensuring realistic behavior during the charging session. Its key functions include:
-
-\begin{itemize}
-    \item \textbf{Output Ramping}: Instead of instantaneous jumps, the charger simulates the physical "slewing" of voltage and current over time. It uses defined $\Delta U$ and $\Delta I$ rates to ramp the output toward the target setpoint.
-    \item \textbf{Limit Enforcement}: It strictly enforces hard safety limits for the system (e.g., \texttt{evse\_max\_current}, \texttt{evse\_max\_power}), protecting the modeled hardware.
-    \item \textbf{Setpoint Control}: The EV provides dynamic target values (\textit{Target Voltage}, \textit{Target Current}), which the charger attempts to follow within its safety constraints.
-    \item \textbf{Fault Detection}: The class includes methods like \texttt{isVoltageLimitExceeded()} and \texttt{isPowerLimitExceeded()} to trigger immediate session termination if operating conditions are violated.
-\end{itemize}
-
-\section{Battery Simulation}
-The \texttt{Battery} class provides a logical model of the EV's energy storage, managing State of Charge (SOC) and physical limits.
-
-\begin{itemize}
-    \item \textbf{Energy Tracking}: Maintains the battery capacity (Wh) and current energy level. SOC is dynamically calculated as $\frac{\textit{Current Level}}{\textit{Capacity}} \times 100$.
-    \item \textbf{Charging Process}: The \texttt{tickSimulation()} method accumulates energy over time intervals based on the instantaneous input voltage and current ($E = V \times I \times \Delta t$).
-    \item \textbf{Configurable Limits}: Supports defining maximum Voltage, Current, and Power constraints specific to the chosen Energy Transfer Mode (AC vs. DC).
-    \item \textbf{Status Reporting}: Continuously updates the SOC and charging status ('is\_full', 'is\_charging'), which are reported back to the EVSE via ISO 15118 messages.
-\end{itemize}
 
 \chapter{Configuration and Deployment}
 
