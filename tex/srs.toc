@@ -12,21 +12,25 @@
 \contentsline {subsection}{\numberline {2.5.2}EV Component}{4}{subsection.2.5.2}%
 \contentsline {subsection}{\numberline {2.5.3}EVSE Component}{4}{subsection.2.5.3}%
 \contentsline {section}{\numberline {2.6}Charger Component}{5}{section.2.6}%
-\contentsline {section}{\numberline {2.7}Battery Component}{5}{section.2.7}%
-\contentsline {chapter}{\numberline {3}Specific Requirements}{7}{chapter.3}%
-\contentsline {section}{\numberline {3.1}External Interfaces}{7}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Communication Interfaces}{7}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}User Interfaces}{7}{subsection.3.1.2}%
-\contentsline {section}{\numberline {3.2}Functional Requirements}{7}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}FR-01: Protocol Negotiation}{7}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}FR-02: Authorization}{7}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}FR-03: Charging Control}{7}{subsection.3.2.3}%
-\contentsline {section}{\numberline {3.3}Communication Flow}{8}{section.3.3}%
-\contentsline {section}{\numberline {3.4}EV State Machine}{8}{section.3.4}%
-\contentsline {section}{\numberline {3.5}EVSE State Machine}{9}{section.3.5}%
-\contentsline {section}{\numberline {3.6}State Synchronization}{10}{section.3.6}%
-\contentsline {chapter}{\numberline {4}Configuration and Deployment}{12}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Command Line Interface (CLI)}{12}{section.4.1}%
-\contentsline {section}{\numberline {4.2}JSON Configuration}{12}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}EV Configuration (ev.json)}{12}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}EVSE Configuration (evse.json)}{12}{subsection.4.2.2}%
+\contentsline {section}{\numberline {2.7}Battery Component}{6}{section.2.7}%
+\contentsline {section}{\numberline {2.8}Default Charging Routine}{6}{section.2.8}%
+\contentsline {subsection}{\numberline {2.8.1}Default Schedule}{6}{subsection.2.8.1}%
+\contentsline {subsection}{\numberline {2.8.2}Physics Simulation Parameters}{6}{subsection.2.8.2}%
+\contentsline {section}{\numberline {2.9}Project File Structure}{6}{section.2.9}%
+\contentsline {chapter}{\numberline {3}Specific Requirements}{8}{chapter.3}%
+\contentsline {section}{\numberline {3.1}External Interfaces}{8}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Communication Interfaces}{8}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}User Interfaces}{8}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Functional Requirements}{8}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}FR-01: Protocol Negotiation}{8}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}FR-02: Authorization}{8}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}FR-03: Charging Control}{8}{subsection.3.2.3}%
+\contentsline {section}{\numberline {3.3}Communication Flow}{9}{section.3.3}%
+\contentsline {section}{\numberline {3.4}EV State Machine}{9}{section.3.4}%
+\contentsline {section}{\numberline {3.5}EVSE State Machine}{10}{section.3.5}%
+\contentsline {section}{\numberline {3.6}State Synchronization}{11}{section.3.6}%
+\contentsline {chapter}{\numberline {4}Configuration and Deployment}{13}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Command Line Interface (CLI)}{13}{section.4.1}%
+\contentsline {section}{\numberline {4.2}JSON Configuration}{13}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}EV Configuration (ev.json)}{13}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}EVSE Configuration (evse.json)}{13}{subsection.4.2.2}%

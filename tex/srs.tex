@@ -140,6 +140,8 @@ The \texttt{Charger} class performs a physical simulation of the power electroni
     \item \textbf{Fault Detection}: The class includes methods like \texttt{isVoltageLimitExceeded()} and \texttt{isPowerLimitExceeded()} to trigger immediate session termination if operating conditions are violated.
 \end{itemize}
 
+The \texttt{Charger} class implements the \texttt{ChargerInterface} abstract base class. This design pattern allows the simulation module to be easily swapped with a real hardware driver (e.g., a \texttt{CanCharger} class) that communicates with physical power electronics via CAN bus or other protocols, while maintaining a consistent API for the \texttt{EVSE} logic.
+
 \section{Battery Component}
 The \texttt{Battery} class provides a logical model of the EV's energy storage, managing State of Charge (SOC) and physical limits.
 \begin{itemize}
@@ -148,6 +150,62 @@ The \texttt{Battery} class provides a logical model of the EV's energy storage, 
     \item \textbf{Configurable Limits}: Supports defining maximum Voltage, Current, and Power constraints specific to the chosen Energy Transfer Mode (AC vs. DC).
     \item \textbf{Status Reporting}: Continuously updates the SOC and charging status ('is\_full', 'is\_charging'), which are reported back to the EVSE via ISO 15118 messages.
 \end{itemize}
+
+\section{Default Charging Routine}
+In the absence of an external configuration file, the system defaults to a hardcoded "Simple Charging Routine" defined in \texttt{Application.py}. This routine ensures the EVSE behaves predictably during initial testing or standalone operation.
+
+\subsection{Default Schedule}
+The default charging profile is a time-dependent power curve that simulates a decreasing power availability (e.g., grid balancing or solar curve):
+\begin{itemize}
+    \item \textbf{0 to 30 minutes}: Maximum Power 25,000 W.
+    \item \textbf{30 to 60 minutes}: Maximum Power reduced to 18,750 W.
+    \item \textbf{Over 60 minutes}: Maximum Power further reduced to 12,500 W.
+\end{itemize}
+
+\subsection{Physics Simulation Parameters}
+To simulate realistic hardware behavior, the \texttt{Charger} class uses specific delta parameters to ramp voltage and current rather than applying instantaneous steps:
+\begin{itemize}
+    \item \textbf{Delta Voltage}: 0.5 V per tick.
+    \item \textbf{Delta Current}: 0.05 A per tick.
+    \item \textbf{Max Limits}: 400 V / 100 A / 25 kW.
+\end{itemize}
+
+\section{Project File Structure}
+The following table summarizes the key files in the repository and their specific purposes within the architecture:
+
+\begin{center}
+\begin{tabular}{ |l|p{10cm}| } 
+\hline
+\textbf{File Name} & \textbf{Description} \\
+\hline
+Application.py & The main entry point. Parses command-line arguments and initializes the \texttt{EV} or \texttt{EVSE} instance based on the selected role. \\ 
+\hline
+Ev.py & Implements the Electric Vehicle (client) logic, including the ISO 15118 state machine and session management. \\
+\hline
+Evse.py & Implements the Charging Station (server) logic, managing service discovery, authorization, and power delivery. \\
+\hline
+Whitebeet.py & The Hardware Abstraction Layer (HAL). Handles low-level communication with the Codico Whitebeet module. \\
+\hline
+Charger.py & A physics simulation class for the EVSE's power electronics. Simulates voltage/current ramping and enforces safety limits. \\
+\hline
+ChargerInterface.py & An abstract base class defining the standard API for charger implementations, enabling pluggable drivers (Simulation vs. CAN). \\
+\hline
+Battery.py & A logical model of the EV battery, tracking State of Charge (SOC) and energy capacity. \\
+\hline
+EthernetAdapter.py & Driver for communicating with the Whitebeet module via a network socket. \\
+\hline
+SpiAdapter.py & Driver for communicating with the Whitebeet module via the SPI bus (e.g., on Raspberry Pi). \\
+\hline
+FramingInterface.py & Defines the packet structure and framing rules for the Host Control Interface (HCI) protocol. \\
+\hline
+api\_server.py & A lightweight Flask server that exposes internal state (like SOC, current power) via a REST API for monitoring. \\
+\hline
+gui\_launcher.py & A graphical utility to easily launch \texttt{Application.py} without using the command line. \\
+\hline
+ev.json / evse.json & Configuration files defining capabilities, limits, and schedules for the respective roles. \\
+\hline
+\end{tabular}
+\end{center}
 
 \chapter{Specific Requirements}
 

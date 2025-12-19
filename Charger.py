@@ -1,6 +1,7 @@
+from ChargerInterface import ChargerInterface
 import time
 
-class Charger():
+class Charger(ChargerInterface):
 
     def __init__(self):
         self.timestamp_last_calc_u = time.time_ns() / 1000000
