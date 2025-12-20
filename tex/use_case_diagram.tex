@@ -10,9 +10,11 @@
   \umlactor[x=-2, y=-4]{User}
   \umlactor[x=-2, y=-7]{Dashboard}
   \umlactor[x=10, y=-5]{EV}
+  \umlactor[x=-2, y=2]{CSMS}
 
   % System
   \begin{umlsystem}[x=4, fill=white!10]{MEA-V2G System}
+      \umlusecase[y=2, name=ocpp]{Remote Management (OCPP)}
       \umlusecase[y=0, name=config]{Configure (JSON/CLI)}
       \umlusecase[y=-1.5, name=start]{Start Application}
       \umlusecase[y=-3, name=slac]{SLAC Matching}
@@ -22,6 +24,9 @@
       \umlusecase[y=-9, name=stop]{Stop Charging}
   \end{umlsystem}
 
+  % Relations - CSMS
+  \umlassoc{CSMS}{ocpp}
+  
   % Relations - User
   \umlassoc{User}{config}
   \umlassoc{User}{start}
@@ -41,6 +46,8 @@
   \umlinclude{slac}{start}
   \umlinclude{charge_loop}{auth}
   \umlextend{charge_loop}{monitor}
+  \umlextend{charge_loop}{ocpp}
+  \umlextend{start}{ocpp}
 
 \end{tikzpicture}
 

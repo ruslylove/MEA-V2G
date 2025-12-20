@@ -1,0 +1,78 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=6]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 1. EV Plugs in
+    \begin{umlcall}[op=Plug In, type=synchron]{EV}{EVSE}
+    \end{umlcall}
+
+    % 2. Session Setup (ISO 15118)
+    \begin{umlcall}[dt=4, op=SessionSetupReq, type=synchron, return=SessionSetupRes]{EV}{EVSE}
+    \end{umlcall}
+
+    % 3. Authorization (CSMS)
+    \begin{umlcall}[dt=4, op=AuthorizeReq, type=synchron, return=AuthorizeRes]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4. Charge Parameter Discovery (ISO 15118)
+    \begin{umlcall}[dt=4, op=ChargeParamReq, type=synchron, return=ChargeParamRes (Max 32A)]{EV}{EVSE}
+    \end{umlcall}
+
+    % 5. Start Transaction (Local or Remote)
+    \begin{umlcall}[dt=4, op=TransactionEvent(Started), type=synchron, return=Accepted]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    % 6. Power Delivery (ISO 15118)
+    \begin{umlcall}[dt=4, op=PowerDeliveryReq(Start), type=synchron, return=PowerDeliveryRes]{EV}{EVSE}
+    \end{umlcall}
+
+    % 7. Charging Loop & Smart Charging
+    \umlfragment[type=loop, label=Smart Charging, inner xsep=10]{
+      % CSMS sets limit
+      \begin{umlcall}[dt=5, op=SetVariables(Limit10A), type=synchron, return=Accepted]{CSMS}{EVSE}
+      \end{umlcall}
+
+      % EV requests current
+      \begin{umlcall}[dt=5, op=CurrentDemandReq(16A), type=synchron, return=CurrentDemandRes(10A)]{EV}{EVSE}
+      \end{umlcall}
+      
+      % EVSE reports status
+      \begin{umlcall}[dt=5, op=MeterValues(5.2kWh), type=synchron, return=Accepted]{EVSE}{CSMS}
+      \end{umlcall}
+    }
+
+    % 8. Remote Stop (CSMS)
+    \begin{umlcall}[dt=5, op=RequestStopTransaction, type=synchron, return=Accepted]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % 9. Power Delivery Stop (ISO 15118)
+    \begin{umlcall}[dt=4, op=PowerDeliveryReq(Stop), type=synchron, return=PowerDeliveryRes]{EVSE}{EV}
+    \end{umlcall}
+
+    % 10. EV Stops
+    \begin{umlcall}[dt=4, op=SessionStopReq, type=synchron, return=SessionStopRes]{EV}{EVSE}
+    \end{umlcall}
+
+    % 11. Transaction Ended & Billing
+    \begin{umlcall}[dt=4, op=TransactionEvent(Ended), type=synchron, return=Accepted]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 12. Billing Notification (To User/App)
+    \umlfragment[type=opt, label=Billing]{
+        \begin{umlcall}[dt=4, op=PushNotification(Cost), type=synchron, return=Ack]{CSMS}{EVSE}
+        \end{umlcall}
+    }
+
+  \end{umlseqdiag}
+
+\end{tikzpicture}
+
+\end{document}

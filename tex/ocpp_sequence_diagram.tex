@@ -1,0 +1,46 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  
+  \begin{umlseqdiag}
+    \umlactor[class=EVSE,x=0]{EVSE}
+    \umlactor[class=CSMS,x=8]{CSMS}
+
+    % Boot Notification
+    \begin{umlcall}[dt=5, op=BootNotification, type=synchron, return=Accepted]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % Heartbeat (Periodic)
+    \begin{umlcall}[dt=5, op=Heartbeat, type=synchron, return=Accepted]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % Remote Start
+    \begin{umlcall}[dt=5, op=RequestStartTransaction, type=synchron, return=Accepted]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % Transaction Started Event
+    \begin{umlcall}[dt=5, op=TransactionEvent (Started), type=synchron, return=Accepted]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % Charging Loop (simplified)
+    \umlfragment[type=loop, label=Charging, inner xsep=8]{
+      \begin{umlcall}[dt=5, op=StatusNotification (Charging), type=synchron, return=Accepted]{EVSE}{CSMS}
+      \end{umlcall}
+    }
+
+    % Remote Stop
+    \begin{umlcall}[dt=5, op=RequestStopTransaction, type=synchron, return=Accepted]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % Transaction Ended Event
+    \begin{umlcall}[dt=5, op=TransactionEvent (Ended), type=synchron, return=Accepted]{EVSE}{CSMS}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+
+\end{tikzpicture}
+
+\end{document}

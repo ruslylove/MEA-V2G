@@ -1,0 +1,67 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usetikzlibrary{automata, positioning, arrows, calc}
+
+\begin{document}
+
+\begin{tikzpicture}[>=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+  \tikzstyle{every state}=[fill=white, draw=black, text=black, minimum size=1.8cm]
+  \tikzstyle{main}=[ultra thick, blue]
+
+  % Core states
+  \node[initial above, state] (Available) {Available};
+  \node[state] (Preparing) [right of=Available, xshift=1.5cm] {Preparing};
+  \node[state] (Charging) [below of=Preparing] {Charging};
+  \node[state] (Finishing) [below of=Available] {Finishing};
+
+  % Side states
+  \node[state] (SuspendedEV) [below of=Charging, node distance=2.5cm] {SuspendedEV};
+  \node[state] (SuspendedEVSE) [right of=Charging, xshift=1.5cm] {SuspendedEVSE};
+  
+  % Exception states
+  \node[state] (Reserved) [above of=Preparing] {Reserved};
+  \node[state] (Unavailable) [left of=Available, xshift=-1.5cm] {Unavailable};
+  \node[state] (Faulted) [below of=Unavailable] {Faulted};
+
+  % Transitions
+  % Available
+  \path[->, main] (Available) edge node {Plug/Auth} (Preparing);
+  \path[->] (Available) edge [bend left] node [] {Reserve} (Reserved);
+  \path[->] (Available) edge node {Operative=F} (Unavailable);
+  \path[->] (Available) edge node {Error} (Faulted);
+
+  % Preparing
+  \path[->, main] (Preparing) edge node {StartTx} (Charging);
+  \path[->] (Preparing) edge node {Stop/Unplug} (Finishing);
+  \path[->] (Preparing) edge [bend left] node {Unplug} (Available);
+
+  % Charging
+  \path[->, main] (Charging) edge node {StopTx} (Finishing);
+  \path[->] (Charging) edge [bend left] node {Pause} (SuspendedEV);
+  \path[->] (Charging) edge [bend left] node {Limit} (SuspendedEVSE);
+  \path[->] (Charging) edge [bend left] node {Error} (Faulted);
+
+  % Suspended
+  \path[->] (SuspendedEV) edge [bend left] node {Resume} (Charging);
+  \path[->] (SuspendedEV) edge [bend left] node[swap]{StopTx} (Finishing);
+  \path[->] (SuspendedEVSE) edge [bend left] node {Resume} (Charging);
+  \path[->] (SuspendedEVSE) edge [bend left=70] node {StopTx} (Finishing);
+
+  % Finishing
+  \path[->, main] (Finishing) edge node {Unplug/Free} (Available);
+  \path[->] (Finishing) edge [bend left] node {Error} (Faulted);
+
+  % Reserved
+  \path[->] (Reserved) edge node {Timeout/Cancel} (Available);
+  \path[->] (Reserved) edge node {Plug+Auth} (Preparing);
+
+  % Unavailable
+  \path[->] (Unavailable) edge [bend left] node [] {Operative=T} (Available);
+  \path[->] (Unavailable) edge node {Error} (Faulted);
+
+  % Faulted
+  \path[->] (Faulted) edge [bend right] node [swap] {Reset} (Available);
+  \path[->] (Faulted) edge [bend left] node {I/Operative=F} (Unavailable);
+
+\end{tikzpicture}
+
+\end{document}

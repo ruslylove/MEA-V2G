@@ -8,6 +8,7 @@
 \usepackage{hyperref}
 \usepackage{titlesec}
 \usepackage{parskip}
+\usepackage{float}
 
 % Geometry setup
 \geometry{
@@ -35,7 +36,7 @@
     \vspace{0.5cm}
     \large Reference Implementation for ISO 15118 EV/EVSE
 }
-\author{Development Team}
+\author{Ruslee Sutthaweekul}
 \date{\today}
 
 \begin{document}
@@ -57,6 +58,7 @@ The MEA-V2G software encompasses:
     \item Handling of charging parameters (Voltage, Current, Power).
     \item Implementation of basic Control Pilot (CP) and SLAC sequences.
     \item High-level V2G communication management.
+    \item Integration with OCPP 2.0.1 for backend communication.
 \end{itemize}
 
 \section{Definitions and Acronyms}
@@ -68,6 +70,8 @@ The MEA-V2G software encompasses:
     \item[V2G] Vehicle-to-Grid
     \item[PNC] Plug \& Charge
     \item[EIM] External Identification Means
+    \item[OCPP] Open Charge Point Protocol
+    \item[CSMS] Charging Station Management System
 \end{description}
 
 \chapter{Overall Description}
@@ -82,6 +86,7 @@ The system enables the following core functions:
     \item \textbf{SLAC}: Automates the matching process between EV and EVSE at the physical layer.
     \item \textbf{V2G Session Management}: Handles Service Discovery, Parameter Discovery, and Authorization.
     \item \textbf{Charging Loop}: Monitoring and control of the active energy transfer.
+    \item \textbf{OCPP Communication}: Interface with a CSMS via OCPP 2.0.1 for remote control and status monitoring.
 \end{enumerate}
 
 \section{Use Case Diagram}
@@ -131,6 +136,13 @@ The \texttt{EVSE} class is the central controller for the station side. It manag
     \item \textbf{Scheduling}: Manages SASchedules based on configuration.
 \end{itemize}
 
+\subsection{OCPP Component}
+The system integrates an OCPP 2.0.1 client to enable remote management.
+\begin{itemize}
+    \item \textbf{OcppInterface}: Adapts the \texttt{ocpp} library's \texttt{ChargePoint} class to the MEA-V2G architecture. It maps OCPP commands (e.g., \texttt{RequestStartTransaction}) to local \texttt{Charger} actions.
+    \item \textbf{OcppWorker}: A dedicated thread that manages the \texttt{asyncio} event loop and WebSocket connection to the CSMS, ensuring non-blocking operation alongside the main application loop.
+\end{itemize}
+
 \section{Charger Component}
 The \texttt{Charger} class performs a physical simulation of the power electronics, ensuring realistic behavior during the charging session. Its key functions include:
 \begin{itemize}
@@ -141,6 +153,47 @@ The \texttt{Charger} class performs a physical simulation of the power electroni
 \end{itemize}
 
 The \texttt{Charger} class implements the \texttt{ChargerInterface} abstract base class. This design pattern allows the simulation module to be easily swapped with a real hardware driver (e.g., a \texttt{CanCharger} class) that communicates with physical power electronics via CAN bus or other protocols, while maintaining a consistent API for the \texttt{EVSE} logic.
+
+\subsection{Implementing a Custom Charger}
+To integrate specific power electronics hardware, developers must create a subclass of \texttt{ChargerInterface}. This ensures the \texttt{EVSE} logic remains decoupled from the physical layer.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{charger_interface_class_diagram.pdf}
+    \caption{Charger Interface and Implementation}
+    \label{fig:chargerinterface}
+\end{figure}
+
+A custom implementation must override the abstract methods to map high-level commands to hardware-specific protocols. The following sections detail the requirements for each group of methods.
+
+\subsubsection{Lifecycle Management}
+These methods control the high-level operational state of the power electronics.
+\begin{description}
+    \item[\texttt{start()}] Called when the EVSE initializes or prepares for a session. It should initialize hardware communication (e.g., open CAN sockets). \textbf{Note}: This method should \textbf{not} automatically close the output contactors; that is handled by the state machine after safe voltage matching.
+    \item[\texttt{stop()}] \textbf{Critical Safety Method}. Called to terminate a session or during error conditions. It must immediately disable power output, open contactors, and return the hardware to a safe idle state (0V/0A).
+\end{description}
+
+\subsubsection{Control Loop Methods}
+These methods are called cyclically (typically every 10-100ms) during the active charging phase.
+\begin{description}
+    \item[\texttt{setEvTargetVoltage(val)}] Receives the EV's requested voltage setpoint (in Volts). The implementation must transmit this request to the power supply unit (PSU).
+    \item[\texttt{setEvTargetCurrent(val)}] Receives the EV's requested current setpoint (in Amps). The implementation must ensure the PSU imposes this current limit.
+\end{description}
+\textit{Return Value}: These methods must return \texttt{True} if the command was successfully queued or sent to the hardware, and \texttt{False} if the request triggers a local hardware fault or limit violation.
+
+\subsubsection{Telemetry Methods}
+The EVSE state machine relies on accurate feedback to perform safety checks (e.g., Welding Detection) and process steps (e.g., Pre-Charge).
+\begin{description}
+    \item[\texttt{getEvsePresentVoltage()}] Must return the \textit{measured} voltage at the DC output terminals. Do not return the internal setpoint; the actual value is required to verify contactor states.
+    \item[\texttt{getEvsePresentCurrent()}] Must return the \textit{measured} current flowing to the EV.
+\end{description}
+
+\subsubsection{Configuration Accessors}
+The interface includes getters and setters for electrical limits (e.g., \texttt{setEvseMaxCurrent}, \texttt{getEvseMaxPower}).
+\begin{itemize}
+    \item For a \textbf{Simulation} (like \texttt{Charger.py}), these methods simply store and retrieve variables to emulate different hardware capabilities.
+    \item For \textbf{Physical Hardware}, the setters (e.g., `setEvseMaxCurrent`) should theoretically configure the hardware's internal safety latches if supported. The getters must return the valid limits to be advertised to the EV during the \textit{Charge Parameter Discovery} phase.
+\end{itemize}
 
 \section{Battery Component}
 The \texttt{Battery} class provides a logical model of the EV's energy storage, managing State of Charge (SOC) and physical limits.
@@ -215,6 +268,7 @@ ev.json / evse.json & Configuration files defining capabilities, limits, and sch
 \begin{itemize}
     \item \textbf{Ethernet}: Main control interface for sending HCI commands and receiving notifications.
     \item \textbf{SPI}: Alternative control interface (e.g., for Raspberry Pi integration).
+    \item \textbf{OCPP Interface}: WebSocket connection (JSON over WebSockets) to a central management system (CSMS).
 \end{itemize}
 
 \subsection{User Interfaces}
@@ -247,6 +301,15 @@ During the charging loop, the system shall:
     \item Terminate the session upon "Stop Charging" request from either side.
 \end{itemize}
 
+\subsection{FR-04: OCPP Integration}
+The system shall implement OCPP 2.0.1 features:
+\begin{itemize}
+    \item Connect to a CSMS via WebSocket.
+    \item Send \texttt{BootNotification} and \texttt{Heartbeat} messages.
+    \item Accept \texttt{RequestStartTransaction} and \texttt{RequestStopTransaction} commands from the CSMS.
+    \item Support \texttt{SetVariables} to configure EVSE limits remotely.
+\end{itemize}
+
 \section{Communication Flow}
 The following sequence diagram depicts the simplified ISO 15118 charging loop interaction between the EV and EVSE, which is the core logical flow of the application.
 
@@ -255,6 +318,26 @@ The following sequence diagram depicts the simplified ISO 15118 charging loop in
     \includegraphics[width=0.8\textwidth]{sequence_diagram.pdf}
     \caption{ISO 15118 Charging Loop Sequence}
     \label{fig:sequenceinteraction}
+\end{figure}
+
+\subsection{OCPP Sequence Flow}
+The following diagram illustrates the interaction between the EVSE (Charge Point) and the CSMS (Charging Station Management System) via OCPP 2.0.1.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{ocpp_sequence_diagram.pdf}
+    \caption{OCPP 2.0.1 Interaction Sequence}
+    \label{fig:ocppsequence}
+\end{figure}
+
+\subsection{CSMS-EVSE-EV Interaction}
+This diagram focuses on the 3-tier communication flow involving the management system, the charging station, and the vehicle. It illustrates a scenario where a remote command initiates a session with smart charging limits.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{threetier_sequence_diagram.pdf}
+    \caption{3-Tier (CSMS-EVSE-EV) Sequence Flow}
+    \label{fig:threetiersequence}
 \end{figure}
 
 \section{EV State Machine}
@@ -311,12 +394,124 @@ The charging process relies on the tight synchronization between the EV and EVSE
     \item[Term] Coordinated shutdown to ensure contactors open safely (Welding Detection).
 \end{description}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{states_relation_diagram.pdf}
+    \includegraphics[width=\textwidth]{states_relation_diagram.pdf}
     \caption{EV-EVSE State Synchronization}
     \label{fig:staterelation}
 \end{figure}
+
+\section{OCPP Connector State Machine}
+The EVSE maintains a logical state for each connector, which is reported to the CSMS via Status Notification messages. This state machine abstracts the underlying ISO 15118 physical processes.
+
+\begin{description}
+    \item[Available] The connector is free and ready for a new session.
+    \item[Preparing] An EV is plugged in or an authorization process is pending.
+    \item[Charging] Active energy transfer is in progress.
+    \item[SuspendedEV] Charging is paused by the EV (e.g., battery full).
+    \item[SuspendedEVSE] Charging is paused by the EVSE (e.g., smart charging limit).
+    \item[Finishing] The session has stopped, waiting for the plug to be removed.
+    \item[Reserved] The connector is reserved for a specific user.
+    \item[Unavailable] The connector is operative but not available for use (e.g., maintenance).
+    \item[Faulted] A critical error has occurred.
+\end{description}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{ocpp_state_diagram.pdf}
+    \caption{OCPP Connector Status State Machine}
+    \label{fig:ocppstatediagram}
+\end{figure}
+
+\subsection{State Transition Logic}
+The following table details the communication packets exchanged between the EV, EVSE, and CSMS that trigger the transitions in the OCPP Connector State Machine.
+
+\begin{center}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{|l|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\hline
+\textbf{Transition} & \textbf{Physical Trigger} & \textbf{ISO 15118 (EV-EVSE)} & \textbf{OCPP (EVSE-CSMS)} \\
+\hline
+\multicolumn{4}{|l|}{\textit{Normal Operation}} \\
+\hline
+Available $\rightarrow$ Preparing & Plug In (CP $A \rightarrow B$) & SLAC Match, SessionSetupReq & StatusNotification(Preparing) \\
+\hline
+Preparing $\rightarrow$ Charging & Power Delivery Start (CP $B \rightarrow C$) & PowerDeliveryReq(Start), CurrentDemandReq & TransactionEvent(Started), StatusNotification(Charging) \\
+\hline
+Charging $\rightarrow$ Finishing & Session Stop (CP $C \rightarrow B$) & PowerDeliveryReq(Stop) or SessionStopReq & TransactionEvent(Ended), StatusNotification(Finishing) \\
+\hline
+Finishing $\rightarrow$ Available & Unplug (CP $B \rightarrow A$) & N/A & StatusNotification(Available) \\
+\hline
+\multicolumn{4}{|l|}{\textit{Suspended States}} \\
+\hline
+Charging $\rightarrow$ SuspendedEV & EV pauses (e.g. max SOC) & CurrentDemandReq (Target=0A) & StatusNotification(SuspendedEV) \\
+\hline
+SuspendedEV $\rightarrow$ Charging & EV resumes & CurrentDemandReq (Target$>$0A) & StatusNotification(Charging) \\
+\hline
+Charging $\rightarrow$ SuspendedEVSE & EVSE limits power & CurrentDemandRes (MaxCurrent=0A) & StatusNotification(SuspendedEVSE) \\
+\hline
+SuspendedEVSE $\rightarrow$ Charging & EVSE lifts limit & CurrentDemandRes (MaxCurrent$>$0A) & StatusNotification(Charging) \\
+\hline
+Suspended $\rightarrow$ Finishing & Stop during pause & SessionStopReq & TransactionEvent(Ended), StatusNotification(Finishing) \\
+\hline
+\multicolumn{4}{|l|}{\textit{Reservation \& Availability}} \\
+\hline
+Available $\rightarrow$ Reserved & N/A & N/A & ReserveNowReq, StatusNotification(Reserved) \\
+\hline
+Reserved $\rightarrow$ Preparing & Plug In + Auth & SessionSetupReq & StatusNotification(Preparing) \\
+\hline
+Reserved $\rightarrow$ Available & Timeout / Cancel & N/A & CancelReservationReq, StatusNotification(Available) \\
+\hline
+Available $\rightarrow$ Unavailable & Operator Command & N/A & ChangeAvailabilityReq, StatusNotification(Unavailable) \\
+\hline
+Unavailable $\rightarrow$ Available & Operator Command & N/A & ChangeAvailabilityReq, StatusNotification(Available) \\
+\hline
+\multicolumn{4}{|l|}{\textit{Exception Layout}} \\
+\hline
+Preparing $\rightarrow$ Available & Unplug (Invalid Session) & SessionStopReq & StatusNotification(Available) \\
+\hline
+Any $\rightarrow$ Faulted & Error / Fault & Welding Detection Fail, etc. & StatusNotification(Faulted) \\
+\hline
+Faulted $\rightarrow$ Available & Reset / Recovery & N/A & ResetReq, StatusNotification(Available) \\
+\hline
+Faulted $\rightarrow$ Unavailable & Permanent Fault & N/A & ChangeAvailabilityReq, StatusNotification(Unavailable) \\
+\hline
+\end{tabular}%
+}
+\end{center}
+
+\subsection{EVSE to OCPP State Mapping}
+The following table defines how the internal ISO 15118 EVSE states map to the reported OCPP Connector Status.
+
+\begin{center}
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+\textbf{EVSE State (ISO 15118)} & \textbf{OCPP Status} & \textbf{Notes} \\
+\hline
+Init & Unavailable & System initialization or re-boot. \\
+\hline
+Wait & Available & Ready for a new session (CP State A). \\
+\hline
+SLAC & Preparing & Plugged in, matching physics. \\
+\hline
+Session, Authorization & Preparing & Protocol negotiation and Auth. \\
+\hline
+Params, Cable & Preparing & Parameter discovery and Cable Check. \\
+\hline
+PreCharge & Charging & Contactors closing, voltage matching. \\
+\hline
+Charge & Charging & Active energy transfer. \\
+\hline
+Charge (CurrentDemand=0) & SuspendedEV & EV is not drawing power. \\
+\hline
+Charge (limit=0) & SuspendedEVSE & EVSE is preventing power flow. \\
+\hline
+Stop & Finishing & Session ended, waiting for unplug. \\
+\hline
+(Any Error) & Faulted & Critical hardware or protocol failure. \\
+\hline
+\end{tabular}
+\end{center}
 
 \chapter{Configuration and Deployment}
 
@@ -329,7 +524,10 @@ The system is launched via \texttt{Application.py} with several arguments to def
     \item \texttt{-c, --config}: Path to the EV configuration file (default: \texttt{ev.json}).
     \item \texttt{-ec, --evse-config}: Path to the EVSE configuration file (default: \texttt{evse.json}).
     \item \texttt{--auto}: (EVSE only) Enables automatic authorization for Plug \& Charge.
+
     \item \texttt{--api-port}: Sets the port for the REST API status monitor.
+    \item \texttt{--ocpp-url}: (EVSE only) WebSocket URL for the OCPP CSMS.
+    \item \texttt{--ocpp-id}: (EVSE only) The Charge Point ID to Identify the station to the CSMS.
 \end{itemize}
 
 \section{JSON Configuration}

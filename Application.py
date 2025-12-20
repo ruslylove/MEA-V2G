@@ -1,5 +1,9 @@
 import argparse
 import json
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'ocpp_lib'))
+
 from Evse import *
 from Ev import *
 
@@ -15,6 +19,8 @@ if __name__ == "__main__":
     parser.add_argument('-p', '--portmirror', help='Enables port mirror.', action='store_true')
     parser.add_argument('--auto', action='store_true', help='Automatically authorize the EV connection for EVSE mode.')
     parser.add_argument('--api-port', type=int, help='Enable the Grafana/Dashboard API on the specified port (e.g., 5000).')
+    parser.add_argument('--ocpp-url', type=str, help='WebSocket URL for OCPP CSMS (e.g., ws://localhost:9000/CP_1).')
+    parser.add_argument('--ocpp-id', type=str, help='Charge Point ID for OCPP.')
     args = parser.parse_args()
 
     print(f'Welcome to Codico Whitebeet {args.role} reference implementation')
@@ -121,6 +127,11 @@ if __name__ == "__main__":
                 evse.setSchedule(schedule)
 
             # Start the EVSE loop
+            if args.ocpp_url and args.ocpp_id:
+                from OcppWorker import OcppWorker
+                ocpp_worker = OcppWorker(args.ocpp_url, args.ocpp_id, evse.getCharger())
+                ocpp_worker.start()
+
             evse.whitebeet.networkConfigSetPortMirrorState(args.portmirror)
             evse.loop()
             print("EVSE loop finished")

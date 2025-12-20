@@ -1,0 +1,52 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+\begin{tikzpicture}
+
+  % Abstract Interface
+  \umlclass[type=abstract, x=0, y=0]{ChargerInterface}{
+  }{
+    \umlvirt{+ start() : void} \\
+    \umlvirt{+ stop() : void} \\
+    \umlvirt{+ setEvseMaxCurrent(value) : void} \\
+    \umlvirt{+ setEvseMaxVoltage(value) : void} \\
+    \umlvirt{+ setEvseMaxPower(value) : void} \\
+    \umlvirt{+ setEvseDeltaVoltage(value) : void} \\
+    \umlvirt{+ setEvseDeltaCurrent(value) : void} \\
+    \umlvirt{+ setEvTargetVoltage(voltage) : bool} \\
+    \umlvirt{+ setEvTargetCurrent(current) : bool} \\
+    \umlvirt{+ getEvsePresentVoltage() : float} \\
+    \umlvirt{+ getEvsePresentCurrent() : float} \\
+    \umlvirt{+ isVoltageLimitExceeded(voltage) : bool} \\
+    \umlvirt{+ isPowerLimitExceeded(power) : bool}
+  }
+
+  % Concrete Implementation
+  \umlclass[x=0, y=-8]{Charger}{
+    - evse\_present\_voltage : float \\
+    - evse\_present\_current : float \\
+    - evse\_delta\_u : float \\
+    - evse\_delta\_i : float \\
+    - stopped : bool
+  }{
+    + start() : void \\
+    + stop() : void \\
+    + setEvTargetVoltage(voltage) : bool \\
+    + setEvTargetCurrent(current) : bool \\
+    - \_calcEvsePresentVoltage() : void \\
+    - \_calcEvsePresentCurrent() : void
+  }
+
+  % Inheritance
+  \umlimpl{Charger}{ChargerInterface}
+
+  % Note about physics simulation
+  \umlnote[x=5, y=-8, width=5cm]{Charger}{
+    Implements physics simulation:
+    Ramps voltage/current based on delta values
+    instead of instantaneous steps.
+  }
+
+\end{tikzpicture}
+\end{document}
