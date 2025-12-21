@@ -684,6 +684,80 @@ The validation of the MEA-V2G system ensures compliance with ISO 15118 standards
         \end{itemize}
 \end{itemize}
 
+\section{Automated Test Strategy}
+The project employs a tiered automated testing strategy using the Python `unittest` framework. This ensures regressions are caught early and that individual components behave correctly before being integrated.
+
+\subsection{Unit Testing}
+Unit tests isolate specific classes and methods, mocking out external dependencies like hardware interfaces and network libraries.
+\begin{description}
+    \item[\texttt{tests/unit/test\_charger.py}] Verifies the \texttt{Charger} physics simulation.
+    \begin{itemize}
+        \item Validates voltage and current ramping logic ($dV/dt$, $dI/dt$).
+        \item Ensures safety limits (Max Voltage/Current/Power) are enforced.
+        \item Checks start/stop behavior.
+    \end{itemize}
+    \item[\texttt{tests/unit/test\_whitebeet.py}] Verifies the \texttt{Whitebeet} HAL module.
+    \begin{itemize}
+        \item Mocks the internal \texttt{FramingInterface} and \texttt{Logger}.
+        \item Validates command construction for SLAC and V2G modes.
+        \item Checks error handling for invalid input parameters.
+    \end{itemize}
+    \item[\texttt{tests/unit/test\_ocpp.py}] Verifies the \texttt{OcppInterface}.
+    \begin{itemize}
+        \item Mocks the \texttt{ocpp} library to avoid heavy dependencies in CI environments.
+        \item Tests \texttt{BootNotification} handling (Accepted/Rejected).
+        \item Tests \texttt{RemoteStartTransaction} and \texttt{RemoteStopTransaction} flows.
+    \end{itemize}
+\end{description}
+
+\subsection{Integration Testing}
+Integration tests focus on the interaction between the application logic and the hardware drivers (mocked).
+\begin{description}
+    \item[\texttt{tests/integration/test\_evse.py}] Verifies the \texttt{Evse} class orchestrator.
+    \begin{itemize}
+        \item Simulates the complete EV connection flow (CP State change $\rightarrow$ SLAC $\rightarrow$ V2G Session).
+        \item Validates that V2G messages (e.g., \texttt{ChargeParameterDiscovery}) correctly update the \texttt{Charger} setpoints.
+    \end{itemize}
+\end{description}
+
+\subsection{System Testing}
+System tests verify the full end-to-end stack, including the external management interface.
+\begin{description}
+    \item[\texttt{tests/system/test\_system.py}] Verifies the connection between OCPP and the local Charging hardware.
+    \begin{itemize}
+        \item Validates that an OCPP \texttt{RemoteStart} command successfully transitions the local \texttt{Charger} to an active state.
+        \item Verifies that hardware faults or stops are correctly reported back to the OCPP layer.
+    \end{itemize}
+\end{description}
+
+\subsection{Test Execution}
+The entire test suite can be executed from the project root directory using the standard Python test runner.
+
+\begin{verbatim}
+# Run all tests (Unit, Integration, System)
+python3 -m unittest discover tests
+
+# Run only Unit Tests
+python3 -m unittest discover tests/unit
+
+# Run only Integration Tests
+python3 -m unittest discover tests/integration
+
+# Run in Verbose Mode (shows individual test names)
+python3 -m unittest discover tests -v
+\end{verbatim}
+
+\subsection{Initial Test Results}
+As of December 2025, the initial automated test suite consisting of 20 tests has been executed successfully.
+
+\begin{itemize}
+    \item \textbf{Unit Tests}: 15 tests passed. Covers `Charger` logic, `Whitebeet` protocol framing, and `OcppInterface` messages.
+    \item \textbf{Integration Tests}: 3 tests passed. Validates `Evse` orchestrator connection flows and parameter handling.
+    \item \textbf{System Tests}: 2 tests passed. Validates end-to-end OCPP remote start/stop commands.
+\end{itemize}
+
+\textbf{Result}: 100\% Pass Rate (20/20). Execution time < 0.3 seconds.
+
 \section{Test Procedures}
 
 \subsection{TC-01: System Initialization}
