@@ -9,6 +9,7 @@
 \usepackage{titlesec}
 \usepackage{parskip}
 \usepackage{float}
+\usepackage[table]{xcolor}
 
 % Geometry setup
 \geometry{
@@ -110,6 +111,68 @@ The system obeys a modular object-oriented architecture. The core logic handles 
     \label{fig:classdiagram}
 \end{figure}
 
+\section{EV State Machine}
+The EV internal logic follows a distinct state machine to manage the charging session lifecycle, as observed in the implementation.
+
+\begin{description}
+    \item[Init] Initial state where the EV controller is started and hardware interfaces (SPI/Ethernet) are initialized.
+    \item[SessionStarted] The V2G session has been established. The EV has successfully matched with the EVSE via SLAC.
+    \item[CableCheck] The EV waits for the EVSE to perform the cable check (isolation test) to ensure safety.
+    \item[PreCharging] Pre-charge phase where the EV matches its battery voltage to the DC bus voltage.
+    \item[Charging] The main state where energy transfer occurs. The EV sends \textit{CurrentDemand} requests in a loop.
+    \item[ChargingStopped] The session is terminated, either normally (target SOC reached) or due to an error.
+\end{description}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.6\textwidth]{state_diagram.pdf}
+    \caption{EV State Machine}
+    \label{fig:statediagram}
+\end{figure}
+
+\section{EVSE State Machine}
+The EVSE logic complements the EV, acting as the server component that handles session setup, authorization, and power delivery control.
+
+\begin{description}
+    \item[Init] Initialization of the Whitebeet module services (CP, SLAC, V2G).
+    \item[Wait] The EVSE waits for an EV to physically plug in (Control Pilot State B).
+    \item[SLAC] Signal Level Attenuation Characterization process to pair the EV and EVSE.
+    \item[Session] High-level communication session established; protocol negotiation occurs.
+    \item[Authorization] Verifying if the EV is authorized to charge (via EIM or Plug \& Charge).
+    \item[Params] Exchanging charge parameter limits (Maximum Voltage, Current, Power limits).
+    \item[Cable] Performing cable isolation check to ensure no faults exist.
+    \item[PreCharge] Adjusting DC output voltage to match the EV's reported battery voltage.
+    \item[Charge] Active energy transfer loop responding to the EV's current demand.
+    \item[Stop] Session termination and welding detection sequence.
+    \item[Faulted] Critical error state (e.g., GFDI trip, Overcurrent). The EVSE opens contactors and sends a \texttt{StatusNotification(Faulted)} to the CSMS via OCPP. It awaits a manual or remote reset.
+\end{description}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{evse_state_diagram.pdf}
+    \caption{EVSE State Machine}
+    \label{fig:evsestatediagram}
+\end{figure}
+
+\section{State Synchronization}
+The charging process relies on the tight synchronization between the EV and EVSE states. Figure \ref{fig:staterelation} illustrates the parallel state progression and key synchronization points.
+
+\begin{description}
+    \item[Discovery] Control Pilot signal detection (State A $\rightarrow$ B).
+    \item[Setup] SLAC matching and V2G Session Setup.
+    \item[Safety] Both sides must confirm safety parameters during Cable Check.
+    \item[Sync] Voltage levels must be synchronized during Pre-Charge before the contactors close.
+    \item[Power] The Charging Loop is a lock-step process where the EV requests and the EVSE delivers.
+    \item[Term] Coordinated shutdown to ensure contactors open safely (Welding Detection).
+\end{description}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{states_relation_diagram.pdf}
+    \caption{EV-EVSE State Synchronization}
+    \label{fig:staterelation}
+\end{figure}
+
 \section{Core Components}
 The system comprises the following key software components:
 
@@ -120,6 +183,40 @@ The \texttt{Whitebeet} class serves as the Hardware Abstraction Layer (HAL). It 
     \item \textbf{Event Dispatching}: Receives raw data from the hardware and dispatches events (e.g., \texttt{EV\_CONNECTED}, \texttt{V2G\_MESSAGE}) to the higher-level logic.
     \item \textbf{Service Management}: Exposes methods to control Control Pilot (CP) state, SLAC, and V2G messaging.
 \end{itemize}
+
+\subsubsection{Protocol Structure}
+The Whitebeet module communicates via a serial interface using a framed protocol. Each frame is structured as follows:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Start} & \textbf{Mod ID} & \textbf{Sub ID} & \textbf{Req ID} & \textbf{Len (2)} & \textbf{Payload} & \textbf{CRC} & \textbf{End} \\
+\hline
+0xC0 & 1 Byte & 1 Byte & 1 Byte & Big Endian & $N$ Bytes & 1 Byte & 0xC1 \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{HCI State Transition Mapping}
+The following table maps the critical EVSE states to the corresponding ISO 15118 V2G messages and the Whitebeet HCI notifications that trigger the transitions.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|l|l|}
+    \hline
+    \textbf{EVSE State} & \textbf{ISO 15118 Message} & \textbf{HCI Notification} & \textbf{HCI ID} \\ \hline
+    \rowcolor{gray!10} \textbf{CableCheck} & \texttt{ChargeParameterDiscoveryReq} & \texttt{SessionStarted} & 0x80 \\ \hline
+    Authorization & \texttt{AuthorizationReq} & \texttt{RequestAuthorization} & 0x82 \\ \hline
+    \rowcolor{gray!10} \textbf{PreCharge} & \texttt{PowerDeliveryReq(Start)} & \texttt{PowerDeliveryReq} & 0x8E \\ \hline
+    \textbf{PreCharge} & \texttt{PreChargeReq} & \texttt{PreChargeStarted} & 0x88 \\ \hline
+    \rowcolor{gray!10} \textbf{Charge} & \texttt{CurrentDemandReq} & \texttt{DCChargeParamsChanged} & 0x85 \\ \hline
+    Stop & \texttt{PowerDeliveryReq(Stop)} & \texttt{RequestStopCharging} & 0x8A \\ \hline
+    \rowcolor{gray!10} \textbf{Stop} & \texttt{SessionStopReq} & \texttt{SessionStopped} & 0x8C \\ \hline
+    Faulted & (Any Error) & \texttt{SessionError} & 0x8E \\ \hline
+    \end{tabular}
+    \caption{Whitebeet HCI State Mapping}
+    \label{tab:hci_mapping}
+\end{table}
 
 \subsection{EV Component}
 The \texttt{EV} class is the central controller for the client side. It orchestrates the charging session from the vehicle's perspective.
@@ -142,6 +239,8 @@ The system integrates an OCPP 2.0.1 client to enable remote management.
     \item \textbf{OcppInterface}: Adapts the \texttt{ocpp} library's \texttt{ChargePoint} class to the MEA-V2G architecture. It maps OCPP commands (e.g., \texttt{RequestStartTransaction}) to local \texttt{Charger} actions.
     \item \textbf{OcppWorker}: A dedicated thread that manages the \texttt{asyncio} event loop and WebSocket connection to the CSMS, ensuring non-blocking operation alongside the main application loop.
 \end{itemize}
+
+
 
 \section{Charger Component}
 The \texttt{Charger} class performs a physical simulation of the power electronics, ensuring realistic behavior during the charging session. Its key functions include:
@@ -194,6 +293,80 @@ The interface includes getters and setters for electrical limits (e.g., \texttt{
     \item For a \textbf{Simulation} (like \texttt{Charger.py}), these methods simply store and retrieve variables to emulate different hardware capabilities.
     \item For \textbf{Physical Hardware}, the setters (e.g., `setEvseMaxCurrent`) should theoretically configure the hardware's internal safety latches if supported. The getters must return the valid limits to be advertised to the EV during the \textit{Charge Parameter Discovery} phase.
 \end{itemize}
+
+
+\subsection{TRIO-HP Charger Protocol}
+This section details the specific hardware and communication protocol for the TRIO-HP/\allowbreak 3AC/\allowbreak 1KDC/\allowbreak 20KW/\allowbreak BI power module, which is supported by the system via a CAN bus interface.
+
+\subsubsection{Hardware Description}
+\begin{itemize}
+    \item \textbf{Brand}: PHOENIX CONTACT
+    \item \textbf{Model}: TRIO-HP/3AC/1KDC/20KW/BI
+    \item \textbf{Function}: Bidirectional DC/AC and AC/DC converter.
+    \item \textbf{Communication}: CAN 2.0B Extended Frame (29-bit Identifier).
+    \item \textbf{Baud Rate}: 125 kbps.
+    \item \textbf{Termination}: 120 $\Omega$ resistors required.
+\end{itemize}
+
+\subsubsection{Protocol Structure}
+The protocol uses a 29-bit extended identifier structured as follows:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Error (3 bits)} & \textbf{Device No. (4 bits)} & \textbf{Command (6 bits)} & \textbf{Target (8 bits)} & \textbf{Source (8 bits)} \\
+\hline
+28-26 & 25-22 & 21-16 & 15-8 & 7-0 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{itemize}
+    \item \textbf{Error Code}: 0x00 = Normal.
+    \item \textbf{Device No}: 0x0A for individual modules, 0x0B for groups.
+    \item \textbf{Target/Source Address}: Unique module ID; Controller default is 0xF0.
+\end{itemize}
+
+\subsubsection{Key Commands}
+The system utilizes the following CAN commands to control the charger:
+
+\begin{center}
+\begin{tabular}{|l|c|c|l|}
+\hline
+\textbf{Description} & \textbf{Cmd ID} & \textbf{Data Bytes (Hex)} & \textbf{Notes} \\
+\hline
+Read DC Voltage & 0x23 & 10 01 00 00 ... & Response contains voltage in mV. \\
+\hline
+Read DC Current & 0x23 & 10 02 00 00 ... & Response contains current in mA. \\
+\hline
+Set DC Voltage & 0x24 & 10 01 00 00 ... & Sets output voltage target (mV). \\
+\hline
+Set DC Current & 0x24 & 10 02 00 00 ... & Sets output current limit (mA). \\
+\hline
+Enable Operation & 0x24 & 11 10 00 00 ... & Byte 7: 0xA0 (On), 0xA1 (Off). \\
+\hline
+\end{tabular}
+\end{center}
+
+
+\subsubsection{Protocol Integration}
+The following table maps the abstract EVSE states and OCPP events to specific CAN protocol actions, ensuring the hardware behaves correctly during the session lifecycle.
+
+\begin{center}
+\begin{tabular}{|l|p{4cm}|p{4cm}|p{4cm}|}
+\hline
+\textbf{EVSE State} & \textbf{Event / Trigger} & \textbf{System Action} & \textbf{CAN Command Sequence} \\
+\hline
+\textbf{PreCharge} & Session Setup & Match EV battery voltage to prevent inrush current. & \texttt{Set DC Voltage} (Target) \newline \texttt{Enable Operation} (0xA0) \\
+\hline
+\textbf{Charge} & \texttt{SetChargingProfile} (OCPP) & Apply new maximum current limit from CSMS. & \texttt{Set DC Current} (Profile Limit) \\
+\hline
+\textbf{Charge} & \texttt{CurrentDemand} (EV) & Follow EV's dynamic current request. & \texttt{Set DC Current} (EV Target) \\
+\hline
+\textbf{Stop} & Session Check / User Stop & Safe shutdown sequence. & \texttt{Set DC Current} (0 A) \newline \texttt{Disable Operation} (0xA1) \\
+\hline
+\end{tabular}
+\end{center}
 
 \section{Battery Component}
 The \texttt{Battery} class provides a logical model of the EV's energy storage, managing State of Charge (SOC) and physical limits.
@@ -340,66 +513,7 @@ This diagram focuses on the 3-tier communication flow involving the management s
     \label{fig:threetiersequence}
 \end{figure}
 
-\section{EV State Machine}
-The EV internal logic follows a distinct state machine to manage the charging session lifecycle, as observed in the implementation.
 
-\begin{description}
-    \item[Init] Initial state where the EV controller is started and hardware interfaces (SPI/Ethernet) are initialized.
-    \item[SessionStarted] The V2G session has been established. The EV has successfully matched with the EVSE via SLAC.
-    \item[CableCheck] The EV waits for the EVSE to perform the cable check (isolation test) to ensure safety.
-    \item[PreCharging] Pre-charge phase where the EV matches its battery voltage to the DC bus voltage.
-    \item[Charging] The main state where energy transfer occurs. The EV sends \textit{CurrentDemand} requests in a loop.
-    \item[ChargingStopped] The session is terminated, either normally (target SOC reached) or due to an error.
-\end{description}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.6\textwidth]{state_diagram.pdf}
-    \caption{EV State Machine}
-    \label{fig:statediagram}
-\end{figure}
-
-\section{EVSE State Machine}
-The EVSE logic complements the EV, acting as the server component that handles session setup, authorization, and power delivery control.
-
-\begin{description}
-    \item[Init] Initialization of the Whitebeet module services (CP, SLAC, V2G).
-    \item[Wait] The EVSE waits for an EV to physically plug in (Control Pilot State B).
-    \item[SLAC] Signal Level Attenuation Characterization process to pair the EV and EVSE.
-    \item[Session] High-level communication session established; protocol negotiation occurs.
-    \item[Authorization] Verifying if the EV is authorized to charge (via EIM or Plug \& Charge).
-    \item[Params] Exchanging charge parameter limits (Maximum Voltage, Current, Power limits).
-    \item[Cable] Performing cable isolation check to ensure no faults exist.
-    \item[PreCharge] Adjusting DC output voltage to match the EV's reported battery voltage.
-    \item[Charge] Active energy transfer loop responding to the EV's current demand.
-    \item[Stop] Session termination and welding detection sequence.
-\end{description}
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.7\textwidth]{evse_state_diagram.pdf}
-    \caption{EVSE State Machine}
-    \label{fig:evsestatediagram}
-\end{figure}
-
-\section{State Synchronization}
-The charging process relies on the tight synchronization between the EV and EVSE states. Figure \ref{fig:staterelation} illustrates the parallel state progression and key synchronization points.
-
-\begin{description}
-    \item[Discovery] Control Pilot signal detection (State A $\rightarrow$ B).
-    \item[Setup] SLAC matching and V2G Session Setup.
-    \item[Safety] Both sides must confirm safety parameters during Cable Check.
-    \item[Sync] Voltage levels must be synchronized during Pre-Charge before the contactors close.
-    \item[Power] The Charging Loop is a lock-step process where the EV requests and the EVSE delivers.
-    \item[Term] Coordinated shutdown to ensure contactors open safely (Welding Detection).
-\end{description}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=\textwidth]{states_relation_diagram.pdf}
-    \caption{EV-EVSE State Synchronization}
-    \label{fig:staterelation}
-\end{figure}
 
 \section{OCPP Connector State Machine}
 The EVSE maintains a logical state for each connector, which is reported to the CSMS via Status Notification messages. This state machine abstracts the underlying ISO 15118 physical processes.
@@ -418,7 +532,7 @@ The EVSE maintains a logical state for each connector, which is reported to the 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{ocpp_state_diagram.pdf}
+    \includegraphics[width=1\textwidth]{ocpp_state_diagram.pdf}
     \caption{OCPP Connector Status State Machine}
     \label{fig:ocppstatediagram}
 \end{figure}
@@ -546,5 +660,48 @@ Defines the characteristics of the Charging Station:
     \item \textbf{charger}: Output limits (Max Voltage/Current/Power) and slew rates ($\Delta V, \Delta I$) for the simulation.
     \item \textbf{schedule}: Defines power delivery schedules (SASchedules) sent to the EV during the Charge Parameter Discovery phase.
 \end{itemize}
+
+\appendix
+\chapter{OCPP 2.0.1 Protocol Details}
+\section{Overview}
+OCPP 2.0.1 is the latest version of the Open Charge Point Protocol, enabling communication between the EVSE and the Charging Station Management System (CSMS). Unlike previous SOAP-based versions, it relies heavily on JSON over WebSockets for efficient, real-time data exchange. Key improvements include enhanced security, Plug \& Charge support, and device management.
+
+\section{Core Packet Examples}
+\subsection{BootNotification}
+Sent when the EVSE boots up to register with the CSMS.
+
+\begin{verbatim}
+{
+  "reason": "PowerUp",
+  "chargingStation": {
+    "model": "TRIO-HP",
+    "vendorName": "PHOENIX CONTACT"
+  }
+}
+\end{verbatim}
+
+\subsection{Heartbeat}
+Sent periodically to indicate the EVSE is still online.
+
+\begin{verbatim}
+{
+  "customData": null
+}
+\end{verbatim}
+
+\subsection{TransactionEvent (Started)}
+Sent when a transaction begins (e.g., EV plugs in or session authorized).
+
+\begin{verbatim}
+{
+  "eventType": "Started",
+  "timestamp": "2024-12-21T12:00:00Z",
+  "triggerReason": "CablePluggedIn",
+  "seqNo": 1,
+  "transactionInfo": {
+    "transactionId": "12345"
+  }
+}
+\end{verbatim}
 
 \end{document}

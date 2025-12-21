@@ -3,7 +3,7 @@
 
 \begin{document}
 
-\begin{tikzpicture}[>=stealth', shorten >=1pt, auto, node distance=4cm, semithick]
+\begin{tikzpicture}[>=stealth', shorten >=1pt, auto, node distance=3.5cm, semithick, font=\large]
   \tikzstyle{every state}=[fill=white, draw=black, text=black, minimum size=1.8cm]
   \tikzstyle{main}=[ultra thick, blue]
 
@@ -14,8 +14,8 @@
   \node[state] (Finishing) [below of=Available] {Finishing};
 
   % Side states
-  \node[state] (SuspendedEV) [below of=Charging, node distance=2.5cm] {SuspendedEV};
-  \node[state] (SuspendedEVSE) [right of=Charging, xshift=1.5cm] {SuspendedEVSE};
+  \node[state] (SuspendedEV) [below of=Charging, node distance=2.5cm] {Susp. EV};
+  \node[state] (SuspendedEVSE) [right of=Charging, xshift=1cm] {Susp. EVSE};
   
   % Exception states
   \node[state] (Reserved) [above of=Preparing] {Reserved};
@@ -43,15 +43,15 @@
   % Suspended
   \path[->] (SuspendedEV) edge [bend left] node {Resume} (Charging);
   \path[->] (SuspendedEV) edge [bend left] node[swap]{StopTx} (Finishing);
-  \path[->] (SuspendedEVSE) edge [bend left] node {Resume} (Charging);
-  \path[->] (SuspendedEVSE) edge [bend left=70] node {StopTx} (Finishing);
+  \path[->] (SuspendedEVSE) edge [bend left] node[swap] {Resume} (Charging);
+  \path[->] (SuspendedEVSE) edge [bend left=75] node {StopTx} (Finishing);
 
   % Finishing
-  \path[->, main] (Finishing) edge node {Unplug/Free} (Available);
-  \path[->] (Finishing) edge [bend left] node {Error} (Faulted);
+  \path[->, main] (Finishing) edge node[swap] {Unplug/Free} (Available);
+  \path[->] (Finishing) edge [bend left] node[swap] {Error} (Faulted);
 
   % Reserved
-  \path[->] (Reserved) edge node {Timeout/Cancel} (Available);
+  \path[->] (Reserved) edge node[align=center] {Timeout/\\Cancel} (Available);
   \path[->] (Reserved) edge node {Plug+Auth} (Preparing);
 
   % Unavailable

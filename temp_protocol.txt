@@ -1,0 +1,903 @@
+TRIO-HP/3AC/1KDC/20KW/BI
+CAN BUS Protocol V1.00
+
+
+
+
+Data sheet
+111472_en_00                            © Phoenix Contact 2024-12-18
+
+1      Description                                            Supported power modules
+                                                              The following TRIO-HP... power modules are currently
+This document describes the CAN-based communication
+                                                              supported by the CAN-based communication protocol:
+protocol for communication between the controller with
+CAN communication module and one or more power mod-           Item designation                                                         Item No.
+ules.                                                         TRIO-HP/3AC/1KDC/20KW/BI                                                 1560712
+The controller, as the higher-level controller, always han-
+dles communication with the bus devices on the linear         Figure 1                             Overview of the communication methods
+CAN bus.                                                                                                            System             Group 2
+The CAN-based communication protocol supports the fol-
+lowing communication methods:                                                                                                           Power module
+                                                                                                                                             #3
+– Peer-to-peer                                                                                                         Group 1
+                                                                 PLC / CAN Interface module
+
+
+
+
+– Multicast                                                                                        Peer-to-Peer
+                                                                                                 Request/Response
+                                                                                                                        Power module    Power module
+                                                                                                                             #0              #6
+– Broadcast
+                                                                                                   Multicast            Power module    Power module
+                                                                                               Request/Response
+                                                                                                                             #4              #2
+
+
+                                                                                                 Broadcast              Power module    Power module
+                                                                                              Request/Response
+                                                                                                                             #1              #5
+                                                                                         TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+Table of contents
+1    Description .................................................................................................................................... 1
+2    Basic principles ............................................................................................................................. 3
+      2.1      CAN protocol .....................................................................................................................................................3
+      2.2      Communication process ...................................................................................................................................3
+      2.3      Data type ...........................................................................................................................................................3
+               2.3.1 Fixed-point number...............................................................................................................................3
+               2.3.2 Floating-point number ..........................................................................................................................3
+
+3    Application frame format and data definition .............................................................................. 4
+      3.1      Frame format.....................................................................................................................................................4
+      3.2      Identifier............................................................................................................................................................4
+               3.2.1 Error code ..............................................................................................................................................4
+               3.2.2 Device number.......................................................................................................................................4
+               3.2.3 Command number.................................................................................................................................4
+               3.2.4 Target address/source address ............................................................................................................4
+      3.3      Command overview ..........................................................................................................................................6
+      3.4      Command description.......................................................................................................................................8
+               3.4.1 Reading data fields ................................................................................................................................8
+               3.4.2 Transmitting data fields ..................................................................................................................... 11
+      3.5      Status description .......................................................................................................................................... 17
+
+
+
+
+111472_en_00                                                                                                                              Phoenix Contact                   2 / 18
+                                                             TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+2          Basic principles                                  2.3.2   Floating-point number
+                                                             The storage format of the floating-point number is 4 bytes
+2.1        CAN protocol                                      and is sent in the following sequence: sign bit, code, man-
+–     Uses the extended frame mode CAN 2.0B                  tissa high bit, and mantissa low bit.
+–     The bit rate is 125 kbps                               The floating-point number uses the IEEE 32-bit standard
+–     120 Ω termination resistors for terminating the CAN    format for floating-point numbers (standard format for
+      bus                                                    floating-point numbers for the C programming language),
+                                                             whereby the length is 32 bits and the format is structured
+–     In AC/DC power grid mode or DC/AC on-grid mode, a
+                                                             as follows:
+      maximum of 48 power modules are supported in par-
+      allel operation                                            D31       D30-D23     D22-D16     D15-D8       D7-D0
+–     In DC/AC off-grid mode, a maximum of 8 power mod-        Sign of      Code      Mantissa Mantissa Mantissa
+      ules are supported in parallel operation                the float-              high bit middle bit low bit
+                                                              ing-point
+2.2        Communication process                               number
+                          Send command
+                            to module?
+                                                             If the code is E and the mantissa is M, then: floating-point
+                                                             number = ±(1+M×2-23)·2E-127. Whether the floating-point
+                                                             number is positive or negative depends on the value of the
+                                                             sign bit (S). S = 1 means that the floating-point number is
+      No response,           Address
+                                                             negative, and S = 0 means that the floating-point number
+                                                             is positive.
+          Exit               is valid?
+
+
+                                                             Example: If the 32-bit floating-point number is 43H, FAH,
+                                                             00H, and 00H (S = 0, E = 135, M = 0x7A0000 = 61×217),
+                            Command /           Return       the value of the floating-point number is (1+61×217×2-23)
+                           data is valid?     error code     ·2135-127= 500.
+                                                             If the floating-point number is 40.0, then the transmission
+                                                             sequence is 42, 20, 00, 00.
+                            Response                         If the floating-point number is 2.40, then the transmission
+                            command
+                                                             sequence is 40, 19, 99, 9A.
+
+2.3        Data type
+Send the bytes in an increasing sequence. Begin with
+byte 0. Depending on the command number, the data type
+of the command can contain fixed-point or floating-point
+numbers.
+
+2.3.1      Fixed-point number
+A fixed-point number can take up a length of 1 to 4 bytes.
+The detailed format can be found in Section 3.3 Command
+description.
+
+
+
+
+111472_en_00                                                                                Phoenix Contact        3 / 18
+                                                                                       TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+3           Application frame format and data                                          3.2.2   Device number
+            definition                                                                  Device no.             Description
+                                                                                                               Protocol between the controller with CAN
+3.1         Frame format                                                                0x0A                   communication module and the individual
+                                                                                                               power module
+Communication between the higher-level controller with                                                         Protocol between the controller with CAN
+CAN communication module and one or more power mod-                                     0x0B                   communication module and a module
+                                                                                                               group
+ules takes place via CAN 2.0B frames.
+The frame format is illustrated in the following table:                                3.2.3   Command number
+Description                              Code                                          Detailed information can be found in Section 3.3 Com-
+Start of frame                           SOF (1 bit)                                   mand description.
+                                         Identifier (11 bits)
+                                         SRR                                           3.2.4   Target address/source address
+Arbitration field                        IDE
+                                         Identifier (18 bits)                                   Note
+                                         RTR                                                    The module number is assigned automatically
+                                         Reserved (1 bit)                                       and depends on the internal serial number of the
+Control field
+                                         Data length (4 bits)                                   module. If a module is removed from the CAN
+Data field                           Data (0-8 bytes)                                           bus during operation, the remaining modules re-
+CRC field                            CRC (16 bits)                                              tain their module number. If a new module is
+Ack field                            Ack (2 bits)                                               added to the CAN bus, the addressing is re-
+End of frame                         (7 bits)                                                   started.
+The data length in this protocol is 8 bytes. The controllable
+part is comprised of the identifier and the data.                                      Peer-to-peer
+                                                                                       Describes equal-authority communication between the
+                 Identifier                                     Data
+                                                                                       charging controller and individual power modules. The re-
+       3 bits                29 bits
+    Leading zero            Identifier
+                                                 Byte 0           ...        Byte 7    quest/response pattern is reciprocal.
+                  4 bytes                                       8 bytes                For peer-to-peer addressing, the target address is the au-
+                                                                                       tomatically assigned module address. Set the device num-
+3.2         Identifier                                                                 ber to the value 0x0A.
+     28-26            25-22               21-16             15-8             7-0
+                                                                                       Multicast
+    Error code      Device no.       Command              Target ad-      Source ad-
+     (3 bits)        (4 bits)           no.                 dress           dress      Describes the communication between the charging con-
+                                      (6 bits)             (8 bits)        (8 bits)
+                                                                                       troller and a group of power modules. The charging con-
+3.2.1       Error code                                                                 troller sends a request with a group address. Depending
+                                                                                       on the command sent, individual or all modules in the
+Error code                           Description                                       group respond. Set the device number to the value 0x0B.
+0x00                                 Normal
+0x01                                 /                                                          Note
+0x02                                 Command invalid                                            If several modules are connected to different
+0x03                                 Data invalid                                               loads, it is recommended that the power mod-
+/                                    /                                                          ules are grouped into different groups.
+0x07                                 Start of processing
+
+
+
+
+111472_en_00                                                                                                         Phoenix Contact            4 / 18
+                                                                                TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+Broadcast
+Describes the communication between the charging con-
+troller and the entire system. The charging controller
+sends a request as a broadcast message.
+For broadcast addressing, the target address is 0x3F. Set
+the device number to the value 0x0A.
+                          Target address/source address
+                Bit 7   Bit 6   Bit 5   Bit 4   Bit 3   Bit 2   Bit 1   Bit 0
+                 Reserved               Module address: 00~0x3B,
+Power module
+                   (0.0)                 broadcast address: 3F
+Charging con-           Charging controller address: 0xF0~0xF8,
+troller                          default address: 0xF0
+
+
+
+
+111472_en_00                                                                                             Phoenix Contact   5 / 18
+                                                               TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+3.3          Command overview
+
+              Note
+              The following table provides an overview of the supported commands of the CAN-based communication proto-
+              col for communication between the controller with CAN communication module and one or more power mod-
+              ules.
+
+
+  Read/           Com-                                                   Data
+  write           mand
+                            Byte 0      Byte 1      Byte 2      Byte 3          Byte 4          Byte 5          Byte 6           Byte 7
+                 number
+      Read        0x23       0x10        0x01                                                System voltage on DC side [mV]
+      Read        0x23       0x10        0x02                                               System current on DC side [mV]
+      Read        0x23       0x10        0x10                                                                 Number of power modules
+      Read        0x23       0x11        0x01                                            Power module voltage on DC side [mV]
+      Read        0x23       0x11        0x02                                            Power module current on DC side [mA]
+      Read        0x23       0x11        0x03                                      Power module voltage on AC side (A-B) [mV]
+      Read        0x23       0x11        0x04                                      Power module voltage on AC side (B-C) [mV]
+      Read        0x23       0x11        0x05                                       Power module voltage on AC side (C-A) [mV]
+      Read        0x23       0x11        0x06                                       Power module ambient temperature [m°C]
+      Read        0x23       0x11        0x10                                                  Status 1.3     Status 1.2      Status 1.1
+      Read        0x23       0x11        0x11                                                                 Status 2.2      Status 2.1
+      Read        0x23       0x11        0x20                                                                   Module group number
+      Read        0x23       0x21        0x01                                              Voltage on AC side, phase A [mV]
+      Read        0x23       0x21        0x02                                              Voltage on AC side, phase B [mV]
+      Read        0x23       0x21        0x03                                              Voltage on AC side, phase C [mV]
+      Read        0x23       0x21        0x04                                              Current on AC side, phase A [mA]
+      Read        0x23       0x21        0x05                                              Current on AC side, phase B [mA]
+      Read        0x23       0x21        0x06                                              Current on AC side, phase C [mA]
+      Read        0x23       0x21        0x07                                                     AC frequency [mHz]
+      Read        0x23       0x21        0x08                                                Active power on AC side [mW]
+      Read        0x23       0x21        0x09                                            Active power on AC side, phase A [mW]
+      Read        0x23       0x21        0x0A                                            Active power on AC side, phase B [mW]
+      Read        0x23       0x21        0x0B                                            Active power on AC side, phase C [mW]
+      Read        0x23       0x21        0x0C                                              Reactive power on AC side [mVar]
+      Read        0x23       0x21        0x0D                                       Reactive power on AC side, phase A [mVar]
+      Read        0x23       0x21        0x0E                                       Reactive power on AC side, phase B [mVar]
+      Read        0x23       0x21        0x0F                                       Reactive power on AC side, phase C [mVar]
+      Read        0x23       0x21        0x10                                              Apparent power on AC side [mVA]
+      Read        0x23       0x21        0x11                                       Apparent power on AC side, phase A [mVA]
+      Read        0x23       0x21        0x12                                       Apparent power on AC side, phase B [mVA]
+      Read        0x23       0x21        0x13                                       Apparent power on AC side, phase C [mVA]
+      Write       0x24       0x10        0x01                                               System voltage on DC side [mV]
+      Write       0x24       0x10        0x02                                               System current on DC side [mA]
+      Write       0x24       0x11        0x01                                            Power module voltage on DC side [mV]
+      Write       0x24       0x11        0x02                                            Power module current on DC side [mA]
+                                                                                                                Operational readiness
+      Write       0x24       0x11        0x10
+                                                                                                                       (on/off)
+      Write       0x24       0x11        0x20                                                                    Green LED flashing
+      Write       0x24       0x11        0x21                                                                Module deactivation (on/off)
+                                                                                                              Slow startup of the output
+      Write       0x24       0x11        0x22
+                                                                                                                   current (on/off)
+      Write       0x24                                                                                          DIP switch function:
+                             0x11        0x23
+                                                                                                               Module or group number
+      Write       0x24                                                                                        Setting the module group
+                             0x11        0x03
+                                                                                                                       number
+
+
+
+111472_en_00                                                                                             Phoenix Contact            6 / 18
+                                                   TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+  Read/         Com-                                         Data
+  write         mand
+                        Byte 0   Byte 1   Byte 2    Byte 3          Byte 4          Byte 5          Byte 6            Byte 7
+               number
+                                                                                                           DC levels
+   Write        0x24    0x11     0x26                                                              parallel operation/series
+                                                                                                           operation
+   Write        0x24    0x11     0x32                                        DC discharge voltage, lower limit [mV]
+                                                                                                                 Voltage stabi-
+   Write        0x24    0x11     0x34
+                                                                                                                 lization mode
+   Write        0x24    0x21     0x05                                                Power factor setting
+   Write        0x24    0x21     0x06                                    Output voltage on AC side per phase [mV]
+   Write        0x24    0x21     0x07                                         Output frequency on AC side [mHz]
+   Write        0x24    0x21     0x08                                          Reactive power at output [mVar]
+                                                                                                Operating mode of the power
+   Write        0x24    0x21     0x10
+                                                                                                          module
+   Write        0x24    0x21     0x17                                                           Reactive power setting mode
+
+
+
+
+111472_en_00                                                                                 Phoenix Contact             7 / 18
+                                                                           TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+3.4     Command description
+
+         Note
+         In the following table, please note the abbreviations Mdl (power module) and Ctrl (controller) in the listed ex-
+         amples.
+
+         Note
+         For read commands (e.g., voltage, current, power, and frequency), the measured value is output at the termi-
+         nals.
+
+3.4.1   Reading data fields
+
+Command        Reading data fields
+no.
+0x23           Reading system information
+               Peer-to-peer:   No
+               Multicast:      Yes, response only from group coordinator
+               Broadcast:      Yes, response from system coordinator
+                                    Byte 0          Byte 1        Byte 2        Byte 3      Byte 4         Byte 5         Byte 6          Byte 7
+               Request              0x10            0x01            0             0           0               0             0               0
+               Response             0x10            0x01            0             0                  Vo: System voltage on DC side [mV]
+               Example         Ctrl transmits:   02 A3 3F F0   10 01 00 00 00 00 00 00   Read system voltage on DC side
+                               Mdl responds:     02 A3 F0 3F   10 01 00 00 00 0A AE 60   Response Uo: 700 V
+               Request              0x10            0x02            0             0           0               0             0               0
+               Response             0x10            0x02            0             0                  Io: System current on DC side [mV]
+               Example         Ctrl transmits:   02 A3 3F F0   10 02 00 00 00 00 00 00   Read system current on DC side
+                               Mdl responds:     02 A3 F0 3F   10 02 00 00 00 00 C3 50   Response Io: 50 A
+               Request              0x10            0x10            0             0           0               0             0               0
+               Response             0x10            0x10            0             0           0               0        Number of power modules
+               Note            Multicast addressing: The module returns the number of power modules in the group
+                               Broadcast addressing: The module returns the number of power modules in the system
+               Example         Ctrl transmits:   02 E3 02 F0   10 10 00 00 00 00 00 00   Read number of power modules in group 2
+                               Mdl responds:     02 E3 F0 02   10 10 00 00 00 00 00 05   5 power modules detected in group 2
+
+
+
+
+111472_en_00                                                                                                      Phoenix Contact           8 / 18
+                                                                             TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+Command        Reading data fields
+no.
+0x23           Reading power module information
+               Peer-to-peer:   Yes
+               Multicast:      Yes, response from every power module in the group
+               Broadcast:      No
+                                     Byte 0         Byte 1        Byte 2          Byte 3         Byte 4          Byte 5         Byte 6              Byte 7
+               Request               0x11           0x01             0              0               0               0             0                   0
+               Response              0x11           0x01             0              0                   Vo: Power module voltage on DC side [mV]
+               Example         Ctrl transmits:   02 A3 00 F0   11 01 00 00 00 00 00 00        Read power module #0, voltage on DC side
+                               Mdl responds:     02 A3 F0 00   11 01 00 00 00 07 A1 20        Power module #0, Vo: 500 V
+               Request               0x11           0x02             0              0               0               0             0                   0
+               Response              0x11           0x02             0              0                   Io: Power module current on DC side [mA]
+               Request               0x11           0x03             0              0               0               0             0                   0
+               Response              0x11           0x03             0              0             Power module phase voltage on AC side (A-B) [mV]
+               Example         Ctrl transmits:   02 E3 02 F0   11 03 00 00 00 00 00 00        Read power module #2, phase voltage on AC side (A-B)
+                               Mdl responds:     02 E3 F0 00   11 03 00 00 00 04 BA F0        Group #2, module #0, phase voltage: 310 V
+               Request               0x11           0x04             0              0               0               0             0                   0
+               Response              0x11           0x04             0              0             Power module phase voltage on AC side (B-C) [mV]
+               Request               0x11           0x05             0              0               0               0             0                   0
+               Response              0x11           0x05             0              0             Power module phase voltage on AC side (C-A) [mV]
+               Request               0x11           0x06             0              0               0               0             0                   0
+               Response              0x11           0x06             0              0                   Power module ambient temperature [m°C]
+               Request               0x11           0x10             0              0               0               0             0                   0
+               Note            Temperature measurement is performed on the device front next to the fans
+               Response                                                                                                        Status 1
+                                     0x11           0x10             0              0               0
+                                                                                                                Status 1.3    Status 1.2       Status 1.1
+               Note            For a description of the status bits, see Section 3.5 Status description
+               Request               0x11           0x11             0              0               0               0             0                   0
+                                                                                                                    0                    Status 2
+               Response              0x11           0x11             0              0               0
+                                                                                                                    0         Status 2.2       Status 2.1
+               Note            For a description of the status bits, see Section 3.5 Status description
+           Request                   0x11           0x20             0              0               0               0             0                   0
+           Response                  0x11           0x20             0              0               0               0           Module group number
+
+
+
+
+111472_en_00                                                                                                            Phoenix Contact               9 / 18
+                                                                           TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+Command        Reading data fields
+no.
+0x23           Reading power module information on AC side
+               Peer-to-peer:   Yes
+               Multicast:      Yes, response from every power module in the group
+               Broadcast:      No
+                                     Byte 0         Byte 1        Byte 2        Byte 3      Byte 4          Byte 5         Byte 6         Byte 7
+               Request               0x21           0x01            0             0           0               0              0                 0
+               Response              0x21           0x01            0             0               Voltage on AC side, phase A – neutral [mV]
+               Request               0x21           0x02            0             0           0               0              0                 0
+               Response              0x21           0x02            0             0               Voltage on AC side, phase B – neutral [mV]
+               Request               0x21           0x03            0             0           0               0              0                 0
+               Response              0x21           0x03            0             0               Voltage on AC side, phase C – neutral [mV]
+               Request               0x21           0x04            0             0           0               0              0                 0
+               Response              0x21           0x04            0             0                   Current on AC side, phase A [mA]
+               Example         Ctrl transmits:   02 A3 00 F0   21 04 00 00 00 00 00 00   Read module #0, current from phase A
+                               Mdl responds:     02 A3 F0 00   21 04 00 00 00 00 13 88   Response Module #0, current from phase A is 5 A
+               Request               0x21           0x05            0             0           0               0              0                 0
+               Response              0x21           0x05            0             0                   Current on AC side, phase B [mA]
+               Request               0x21           0x06            0             0           0               0              0                 0
+               Response              0x21           0x06            0             0                   Current on AC side, phase C [mA]
+               Request               0x21           0x07            0             0           0               0              0                 0
+               Response              0x21           0x07            0             0                          AC frequency [mHz]
+               Request               0x21           0x08            0             0           0               0              0                 0
+               Response              0x21           0x08            0             0                     Active power on AC side [mW]
+               Example         Ctrl transmits:   02 E3 02 F0   21 08 00 00 00 00 00 00   Read group #2, active power
+                               Mdl responds:     02 E3 F0 00   21 08 00 00 00 E4 E1 C0   Response Group #2, module #0, active power is 15 kW
+               Request               0x21           0x09            0             0           0               0              0                 0
+               Response              0x21           0x09            0             0                Active power on AC side, phase A [mW]
+               Request               0x21           0x0A            0             0           0               0              0                 0
+               Response              0x21           0x0A            0             0                Active power on AC side, phase B [mW]
+               Request               0x21           0x0B            0             0           0               0              0                 0
+               Response              0x21           0x0B            0             0                Active power on AC side, phase C [mW]
+               Request               0x21           0x0C            0             0           0               0              0                 0
+               Response              0x21           0x0C            0             0                   Reactive power on AC side [mVar]
+               Request               0x21           0x0D            0             0           0               0              0                 0
+               Response              0x21           0x0D            0             0               Reactive power on AC side, phase A [mVar]
+               Request               0x21           0x0E            0             0           0               0              0                 0
+               Response              0x21           0x0E            0             0               Reactive power on AC side, phase B [mVar]
+               Request               0x21           0x0F            0             0           0               0              0                 0
+               Response              0x21           0x0F            0             0               Reactive power on AC side, phase C [mVar]
+               Request               0x21           0x10            0             0           0               0              0                 0
+               Response              0x21           0x10            0             0                   Apparent power on AC side [mVA]
+               Request               0x21           0x11            0             0           0               0              0                 0
+               Response              0x21           0x11            0             0               Apparent power on AC side, phase A [mVA]
+               Request               0x21           0x12            0             0           0               0              0                 0
+               Response              0x21           0x12            0             0               Apparent power on AC side, phase B [mVA]
+               Request               0x21           0x13            0             0           0               0              0                 0
+               Response              0x21           0x13            0             0               Apparent power on AC side, phase C [mVA]
+
+
+
+
+111472_en_00                                                                                                      Phoenix Contact          10 / 18
+                                                                         TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+3.4.2   Transmitting data fields
+Com-     Transmitting data fields
+mand no.
+0x24       Setting system voltage and system current (DC)
+           Peer-to-peer:   No
+           Multicast:      Yes, response from every power module in the group
+           Broadcast:      Yes, response from system coordinator
+                                Byte 0          Byte 1          Byte 2        Byte 3         Byte 4         Byte 5          Byte 6          Byte 7
+           Request              0x10             0x01             0             0                 Setpoint – system voltage on DC side [mV]
+           Response             0x10             0x01             0             0                 Setpoint – system voltage on DC side [mV]
+           Note            Multicast addressing: System output voltage for the entire group
+                           Broadcast addressing: System output voltage for the entire system
+                           Only for AC/DC mode
+           Example         Ctrl transmits:   02 A4 3F F0    10 01 00 00 00 0A D5 70      Set all power modules to Vo 710 V
+                           Mdl responds:     02 A4 F0 3F    10 01 00 00 00 0A D5 70      System coordinator responds Vo 710 V
+           Request              0x10             0x02             0             0                 Setpoint – system current on DC side [mA]
+           Response             0x10             0x02             0             0                 Setpoint – system current on DC side [mA]
+           Note            Multicast addressing: Total current of the group
+                           Broadcast addressing: Total current of the system
+                           For AC/DC mode: Sets the output current. For DC/AC mode: Limitation of the input current.
+                           Note: In DC/AC on-grid mode, the input current is limited and the device does not switch off when the limit is reached. In
+                           DC/AC off-grid mode, the device switches off when the limit is reached. It is therefore recommended to set the maximum
+                           current limit in this mode.
+           Example         Ctrl transmits:   02 E4 02 F0    10 02 00 00 00 00 13 88      Set group #2, total current to 5 A
+                                                                                         (if there are 2 power modules in a group, then the Io of each
+                                                                                         power module is 2.5 A)
+                           Mdl responds:     02 E4 F0 02    10 02 00 00 00 00 13 88      Group coordinator from group #2 responds:
+                                                                                         Set DC output voltage is 5 A
+0x24       Setting voltage and current (DC) of a power module
+           Peer-to-peer:   No
+           Multicast:      Yes, response from every power module in the group
+           Broadcast:      Yes, without response
+                                Byte 0          Byte 1          Byte 2        Byte 3         Byte 4         Byte 5          Byte 6          Byte 7
+           Request              0x11             0x01             0             0              Setpoint – power module voltage on DC side [mV]
+           Response             0x11             0x01             0             0              Setpoint – power module voltage on DC side [mV]
+           Example         Ctrl transmits:   02 A4 3F F0    11 01 00 00 00 0B 71 B0      Set Vo 750 V DC on all power modules
+                           Mdl responds:     No response
+                           Ctrl transmits:   02 E4 02 F0    11 01 00 00 00 0A D5 70      Set group #2 to Vo 710 V DC
+                           Mdl responds:     02 E4 F0 00    11 01 00 00 00 0A D5 70      Response Group #2, module #0: Vo 710 V DC
+           Note            Only for AC/DC mode
+           Request              0x11             0x02             0             0              Setpoint – power module current on DC side [mA]
+           Response             0x11             0x02             0             0              Setpoint – power module current on DC side [mA]
+           Example         Ctrl transmits:   02 A4 00 F0    11 02 00 00 00 00 13 88      Set DC-side current value of module #0 to 5 A
+                           Mdl responds:     02 A4 F0 00    11 02 00 00 00 00 13 88      Response Module #0 current on DC side 5 A
+           Note            For AC/DC mode: Sets the output current. For DC/AC mode: Limitation of the input current.
+                           Note: In DC/AC on-grid mode, the input current is limited and the device does not switch off when the limit is reached. In
+                           DC/AC off-grid mode, the device switches off when the limit is reached. It is therefore recommended to set the maximum
+                           current limit in this mode.
+
+
+
+
+111472_en_00                                                                                                      Phoenix Contact           11 / 18
+                                                                          TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+Com-     Transmitting data fields
+mand no.
+0x24      Enabling/disabling operational readiness
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1         Byte 2         Byte 3          Byte 4         Byte 5          Byte 6        Byte 7
+          Request                0x11            0x10            0               0                                                         On/off
+          Response               0x11            0x10            0               0                                                         On/off
+          Note             0xA0: on; 0xA1: off (default)
+          Example          Ctrl transmits:   02 A4 3F F0   11 10 00 00 00 00 00 A1        Switch off all power modules
+                           Mdl responds:     No response
+                           Ctrl transmits:   02 A4 00 F0   11 10 00 00 00 00 00 A0        Switch on power module #0
+                           Mdl responds:     02 A4 F0 00   11 10 00 00 00 00 00 A0        Response power module #0 ON
+                           Ctrl transmits:   02 E4 02 F0   11 10 00 00 00 00 00 A1        Switch off power module of group #2
+                           Mdl responds:     02 E4 F0 00   11 10 00 00 00 00 00 A1        Response power module #0 OFF
+0x24      LED of a power module – flashing green
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1         Byte 2         Byte 3          Byte 4         Byte 5          Byte 6        Byte 7
+          Request                                                                                                                        Green LED
+                                 0x11            0x20            0               0              0               0              0
+                                                                                                                                          flashing
+          Response                                                                                                                       Green LED
+                                 0x11            0x20            0               0              0               0              0
+                                                                                                                                          flashing
+          Note             0xA0: off; 0xA1: flashing
+          Example          Ctrl transmits:   02 A4 00 F0   11 20 00 00 00 00 00 A1        Switch on power module #0, green LED
+                           Mdl responds:     02 A4 F0 00   11 20 00 00 00 00 00 A1        Power module #0, green LED is on
+0x24      Enabling/disabling module deactivation
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       No
+                                 Byte 0         Byte 1         Byte 2         Byte 3          Byte 4         Byte 5          Byte 6        Byte 7
+          Request                                                                                                                        Deactivation
+                                 0x11            0x21            0               0              0               0              0
+                                                                                                                                           on/off
+          Response                                                                                                                       Deactivation
+                                 0x11            0x21            0               0              0               0              0
+                                                                                                                                           on/off
+          Note             0xA1: deactivation on; 0xA0: deactivation off (default)
+                           If an output power is required that is lower than the maximum system power, individual modules can be deactivated for
+                           efficiency reasons. Operational readiness is disabled for the deactivated module. The operational readiness of the deacti-
+                           vated module cannot be restored using the “Enable/disable operational readiness” command.
+                           Example: In a system with 3x 20 kW modules, only 40 kW of output power is required. A module can be deactivated using
+                           this command. When transmitting a broadcast to the system with the required output power, the operational readiness of
+                           the deactivated module remains disabled and the remaining two modules operate at full power and therefore with higher
+                           efficiency.
+0x24      Slow startup of the output current
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1         Byte 2         Byte 3          Byte 4         Byte 5          Byte 6        Byte 7
+          Request                0x11            0x22            0               0              0               0              0         Slow startup
+          Response               0x11            0x22            0               0              0               0              0         Slow startup
+          Note             0xA1: activated; 0xA0: deactivated. The function allows the output current to reach the set current in 5 s.
+
+
+
+
+111472_en_00                                                                                                        Phoenix Contact         12 / 18
+                                                                           TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+Com-     Transmitting data fields
+mand no.
+0x24      Setting DIP switch function
+          Peer-to-peer:     No
+          Multicast:        No
+          Broadcast:        Yes, without response
+                                  Byte 0         Byte 1          Byte 2        Byte 3        Byte 4           Byte 5           Byte 6           Byte 7
+          Request                                                                                                                           Group num-
+                                  0x11            0x23              0            0             0                0                0          ber/module
+                                                                                                                                              number
+          Note              0xA0: group number (default); 0xA1: module number
+                            To execute the command, the operational readiness of all modules must be disabled.
+                            By default, the DIP switch sets the group number of the module and the module number is assigned automatically. The
+                            DIP switch is used to set the module number using the command.
+                            The following command is used to set the group number via the CAN bus.
+0x24      Setting the group number (only if DIP switch function is changed to module number)
+          Peer-to-peer:     Yes
+          Multicast:        No
+          Broadcast:        Yes, without response
+                                  Byte 0         Byte 1          Byte 2        Byte 3        Byte 4           Byte 5           Byte 6           Byte 7
+          Request                                                                                                                           Group num-
+                                  0x11            0x03              0            0             0                0                0
+                                                                                                                                                ber
+          Response                                                                                                                          Group num-
+                                  0x11            0x03              0            0             0                0                0
+                                                                                                                                                ber
+          Note              To set the group number, the operational readiness of the module must be disabled.
+          Example           Ctrl transmits:   02 A4 3F F0     11 23 00 00 00 00 00 A1    Switch the DIP switches of all modules in the CAN bus to set
+                                                                                         the module number
+                            Mdl responds:     No response
+                            Ctrl transmits:   02 A4 3F F0     11 03 00 00 00 00 00 02    Assign all modules to group 2
+                            Mdl responds:     No response
+                            Ctrl transmits:   02 A4 01 F0     11 03 00 00 00 00 00 03    Assign module #1 to group 3
+                            Mdl responds:     02 A4 F0 01     11 03 00 00 00 00 00 03    Response Module #1 assigned to group 3
+0x24      Setting DC power levels to parallel operation/series operation
+          Peer-to-peer:     Yes
+          Multicast:        Yes, response from every power module in the group
+          Broadcast:        Yes, without response
+                                  Byte 0         Byte 1          Byte 2        Byte 3        Byte 4           Byte 5           Byte 6           Byte 7
+          Request                                                                                                                             Operating
+                                  0x11            0x26              0            0             0                0                0             mode
+                                                                                                                                              DC levels
+          Response                                                                                                                            Operating
+                                  0x11            0x26              0            0             0                0                0             mode
+                                                                                                                                              DC levels
+          Note              0xA2: automatic mode; 0xA1: series operation; 0xA0: parallel operation;
+                            for further information, see documentation accompanying the product
+                            Default value: series operation (0xA1)
+                            The operating mode can only be switched if operational readiness is disabled.
+          NOTE: Avoid DC overvoltage in automatic or parallel operation
+          In parallel operation, the applied DC voltage at the DC connection terminal blocks must not exceed 500 V DC.
+          In automatic mode, a voltage of more than 500 V DC may be applied if operational readiness is disabled, or the applied voltage must slowly
+          increase to over 500 V DC (e.g., a connected battery whose voltage increases to over 500 V DC when charging is permitted). For detailed
+          information, please refer to the packing slip of the product.
+          Example           Ctrl transmits:   02 A4 3F F0     11 26 00 00 00 00 00 A1    Set all modules to series operation of the DC power level
+                            Mdl responds:     No response
+                            Ctrl transmits:   02 A4 00 F0     11 26 00 00 00 00 00 A2    Set module #0 to automatic operation of the DC power levels
+                            Mdl responds:     02 A4 F0 00     11 26 00 00 00 00 00 A2    Module #0 responds Set automatic operation of the DC power lev-
+                                                                                         els
+
+
+
+
+111472_en_00                                                                                                        Phoenix Contact             13 / 18
+                                                                          TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+Com-     Transmitting data fields
+mand no.
+0x24      Setting lower limit for DC discharge voltage
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1         Byte 2          Byte 3          Byte 4          Byte 5           Byte 6           Byte 7
+          Request                0x11            0x32             0              0                            Discharge voltage limit
+          Response               0x11            0x32             0              0                            Discharge voltage limit
+          Note             If the set lower limit of the applied DC voltage is reached, the module switches off.
+                           Default: 45 V DC
+                           (only for DC/AC on-grid and off-grid mode)
+          Example          Ctrl transmits:   02 A4 00 F0   11 32 00 00 00 04 93 E0         Module #0, set lower limit for DC discharge voltage to 300 V DC
+                           Mdl responds:     02 A4 F0 00   11 32 00 00 00 04 93 E0         Response Module #0, lower limit for DC discharge voltage
+                                                                                           300 V DC
+0x24      Enabling/disabling voltage stabilization mode
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1         Byte 2          Byte 3          Byte 4          Byte 5           Byte 6           Byte 7
+          Request                0x11            0x34             0              0               0                 0               0             On/off
+          Response               0x11            0x34             0              0               0                 0               0             On/off
+          Note             0xA0: disabled (default); 0xA1: enabled
+                           Only for grid-dependent AC/DC and DC/AC on-grid operation.
+                           If this mode is enabled, the device automatically switches from AC/DC mode to DC/AC on-grid mode and vice versa.
+                           The switchover depends on the applied voltage level on the DC side. If the applied voltage on the DC side reaches the set
+                           level from the command 0x24 0x10 0x01 or the command 0x24 0x11 0x01, the module switches to DC/AC mode. If the
+                           voltage is below the set level, the module switches to AC/DC mode.
+          Example          Ctrl transmits:   02 A4 3F F0   11 34 00 00 00 00 00 A1         Enable voltage stabilization mode for all modules
+                           Mdl responds:     No response
+                           Ctrl transmits:   02 A4 3F F0   10 01 00 00 00 06 1A 80         Set voltage level for all modules to 400 V DC
+                           Mdl responds:     02 A4 F0 3F   10 01 00 00 00 06 1A 80         Response by system coordinator Voltage level set to
+                                                                                           400 V DC
+0x24      Setting the power factor
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1         Byte 2          Byte 3          Byte 4          Byte 5           Byte 6           Byte 7
+          Request                0x21            0x05             0              0                      Power factor (floating-point number)
+          Response               0x21            0x05             0              0                      Power factor (floating-point number)
+          Note             Value range 0.8 ... 1.0; increments: 0.001
+                           To execute the command, the setting mode of the reactive power (command 0x21 0x17) must be set to 0xA1.
+                           The command only applies to DC/AC on-grid mode.
+0x24      Setting the output voltage on the AC side
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1         Byte 2          Byte 3          Byte 4          Byte 5           Byte 6           Byte 7
+          Request                0x21            0x06             0              0                   Setpoint – phase voltage on AC side [mV]
+          Response               0x21            0x06             0              0                   Setpoint – phase voltage on AC side [mV]
+          Note             Value range: 220 V AC ... 277 V AC
+                           To switch the phase voltage, operational readiness must be disabled
+                           Only possible in DC/AC off-grid mode
+          Example          Ctrl transmits:   02 A4 00 F0   21 06 00 00 00 03 82 70         Module #0, set AC phase voltage to 230 V AC
+                           Mdl responds:     02 A4 F0 00   21 06 00 00 00 03 82 70         Module #0 responds Set AC phase voltage to 230 V AC
+
+
+
+
+111472_en_00                                                                                                           Phoenix Contact            14 / 18
+                                                                        TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+Com-     Transmitting data fields
+mand no.
+0x24      Setting the output frequency on the AC side
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1        Byte 2        Byte 3         Byte 4         Byte 5           Byte 6       Byte 7
+          Request                0x21            0x07           0               0             Setpoint – output frequency on AC side [mHz]
+          Response               0x21            0x07           0               0             Setpoint – output frequency on AC side [mHz]
+          Note             Value range: 50 Hz ... 60 Hz
+                           Default: 50 Hz
+                           To switch the output frequency, operational readiness must be disabled.
+                           After transmitting the command, the input voltage on the DC side must be switched off and on again (power cycle)
+                           Only possible in DC/AC off-grid mode
+          Example          Ctrl transmits:   02 A4 00 F0   21 07 00 00 00 00 EA 60      Module #0, set output frequency to 60 Hz
+                           Mdl responds:     02 A4 F0 00   21 07 00 00 00 00 EA 60      Module #0 responds Set output frequency to 60 Hz
+0x24      Setting the reactive power at the output
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1        Byte 2        Byte 3         Byte 4         Byte 5           Byte 6       Byte 7
+          Request                0x21            0x08           0               0                    Reactive power at output [mVar]
+          Response               0x21            0x08           0               0                    Reactive power at output [mVar]
+          Note             To execute the command, the setting mode of the reactive power (command 0x21 0x17) must be set to 0xA2
+                           Only possible in DC/AC on-grid mode
+          Example          Ctrl transmits:   02 A4 00 F0   21 08 00 00 00 0F 42 40      Module #0, set reactive power to 1000 Var
+                           Mdl responds:     02 A4 F0 00   21 08 00 00 00 0F 42 40      Module #0 responds Set reactive power to 1000 Var
+0x24      Setting the module operating mode
+          Peer-to-peer:    Yes
+          Multicast:       Yes, response from every power module in the group
+          Broadcast:       Yes, without response
+                                 Byte 0         Byte 1        Byte 2        Byte 3         Byte 4         Byte 5           Byte 6       Byte 7
+          Request                                                                                                                      Operating
+                                 0x21            0x10           0               0             0              0               0
+                                                                                                                                        mode
+          Response                                                                                                                     Operating
+                                 0x21            0x10           0               0             0              0               0
+                                                                                                                                        mode
+          Note             0xA0: AC/DC (default); 0xA1: DC/AC on-grid mode; 0xA2: DC/AC off-grid mode
+                           To switch the operating mode, operational readiness must be disabled.
+                           In AC/DC mode and in DC/AC on-grid mode, the neutral conductor must not be connected.
+                           In DC/AC off-grid mode, the neutral conductor must be connected.
+                           Example for switching from AC/DC mode to DC/AC off-grid mode:
+                           1. Disable operational readiness
+                           2. Disconnect the module from the grid on the AC side (the battery remains connected on the DC side)
+                           3. Connect the AC load including the neutral conductor
+                           4. Switch the operating mode from AC/DC mode to DC/AC off-grid mode
+                           5. Enable operational readiness
+          Example          Ctrl transmits:   02 A4 3F F0   21 10 00 00 00 00 00 A1      Set all modules to DC/AC on-grid
+                           Mdl responds:     No response
+                           Ctrl transmits:   02 A4 00 F0   21 10 00 00 00 00 00 A0      Set module #0 to AC/DC mode
+                           Mdl responds:     02 A4 F0 00   21 10 00 00 00 00 00 A0      Module #0 responds Set to AC/DC mode
+
+
+
+
+111472_en_00                                                                                                     Phoenix Contact         15 / 18
+                                                                        TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+Com-     Transmitting data fields
+mand no.
+0x24      Selecting reactive power setting mode
+          Peer-to-peer:   Yes
+          Multicast:      Yes, response from every power module in the group
+          Broadcast:      Yes, without response
+                                Byte 0         Byte 1        Byte 2         Byte 3         Byte 4        Byte 5           Byte 6           Byte 7
+          Request                                                                                                         Reactive power setting
+                                0x21            0x17            0                0           0              0
+                                                                                                                                  mode
+          Response                                                                                                        Reactive power setting
+                                0x21            0x17            0                0           0              0
+                                                                                                                                  mode
+          Note            The reactive power can be set in two different ways:
+                          0xA0: No setting mode selected (default)
+                          0xA1: Setting via the power factor (command 0x21 0x05)
+                          0xA2: Setting via the reactive power value (command 0x21 0x08)
+                          If you want to set the reactive power via commands 0x21 0x05 or 0x21 0x08, this command must be executed first.
+                          Only possible in DC/AC on-grid mode
+          Example         Ctrl transmits:   02 A4 00 F0   21 17 00 00 00 00 00 A2    Module #0, set reactive power setting mode to reactive power value
+                          Mdl responds:     02 A4 F0 00   21 17 00 00 00 00 00 A2    Response module #0 Reactive power setting mode set to reactive
+                                                                                     power value
+                          Ctrl transmits:   02 A4 00 F0   21 17 00 00 00 00 00 A1    Module #0, set reactive power setting mode to power factor
+                          Mdl responds:     02 A4 F0 00   21 17 00 00 00 00 00 A1    Response module #0 Reactive power setting mode set to power fac-
+                                                                                     tor
+
+
+
+
+111472_en_00                                                                                                    Phoenix Contact             16 / 18
+                                                                      TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+3.5     Status description
+
+                 Bit    Description                    Condition                                                 Power mod-        LED
+                                                                                                                     ule
+                                                                                                                   status
+Status 1.3        7     1: PFC circuit is OFF          1: PFC circuit is OFF                                         OFF
+                  6     1: Overvoltage at the input    1: Vin > 535 V AC                                             OFF           Yellow
+                  5     1: Undervoltage at the input   1: Vin < 260 V AC                                             OFF           Yellow
+                  4     1: Input asymmetry             1: Input asymmetry (AC)                                        /              /
+                                                       1: One phase lost (input overvoltage if single phase
+                  3     1: Input phase lost                                                                           /              /
+                                                       first)
+                  2     1: Load sharing                1: Iavg_system > 15%                                           /              /
+                                                       1: Module ID is present multiple times on the CAN
+                  1     1: Module ID repetition                                                                      OFF            Red
+                                                       bus
+                                                       1: Limitation of the output power for high tempera-
+                  0     1: Power limitation                                                                           /              /
+                                                       tures or low input voltages
+Status 1.2                                             1: No CAN signal from the charging controller for
+                  7     1: CAN command interruption                                                                  OFF      Flashing yellow
+                                                       10 seconds
+                  6     1: Slow startup                1: Slow power module startup activated                         /              /
+                  5     1: Overvoltage at the output   1: Vout > 1036 V DC                                           OFF           Yellow
+                        1: Temperature threshold
+                  4                                    1: Ambient temperature threshold > 78°C ±3%                   OFF           Yellow
+                        value exceeded
+                  3     1: Fan error                   1: Fan error                                                  OFF       Flashing red
+                                                       1: Module shuts down to protect itself. For example,
+                  2     1: Module protection           due to input/output voltage, or undervoltage/over-            OFF           Yellow
+                                                       voltage, or overtemperature
+                                                       1: Module error (e.g., short circuit at the output, fan
+                  1     1: Module error                                                                              OFF            Red
+                                                       error, internal PCB error)
+                  0     1: DC side is OFF              1: DC side is OFF                                             OFF             /
+Status 1.1        7
+                  6
+                                                       1: Vout > 350 V DC, 2 seconds after OFF
+                  5     1: Discharge abnormal          1: Vout (400 ms after OFF) > 1/2 x Vout (at the time          OFF             /
+                                                       of switch-off)
+                                                       1: The module is deactivated by the “Module deacti-
+                  4     Module deactivated                                                                           OFF             /
+                                                       vation” command
+                  3
+                  2
+                  1
+                  0     1: Output short circuit        1: Vo < 25 V, Io > 10% for 2 seconds                          OFF            Red
+
+
+
+
+111472_en_00                                                                                                     Phoenix Contact     17 / 18
+                                                                     TRIO-HP/3AC/1KDC/20KW/BI CAN BUS Protocol V1.00
+
+
+
+
+                     Bit    Description                Condition
+Status 2.2            7
+                      6
+                      5
+                      4     E-STOP                     E-STOP active
+                      3
+                      2
+                      1     AC overload                AC overload in off-grid mode
+                                                       1: DC/AC off-grid mode (inverter)
+                      0     Mains power mode
+                                                       0: DC/AC on-grid mode (inverter)
+Status 2.1            7
+                      6
+                      5
+                      4
+                      3
+                      2
+                      1
+                                                       1: DC/AC mode (inverter)
+                      0     Operating mode
+                                                       0: AC/DC mode (rectifier)
+
+
+
+             Note: Communication interruption
+             If the power module does not receive any signals from the charging controller within 10 seconds, the power
+             module switches off.
+
+             Note: Interval time for controller requests
+             The interval time for control requests should be between 50 ms and 200 ms.
+
+             Note: The use of the frame with identifier 0x075XXXXX is not permitted in the charging controller
+             The power modules use frame 0x075XXXXX for internal communication with each other. Additional use of this
+             frame in the charging controller is not permitted.
+
+
+
+
+111472_en_00                Phoenix Contact GmbH & Co. KG • Flachsmarktstraße 8 • 32825 Blomberg • Germany        18 / 18
+                                                         phoenixcontact.com
+
