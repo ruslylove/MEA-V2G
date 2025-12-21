@@ -7,7 +7,7 @@
 \begin{tikzpicture}
 
   % Core Hardware Interface
-  \umlclass[x=5, y=0]{Whitebeet}{
+  \umlclass[x=5, y=1]{Whitebeet}{
     + mac : str \\
     + version : str
   }{
@@ -26,7 +26,7 @@
     + \_handleEvseConnected()
   }
 
-  \umlclass[x=0, y=2]{Battery}{
+  \umlclass[x=0, y=1]{Battery}{
     + soc : int \\
     + voltage : float
   }{
@@ -43,7 +43,7 @@
     + \_waitEvConnected()
   }
 
-  \umlclass[x=10, y=2]{Charger}{
+  \umlclass[x=10, y=1]{Charger}{
     + maxPower : float \\
     + maxCurrent : float
   }{

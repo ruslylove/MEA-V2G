@@ -53,9 +53,25 @@
 \contentsline {section}{\numberline {4.2}JSON Configuration}{22}{section.4.2}%
 \contentsline {subsection}{\numberline {4.2.1}EV Configuration (ev.json)}{22}{subsection.4.2.1}%
 \contentsline {subsection}{\numberline {4.2.2}EVSE Configuration (evse.json)}{22}{subsection.4.2.2}%
-\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{24}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Overview}{24}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Core Packet Examples}{24}{section.A.2}%
-\contentsline {subsection}{\numberline {A.2.1}BootNotification}{24}{subsection.A.2.1}%
-\contentsline {subsection}{\numberline {A.2.2}Heartbeat}{24}{subsection.A.2.2}%
-\contentsline {subsection}{\numberline {A.2.3}TransactionEvent (Started)}{24}{subsection.A.2.3}%
+\contentsline {chapter}{\numberline {5}Test Plan}{24}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Testing Scope}{24}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Test Environment}{24}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Test Procedures}{24}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}TC-01: System Initialization}{24}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}TC-02: EV Connection}{25}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}TC-03: Authorization}{25}{subsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.3.4}TC-04: Charging Loop}{25}{subsection.5.3.4}%
+\contentsline {subsection}{\numberline {5.3.5}TC-05: Session Stop}{25}{subsection.5.3.5}%
+\contentsline {subsection}{\numberline {5.3.6}TC-06: Safety/Emergency Stop}{26}{subsection.5.3.6}%
+\contentsline {chapter}{\numberline {6}Reference Documents}{27}{chapter.6}%
+\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{28}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Overview}{28}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Core Message Reference}{28}{section.A.2}%
+\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{30}{appendix.B}%
+\contentsline {section}{\numberline {B.1}System \& Configuration}{30}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{30}{section.B.2}%
+\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{30}{section.B.3}%
+\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{31}{section.B.4}%
+\contentsline {subsection}{\numberline {B.4.1}Configuration}{31}{subsection.B.4.1}%
+\contentsline {subsection}{\numberline {B.4.2}Session Control}{31}{subsection.B.4.2}%
+\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{31}{subsection.B.4.3}%

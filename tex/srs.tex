@@ -357,13 +357,13 @@ The following table maps the abstract EVSE states and OCPP events to specific CA
 \hline
 \textbf{EVSE State} & \textbf{Event / Trigger} & \textbf{System Action} & \textbf{CAN Command Sequence} \\
 \hline
-\textbf{PreCharge} & Session Setup & Match EV battery voltage to prevent inrush current. & \texttt{Set DC Voltage} (Target) \newline \texttt{Enable Operation} (0xA0) \\
+\textbf{PreCharge} & Session Setup & Match EV battery voltage to prevent inrush current. & \texttt{Set DC Voltage} (Target) \newline \texttt{Read DC Voltage} (Verify) \newline \texttt{Enable Operation} (0xA0) \\
 \hline
 \textbf{Charge} & \texttt{SetChargingProfile} (OCPP) & Apply new maximum current limit from CSMS. & \texttt{Set DC Current} (Profile Limit) \\
 \hline
 \textbf{Charge} & \texttt{CurrentDemand} (EV) & Follow EV's dynamic current request. & \texttt{Set DC Current} (EV Target) \\
 \hline
-\textbf{Stop} & Session Check / User Stop & Safe shutdown sequence. & \texttt{Set DC Current} (0 A) \newline \texttt{Disable Operation} (0xA1) \\
+\textbf{Stop} & Session Check / User Stop & Safe shutdown sequence. & \texttt{Set DC Current} (0 A) \newline \texttt{Read DC Current} (Verify 0A) \newline \texttt{Disable Operation} (0xA1) \\
 \hline
 \end{tabular}
 \end{center}
@@ -606,6 +606,8 @@ Init & Unavailable & System initialization or re-boot. \\
 \hline
 Wait & Available & Ready for a new session (CP State A). \\
 \hline
+Wait (Reserved) & Reserved & Reserved for specific idTag via \textit{ReserveNow}. \\
+\hline
 SLAC & Preparing & Plugged in, matching physics. \\
 \hline
 Session, Authorization & Preparing & Protocol negotiation and Auth. \\
@@ -661,47 +663,223 @@ Defines the characteristics of the Charging Station:
     \item \textbf{schedule}: Defines power delivery schedules (SASchedules) sent to the EV during the Charge Parameter Discovery phase.
 \end{itemize}
 
+\chapter{Test Plan}
+
+\section{Testing Scope}
+The validation of the MEA-V2G system ensures compliance with ISO 15118 standards and robust handling of high-voltage safety.
+\begin{enumerate}
+    \item \textbf{Unit Testing}: Verification of individual classes (e.g., `Battery`, `Charger`) using the Python `unittest` framework.
+    \item \textbf{Integration Testing}: Verification of the Host Control Interface (HCI) between the application and the Whitebeet module.
+    \item \textbf{System Testing}: End-to-end reliability provided by pairing a simulated EV with the EVSE.
+\end{enumerate}
+
+\section{Test Environment}
+\begin{itemize}
+    \item \textbf{DUT (Device Under Test)}: The MEA-V2G software running on a Linux host (e.g., Raspberry Pi 4).
+    \item \textbf{Hardware Setup}:
+        \begin{itemize}
+            \item 1x Codico Whitebeet-EI (EVSE Role)
+            \item 1x Codico Whitebeet-PI (EV Role) connected via PLC coupling.
+            \item Physical or Simulated Power Electronics.
+        \end{itemize}
+\end{itemize}
+
+\section{Test Procedures}
+
+\subsection{TC-01: System Initialization}
+\textbf{Objective}: Verify the application correctly detects and initializes the Whitebeet hardware. \\
+\textbf{Steps}:
+\begin{enumerate}
+    \item Power on the detailed hardware.
+    \item Launch `python3 Application.py --role evse`.
+    \item Observe console logs for `[Whitebeet] System Version: x.y.z`.
+\end{enumerate}
+\textbf{Expected Result}: The system reports a valid firmware version and enters the `Wait` state (CP State A).
+
+\subsection{TC-02: EV Connection}
+\textbf{Objective}: Verify successful plug-in detection and SLAC matching. \\
+\textbf{Steps}:
+\begin{enumerate}
+    \item Ensure EVSE is in `Wait` state.
+    \item Physically connect the CCS cable (simulated by connecting CP/PE pins).
+    \item Trigger SLAC from the EV side.
+\end{enumerate}
+\textbf{Expected Result}:
+\begin{itemize}
+    \item EVSE transitions to `SLAC`.
+    \item Matching is successful (GreenPHY association).
+    \item EVSE transitions to `Session` (Protocol Negotiation).
+\end{itemize}
+
+\subsection{TC-03: Authorization}
+\textbf{Objective}: Verify the system correctly processes payment/authorization methods. \\
+\textbf{Steps}:
+\begin{enumerate}
+    \item Initiate a session with `PaymentOption=ExternalPayment` (EIM).
+    \item When prompted on the EVSE console, enter "yes" to authorize.
+\end{enumerate}
+\textbf{Expected Result}: EVSE transitions from `Authorization` to `Parameter Discovery`.
+
+\subsection{TC-04: Charging Loop}
+\textbf{Objective}: Verify the main energy transfer loop. \\
+\textbf{Steps}:
+\begin{enumerate}
+    \item Complete Pre-Charge (Voltage matching).
+    \item EV requests a current draw (e.g., 10A).
+\end{enumerate}
+\textbf{Expected Result}:
+\begin{itemize}
+    \item Contactors close (Simulated).
+    \item EVSE output current ramps to 10A.
+    \item `CurrentDemandRes` messages return `DC\_EVSEStatus=Charging`.
+\end{itemize}
+
+\subsection{TC-05: Session Stop}
+\textbf{Objective}: Verify normal session termination. \\
+\textbf{Steps}:
+\begin{enumerate}
+    \item Allow SOC to reach target OR manually stop the EV.
+    \item EV sends `SessionStopReq`.
+\end{enumerate}
+\textbf{Expected Result}:
+\begin{itemize}
+    \item EVSE initiates Welding Detection.
+    \item Contactors open (Voltage returns to 0V).
+    \item EVSE returns to `Wait` state.
+\end{itemize}
+
+\subsection{TC-06: Safety/Emergency Stop}
+\textbf{Objective}: Verify immediate shutdown upon fault or unplug. \\
+\textbf{Steps}:
+\begin{enumerate}
+    \item During `Charging` state, physically disconnect the cable (CP line open).
+\end{enumerate}
+\textbf{Expected Result}:
+\begin{itemize}
+    \item EVSE immediately detects `CP State A`.
+    \item State transitions to `Stop` or `Faulted`.
+    \item Hardware output is disabled (< 20ms).
+\end{itemize}
+\newpage
+
+\chapter{Reference Documents}
+\begin{enumerate}
+    \item[{[1]}] ISO 15118-2:2014. \textit{Road vehicles — Vehicle to grid communication interface — Part 2: Network and application protocol requirements}. International Organization for Standardization.
+    \item[{[2]}] ISO 15118-3:2015. \textit{Road vehicles — Vehicle to grid communication interface — Part 3: Physical and data link layer requirements}. International Organization for Standardization.
+    \item[{[3]}] IEC 61851-1. \textit{Electric vehicle conductive charging system - Part 1: General requirements}. International Electrotechnical Commission.
+    \item[{[4]}] Open Charge Alliance. \textit{Open Charge Point Protocol 2.0.1}.
+    \item[{[5]}] Codico. \textit{Whitebeet-EI/PI Hardware Manual}.
+\end{enumerate}
+
 \appendix
 \chapter{OCPP 2.0.1 Protocol Details}
 \section{Overview}
 OCPP 2.0.1 is the latest version of the Open Charge Point Protocol, enabling communication between the EVSE and the Charging Station Management System (CSMS). Unlike previous SOAP-based versions, it relies heavily on JSON over WebSockets for efficient, real-time data exchange. Key improvements include enhanced security, Plug \& Charge support, and device management.
 
-\section{Core Packet Examples}
-\subsection{BootNotification}
-Sent when the EVSE boots up to register with the CSMS.
+\section{Core Message Reference}
+The following table lists the essential messages in the OCPP 2.0.1 protocol used for basic charging sessions and device management.
 
-\begin{verbatim}
-{
-  "reason": "PowerUp",
-  "chargingStation": {
-    "model": "TRIO-HP",
-    "vendorName": "PHOENIX CONTACT"
-  }
-}
-\end{verbatim}
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{0.3\textwidth}|p{0.15\textwidth}|p{0.45\textwidth}|}
+\hline
+\textbf{Message Name} & \textbf{Direction} & \textbf{Description} \\ \hline
 
-\subsection{Heartbeat}
-Sent periodically to indicate the EVSE is still online.
+\multicolumn{3}{|c|}{\textbf{Provisioning \& Lifecycle}} \\ \hline
+BootNotification & CS $\to$ CSMS & Sent when the Charging Station boots up to register with the CSMS and get configuration. \\ \hline
+Heartbeat & CS $\to$ CSMS & Periodic signal to indicate the station is still online. \\ \hline
+Reset & CSMS $\to$ CS & Commands the station to soft or hard reset. \\ \hline
 
-\begin{verbatim}
-{
-  "customData": null
-}
-\end{verbatim}
+\multicolumn{3}{|c|}{\textbf{Authorization}} \\ \hline
+Authorize & CS $\to$ CSMS & Verifies a token (RFID, App) to start a transaction. \\ \hline
 
-\subsection{TransactionEvent (Started)}
-Sent when a transaction begins (e.g., EV plugs in or session authorized).
+\multicolumn{3}{|c|}{\textbf{Transactions (Events)}} \\ \hline
+TransactionEvent (Started) & CS $\to$ CSMS & \textbf{[NEW]} Unified message replacing \textit{StartTransaction}. Sent when a transaction begins. \\ \hline
+TransactionEvent (Updated) & CS $\to$ CSMS & \textbf{[NEW]} replaces \textit{MeterValues}. Periodic updates during charging. \\ \hline
+TransactionEvent (Ended) & CS $\to$ CSMS & \textbf{[NEW]} Unified message replacing \textit{StopTransaction}. Sent when the transaction stops. \\ \hline
 
-\begin{verbatim}
-{
-  "eventType": "Started",
-  "timestamp": "2024-12-21T12:00:00Z",
-  "triggerReason": "CablePluggedIn",
-  "seqNo": 1,
-  "transactionInfo": {
-    "transactionId": "12345"
-  }
-}
-\end{verbatim}
+\multicolumn{3}{|c|}{\textbf{Availability \& Status}} \\ \hline
+StatusNotification & CS $\to$ CSMS & Reports a change in component status (e.g., Connector: Available $\to$ Occupied). \\ \hline
+ChangeAvailability & CSMS $\to$ CS & Requests to change the availability of a connector or station (Operative/Inoperative). \\ \hline
+NotifyReport & CS $\to$ CSMS & \textbf{[NEW]} Reports monitoring data. Part of the new Device Model. \\ \hline
+
+\multicolumn{3}{|c|}{\textbf{Remote Control}} \\ \hline
+RequestStartTransaction & CSMS $\to$ CS & Remotely initiates a transaction (e.g., via mobile app). \\ \hline
+RequestStopTransaction & CSMS $\to$ CS & Remotely stops an active transaction. \\ \hline
+UnlockConnector & CSMS $\to$ CS & Forces the connector lock to open. \\ \hline
+
+\multicolumn{3}{|c|}{\textbf{Configuration (Device Model)}} \\ \hline
+GetVariables & CSMS $\to$ CS & \textbf{[NEW]} Retrieves values of component variables (Replaces \textit{GetConfiguration}). \\ \hline
+SetVariables & CSMS $\to$ CS & \textbf{[NEW]} Modifies component variables (Replaces \textit{ChangeConfiguration}). \\ \hline
+
+\multicolumn{3}{|c|}{\textbf{Data \& Firmware}} \\ \hline
+DataTransfer & Both & Exchange of implementation-specific data. \\ \hline
+UpdateFirmware & CSMS $\to$ CS & Instructs the station to download and install new firmware. \\ \hline
+FirmwareStatusNotification & CS $\to$ CSMS & Reports progress of the firmware update download/installation. \\ \hline
+
+\end{tabular}
+\end{center}
+
+\chapter{Whitebeet Interface Reference}
+The \texttt{Whitebeet} class encapsulates the low-level communication with the GreenPHY module. Below is a comprehensive list of its public interface methods used for controlling the charging session.
+
+\section{System \& Configuration}
+\begin{description}
+    \item[\texttt{init(iftype, iface, mac)}] Initializes the interface (Ethernet/SPI) and sets the destination MAC address.
+    \item[\texttt{systemGetVersion()}] Retrieves the firmware version of the Whitebeet module (e.g., "1.2.3").
+    \item[\texttt{networkConfigSetPortMirrorState(val)}] Configures port mirroring for debugging traffic.
+\end{description}
+
+\section{Control Pilot (CP)}
+\begin{description}
+    \item[\texttt{controlPilotSetMode(mode)}] Sets the operation mode (0: EV, 1: EVSE).
+    \item[\texttt{controlPilotStart()}] Starts the CP PWM generation/monitoring.
+    \item[\texttt{controlPilotStop()}] Stops the CP service.
+    \item[\texttt{controlPilotSetDutyCycle(cycle)}] Sets the PWM duty cycle (e.g., 5.0\% for 3A digital communication).
+    \item[\texttt{controlPilotGetState()}] Returns the current CP state (A, B, C, D, E, F).
+    \item[\texttt{controlPilotGetVoltage()}] Returns the measured voltage on the CP pin.
+    \item[\texttt{controlPilotGetResistorValue()}] Returns the measured proximity resistor value.
+\end{description}
+
+\section{SLAC (GreenPHY)}
+\begin{description}
+    \item[\texttt{slacStart(mode)}] Starts the SLAC service (0: EV, 1: EVSE).
+    \item[\texttt{slacStop()}] Stops the SLAC service.
+    \item[\texttt{slacStartMatching()}] Initiates the SLAC matching process (EVSE side).
+    \item[\texttt{slacSetValidationConfiguration(cfg)}] Sets validation parameters for the SLAC association.
+\end{description}
+
+\section{V2G Session Management (EVSE)}
+These methods control the high-level ISO 15118 session handling on the EVSE side.
+
+\subsection{Configuration}
+\begin{description}
+    \item[\texttt{v2gEvseSetConfiguration(config)}] Configures critical EVSE parameters (EVSE-ID, Payment Options, Protocols).
+    \item[\texttt{v2gEvseSetSdpConfig(config)}] Configures the SECC Discovery Protocol (ports, security).
+    \item[\texttt{v2gEvseSetSchedules(sched)}] Sets the charging schedules (PMax, Sales Tariffs) sent to the EV.
+    \item[\texttt{v2gEvseSetDcChargingParameters(params)}] Sets the DC limits (Max Voltage, Max Current, Isolation Level).
+    \item[\texttt{v2gEvseSetAcChargingParameters(params)}] Sets the AC limits (Nominal Voltage, Max Current, RCD).
+\end{description}
+
+\subsection{Session Control}
+\begin{description}
+    \item[\texttt{v2gEvseStartListen()}] Starts listening for incoming V2G connection requests (SDP).
+    \item[\texttt{v2gEvseStopListen()}] Stops listening for new connections.
+    \item[\texttt{v2gEvseSetAuthorizationStatus(status)}] Authorizes the session (e.g., after RFID check).
+    \item[\texttt{v2gEvseSetCableCheckFinished(status)}] Signals completion of the Cable Check phase (Isolation test).
+    \item[\texttt{v2gEvseStartCharging()}] Signals readiness to start energy transfer (PreCharge/Current Demand).
+    \item[\texttt{v2gEvseStopCharging()}] Signals a stop request to the EV.
+\end{description}
+
+\subsection{Notifications \& Parsing}
+The application must poll for messages using \texttt{v2gEvseReceiveRequest()}. Returned payloads are parsed using these helpers:
+\begin{description}
+    \item[\texttt{v2gEvseParseSessionStarted(data)}] Extracts Protocol ID, Session ID, and EVCC-ID.
+    \item[\texttt{v2gEvseParsePaymentSelected(data)}] Extracts selected payment method (Contract/PnC).
+    \item[\texttt{v2gEvseParseEnergyTransferModeSelected(data)}] Extracts requested energy mode (DC Extended, etc.).
+    \item[\texttt{v2gEvseParseDCChargeParametersChanged(data)}] Extracts EV target voltage/current and SOC.
+    \item[\texttt{v2gEvseParseStartChargingRequested(data)}] Extracts the charging profile accepted by the EV.
+    \item[\texttt{v2gEvseParseSessionStopped(data)}] Extracts the session closure reason.
+\end{description}
 
 \end{document}
