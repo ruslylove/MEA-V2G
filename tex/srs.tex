@@ -251,7 +251,7 @@ The \texttt{Charger} class performs a physical simulation of the power electroni
     \item \textbf{Fault Detection}: The class includes methods like \texttt{isVoltageLimitExceeded()} and \texttt{isPowerLimitExceeded()} to trigger immediate session termination if operating conditions are violated.
 \end{itemize}
 
-The \texttt{Charger} class implements the \texttt{ChargerInterface} abstract base class. This design pattern allows the simulation module to be easily swapped with a real hardware driver (e.g., a \texttt{CanCharger} class) that communicates with physical power electronics via CAN bus or other protocols, while maintaining a consistent API for the \texttt{EVSE} logic.
+The \texttt{Charger} class implements the \texttt{ChargerInterface} abstract base class. This design pattern allows the simulation module to be easily swapped with a real hardware driver, such as the \texttt{CanCharger} class, which communicates with physical power electronics via CAN bus using the \texttt{python-can} library, while maintaining a consistent API for the \texttt{EVSE} logic.
 
 \subsection{Implementing a Custom Charger}
 To integrate specific power electronics hardware, developers must create a subclass of \texttt{ChargerInterface}. This ensures the \texttt{EVSE} logic remains decoupled from the physical layer.
@@ -367,6 +367,14 @@ The following table maps the abstract EVSE states and OCPP events to specific CA
 \hline
 \end{tabular}
 \end{center}
+
+\subsubsection{CanCharger Implementation}
+The \texttt{CanCharger} class provides the concrete implementation for the TRIO-HP protocol. It utilizes the \texttt{python-can} library to handle low-level bus arbitration and message framing.
+\begin{itemize}
+    \item \textbf{Bus Abstraction}: Supports multiple interfaces (SocketCAN, Kvaser, Virtual) via the library's abstraction layer.
+    \item \textbf{Threaded Listening}: A continuous background thread monitors the bus for broadcast updates (e.g., current system voltage) to keep the internal state synchronized with the hardware.
+    \item \textbf{Error Handling}: Automatically detects connection failures or missing libraries, falling back to safe states or raising initialization errors.
+\end{itemize}
 
 \section{Battery Component}
 The \texttt{Battery} class provides a logical model of the EV's energy storage, managing State of Charge (SOC) and physical limits.
@@ -661,6 +669,15 @@ Defines the characteristics of the Charging Station:
 \begin{itemize}
     \item \textbf{charger}: Output limits (Max Voltage/Current/Power) and slew rates ($\Delta V, \Delta I$) for the simulation.
     \item \textbf{schedule}: Defines power delivery schedules (SASchedules) sent to the EV during the Charge Parameter Discovery phase.
+\end{itemize}
+
+\section{Software Dependencies}
+The MEA-V2G software relies on the following external Python libraries for hardware communication and protocol handling:
+\begin{itemize}
+    \item \textbf{python-can}: Required for the \texttt{CanCharger} class to communicate with CAN-based power modules.
+    \item \textbf{spidev}: Required for SPI communication with the Whitebeet module on Raspberry Pi platforms.
+    \item \textbf{RPi.GPIO}: Required for General Purpose I/O control on Raspberry Pi.
+    \item \textbf{Flask}: Required for the REST API server.
 \end{itemize}
 
 \chapter{Test Plan}

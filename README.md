@@ -128,7 +128,7 @@ Find the MAC address printed on the label of the board in the form of i.e. c4:93
 Find the ethernet interface the WHITE-beet is connected to with
 
 ```console
-$ ip list
+$ ip link
 ```
 
 Run the Application in EVSE mode by typing (we need root privileges for raw socket access).
