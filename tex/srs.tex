@@ -795,6 +795,25 @@ System tests verify the full end-to-end stack, including the external management
     \end{itemize}
 \end{description}
 
+\subsection{System Testing with Local Mock OCPP Server}
+Detailed validation of MEA compliance and custom extensions is performed using a dedicated system test that runs a local mock CSMS.
+\begin{description}
+    \item[\texttt{tests/system/test\_mea\_mock.py}] A self-contained test suite that spins up a local WebSocket server (acting as the CSMS) and an instance of the \texttt{Ocpp16Interface}.
+    \begin{itemize}
+        \item \textbf{Objective}: Validate OCPP compliance and MEA-specific extensions without reliance on external live servers.
+        \item \textbf{Coverage}: Runs the full suite of MEA compliance scenarios:
+        \begin{enumerate}
+            \item \textbf{1.x Configuration}: Boot, Status, Heartbeat, Local List.
+            \item \textbf{2.x--3.x Operations}: Auto-Charge logic, Start/Stop Transaction, Remote Start/Stop via CSMS.
+            \item \textbf{4.x--5.x Resets \& Reservations}: Soft/Hard reset, ReserveNow, CancelReservation.
+            \item \textbf{6.x Charging Profiles}: Smart Charging Profiles (TxProfile).
+            \item \textbf{7.x Abnormal Conditions}: Handling of busy states and emergency stops.
+            \item \textbf{9.x MEA Extensions}: Custom configuration keys for V2G power demands.
+        \end{enumerate}
+        \item \textbf{Execution}: Run via \texttt{python3 tests/system/test\_mea\_mock.py}.
+    \end{itemize}
+\end{description}
+
 \subsection{Test Execution}
 The entire test suite can be executed from the project root directory using the standard Python test runner.
 

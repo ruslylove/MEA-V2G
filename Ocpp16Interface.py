@@ -15,7 +15,8 @@ from ocpp.v16.enums import (
     ChargingProfileStatus,
     ClearCacheStatus,
     UpdateStatus,
-    AvailabilityStatus
+    AvailabilityStatus,
+    RemoteStartStopStatus
 )
 from ocpp.routing import on
 from Charger import Charger
@@ -40,6 +41,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             self.charger.start()
         else:
             LOGGER.warning("BootNotification rejected!")
+        return response # Return response for testing
 
     async def send_heartbeat(self):
         request = call.Heartbeat()
@@ -68,25 +70,25 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         LOGGER.info(f"Received RemoteStartTransaction for id_tag: {id_tag}")
 
         if not self.charger.stopped:
-             return call_result.RemoteStartTransactionPayload(status=AuthorizationStatus.rejected)
+             return call_result.RemoteStartTransaction(status=RemoteStartStopStatus.rejected)
 
         self.charger.start()
         # In 1.6, we accept, but the transaction ID comes later or we generate one?
         # Typically RemoteStartTransaction returns status. Then CP sends StartTransaction.
         # For this minimal implementation we just say accepted.
         
-        return call_result.RemoteStartTransactionPayload(status=AuthorizationStatus.accepted)
+        return call_result.RemoteStartTransaction(status=RemoteStartStopStatus.accepted)
 
     @on(Action.remote_stop_transaction)
     async def on_remote_stop_transaction(self, transaction_id, **kwargs):
         LOGGER.info(f"Received RemoteStopTransaction for transaction_id: {transaction_id}")
         
         if self.charger.stopped:
-             return call_result.RemoteStopTransactionPayload(status=AuthorizationStatus.rejected)
+             return call_result.RemoteStopTransaction(status=RemoteStartStopStatus.rejected)
 
         self.charger.stop()
         
-        return call_result.RemoteStopTransactionPayload(status=AuthorizationStatus.accepted)
+        return call_result.RemoteStopTransaction(status=RemoteStartStopStatus.accepted)
 
     @on(Action.change_configuration)
     async def on_change_configuration(self, key, value, **kwargs):
@@ -105,77 +107,77 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                 else:
                     LOGGER.info("[V2G] Idle")
                 
-                return call_result.ChangeConfigurationPayload(status=ConfigurationStatus.accepted)
+                return call_result.ChangeConfiguration(status=ConfigurationStatus.accepted)
             except ValueError:
                 LOGGER.warning(f"[V2G] Invalid power value: {value}")
-                return call_result.ChangeConfigurationPayload(status=ConfigurationStatus.rejected)
+                return call_result.ChangeConfiguration(status=ConfigurationStatus.rejected)
 
         # Simple mapping examples
         status = ConfigurationStatus.accepted
         
-        return call_result.ChangeConfigurationPayload(status=status)
+        return call_result.ChangeConfiguration(status=status)
         
     @on(Action.trigger_message)
     async def on_trigger_message(self, requested_message, **kwargs):
         LOGGER.info(f"Received TriggerMessage for {requested_message}")
-        return call_result.TriggerMessagePayload(status=ConfigurationStatus.accepted)
+        return call_result.TriggerMessage(status=ConfigurationStatus.accepted)
 
     @on(Action.unlock_connector)
     async def on_unlock_connector(self, connector_id, **kwargs):
         LOGGER.info(f"Received UnlockConnector for {connector_id}")
-        return call_result.UnlockConnectorPayload(status=UnlockStatus.unlocked)
+        return call_result.UnlockConnector(status=UnlockStatus.unlocked)
 
     @on(Action.get_diagnostics)
     async def on_get_diagnostics(self, location, **kwargs):
         LOGGER.info(f"Received GetDiagnostics for {location}")
-        return call_result.GetDiagnosticsPayload(file_name="diagnostics.log")
+        return call_result.GetDiagnostics(file_name="diagnostics.log")
 
     @on(Action.update_firmware)
     async def on_update_firmware(self, location, **kwargs):
         LOGGER.info(f"Received UpdateFirmware from {location}")
-        return call_result.UpdateFirmwarePayload()
+        return call_result.UpdateFirmware()
 
     @on(Action.reset)
     async def on_reset(self, type, **kwargs):
         LOGGER.info(f"Received Reset type: {type}")
-        return call_result.ResetPayload(status=ResetStatus.accepted)
+        return call_result.Reset(status=ResetStatus.accepted)
 
     @on(Action.reserve_now)
     async def on_reserve_now(self, reservation_id, expiry_date, id_tag, connector_id, **kwargs):
         LOGGER.info(f"Received ReserveNow for {id_tag}")
-        return call_result.ReserveNowPayload(status=ReservationStatus.accepted)
+        return call_result.ReserveNow(status=ReservationStatus.accepted)
 
     @on(Action.cancel_reservation)
     async def on_cancel_reservation(self, reservation_id, **kwargs):
         LOGGER.info(f"Received CancelReservation for {reservation_id}")
-        return call_result.CancelReservationPayload(status=CancelReservationStatus.accepted)
+        return call_result.CancelReservation(status=CancelReservationStatus.accepted)
 
     @on(Action.set_charging_profile)
     async def on_set_charging_profile(self, connector_id, cs_charging_profiles, **kwargs):
         LOGGER.info(f"Received SetChargingProfile for connector {connector_id}")
-        return call_result.SetChargingProfilePayload(status=ChargingProfileStatus.accepted)
+        return call_result.SetChargingProfile(status=ChargingProfileStatus.accepted)
 
     @on(Action.clear_cache)
     async def on_clear_cache(self, **kwargs):
         LOGGER.info("Received ClearCache")
-        return call_result.ClearCachePayload(status=ClearCacheStatus.accepted)
+        return call_result.ClearCache(status=ClearCacheStatus.accepted)
 
     @on(Action.send_local_list)
     async def on_send_local_list(self, list_version, local_authorization_list, update_type, **kwargs):
         LOGGER.info("Received SendLocalList")
-        return call_result.SendLocalListPayload(status=UpdateStatus.accepted)
+        return call_result.SendLocalList(status=UpdateStatus.accepted)
 
     @on(Action.get_local_list_version)
     async def on_get_local_list_version(self, **kwargs):
         LOGGER.info("Received GetLocalListVersion")
-        return call_result.GetLocalListVersionPayload(list_version=1)
+        return call_result.GetLocalListVersion(list_version=1)
 
     @on(Action.change_availability)
     async def on_change_availability(self, connector_id, type, **kwargs):
         LOGGER.info(f"Received ChangeAvailability {type} for {connector_id}")
-        return call_result.ChangeAvailabilityPayload(status=AvailabilityStatus.accepted)
+        return call_result.ChangeAvailability(status=AvailabilityStatus.accepted)
 
     @on(Action.get_configuration)
     async def on_get_configuration(self, keys, **kwargs):
         LOGGER.info(f"Received GetConfiguration for {keys}")
-        return call_result.GetConfigurationPayload(configuration_key=[])
+        return call_result.GetConfiguration(configuration_key=[])
