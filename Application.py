@@ -21,6 +21,7 @@ if __name__ == "__main__":
     parser.add_argument('--api-port', type=int, help='Enable the Grafana/Dashboard API on the specified port (e.g., 5000).')
     parser.add_argument('--ocpp-url', type=str, help='WebSocket URL for OCPP CSMS (e.g., ws://localhost:9000/CP_1).')
     parser.add_argument('--ocpp-id', type=str, help='Charge Point ID for OCPP.')
+    parser.add_argument('--ocpp-version', type=str, choices=('1.6', '2.0.1', '2.1'), default='2.0.1', help='OCPP Protocol Version (default: 2.0.1).')
     args = parser.parse_args()
 
     print(f'Welcome to Codico Whitebeet {args.role} reference implementation')
@@ -129,7 +130,7 @@ if __name__ == "__main__":
             # Start the EVSE loop
             if args.ocpp_url and args.ocpp_id:
                 from OcppWorker import OcppWorker
-                ocpp_worker = OcppWorker(args.ocpp_url, args.ocpp_id, evse.getCharger())
+                ocpp_worker = OcppWorker(args.ocpp_url, args.ocpp_id, evse.getCharger(), args.ocpp_version)
                 ocpp_worker.start()
 
             evse.whitebeet.networkConfigSetPortMirrorState(args.portmirror)

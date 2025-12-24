@@ -9,7 +9,7 @@ from Charger import Charger
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger('ocpp_interface')
 
-class OcppInterface(Ocpp201ChargePoint):
+class Ocpp201Interface(Ocpp201ChargePoint):
     def __init__(self, id, connection, charger: Charger):
         super().__init__(id, connection)
         self.charger = charger

@@ -9,25 +9,32 @@
     \umlactor[class=EVSE,x=0]{EVSE}
     \umlactor[class=CSMS,x=8]{CSMS}
 
+
+
     % Boot Notification
-    \begin{umlcall}[dt=5, op=BootNotification, type=synchron, return=Accepted]{EVSE}{CSMS}
+    \begin{umlcall}[dt=5, name=bootNotif, op=BootNotification, type=synchron, return=Accepted]{EVSE}{CSMS}
     \end{umlcall}
 
     % Heartbeat (Periodic)
-    \begin{umlcall}[dt=5, op=Heartbeat, type=synchron, return=Accepted]{EVSE}{CSMS}
+    \begin{umlcall}[dt=5, name=heartBeat, op=Heartbeat, type=synchron, return=Accepted]{EVSE}{CSMS}
     \end{umlcall}
+
+        % Initial State
+    \umlnote[x=-2.5, y=-1.5]{sb-bootNotif}{State: Available}
 
     % Remote Start
-    \begin{umlcall}[dt=5, op=RequestStartTransaction, type=synchron, return=Accepted]{CSMS}{EVSE}
+    \begin{umlcall}[dt=5, name=remoteStart, op=RequestStartTransaction, type=synchron, return=Accepted]{CSMS}{EVSE}
     \end{umlcall}
+    \umlnote[x=-2.5, y=-3.5]{et-remoteStart}{State: Preparing}
 
     % Transaction Started Event
-    \begin{umlcall}[dt=5, op=TransactionEvent (Started), type=synchron, return=Accepted]{EVSE}{CSMS}
+    \begin{umlcall}[dt=5, name=startTx, op=TransactionEvent (Started), type=synchron, return=Accepted]{EVSE}{CSMS}
     \end{umlcall}
+    \umlnote[x=-2.5, y=-5.5]{st-startTx}{State: Charging}
 
     % Charging Loop (simplified)
-    \umlfragment[type=loop, label=Charging, inner xsep=8]{
-      \begin{umlcall}[dt=5, op=StatusNotification (Charging), type=synchron, return=Accepted]{EVSE}{CSMS}
+    \umlfragment[type=loop, label=Charging Loop, inner xsep=8, inner ysep=10]{
+      \begin{umlcall}[dt=6, op=TransactionEvent (Updated), type=synchron, return=Accepted]{EVSE}{CSMS}
       \end{umlcall}
     }
 
@@ -36,7 +43,11 @@
     \end{umlcall}
 
     % Transaction Ended Event
-    \begin{umlcall}[dt=5, op=TransactionEvent (Ended), type=synchron, return=Accepted]{EVSE}{CSMS}
+    \begin{umlcall}[dt=5, name=endTx, op=TransactionEvent (Ended), type=synchron, return=Accepted]{EVSE}{CSMS}
+    \end{umlcall}
+    \umlnote[x=-2.5, y=-7.5]{st-endTx}{State: Finishing}
+    
+    \begin{umlcall}[dt=4, op=StatusNotification(Available), type=synchron]{EVSE}{CSMS}
     \end{umlcall}
 
   \end{umlseqdiag}

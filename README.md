@@ -234,6 +234,26 @@ Run the application in EV mode by typing
 $ sudo .venv/bin/python3 Application.py eth -i eth0 -m c4:93:00:33:33:33 -r EV
 ```
 
+## OCPP SUPPORT
+
+The application supports multiple versions of the Open Charge Point Protocol (OCPP) for communication with a Central System (CSMS).
+
+### Supported Versions
+
+*   **OCPP 1.6**: The widely used standard.
+*   **OCPP 2.0.1**: The latest major version with enhanced features (default).
+*   **OCPP 2.1**: Experimental support for the upcoming standard.
+
+### Usage
+
+To specify the OCPP version, use the `--ocpp-version` argument when running the application in EVSE mode.
+
+```console
+$ sudo .venv/bin/python3 Application.py eth -i eth0 -r EVSE --ocpp-url ws://localhost:9000/CP_1 --ocpp-id CP_1 --ocpp-version 1.6
+```
+
+If the `--ocpp-version` argument is not provided, the application defaults to **OCPP 2.0.1**.
+
 ## CONFIGURATION
 
 You can set the configuration via a configuration file in json format.
@@ -291,7 +311,7 @@ You can enable the API either through the GUI or the command line:
 *   **From the GUI**: Enter a port number (e.g., `5000`) in the "API Port" field.
 *   **From the command line**: Add the `--api-port` argument when running `Application.py`:
     ```console
-    $ sudo .venv/bin/python3 Application.py eth -i enp3s0 -r EVSE --api-port 5000
+    $ sudo .venv/bin/python3 Application.py eth -i enp3s0 -r EVSE --api-port 5000 --ocpp-version 2.0.1
     ```
 
 ### API Endpoint

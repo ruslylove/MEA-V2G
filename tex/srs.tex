@@ -1,6 +1,7 @@
 \documentclass[a4paper,11pt]{report}
 
 % Packages
+\usepackage[table]{xcolor}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
@@ -9,7 +10,7 @@
 \usepackage{titlesec}
 \usepackage{parskip}
 \usepackage{float}
-\usepackage[table]{xcolor}
+\usepackage{longtable}
 
 % Geometry setup
 \geometry{
@@ -171,6 +172,26 @@ The charging process relies on the tight synchronization between the EV and EVSE
     \includegraphics[width=0.7\textwidth]{states_relation_diagram.pdf}
     \caption{EV-EVSE State Synchronization}
     \label{fig:staterelation}
+\end{figure}
+
+\section{Charging Loop Sequence}
+The following sequence diagram depicts the simplified ISO 15118 charging loop interaction between the EV and EVSE, which is the core logical flow of the application.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{sequence_diagram.pdf}
+    \caption{ISO 15118 Charging Loop Sequence}
+    \label{fig:sequenceinteraction}
+\end{figure}
+
+\subsection{CSMS-EVSE-EV Interaction}
+This diagram focuses on the 3-tier communication flow involving the management system, the charging station, and the vehicle. It illustrates a scenario where a remote command initiates a session with smart charging limits.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\textwidth]{threetier_sequence_diagram.pdf}
+    \caption{3-Tier (CSMS-EVSE-EV) Sequence Flow}
+    \label{fig:threetiersequence}
 \end{figure}
 
 \section{Core Components}
@@ -468,6 +489,13 @@ The system shall support negotiation of ISO 15118 protocol versions.
     \item The EV shall select a mutually supported protocol (e.g., DIN SPEC 70121 or ISO 15118-2).
 \end{itemize}
 
+\subsection{FR-01-A: OCPP Version Selection}
+The system shall allow the selection of the OCPP protocol version at startup.
+\begin{itemize}
+    \item Supported versions: OCPP 1.6, OCPP 2.0.1, and OCPP 2.1 (experimental).
+    \item The version shall be configurable via command-line arguments.
+\end{itemize}
+
 \subsection{FR-02: Authorization}
 The system shall support multiple authorization modes:
 \begin{itemize}
@@ -483,25 +511,31 @@ During the charging loop, the system shall:
 \end{itemize}
 
 \subsection{FR-04: OCPP Integration}
-The system shall implement OCPP 2.0.1 features:
+The system shall implement OCPP client features for the selected version (1.6, 2.0.1, or 2.1):
 \begin{itemize}
     \item Connect to a CSMS via WebSocket.
-    \item Send \texttt{BootNotification} and \texttt{Heartbeat} messages.
-    \item Accept \texttt{RequestStartTransaction} and \texttt{RequestStopTransaction} commands from the CSMS.
-    \item Support \texttt{SetVariables} to configure EVSE limits remotely.
+    \item Send version-specific \texttt{BootNotification} and \texttt{Heartbeat} messages.
+    \item Accept remote commands appropriate for the version (e.g., \texttt{RemoteStartTransaction} for 1.6, \texttt{RequestStartTransaction} for 2.0.1+).
+    \item Support configuration/variable management (\texttt{ChangeConfiguration} for 1.6, \texttt{SetVariables} for 2.0.1+).
 \end{itemize}
 
 \section{Communication Flow}
-The following sequence diagram depicts the simplified ISO 15118 charging loop interaction between the EV and EVSE, which is the core logical flow of the application.
+
+
+
+
+
+\subsection{OCPP 1.6 Sequence Flow}
+The interaction in OCPP 1.6 is similar but uses different message names and structures. The following diagram illustrates the flow for OCPP 1.6 (JSON).
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\textwidth]{sequence_diagram.pdf}
-    \caption{ISO 15118 Charging Loop Sequence}
-    \label{fig:sequenceinteraction}
+    \includegraphics[width=0.8\textwidth]{ocpp_16_sequence_diagram.pdf}
+    \caption{OCPP 1.6 Interaction Sequence}
+    \label{fig:ocpp16sequence}
 \end{figure}
 
-\subsection{OCPP Sequence Flow}
+\subsection{OCPP 2.0.1 Sequence Flow}
 The following diagram illustrates the interaction between the EVSE (Charge Point) and the CSMS (Charging Station Management System) via OCPP 2.0.1.
 
 \begin{figure}[h]
@@ -511,15 +545,30 @@ The following diagram illustrates the interaction between the EVSE (Charge Point
     \label{fig:ocppsequence}
 \end{figure}
 
-\subsection{CSMS-EVSE-EV Interaction}
-This diagram focuses on the 3-tier communication flow involving the management system, the charging station, and the vehicle. It illustrates a scenario where a remote command initiates a session with smart charging limits.
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1.0\textwidth]{threetier_sequence_diagram.pdf}
-    \caption{3-Tier (CSMS-EVSE-EV) Sequence Flow}
-    \label{fig:threetiersequence}
-\end{figure}
+
+\subsection{Key Differences: OCPP 1.6 vs 2.0.1}
+The following table highlights the primary differences in message terminology and functionality between the two supported versions.
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Feature} & \textbf{OCPP 1.6} & \textbf{OCPP 2.0.1} \\
+\hline
+\rowcolor{gray!10} Remote Start & \texttt{RemoteStartTransaction} & \texttt{RequestStartTransaction} \\
+\hline
+Remote Stop & \texttt{RemoteStopTransaction} & \texttt{RequestStopTransaction} \\
+\hline
+\rowcolor{gray!10} Configuration & \texttt{ChangeConfiguration} & \texttt{SetVariables} \\
+\hline
+Status & \texttt{StatusNotification} & \texttt{StatusNotification} (Expanded states) \\
+\hline
+\rowcolor{gray!10} Transaction & \texttt{StartTransaction}, \texttt{StopTransaction} & \texttt{TransactionEvent} (Started/Updated/Ended) \\
+\hline
+\end{tabular}
+\end{center}
+
+
 
 
 
@@ -540,7 +589,7 @@ The EVSE maintains a logical state for each connector, which is reported to the 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{ocpp_state_diagram.pdf}
+    \includegraphics[width=0.9\textwidth]{ocpp_state_diagram.pdf}
     \caption{OCPP Connector Status State Machine}
     \label{fig:ocppstatediagram}
 \end{figure}
@@ -548,9 +597,8 @@ The EVSE maintains a logical state for each connector, which is reported to the 
 \subsection{State Transition Logic}
 The following table details the communication packets exchanged between the EV, EVSE, and CSMS that trigger the transitions in the OCPP Connector State Machine.
 
-\begin{center}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{|l|p{3.5cm}|p{4.5cm}|p{5cm}|}
+\small
+\begin{longtable}{|p{3.0cm}|p{3.5cm}|p{4.5cm}|p{4.5cm}|}
 \hline
 \textbf{Transition} & \textbf{Physical Trigger} & \textbf{ISO 15118 (EV-EVSE)} & \textbf{OCPP (EVSE-CSMS)} \\
 \hline
@@ -598,9 +646,8 @@ Faulted $\rightarrow$ Available & Reset / Recovery & N/A & ResetReq, StatusNotif
 \hline
 Faulted $\rightarrow$ Unavailable & Permanent Fault & N/A & ChangeAvailabilityReq, StatusNotification(Unavailable) \\
 \hline
-\end{tabular}%
-}
-\end{center}
+\end{longtable}
+
 
 \subsection{EVSE to OCPP State Mapping}
 The following table defines how the internal ISO 15118 EVSE states map to the reported OCPP Connector Status.
@@ -652,6 +699,7 @@ The system is launched via \texttt{Application.py} with several arguments to def
     \item \texttt{--api-port}: Sets the port for the REST API status monitor.
     \item \texttt{--ocpp-url}: (EVSE only) WebSocket URL for the OCPP CSMS.
     \item \texttt{--ocpp-id}: (EVSE only) The Charge Point ID to Identify the station to the CSMS.
+    \item \texttt{--ocpp-version}: (EVSE only) The OCPP protocol version to use (\texttt{1.6}, \texttt{2.0.1}, or \texttt{2.1}). Defaults to \texttt{2.0.1}.
 \end{itemize}
 
 \section{JSON Configuration}

@@ -1,16 +1,5 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
-\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
-\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
-\global\let\oldnewlabel\newlabel
-\gdef\newlabel#1#2{\newlabelxx{#1}#2}
-\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
-\AtEndDocument{\ifx\hyper@anchor\@undefined
-\let\newlabel\oldnewlabel
-\fi}
-\fi}
-\global\let\hyper@last\relax 
-\gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
 \@writefile{toc}{\contentsline {chapter}{\numberline {1}Introduction}{3}{chapter.1}\protected@file@percent }
@@ -39,58 +28,69 @@
 \@writefile{toc}{\contentsline {section}{\numberline {2.7}State Synchronization}{8}{section.2.7}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {2.5}{\ignorespaces EV-EVSE State Synchronization}}{8}{figure.2.5}\protected@file@percent }
 \newlabel{fig:staterelation}{{2.5}{8}{EV-EVSE State Synchronization}{figure.2.5}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {2.8}Core Components}{8}{section.2.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.8.1}Whitebeet Component}{8}{subsection.2.8.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Protocol Structure}{9}{subsection.2.8.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{HCI State Transition Mapping}{9}{subsection.2.8.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2.1}{\ignorespaces Whitebeet HCI State Mapping}}{9}{table.2.1}\protected@file@percent }
-\newlabel{tab:hci_mapping}{{2.1}{9}{Whitebeet HCI State Mapping}{table.2.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.8.2}EV Component}{9}{subsection.2.8.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.8.3}EVSE Component}{9}{subsection.2.8.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.8.4}OCPP Component}{10}{subsection.2.8.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.9}Charger Component}{10}{section.2.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.9.1}Implementing a Custom Charger}{10}{subsection.2.9.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Lifecycle Management}{10}{figure.2.6}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2.6}{\ignorespaces Charger Interface and Implementation}}{11}{figure.2.6}\protected@file@percent }
-\newlabel{fig:chargerinterface}{{2.6}{11}{Charger Interface and Implementation}{figure.2.6}{}}
-\@writefile{toc}{\contentsline {subsubsection}{Control Loop Methods}{11}{figure.2.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Telemetry Methods}{11}{figure.2.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Configuration Accessors}{12}{figure.2.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.9.2}TRIO-HP Charger Protocol}{12}{subsection.2.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Hardware Description}{12}{subsection.2.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Protocol Structure}{12}{subsection.2.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Key Commands}{12}{subsection.2.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Protocol Integration}{13}{subsection.2.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{CanCharger Implementation}{13}{subsection.2.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.10}Battery Component}{13}{section.2.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.11}Default Charging Routine}{14}{section.2.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.11.1}Default Schedule}{14}{subsection.2.11.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.11.2}Physics Simulation Parameters}{14}{subsection.2.11.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {2.12}Project File Structure}{14}{section.2.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {3}Specific Requirements}{16}{chapter.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.8}Charging Loop Sequence}{8}{section.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.8.1}CSMS-EVSE-EV Interaction}{8}{subsection.2.8.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.6}{\ignorespaces ISO 15118 Charging Loop Sequence}}{9}{figure.2.6}\protected@file@percent }
+\newlabel{fig:sequenceinteraction}{{2.6}{9}{ISO 15118 Charging Loop Sequence}{figure.2.6}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.9}Core Components}{9}{section.2.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.9.1}Whitebeet Component}{9}{subsection.2.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Protocol Structure}{9}{subsection.2.9.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.7}{\ignorespaces 3-Tier (CSMS-EVSE-EV) Sequence Flow}}{10}{figure.2.7}\protected@file@percent }
+\newlabel{fig:threetiersequence}{{2.7}{10}{3-Tier (CSMS-EVSE-EV) Sequence Flow}{figure.2.7}{}}
+\@writefile{toc}{\contentsline {subsubsection}{HCI State Transition Mapping}{10}{subsection.2.9.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2.1}{\ignorespaces Whitebeet HCI State Mapping}}{10}{table.2.1}\protected@file@percent }
+\newlabel{tab:hci_mapping}{{2.1}{10}{Whitebeet HCI State Mapping}{table.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.9.2}EV Component}{11}{subsection.2.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.9.3}EVSE Component}{11}{subsection.2.9.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.9.4}OCPP Component}{11}{subsection.2.9.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.10}Charger Component}{11}{section.2.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.10.1}Implementing a Custom Charger}{12}{subsection.2.10.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2.8}{\ignorespaces Charger Interface and Implementation}}{12}{figure.2.8}\protected@file@percent }
+\newlabel{fig:chargerinterface}{{2.8}{12}{Charger Interface and Implementation}{figure.2.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Lifecycle Management}{12}{figure.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Control Loop Methods}{13}{figure.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Telemetry Methods}{13}{figure.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Configuration Accessors}{13}{figure.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.10.2}TRIO-HP Charger Protocol}{13}{subsection.2.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Hardware Description}{13}{subsection.2.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Protocol Structure}{14}{subsection.2.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Key Commands}{14}{subsection.2.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Protocol Integration}{14}{subsection.2.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{CanCharger Implementation}{14}{subsection.2.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.11}Battery Component}{15}{section.2.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.12}Default Charging Routine}{15}{section.2.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.12.1}Default Schedule}{15}{subsection.2.12.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.12.2}Physics Simulation Parameters}{15}{subsection.2.12.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.13}Project File Structure}{15}{section.2.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Specific Requirements}{17}{chapter.3}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}External Interfaces}{16}{section.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Communication Interfaces}{16}{subsection.3.1.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}User Interfaces}{16}{subsection.3.1.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.2}Functional Requirements}{16}{section.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}FR-01: Protocol Negotiation}{16}{subsection.3.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}FR-02: Authorization}{16}{subsection.3.2.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}FR-03: Charging Control}{17}{subsection.3.2.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.4}FR-04: OCPP Integration}{17}{subsection.3.2.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Communication Flow}{17}{section.3.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces ISO 15118 Charging Loop Sequence}}{17}{figure.3.1}\protected@file@percent }
-\newlabel{fig:sequenceinteraction}{{3.1}{17}{ISO 15118 Charging Loop Sequence}{figure.3.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}OCPP Sequence Flow}{17}{subsection.3.3.1}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces OCPP 2.0.1 Interaction Sequence}}{18}{figure.3.2}\protected@file@percent }
-\newlabel{fig:ocppsequence}{{3.2}{18}{OCPP 2.0.1 Interaction Sequence}{figure.3.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}CSMS-EVSE-EV Interaction}{18}{subsection.3.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {3.4}OCPP Connector State Machine}{18}{section.3.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces 3-Tier (CSMS-EVSE-EV) Sequence Flow}}{19}{figure.3.3}\protected@file@percent }
-\newlabel{fig:threetiersequence}{{3.3}{19}{3-Tier (CSMS-EVSE-EV) Sequence Flow}{figure.3.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces OCPP Connector Status State Machine}}{20}{figure.3.4}\protected@file@percent }
-\newlabel{fig:ocppstatediagram}{{3.4}{20}{OCPP Connector Status State Machine}{figure.3.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}State Transition Logic}{20}{subsection.3.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}External Interfaces}{17}{section.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Communication Interfaces}{17}{subsection.3.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}User Interfaces}{17}{subsection.3.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Functional Requirements}{17}{section.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}FR-01: Protocol Negotiation}{17}{subsection.3.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}FR-01-A: OCPP Version Selection}{17}{subsection.3.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}FR-02: Authorization}{18}{subsection.3.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.4}FR-03: Charging Control}{18}{subsection.3.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.5}FR-04: OCPP Integration}{18}{subsection.3.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Communication Flow}{18}{section.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}OCPP 1.6 Sequence Flow}{18}{subsection.3.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}OCPP 2.0.1 Sequence Flow}{18}{subsection.3.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Key Differences: OCPP 1.6 vs 2.0.1}{18}{subsection.3.3.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces OCPP 1.6 Interaction Sequence}}{19}{figure.3.1}\protected@file@percent }
+\newlabel{fig:ocpp16sequence}{{3.1}{19}{OCPP 1.6 Interaction Sequence}{figure.3.1}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}OCPP Connector State Machine}{19}{section.3.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces OCPP 2.0.1 Interaction Sequence}}{20}{figure.3.2}\protected@file@percent }
+\newlabel{fig:ocppsequence}{{3.2}{20}{OCPP 2.0.1 Interaction Sequence}{figure.3.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces OCPP Connector Status State Machine}}{20}{figure.3.3}\protected@file@percent }
+\newlabel{fig:ocppstatediagram}{{3.3}{20}{OCPP Connector Status State Machine}{figure.3.3}{}}
+\gdef \LT@i {\LT@entry 
+    {1}{98.15825pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{140.4374pt}\LT@entry 
+    {1}{140.4374pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}State Transition Logic}{21}{subsection.3.4.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}EVSE to OCPP State Mapping}{21}{subsection.3.4.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {chapter}{\numberline {4}Configuration and Deployment}{23}{chapter.4}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
@@ -110,12 +110,12 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Integration Testing}{26}{subsection.5.3.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}System Testing}{26}{subsection.5.3.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.3.4}Test Execution}{26}{subsection.5.3.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.5}Initial Test Results}{27}{subsection.5.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.5}Initial Test Results}{26}{subsection.5.3.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {5.4}Test Procedures}{27}{section.5.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}TC-01: System Initialization}{27}{subsection.5.4.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}TC-02: EV Connection}{27}{subsection.5.4.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4.3}TC-03: Authorization}{27}{subsection.5.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.4}TC-04: Charging Loop}{28}{subsection.5.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.4}TC-04: Charging Loop}{27}{subsection.5.4.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4.5}TC-05: Session Stop}{28}{subsection.5.4.5}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {5.4.6}TC-06: Safety/Emergency Stop}{28}{subsection.5.4.6}\protected@file@percent }
 \@writefile{toc}{\contentsline {chapter}{\numberline {6}Reference Documents}{29}{chapter.6}\protected@file@percent }
@@ -132,7 +132,7 @@
 \@writefile{toc}{\contentsline {section}{\numberline {B.1}System \& Configuration}{32}{section.B.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{32}{section.B.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{32}{section.B.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{33}{section.B.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{32}{section.B.4}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {B.4.1}Configuration}{33}{subsection.B.4.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {B.4.2}Session Control}{33}{subsection.B.4.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{33}{subsection.B.4.3}\protected@file@percent }
