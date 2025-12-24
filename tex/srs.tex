@@ -1125,6 +1125,8 @@ The following table outlines the verification matrix mandated by the Metropolita
 \hline
 9.3 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & False \\
 \hline
+9.4 & CSMS $\to$ CS & ChangeConfiguration (V2G) & PowerDemand (+/- Watts) \\
+\hline
 
 \multicolumn{4}{|l|}{\textbf{10. Message Summary Checks}} \\
 \hline
@@ -1310,7 +1312,11 @@ This section details the results of the automated unit tests executed against th
 \hline
 9.3 & LocalAuth & LocalAuthOffline=False & Pass \\
 \hline
-9.4 & ChangeConfig (V2G PowerDemand) & \textbf{SPECIAL}: Verified power flow control (+/- Watts) via custom key. & \textbf{Pass} \\
+9.4.1 & ChangeConfig (V2G: Discharge) & Input: 5000 $\to$ Status: Accepted (Discharging) & Pass \\
+\hline
+9.4.2 & ChangeConfig (V2G: Charge) & Input: -2000 $\to$ Status: Accepted (Charging) & Pass \\
+\hline
+9.4.3 & ChangeConfig (V2G: Invalid) & Input: NOT\_INT $\to$ Status: Rejected & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{10. Message Summary}} \\
