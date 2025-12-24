@@ -922,6 +922,27 @@ python3 tests/system/test_mea_live.py
 \end{verbatim}
 This script performs a real-time handshake, sending a \texttt{BootNotification} and \texttt{StatusNotification}, and logs the server's response.
 
+\section{OCPP 1.6 V2G Workaround (Special Test Case)}
+\textbf{NOTE: This is a specialized test case to validate the V2G workaround mechanism.}
+
+Since OCPP 1.6J does not natively support bidirectional power flow control (V2G), this system implements a \textbf{vendor-specific extension} using the \texttt{ChangeConfiguration} packet.
+
+\subsection{Custom Configuration Key: MEA\_V2G\_PowerDemand}
+The Central System (CSMS) can control the charging/discharging rate by updating the custom configuration key \texttt{MEA\_V2G\_PowerDemand}.
+
+\begin{itemize}
+    \item \textbf{Key Name}: \texttt{MEA\_V2G\_PowerDemand}
+    \item \textbf{Value Type}: Integer (Watts)
+    \item \textbf{Semantics}:
+    \begin{itemize}
+        \item \textbf{Positive (> 0)}: Discharge to Grid [Supply]. (e.g., \texttt{5000} = export 5kW)
+        \item \textbf{Negative (< 0)}: Charge from Grid [Demand]. (e.g., \texttt{-3000} = import 3kW)
+        \item \textbf{Zero (0)}: Idle / No Transfer.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Example Usage}: To request the EVSE to export 5kW to the grid, the CSMS sends a \texttt{ChangeConfiguration} request with key \texttt{MEA\_V2G\_PowerDemand} and value \texttt{5000}.
+
 \section{MEA OCPP 1.6 Compliance Verification}
 The following table outlines the verification matrix mandated by the Metropolitan Electricity Authority (MEA) for OCPP 1.6 compliance. The system must pass these scenarios to ensure compatibility with the MEA EV charging infrastructure.
 
@@ -1288,6 +1309,8 @@ This section details the results of the automated unit tests executed against th
 9.2 & SampleInterval & Set to 60s (MEA Default) & Pass \\
 \hline
 9.3 & LocalAuth & LocalAuthOffline=False & Pass \\
+\hline
+9.4 & ChangeConfig (V2G PowerDemand) & \textbf{SPECIAL}: Verified power flow control (+/- Watts) via custom key. & \textbf{Pass} \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{10. Message Summary}} \\

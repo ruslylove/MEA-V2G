@@ -92,11 +92,26 @@ class Ocpp16Interface(Ocpp16ChargePoint):
     async def on_change_configuration(self, key, value, **kwargs):
         LOGGER.info(f"Received ChangeConfiguration for {key} to {value}")
         
+        # V2G Workaround: Handle Power Demand
+        if key == "MEA_V2G_PowerDemand":
+            try:
+                power_watts = int(value)
+                if power_watts > 0:
+                    LOGGER.info(f"[V2G] Grid Demand: Discharging {power_watts} W")
+                    # self.charger.set_power_demand(power_watts)
+                elif power_watts < 0:
+                    LOGGER.info(f"[V2G] Grid Supply: Charging {abs(power_watts)} W")
+                    # self.charger.set_power_demand(power_watts)
+                else:
+                    LOGGER.info("[V2G] Idle")
+                
+                return call_result.ChangeConfigurationPayload(status=ConfigurationStatus.accepted)
+            except ValueError:
+                LOGGER.warning(f"[V2G] Invalid power value: {value}")
+                return call_result.ChangeConfigurationPayload(status=ConfigurationStatus.rejected)
+
         # Simple mapping examples
         status = ConfigurationStatus.accepted
-        
-        # TODO: Implement actual configuration change logic if needed
-        # For now, just logging it.
         
         return call_result.ChangeConfigurationPayload(status=status)
         

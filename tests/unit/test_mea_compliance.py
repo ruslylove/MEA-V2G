@@ -234,6 +234,20 @@ class TestMeaCompliance(unittest.TestCase):
         res = self.run_async(self.ocpp.on_clear_cache())
         self.assertEqual(res['status'], "Accepted")
 
+    def test_09_04_v2g_workaround(self):
+        """9.4 Special: V2G Workaround (Power Demand via Config)"""
+        # Send 5000W (Discharge to Grid)
+        res = self.run_async(self.ocpp.on_change_configuration(key="MEA_V2G_PowerDemand", value="5000"))
+        self.assertEqual(res['status'], "Accepted")
+
+        # Send -2000W (Charge from Grid)
+        res = self.run_async(self.ocpp.on_change_configuration(key="MEA_V2G_PowerDemand", value="-2000"))
+        self.assertEqual(res['status'], "Accepted")
+
+        # Send Invalid
+        res = self.run_async(self.ocpp.on_change_configuration(key="MEA_V2G_PowerDemand", value="NOT_INT"))
+        self.assertEqual(res['status'], "Rejected")
+
     # --- 2. Auto Charge Verification ---
     def test_2_autocharge_verification(self):
         """2.1 - 2.13 Auto Charge Verification"""
@@ -427,6 +441,20 @@ class TestMeaCompliance(unittest.TestCase):
         # 9.3 LocalAuthorizeOffline: False
         res = self.run_async(self.ocpp.on_change_configuration(key="LocalAuthorizeOffline", value="False"))
         self.assertEqual(res['status'], "Accepted")
+
+    def test_09_04_v2g_workaround(self):
+        """9.4 Special: V2G Workaround (Power Demand via Config)"""
+        # Send 5000W (Discharge to Grid)
+        res = self.run_async(self.ocpp.on_change_configuration(key="MEA_V2G_PowerDemand", value="5000"))
+        self.assertEqual(res['status'], "Accepted")
+
+        # Send -2000W (Charge from Grid)
+        res = self.run_async(self.ocpp.on_change_configuration(key="MEA_V2G_PowerDemand", value="-2000"))
+        self.assertEqual(res['status'], "Accepted")
+
+        # Send Invalid
+        res = self.run_async(self.ocpp.on_change_configuration(key="MEA_V2G_PowerDemand", value="NOT_INT"))
+        self.assertEqual(res['status'], "Rejected")
 
     # --- 10. Message Summary Checks ---
     def test_10_message_summary(self):
