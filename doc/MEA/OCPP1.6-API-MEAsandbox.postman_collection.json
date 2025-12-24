@@ -1,0 +1,1222 @@
+{
+	"info": {
+		"_postman_id": "75f256b1-bd53-4d84-9bec-cc7c7568a421",
+		"name": "OCPP1.6-API-MEAsandbox",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6896437"
+	},
+	"item": [
+		{
+			"name": "1.6",
+			"item": [
+				{
+					"name": "remote command",
+					"item": [
+						{
+							"name": "remote start transaction",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"realm = \"EV\";\r",
+											"\r",
+											"\r",
+											"var randomString = function(length) {\r",
+											"    var text = \"\";\r",
+											"    var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\r",
+											"    for(var i = 0; i < length; i++) {\r",
+											"        text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+											"    }\r",
+											"    return text;\r",
+											"};\r",
+											"\r",
+											"var d = new Date();\r",
+											"var now = d.toISOString();\r",
+											"    \r",
+											"//postman.setEnvironmentVariable(\"head_date\", now);\r",
+											"postman.setEnvironmentVariable(\"digest_realm\", realm);\r",
+											"//postman.setEnvironmentVariable(\"digest_nonce\", randomString(32));\r",
+											"postman.setEnvironmentVariable(\"digest_nonce\", now);\r",
+											"\r",
+											"//\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "digest",
+									"digest": [
+										{
+											"key": "password",
+											"value": "Bh9GKYvSBc9KkbJ",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "meaev.api.dev",
+											"type": "string"
+										},
+										{
+											"key": "algorithm",
+											"value": "MD5",
+											"type": "string"
+										},
+										{
+											"key": "realm",
+											"value": "{{digest_realm}}",
+											"type": "string"
+										},
+										{
+											"key": "nonce",
+											"value": "{{digest_nonce}}",
+											"type": "string"
+										},
+										{
+											"key": "nonceCount",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientNonce",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "opaque",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "qop",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"chargepoint_id\" :\"rddQC4000001\",\r\n   \"connector_id\" :1,\r\n   \"card_id\": \"RFID_SIM\"\r\n}"
+								},
+								"url": {
+									"raw": "https://ocppapi.measandbox.com/EV/cmd/chargepoint/remoteStart",
+									"protocol": "https",
+									"host": [
+										"ocppapi",
+										"measandbox",
+										"com"
+									],
+									"path": [
+										"EV",
+										"cmd",
+										"chargepoint",
+										"remoteStart"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "remote start transaction",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n   \"chargepoint_id\" :\"rddNC3000016\",\r\n   \"connector_id\" :1,\r\n   \"card_id\": \"1234\"\r\n}"
+										},
+										"url": {
+											"raw": "{{url}}/EV/cmd/chargepoint/remoteStart",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"EV",
+												"cmd",
+												"chargepoint",
+												"remoteStart"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Wed, 13 Sep 2023 14:25:33 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "126"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"OK\",\n    \"code\": 200,\n    \"messages\": \"OK\",\n    \"server-time\": \"2023-09-13T14:25:34Z\",\n    \"result\": {\n        \"status\": true,\n        \"transaction_id\": \"61\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "remote stop transaction",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"realm = \"EV\";\r",
+											"\r",
+											"\r",
+											"var randomString = function(length) {\r",
+											"    var text = \"\";\r",
+											"    var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\r",
+											"    for(var i = 0; i < length; i++) {\r",
+											"        text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+											"    }\r",
+											"    return text;\r",
+											"};\r",
+											"\r",
+											"var d = new Date();\r",
+											"var now = d.toISOString();\r",
+											"    \r",
+											"//postman.setEnvironmentVariable(\"head_date\", now);\r",
+											"postman.setEnvironmentVariable(\"digest_realm\", realm);\r",
+											"//postman.setEnvironmentVariable(\"digest_nonce\", randomString(32));\r",
+											"postman.setEnvironmentVariable(\"digest_nonce\", now);\r",
+											"\r",
+											"//\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "digest",
+									"digest": [
+										{
+											"key": "password",
+											"value": "U`?d3~C_Se77CrdsG[l#hq1)J_2$FA1D",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "meaev.api.dev",
+											"type": "string"
+										},
+										{
+											"key": "algorithm",
+											"value": "MD5",
+											"type": "string"
+										},
+										{
+											"key": "realm",
+											"value": "{{digest_realm}}",
+											"type": "string"
+										},
+										{
+											"key": "nonce",
+											"value": "{{digest_nonce}}",
+											"type": "string"
+										},
+										{
+											"key": "nonceCount",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientNonce",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "opaque",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "qop",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"chargepoint_id\" :\"rddQC4000001\",\r\n    \"transaction_id\" : 321\r\n}"
+								},
+								"url": {
+									"raw": "https://ocppapi.measandbox.com/EV/cmd/chargepoint/remoteStop",
+									"protocol": "https",
+									"host": [
+										"ocppapi",
+										"measandbox",
+										"com"
+									],
+									"path": [
+										"EV",
+										"cmd",
+										"chargepoint",
+										"remoteStop"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "remote stop transaction",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n   \"chargepoint_id\" :\"rddNC3000016\",\r\n    \"transaction_id\" : 73\r\n}"
+										},
+										"url": {
+											"raw": "{{url}}/EV/cmd/chargepoint/remoteStop",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"EV",
+												"cmd",
+												"chargepoint",
+												"remoteStop"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Thu, 14 Sep 2023 06:54:17 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "191"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"OK\",\n    \"code\": 200,\n    \"messages\": \"OK\",\n    \"server-time\": \"2023-09-14T06:54:18Z\",\n    \"result\": {\n        \"transaction_id\": 71,\n        \"start_time\": \"2023-09-14T06:53:07Z\",\n        \"stop_time\": \"2023-09-14T06:54:18Z\",\n        \"kWh\": 0\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "reserve",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"realm = \"EV\";\r",
+											"\r",
+											"\r",
+											"var randomString = function(length) {\r",
+											"    var text = \"\";\r",
+											"    var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\r",
+											"    for(var i = 0; i < length; i++) {\r",
+											"        text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+											"    }\r",
+											"    return text;\r",
+											"};\r",
+											"\r",
+											"var d = new Date();\r",
+											"var now = d.toISOString();\r",
+											"    \r",
+											"//postman.setEnvironmentVariable(\"head_date\", now);\r",
+											"postman.setEnvironmentVariable(\"digest_realm\", realm);\r",
+											"//postman.setEnvironmentVariable(\"digest_nonce\", randomString(32));\r",
+											"postman.setEnvironmentVariable(\"digest_nonce\", now);\r",
+											"\r",
+											"//\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "digest",
+									"digest": [
+										{
+											"key": "password",
+											"value": "U`?d3~C_Se77CrdsG[l#hq1)J_2$FA1D",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "meaev.api.dev",
+											"type": "string"
+										},
+										{
+											"key": "algorithm",
+											"value": "MD5",
+											"type": "string"
+										},
+										{
+											"key": "realm",
+											"value": "{{digest_realm}}",
+											"type": "string"
+										},
+										{
+											"key": "nonce",
+											"value": "{{digest_nonce}}",
+											"type": "string"
+										},
+										{
+											"key": "nonceCount",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientNonce",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "opaque",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "qop",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"chargepoint\" :\"rddQC4000001\",\r\n   \"connector\" : 1,\r\n   \"duration\": 15,\r\n   \"card_id\": \"0FABD4C1234\"\r\n}"
+								},
+								"url": {
+									"raw": "https://ocppapi.measandbox.com/EV/cmd/chargepoint/reserve",
+									"protocol": "https",
+									"host": [
+										"ocppapi",
+										"measandbox",
+										"com"
+									],
+									"path": [
+										"EV",
+										"cmd",
+										"chargepoint",
+										"reserve"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "cancel reservation",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"realm = \"EV\";\r",
+											"\r",
+											"\r",
+											"var randomString = function(length) {\r",
+											"    var text = \"\";\r",
+											"    var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\r",
+											"    for(var i = 0; i < length; i++) {\r",
+											"        text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+											"    }\r",
+											"    return text;\r",
+											"};\r",
+											"\r",
+											"var d = new Date();\r",
+											"var now = d.toISOString();\r",
+											"    \r",
+											"//postman.setEnvironmentVariable(\"head_date\", now);\r",
+											"postman.setEnvironmentVariable(\"digest_realm\", realm);\r",
+											"//postman.setEnvironmentVariable(\"digest_nonce\", randomString(32));\r",
+											"postman.setEnvironmentVariable(\"digest_nonce\", now);\r",
+											"\r",
+											"//\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "digest",
+									"digest": [
+										{
+											"key": "password",
+											"value": "U`?d3~C_Se77CrdsG[l#hq1)J_2$FA1D",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "meaev.api.dev",
+											"type": "string"
+										},
+										{
+											"key": "algorithm",
+											"value": "MD5",
+											"type": "string"
+										},
+										{
+											"key": "realm",
+											"value": "{{digest_realm}}",
+											"type": "string"
+										},
+										{
+											"key": "nonce",
+											"value": "{{digest_nonce}}",
+											"type": "string"
+										},
+										{
+											"key": "nonceCount",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientNonce",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "opaque",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "qop",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"chargepoint\" :\"rddQC4000001\",\r\n   \"reservation_id\" : 205\r\n}"
+								},
+								"url": {
+									"raw": "https://ocppapi.measandbox.com/EV/cmd/chargepoint/cancel",
+									"protocol": "https",
+									"host": [
+										"ocppapi",
+										"measandbox",
+										"com"
+									],
+									"path": [
+										"EV",
+										"cmd",
+										"chargepoint",
+										"cancel"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Configuration",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"realm = \"EV\";\r",
+											"\r",
+											"\r",
+											"var randomString = function(length) {\r",
+											"    var text = \"\";\r",
+											"    var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\r",
+											"    for(var i = 0; i < length; i++) {\r",
+											"        text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+											"    }\r",
+											"    return text;\r",
+											"};\r",
+											"\r",
+											"var d = new Date();\r",
+											"var now = d.toISOString();\r",
+											"    \r",
+											"//postman.setEnvironmentVariable(\"head_date\", now);\r",
+											"postman.setEnvironmentVariable(\"digest_realm\", realm);\r",
+											"//postman.setEnvironmentVariable(\"digest_nonce\", randomString(32));\r",
+											"postman.setEnvironmentVariable(\"digest_nonce\", now);\r",
+											"\r",
+											"//\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "digest",
+									"digest": [
+										{
+											"key": "password",
+											"value": "U`?d3~C_Se77CrdsG[l#hq1)J_2$FA1D",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "meaev.api.dev",
+											"type": "string"
+										},
+										{
+											"key": "algorithm",
+											"value": "MD5",
+											"type": "string"
+										},
+										{
+											"key": "realm",
+											"value": "{{digest_realm}}",
+											"type": "string"
+										},
+										{
+											"key": "nonce",
+											"value": "{{digest_nonce}}",
+											"type": "string"
+										},
+										{
+											"key": "nonceCount",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientNonce",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "opaque",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "qop",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"chargepoint_id\" :\"rddQC4000001\",\r\n   \"key\":\"test\",\r\n   \"value\":\"1\"\r\n}"
+								},
+								"url": {
+									"raw": "https://ocppapi.measandbox.com/EV/remote/changeConfiguration",
+									"protocol": "https",
+									"host": [
+										"ocppapi",
+										"measandbox",
+										"com"
+									],
+									"path": [
+										"EV",
+										"remote",
+										"changeConfiguration"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SetChargingProfile",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"realm = \"EV\";\r",
+											"\r",
+											"\r",
+											"var randomString = function(length) {\r",
+											"    var text = \"\";\r",
+											"    var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\r",
+											"    for(var i = 0; i < length; i++) {\r",
+											"        text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+											"    }\r",
+											"    return text;\r",
+											"};\r",
+											"\r",
+											"var d = new Date();\r",
+											"var now = d.toISOString();\r",
+											"    \r",
+											"//postman.setEnvironmentVariable(\"head_date\", now);\r",
+											"postman.setEnvironmentVariable(\"digest_realm\", realm);\r",
+											"//postman.setEnvironmentVariable(\"digest_nonce\", randomString(32));\r",
+											"postman.setEnvironmentVariable(\"digest_nonce\", now);\r",
+											"\r",
+											"//\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "digest",
+									"digest": [
+										{
+											"key": "password",
+											"value": "U`?d3~C_Se77CrdsG[l#hq1)J_2$FA1D",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "meaev.api.dev",
+											"type": "string"
+										},
+										{
+											"key": "algorithm",
+											"value": "MD5",
+											"type": "string"
+										},
+										{
+											"key": "realm",
+											"value": "{{digest_realm}}",
+											"type": "string"
+										},
+										{
+											"key": "nonce",
+											"value": "{{digest_nonce}}",
+											"type": "string"
+										},
+										{
+											"key": "nonceCount",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientNonce",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "opaque",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "qop",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"chargepoint_id\" :\"rddQC4000001\",\r\n   \"connectorId\":1,\r\n    \"csChargingProfiles\":{\r\n        \"chargingProfileId\":99,\r\n        \"transactionId\":7337,\r\n        \"stackLevel\":1,\r\n        \"chargingProfilePurpose\":\"TxProfile\",\r\n        \"chargingProfileKind\": \"Absolute\",\r\n        \"recurrencyKind\":\"Daily\",\r\n        \"validFrom\":\"2025-12-18T10:10:00Z\",\r\n        \"validTo\":\"2026-12-19T10:10:00Z\",\r\n        \"chargingSchedule\":{\r\n            \"duration\":6000,\r\n            \"startSchedule\":\"2025-12-23T10:10:00Z\",\r\n            \"chargingRateUnit\":\"A\",\r\n            \"minChargingRate\":1,\r\n            \"chargingSchedulePeriod\":[{\r\n                \"startPeriod\":1,\r\n                \"limit\":20,\r\n                \"numberPhases\":1\r\n            }]\r\n        }\r\n    }\r\n}"
+								},
+								"url": {
+									"raw": "https://ocppapi.measandbox.com/EV/remote/SetChargingProfile",
+									"protocol": "https",
+									"host": [
+										"ocppapi",
+										"measandbox",
+										"com"
+									],
+									"path": [
+										"EV",
+										"remote",
+										"SetChargingProfile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remote reset",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"realm = \"EV\";\r",
+											"\r",
+											"\r",
+											"var randomString = function(length) {\r",
+											"    var text = \"\";\r",
+											"    var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\r",
+											"    for(var i = 0; i < length; i++) {\r",
+											"        text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+											"    }\r",
+											"    return text;\r",
+											"};\r",
+											"\r",
+											"var d = new Date();\r",
+											"var now = d.toISOString();\r",
+											"    \r",
+											"//postman.setEnvironmentVariable(\"head_date\", now);\r",
+											"postman.setEnvironmentVariable(\"digest_realm\", realm);\r",
+											"//postman.setEnvironmentVariable(\"digest_nonce\", randomString(32));\r",
+											"postman.setEnvironmentVariable(\"digest_nonce\", now);\r",
+											"\r",
+											"//\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "digest",
+									"digest": [
+										{
+											"key": "password",
+											"value": "U`?d3~C_Se77CrdsG[l#hq1)J_2$FA1D",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "meaev.api.dev",
+											"type": "string"
+										},
+										{
+											"key": "algorithm",
+											"value": "MD5",
+											"type": "string"
+										},
+										{
+											"key": "realm",
+											"value": "{{digest_realm}}",
+											"type": "string"
+										},
+										{
+											"key": "nonce",
+											"value": "{{digest_nonce}}",
+											"type": "string"
+										},
+										{
+											"key": "nonceCount",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientNonce",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "opaque",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "qop",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"chargepoint\" :\"rddQC4000001\",\r\n   \"reset_type\" : \"Soft\"\r\n}"
+								},
+								"url": {
+									"raw": "https://ocppapi.measandbox.com/EV/remote/reset",
+									"protocol": "https",
+									"host": [
+										"ocppapi",
+										"measandbox",
+										"com"
+									],
+									"path": [
+										"EV",
+										"remote",
+										"reset"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "remote reset",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n   \"chargepoint\" :\"rddNC3000016\",\r\n   \"reset_type\" : \"Hard\"\r\n}"
+										},
+										"url": {
+											"raw": "{{url}}/EV/remote/reset",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"EV",
+												"remote",
+												"reset"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Thu, 14 Sep 2023 11:26:48 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "110"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"OK\",\n    \"code\": 200,\n    \"messages\": \"OK\",\n    \"server-time\": \"2023-09-14T11:26:48Z\",\n    \"result\": {\n        \"status\": \"Accepted\"\n    }\n}"
+								},
+								{
+									"name": "remote reset",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "",
+												"value": "",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n   \"chargepoint\" :\"rddNC3000016\",\r\n   \"reset_type\" : \"Hard\"\r\n}"
+										},
+										"url": {
+											"raw": "{{url}}/EV/remote/reset",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"EV",
+												"remote",
+												"reset"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "date",
+											"value": "Tue, 26 Sep 2023 09:18:00 GMT"
+										},
+										{
+											"key": "server",
+											"value": "uvicorn"
+										},
+										{
+											"key": "content-length",
+											"value": "126"
+										},
+										{
+											"key": "content-type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"status\": \"ServiceUnavailable\",\n    \"code\": 503,\n    \"messages\": \"Charge Point OFF-LINE\",\n    \"server-time\": \"2023-09-26T09:18:00Z\",\n    \"result\": {}\n}"
+								}
+							]
+						},
+						{
+							"name": "get configuration",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"realm = \"EV\";\r",
+											"\r",
+											"\r",
+											"var randomString = function(length) {\r",
+											"    var text = \"\";\r",
+											"    var possible = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";\r",
+											"    for(var i = 0; i < length; i++) {\r",
+											"        text += possible.charAt(Math.floor(Math.random() * possible.length));\r",
+											"    }\r",
+											"    return text;\r",
+											"};\r",
+											"\r",
+											"var d = new Date();\r",
+											"var now = d.toISOString();\r",
+											"    \r",
+											"//postman.setEnvironmentVariable(\"head_date\", now);\r",
+											"postman.setEnvironmentVariable(\"digest_realm\", realm);\r",
+											"//postman.setEnvironmentVariable(\"digest_nonce\", randomString(32));\r",
+											"postman.setEnvironmentVariable(\"digest_nonce\", now);\r",
+											"\r",
+											"//\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "digest",
+									"digest": [
+										{
+											"key": "password",
+											"value": "U`?d3~C_Se77CrdsG[l#hq1)J_2$FA1D",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "meaev.api.dev",
+											"type": "string"
+										},
+										{
+											"key": "algorithm",
+											"value": "MD5",
+											"type": "string"
+										},
+										{
+											"key": "realm",
+											"value": "{{digest_realm}}",
+											"type": "string"
+										},
+										{
+											"key": "nonce",
+											"value": "{{digest_nonce}}",
+											"type": "string"
+										},
+										{
+											"key": "nonceCount",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "clientNonce",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "opaque",
+											"value": "",
+											"type": "string"
+										},
+										{
+											"key": "qop",
+											"value": "",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"chargepoint\" :\"rddQC4000001\",\r\n   \"key\":[]\r\n}"
+								},
+								"url": {
+									"raw": "https://ocppapi.measandbox.com/EV/cmd/chargepoint/getConfiguration",
+									"protocol": "https",
+									"host": [
+										"ocppapi",
+										"measandbox",
+										"com"
+									],
+									"path": [
+										"EV",
+										"cmd",
+										"chargepoint",
+										"getConfiguration"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

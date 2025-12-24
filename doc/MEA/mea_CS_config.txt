@@ -1,0 +1,5 @@
+CP-ID : rddQC4000001
+
+ocpp link:
+ws://ocpp.measandbox.com:2931/EV/Srv/JSON/1.6/rddQC4000001
+wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001

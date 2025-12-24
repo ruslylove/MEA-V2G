@@ -1,0 +1,580 @@
+Test Report - ANNEX B
+การทดสอบ                Open Charge Point Protocol (OCPP) และการสื่อสารข้อมูลกับ MEA OCPP Server (OCPP 1.6j) : CCS2 x2 at Warehouse 10%
+วันที่ทดสอบ                                                                                        เวลาเริ่มทดสอบ                                                 เวลาสิ้นสุดการทดสอบ
+Charger detail
+Brand                                                                                               Model
+Rated                                                                                               Firmware version
+Chargepoint ID                                                                                      NO. of Connector ID                                           Connector type           CCS 2
+
+สรุปผลการทดสอบ
+
+รายการทดสอบ
+                                                                                                    MEA OCPP Sever Required
+   ลาดับ                         Message                                                                                                                                                Remark
+                                                                                           รายละเอียดการทดสอบ                             Conn. ID 1 Conn. ID 2
+     1     การตรวจสอบการตั้งค่าเครื่องชาร์จ
+    1.1    BootNotification                                  Include : chargePointModel, chargePointVendor, firmwareVersion
+    1.2    StatusNotification                                Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                             status, timestamp, vendorId, vendorErrorCode
+    1.3    TriggerMessage (BootNotification)                 Include : status (Accepted)
+    1.4    BootNotification                                  Include : chargePointModel, chargePointVendor, firmwareVersion
+    1.5    TriggerMessage (StatusNotification)               Include : status (Accepted)
+    1.6    StatusNotification                                Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                             status, timestamp, vendorId, vendorErrorCode
+    1.7    TriggerMessage (MeterValues)                      Include : status (Accepted)
+    1.8    MeterValues                                       Include : connectorId, transactionId, meterValue {timestamp,
+                                                             sampledValue {measurand (Voltage, Current.Import,
+                                                             Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                             value, unit, context, location}}
+
+    1.9    GetConfiguration                                  Include : configurationKey
+                                                             {HeartbeatInterval (int), LocalAuthorizeOffline (boolean),
+                                                             MeterValueSampleInterval (int), UnlockConnectorOnEVSideDisconnect
+                                                             (boolean)}
+
+   1.10    ChangeConfiguration                               Include : status (Accepted)
+           (HeartbeatInterval: 10 min)
+รายการทดสอบ
+                                                                                                  MEA OCPP Sever Required
+  ลาดับ                         Message                                                                                                                                                Remark
+                                                                                         รายละเอียดการทดสอบ                           Conn. ID 1 Conn. ID 2
+   1.11   ChangeConfiguration                              Include : status (Accepted)
+          (MeterValueSampleInterval: 30 sec)
+   1.12   ChangeConfiguration                              Include : status (Accepted)
+          ( UnlockConnectorOnEVSideDisconnect: True)
+   1.13   ChangeAvailability (connectorId, Inoperative)    Include : status (Accepted)
+   1.14   StatusNotification                               Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                           status, timestamp, vendorId, vendorErrorCode
+   1.15   ChangeAvailability (connectorId, Operative)      Include : status (Accepted)
+   1.16   StatusNotification                               Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                           status, timestamp, vendorId, vendorErrorCode
+   1.17   GetDiagnostics                                   Include : fileName                                                                                 *ขึ้นกับการพิจารณา
+   1.18   DiagnosticsStatusNotification                    Include : status (Uploading, Uploaded,UploadFailed)                                                *ขึ้นกับการพิจารณา
+   1.19   UpdateFirmware                                   Include :                                                                                          *ขึ้นกับการพิจารณา
+   1.20   FirmwareStatusNotification                       Include : status (Downloading, Downloaded, Installing, Installed)                                  *ขึ้นกับการพิจารณา
+   1.21   ChangeConfiguration                              Include : status (Accepted)
+          (LocalAuthorizeOffline: True)
+   1.22   SendLocalList (listVersion, updateType: Full ,   Include : status (Accepted)
+          [localAuthorizationList])
+   1.23   GetLocalListVersion                              Include : listVersion
+   1.24   clearCache                                       Include : status (Accepted)
+    2     การตรวจสอบการทางาน Auto Charge                                                                                                                      "Authorize", {"idTag": "VID:[id]"}
+   2.1    ChangeConfiguration                              Include : status (Accepted)                                                                        *หากไม่รองรับการ ChangeConfiguration จะต้อง
+          (AutoCharge: False)                                                                                                                                 สามารถ Config ที่หน้าจอของเครื่องอัดประจุไฟฟ้าได้
+   2.2    StatusNotification (Plug)                        Include : connectorId (All Connector ID [0,1,2,3,...] if status change),                           *เมื่อเสียบหัวกับรถแล้ว เครื่องอัดประจุไฟฟ้าจะต้องไม่ส่ง
+                                                           errorCode, info, status, timestamp, vendorId, vendorErrorCode                                      ขอ Authorize ด้วย VID
+   2.3    StatusNotification (Unplug)                      Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                           errorCode, info, status, timestamp, vendorId, vendorErrorCode
+รายการทดสอบ
+                                                                                                     MEA OCPP Sever Required
+  ลาดับ                          Message                                                                                                                                                 Remark
+                                                                                            รายละเอียดการทดสอบ                            Conn. ID 1 Conn. ID 2
+   2.4    ChangeConfiguration                                 Include : status (Accepted)                                                                         *หากไม่รองรับการ ChangeConfiguration จะต้อง
+          (AutoCharge: True)                                                                                                                                      สามารถ Config ที่หน้าจอของเครื่องอัดประจุไฟฟ้าได้
+   2.5    StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   2.6    Authorize (Auto Charge)                             Include : idTag (Accepted)                                                                          {"idTag": "VID:[id]"}
+                                                                                                                                                                  EX. : {"idTag": "VID:FCA47A10E365"}
+   2.7    StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   2.8    StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   2.9    MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+   2.10   RemoteStopTransaction                               Include : status
+   2.11   StopTransaction                                     Include : idTag, meterStop, timestamp, transactionId
+   2.12   StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   2.13   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   2.14   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   2.15   Authorize (Auto Charge)                             Include : idTag (Accepted)                                                                          {"idTag": "VID:[id]"}
+                                                                                                                                                                  EX. : {"idTag": "VID:FCA47A10E365"}
+   2.16   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   2.17   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   2.18   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+รายการทดสอบ
+                                                                                                   MEA OCPP Sever Required
+  ลาดับ                          Message                                                                                                                                                   Remark
+                                                                                          รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   2.19   StatusNotification (Suspended by EV)                Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   2.20   StopTransaction (Unplug)                            Include : idTag, meterStop, timestamp, transactionId
+   2.21   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),                            *หลังเสร้จสิ้นหัวข้อนี้ ผู้ดาเนินการทดสอบ
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode                                       จะต้องตั้งสถานะของ VID เป็น Invalid
+    3     การตรวจสอบการทางานรูปแบบปกติ
+   3.1    BootNotification                                    Include : chargePointModel, chargePointVendor, firmwareVersion,
+   3.2    StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                              status, timestamp, vendorId, vendorErrorCode
+   3.3    StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   3.4    Authorize (Valid Card)                              Include : IdTag (Accepted)
+   3.5    StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   3.6    StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   3.7    MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+
+   3.8    StopTransaction (Valid Card)                        Include : idTag, meterStop, timestamp, transactionId
+   3.9    StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   3.10   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   3.11   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   3.12   RemoteStartTransaction                              Include : status (Accepted)
+   3.13   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+รายการทดสอบ
+                                                                                                   MEA OCPP Sever Required
+  ลาดับ                          Message                                                                                                                          Remark
+                                                                                          รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   3.14   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   3.15   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+   3.16   RemoteStopTransaction                               Include : status
+   3.17   StopTransaction                                     Include : idTag, meterStop, timestamp, transactionId
+   3.18   StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   3.19   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+
+    4     การตรวจสอบการรีเซ็ต
+   4.1    Reset (Hard)                                        Include : status
+   4.2    BootNotification                                    Include : chargePointModel, chargePointVendor, firmwareVersion,
+   4.3    StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                              status, timestamp, vendorId, vendorErrorCode
+   4.4    StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   4.5    RemoteStartTransaction                              Include : status (Accepted)
+   4.6    StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   4.7    StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   4.8    MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+
+   4.9    Reset (Soft)                                        Include : status
+รายการทดสอบ
+                                                                                                   MEA OCPP Sever Required
+  ลาดับ                          Message                                                                                                                          Remark
+                                                                                          รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   4.10   StopTransaction                                     Include : idTag, meterStop, timestamp, transactionId
+   4.11   StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   4.12   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   4.13   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   4.14   RemoteStartTransaction                              Include : status (Accepted)
+   4.15   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   4.16   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   4.17   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+
+   4.18   Reset (Hard)                                        Include : status
+   4.19   StopTransaction                                     Include : idTag, meterStop, timestamp, transactionId
+   4.20   StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   4.21   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+
+    5     การตรวจสอบการทางานการจอง
+   5.1    StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   5.2    ReserveNow                                          Include : status
+   5.3    StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   5.4    CancelReservation                                   Include : status
+รายการทดสอบ
+                                                                                                   MEA OCPP Sever Required
+  ลาดับ                          Message                                                                                                                          Remark
+                                                                                          รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   5.5    StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   5.6    ReserveNow (1 min)                                  Include : status
+   5.7    StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   5.8    StatusNotification (Unplug) (Timeout)               Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   5.9    ReserveNow                                          Include : status
+   5.10   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   5.11   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   5.12   RemoteStartTransaction                              Include : status (Accepted)
+   5.13   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp, reservationId
+   5.14   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   5.15   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+
+   5.16   RemoteStopTransaction                               Include : status
+   5.17   StopTransaction                                     Include : idTag, meterStop, timestamp, transactionId
+   5.18   StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   5.19   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+รายการทดสอบ
+                                                                                                   MEA OCPP Sever Required
+  ลาดับ                          Message                                                                                                                          Remark
+                                                                                          รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+    6     การตรวจสอบการ Set Charging Profile
+   6.1    StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   6.2    StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   6.3    Authorize (Card)                                    Include : IdTag (Accepted)
+   6.4    StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   6.5    StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   6.6    MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+
+   6.7    SetChargingProfile (chargingProfilePurpose:         Include : status
+          TxProfile, chargingRateUnit: W)
+   6.8    MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+
+   6.9    SetChargingProfile (chargingProfilePurpose:         Include : status
+          TxProfile, chargingRateUnit: W)
+   6.10   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+
+   6.11   StopTransaction (Card)                              Include : idTag, meterStop, timestamp, transactionId
+   6.12   StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+รายการทดสอบ
+                                                                                                   MEA OCPP Sever Required
+  ลาดับ                          Message                                                                                                                          Remark
+                                                                                          รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   6.13   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   6.14   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   6.15   RemoteStartTransaction                              Include : status (Accepted)
+   6.16   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   6.17   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   6.18   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+   6.19   SetChargingProfile (chargingProfilePurpose:         Include : status
+          TxProfile, chargingRateUnit: W)
+   6.20   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+   6.21   SetChargingProfile (chargingProfilePurpose:         Include : status
+          TxProfile, chargingRateUnit: W)
+   6.22   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+          *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+          meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+
+   6.23   RemoteStopTransaction                               Include : status
+   6.24   StopTransaction                                     Include : idTag, meterStop, timestamp, transactionId
+   6.25   StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+รายการทดสอบ
+                                                                                                    MEA OCPP Sever Required
+  ลาดับ                           Message                                                                                                                          Remark
+                                                                                           รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   6.26    StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+     7     การตรวจสอบการทางานรูปแบบผิดปกติ
+    7.1    การ Remote Start แบบ Unplug
+   7.1.1   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.1.2   RemoteStartTransaction                              Include : status (Rejected)
+    7.2    การ Remote Start Connector ID เดียวกันในเวลาใกล้เคียงกัน
+   7.2.1   StatusNotification (Unplug)                      Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                            errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.2.2   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.2.3   RemoteStartTransaction                              Include : status (Accepted)
+   7.2.4   RemoteStartTransaction (same Connector ID           Include : status (Rejected)
+           within 10 sec)
+   7.2.5   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   7.2.6   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.2.7   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                               value, unit, context, location}}
+   7.2.8   RemoteStopTransaction                               Include : status
+   7.2.9   StopTransaction                                     Include : idTag, meterStop, timestamp, transactionId
+  7.2.10   StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  7.2.11   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+รายการทดสอบ
+                                                                                                    MEA OCPP Sever Required
+  ลาดับ                           Message                                                                                                                          Remark
+                                                                                           รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+    7.3    การใช้ Card สลับใบ
+   7.3.1   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.3.2   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.3.3   Authorize (Invalid)                                 Include : IdTag
+   7.3.4   Authorize (Accepted)                                Include : IdTag
+   7.3.5   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   7.3.6   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.3.7   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                               value, unit, context, location}}
+  7.3.8    Authorize (Invalid)                                 Include : IdTag
+  7.3.9    StopTransaction (Card)                              Include : idTag, meterStop, timestamp, transactionId
+  7.3.10   StatusNotification (Plug) (If any)                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  7.3.11   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+
+
+    7.4    การหยุดชาร์จด้วยวิธีตบปุ่ม Emergency
+   7.4.1   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.4.2   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.4.3   RemoteStartTransaction                              Include : status (Accepted)
+   7.4.4   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+รายการทดสอบ
+                                                                                                    MEA OCPP Sever Required
+  ลาดับ                          Message                                                                                                                           Remark
+                                                                                           รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   7.4.5   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.4.6   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                               value, unit, context, location}}
+   7.4.7   StopTransaction (ตบปุ่ม Emergency)                  Include : idTag, meterStop, timestamp, transactionId
+   7.4.8   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+           *info must show the cause of the error              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.4.9   StatusNotification (Unplug) (If any)                Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  7.4.10   StatusNotification (Unplug) (คายปุ่ม Emergency)     Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+    7.5    การเปิดประตูเครื่องชาร์จ
+   7.5.1   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.5.2   StatusNotification (Open door)                      Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+           *info must show the cause of the error              errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.5.3   StatusNotification (Close door)                     Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+    7.6    การทดสอบกรณีเกิดไฟฟ้าดับ
+   7.6.1   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.6.2   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   7.6.3   RemoteStartTransaction                              Include : status (Accepted)
+   7.6.4   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+   7.6.5   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+รายการทดสอบ
+                                                                                                      MEA OCPP Sever Required
+  ลาดับ                           Message                                                                                                                          Remark
+                                                                                             รายละเอียดการทดสอบ                            Conn. ID 1 Conn. ID 2
+   7.6.6   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                               value, unit, context, location}}
+   7.6.7   StopTransaction (ตัดไฟฟ้าเครื่องชาร์จ)              Include : idTag, meterStop, timestamp, transactionId
+   7.6.8   BootNotification                                    Include : chargePointModel, chargePointVendor, firmwareVersion,
+   7.6.9   StatusNotification (Plug)                           Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                               status, timestamp, vendorId, vendorErrorCode
+  7.6.10   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+    7.7    การทดสอบบัตรที่ลงทะเบียนไว้ใน LocalList
+   7.7.1   ปลดสาย LAN
+   7.7.2   เริ่มชาร์จโดย card ใน localAuthorizationList        ชาร์จได้สาเร็จ
+   7.7.3   หยุดชาร์จโดย card ใน localAuthorizationList         หยุดชาร์จ
+     8     การทดสอบชาร์จพร้อมกัน 2 หัว
+    8.1    การ Remote Start พร้อมกัน 2 หัว
+   8.1.1   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                               status, timestamp, vendorId, vendorErrorCode
+   8.1.2   StatusNotification (connectorId 1&2: Plug)          Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   8.1.3   RemoteStartTransaction (connectorId 1)              Include : status (Accepted)
+   8.1.4   RemoteStartTransaction (connectorId 2)              Include : status (Accepted or Rejected)
+           *within 10 sec after RemoteStart connectorId 1      *Must be related to the behavior of the Charger
+                                                                     - if Accepted, charger must StartTransaction within 90 sec
+                                                                     - If Rejected, server must RemoteStartTransaction again
+
+   8.1.5   StartTransaction (connectorId 1)                    Include : connectorId, idTag, meterStart, timestamp
+   8.1.6   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   8.1.7   StartTransaction (connectorId 2)                    Include : connectorId, idTag, meterStart, timestamp
+รายการทดสอบ
+                                                                                                    MEA OCPP Sever Required
+  ลาดับ                           Message                                                                                                                          Remark
+                                                                                           รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   8.1.8   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   8.1.9   MeterValues (30 sec) (connectorId 1)                Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                               value, unit, context, location}}
+  8.1.10   MeterValues (30 sec) (connectorId 2)                Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                               value, unit, context, location}}
+  8.1.11   RemoteStopTransaction (connectorId 1)               Include : status
+  8.1.12   StopTransaction                                     Include : idTag, meterStop, timestamp, transactionId
+  8.1.13   StatusNotification (If any)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  8.1.14   StatusNotification (connectorId 1: Unplug)          Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  8.1.15   RemoteStopTransaction (connectorId 2)               Include : status
+  8.1.16   StopTransaction                                     Include : idTag, meterStop, timestamp, transactionId
+  8.1.17   StatusNotification (If any)                         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  8.1.18   StatusNotification (connectorId 2: Unplug)          Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+    8.2    การหยุดชาร์จด้วยวิธีตบปุ่ม Emergency
+   8.2.1   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                               status, timestamp, vendorId, vendorErrorCode
+   8.2.2   StatusNotification (connectorId 1: Plug)            Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   8.2.3   RemoteStartTransaction (connectorId 1)              Include : status (Accepted)
+   8.2.4   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+รายการทดสอบ
+                                                                                                    MEA OCPP Sever Required
+  ลาดับ                          Message                                                                                                                           Remark
+                                                                                           รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   8.2.5   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   8.2.6   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                               value, unit, context, location}}
+   8.2.7   StatusNotification (connectorId 2: Plug)            Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   8.2.8   RemoteStartTransaction (connectorId 2)              Include : status (Accepted)
+  8.2.9    StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+  8.2.10   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  8.2.11   MeterValues (30 sec)                               Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to  sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                         Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                              value, unit, context, location}}
+  8.2.12   StopTransaction (ตบปุ่ม Emergency) (connectorId 1) Include : idTag, meterStop, timestamp, transactionId
+  8.2.13   StopTransaction (ตบปุ่ม Emergency) (connectorId 2) Include : idTag, meterStop, timestamp, transactionId
+  8.2.14   StatusNotification (connectorId 1&2: Plug)         Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+           *info must show the cause of the error             errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  8.2.15   StatusNotification (connectorId 1&2: Unplug)       Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+           (If any)                                           errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  8.2.16   StatusNotification (connectorId 1&2: Unplug)        Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+           (คายปุ่ม Emergency)                                 errorCode, info, status, timestamp, vendorId, vendorErrorCode
+    8.3    การทดสอบกรณีเกิดไฟฟ้าดับ
+   8.3.1   StatusNotification (Unplug)                         Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                               status, timestamp, vendorId, vendorErrorCode
+   8.3.2   StatusNotification (connectorId 1: Plug)            Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   8.3.3   RemoteStartTransaction (connectorId 1)              Include : status (Accepted)
+   8.3.4   StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+รายการทดสอบ
+                                                                                                    MEA OCPP Sever Required
+  ลาดับ                           Message                                                                                                                          Remark
+                                                                                           รายละเอียดการทดสอบ                              Conn. ID 1 Conn. ID 2
+   8.3.5   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   8.3.6   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                               value, unit, context, location}}
+   8.3.7   StatusNotification (connectorId 2: Plug)            Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+   8.3.8   RemoteStartTransaction (connectorId 2)              Include : status (Accepted)
+  8.3.9    StartTransaction                                    Include : connectorId, idTag, meterStart, timestamp
+  8.3.10   StatusNotification                                  Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+  8.3.11   MeterValues (30 sec)                                Include : connectorId, transactionId, meterValue {timestamp,
+           *Energy.Active.Import.Register must be related to   sampledValue {measurand (Voltage, Current.Import,
+           meterStart                                          Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                               value, unit, context, location}}
+  8.3.12   StopTransaction (ไฟฟ้าดับ) (connectorId 1)          Include : idTag, meterStop, timestamp, transactionId
+  8.3.13   StopTransaction (ไฟฟ้าดับ) (connectorId 2)          Include : idTag, meterStop, timestamp, transactionId
+  8.3.14   BootNotification                                    Include : chargePointModel, chargePointVendor, firmwareVersion,
+  8.3.15   StatusNotification (connectorId 1&2: Plug)          Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                               status, timestamp, vendorId, vendorErrorCode
+  8.3.16   StatusNotification (connectorId 1&2: Unplug)        Include : connectorId (All Connector ID [0,1,2,3,...] if status change),
+                                                               errorCode, info, status, timestamp, vendorId, vendorErrorCode
+    9      การตั้งค่าเครื่องชาร์จเป็นค่าที่ กฟน. กาหนด
+   9.1     ChangeConfiguration                                 Include : status (Accepted)
+           (HeartbeatInterval: 60 min)
+   9.2     ChangeConfiguration                                 Include : status (Accepted)
+           (MeterValueSampleInterval: 1 min)
+   9.3     ChangeConfiguration                                 Include : status (Accepted)
+           (LocalAuthorizeOffline: False)
+รายการทดสอบ
+                                                                                                  MEA OCPP Sever Required
+  ลาดับ                         Message                                                                                                                                             Remark
+                                                                                         รายละเอียดการทดสอบ                            Conn. ID 1 Conn. ID 2
+   10     สรุปผลการตรวจสอบ Messages
+   10.1   Authorize                                        Include : IdTag
+   10.2   BootNotification                                 Include : chargePointModel, chargePointVendor, firmwareVersion
+   10.3   DataTransfer                                                                                                                                         *ขึ้นกับการพิจารณา
+   10.4   Heartbeat (Interval 60 min)                      Include :
+   10.5   MeterValues (Interval 1 min)                     Include : connectorId, transactionId, meterValue {timestamp,
+                                                           sampledValue {measurand (Voltage, Current.Import,
+                                                           Energy.Active.Import.Register, Power.Active.Import, SoC , Power.Offered),
+                                                           value, unit, context, location}}
+   10.6   RemoteStartTransaction                           Include : status (Accepted or Rejected (if Unplug))
+   10.7   RemoteStopTransaction                            Include : status
+   10.8   Reset                                            Include : status
+   10.9   StartTransaction                                 Include : connectorId, idTag, meterStart, timestamp
+  10.10   StatusNotification                               Include : connectorId (All Connector ID [0,1,2,3,...]), errorCode, info,
+                                                           status, timestamp, vendorId, vendorErrorCode
+  10.11   StopTransaction                                  Include : idTag, meterStop, timestamp, transactionId
+  10.12   ReserveNow                                       Include : status
+  10.13   CancelReservation                                Include : status
+  10.14   SetChargingProfile (chargingProfilePurpose:      Include : status
+          TxProfile, chargingRateUnit: W)
+  10.15   TriggerMessage                                   Include : status (Accepted)
+  10.16   GetConfiguration                                 Include : configurationKey
+                                                           {HeartbeatInterval (int), LocalAuthorizeOffline (boolean),
+                                                           MeterValueSampleInterval (int), UnlockConnectorOnEVSideDisconnect
+                                                           (boolean)}
+  10.17   ChangeConfiguration                              Include : status (Accepted)
+  10.18   ChangeAvailability                               Include : status (Accepted)
+  10.19   GetDiagnostics                                   Include : fileName                                                                                  *ขึ้นกับการพิจารณา
+  10.20   UpdateFirmware                                   Include :                                                                                           *ขึ้นกับการพิจารณา
+  10.21   SendLocalList (listVersion, updateType: Full ,   Include : status (Accepted)
+          [localAuthorizationList])
+รายการทดสอบ
+                                                                                 MEA OCPP Sever Required
+  ลาดับ                         Message                                                                                                   Remark
+                                                                        รายละเอียดการทดสอบ                        Conn. ID 1 Conn. ID 2
+  10.22   GetLocalListVersion             Include : listVersion
+  10.23   clearCache                      Include : status (Accepted)
+    11    การตรวจสอบอื่นๆ
+   11.1   ปลดสาย LAN                      Handshaking ในเวลา                              นาที (< 1 min)
+   11.2   การ Disconnect                              ครั้ง / ชั่วโมง เวลา Handshaking ใช้เวลา             นาที
+
