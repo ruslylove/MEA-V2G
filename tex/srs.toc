@@ -76,8 +76,11 @@
 \contentsline {subsection}{\numberline {5.4.5}TC-05: Session Stop}{28}{subsection.5.4.5}%
 \contentsline {subsection}{\numberline {5.4.6}TC-06: Safety/Emergency Stop}{28}{subsection.5.4.6}%
 \contentsline {chapter}{\numberline {6}MEA Compliance Test}{29}{chapter.6}%
-\contentsline {section}{\numberline {6.1}MEA OCPP 1.6 Compliance Verification}{29}{section.6.1}%
-\contentsline {section}{\numberline {6.2}MEA Compliance Test Results}{31}{section.6.2}%
+\contentsline {section}{\numberline {6.1}MEA Test Configuration}{29}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Connectivity Details}{29}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Test Execution Instructions}{29}{subsection.6.1.2}%
+\contentsline {section}{\numberline {6.2}MEA OCPP 1.6 Compliance Verification}{29}{section.6.2}%
+\contentsline {section}{\numberline {6.3}MEA Compliance Test Results}{31}{section.6.3}%
 \contentsline {chapter}{\numberline {7}Reference Documents}{33}{chapter.7}%
 \contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{34}{appendix.A}%
 \contentsline {section}{\numberline {A.1}Overview}{34}{section.A.1}%

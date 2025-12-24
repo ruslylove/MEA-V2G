@@ -905,6 +905,23 @@ As of December 2025, the initial automated test suite consisting of 20 tests has
 
 \chapter{MEA Compliance Test}
 
+\section{MEA Test Configuration}
+This section details the specific configuration used for validation against the Metropolitan Electricity Authority (MEA) OCPP Sandbox.
+
+\subsection{Connectivity Details}
+\begin{itemize}
+    \item \textbf{Charge Point ID}: \texttt{rddQC4000001}
+    \item \textbf{CSMS Endpoint}: \texttt{wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001}
+    \item \textbf{Protocol}: OCPP 1.6J (JSON over WebSockets)
+\end{itemize}
+
+\subsection{Test Execution Instructions}
+To verify connectivity and basic message exchange with the live MEA server, execute the following system test script:
+\begin{verbatim}
+python3 tests/system/test_mea_live.py
+\end{verbatim}
+This script performs a real-time handshake, sending a \texttt{BootNotification} and \texttt{StatusNotification}, and logs the server's response.
+
 \section{MEA OCPP 1.6 Compliance Verification}
 The following table outlines the verification matrix mandated by the Metropolitan Electricity Authority (MEA) for OCPP 1.6 compliance. The system must pass these scenarios to ensure compatibility with the MEA EV charging infrastructure.
 

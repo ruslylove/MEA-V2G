@@ -16,13 +16,15 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(level
 logger = logging.getLogger('LiveTest')
 
 CP_ID = "rddQC4000001"
-CSMS_URL = f"ws://ocpp.measandbox.com:2931/EV/Srv/JSON/1.6/{CP_ID}"
+CSMS_URL = f"wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/{CP_ID}"
 
 class MockCharger:
     def __init__(self):
         self.stopped = True
     def stop(self):
         logger.info("Charger stopped.")
+    def start(self):
+        logger.info("Charger started (hardware initialized).")
     def start_session(self):
         logger.info("Charger started session.")
 

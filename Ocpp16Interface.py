@@ -29,8 +29,8 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         self.charger = charger
         self.transaction_id = None
 
-    async def send_boot_notification(self, model="MEA-V2G-01", vendor="RuslyLove"):
-        request = call.BootNotificationPayload(
+    async def send_boot_notification(self, model="MEA-V2G-01", vendor="KMUTNB"):
+        request = call.BootNotification(
             charge_point_model=model,
             charge_point_vendor=vendor
         )
@@ -42,11 +42,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             LOGGER.warning("BootNotification rejected!")
 
     async def send_heartbeat(self):
-        request = call.HeartbeatPayload()
+        request = call.Heartbeat()
         await self.call(request)
 
     async def send_status_notification(self, connector_id=1, status=ChargePointStatus.available):
-        request = call.StatusNotificationPayload(
+        request = call.StatusNotification(
             connector_id=connector_id,
             error_code="NoError",
             status=status
