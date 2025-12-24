@@ -117,6 +117,7 @@ Install the python packages needed
 $ pip install --pre scapy[basic]
 $ pip install Cython
 $ pip install python-libpcap
+$ pip install ocpp websockets python-can Flask
 ```
 
 ## GETTING STARTED
