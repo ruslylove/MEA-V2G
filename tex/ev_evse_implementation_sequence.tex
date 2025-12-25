@@ -1,0 +1,56 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=10]{EVSE}
+
+    % Initial Connection
+    \begin{umlcall}[op={plug in (CP State A $\to$ B)}, type=synchron, return={connected}]{EV}{EVSE}
+    \end{umlcall}
+
+    \begin{umlcall}[op={SLAC Matching}, type=synchron, return={matched}]{EV}{EVSE}
+    \end{umlcall}
+
+    % Session Setup
+    \begin{umlcall}[op=v2gStartSession (SessionSetupReq), type=synchron, return={SessionStarted}]{EV}{EVSE}
+    \end{umlcall}
+
+    % Parameter Discovery (Schedules)
+    \begin{umlcall}[op={Wait for Schedules}, type=synchron, return={ScheduleReceived}]{EV}{EVSE}
+    \end{umlcall}
+    
+    % Cable Check
+    \begin{umlcall}[dt=5, op={v2gStartCableCheck}, type=synchron, return={CableCheckFinished}]{EV}{EVSE}
+    \end{umlcall}
+
+    % Pre-Charge
+    \begin{umlcall}[dt=5, op={v2gStartPreCharging}, type=synchron, return={PreChargeStarted}]{EV}{EVSE}
+    \end{umlcall}
+    
+    % Charging Start
+    \begin{umlcall}[dt=5, op={v2gStartCharging}, type=synchron, return={ChargingStarted}]{EV}{EVSE}
+    \end{umlcall}
+
+    % Charging Loop
+    \umlfragment[type=loop, label=Charging Loop, inner xsep=10]{
+      \begin{umlcall}[dt=5, op={v2gUpdateDCChargingParameters}, type=synchron, return={ParametersChanged}]{EV}{EVSE}
+      \end{umlcall}
+    }
+
+    % Termination
+    \begin{umlcall}[dt=5, op={v2gStopCharging}, type=synchron, return={ChargingStopped}]{EV}{EVSE}
+    \end{umlcall}
+
+    \begin{umlcall}[dt=5, op={v2gStopSession}, type=synchron, return={SessionStopped}]{EV}{EVSE}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+
+\end{tikzpicture}
+
+\end{document}

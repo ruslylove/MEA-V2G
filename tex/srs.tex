@@ -184,6 +184,94 @@ The following sequence diagram depicts the simplified ISO 15118 charging loop in
     \label{fig:sequenceinteraction}
 \end{figure}
 
+\subsection{Detailed Implementation Sequence}
+The following diagram illustrates the actual sequence of HCI commands and notifications implemented in the \texttt{Ev} and \texttt{Evse} classes.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{ev_evse_implementation_sequence.pdf}
+    \caption{Detailed EV-EVSE Implementation Sequence}
+    \label{fig:implementationsequence}
+\end{figure}
+
+\subsubsection{Transaction Value Analysis}
+The following list details the specific values exchanged in each transaction of the implementation sequence shown in Figure \ref{fig:implementationsequence}.
+
+\begin{description}
+    \item[Session Setup] The session initiation involves a handshake of identifiers and capabilities.
+    \begin{itemize}
+        \item \textbf{EV Action}: Calls \texttt{v2gStartSession()}.
+        \item \textbf{EVSE Response} (0x80): Notification \texttt{SessionStarted} sent to EVSE logic.
+        \begin{itemize}
+            \item \texttt{protocol}: Negotiated ISO 15118 protocol version.
+            \item \texttt{session\_id}: Unique session identifier (hex string).
+            \item \texttt{evcc\_id}: EV Communication Controller ID (MAC address based).
+        \end{itemize}
+        \item \textbf{EV Notification} (0xC0): Notification \texttt{SessionStarted} received by EV logic.
+        \begin{itemize}
+            \item \texttt{session\_id}: Unique session identifier.
+            \item \texttt{evse\_id}: EVSE Identification Number (e.g., DE*A23*E45B*78C).
+            \item \texttt{payment\_method}: Selected payment option (e.g., EIM).
+            \item \texttt{energy\_transfer\_mode}: Selected transfer mode (e.g., DC\_extended).
+        \end{itemize}
+    \end{itemize}
+
+    \item[Parameter Discovery] Exchange of electrical limits and target values.
+    \begin{itemize}
+        \item \textbf{EV Action}: Calls \texttt{v2gSetDCChargingParameters()} with:
+        \begin{itemize}
+            \item \texttt{max\_voltage}, \texttt{max\_current}, \texttt{max\_power}: Physical limits of the battery.
+            \item \texttt{target\_voltage}, \texttt{target\_current}: Requested output values.
+            \item \texttt{soc}: Current State of Charge (0-100\%).
+        \end{itemize}
+        \item \textbf{EVSE Notification} (0x85): Notification \texttt{DCChargeParametersChanged} received by EVSE logic containing the EV's requested values.
+        \item \textbf{EVSE Action}: Calls \texttt{v2gEvseUpdateDcChargingParameters()} with:
+        \begin{itemize}
+            \item \texttt{evse\_max\_current}, \texttt{evse\_max\_power}: Station limits.
+            \item \texttt{evse\_present\_voltage}, \texttt{evse\_present\_current}: Real-time measured output.
+            \item \texttt{evse\_status}: Current system status code.
+        \end{itemize}
+        \item \textbf{EV Notification} (0xC1): Notification \texttt{DCChargeParametersChanged} received by EV logic with the station's limits and current status.
+    \end{itemize}
+
+    \item[Cable Check] Safety verification of the physical connection.
+    \begin{itemize}
+        \item \textbf{EV Action}: Calls \texttt{v2gStartCableCheck()}.
+        \item \textbf{EVSE Notification} (0x87): Notification \texttt{RequestCableCheck} received.
+        \item \textbf{EVSE Action}: Verifies isolation and calls \texttt{v2gEvseSetCableCheckFinished(True)}.
+        \item \textbf{EV Notification} (0xC5): Notification \texttt{CableCheckFinished} received.
+    \end{itemize}
+
+    \item[Pre-Charge] Voltage synchronization.
+    \begin{itemize}
+        \item \textbf{EV Action}: Calls \texttt{v2gStartPreCharging()}.
+        \item \textbf{EVSE Notification} (0x88): Notification \texttt{PreChargeStarted} received. EVSE adjusts output voltage to match EV battery voltage.
+        \item \textbf{EV Notification} (0xC6): Notification \texttt{PreChargingReady} received.
+    \end{itemize}
+
+    \item[Start Charging] Contactors close and power delivery begins.
+    \begin{itemize}
+        \item \textbf{EV Action}: Calls \texttt{v2gStartCharging()}.
+        \item \textbf{EVSE Notification} (0x89): Notification \texttt{RequestStartCharging} received.
+        \item \textbf{EV Notification} (0xC8): Notification \texttt{ChargingStarted} received.
+    \end{itemize}
+
+    \item[Charging Loop] Continuous control loop (Cyclic).
+    \begin{itemize}
+        \item \textbf{EV}: Periodically calls \texttt{v2gUpdateDCChargingParameters} to adjust \texttt{target\_current} based on the charging profile.
+        \item \textbf{EVSE}: Periodically calls \texttt{v2gEvseUpdateDcChargingParameters} to report \texttt{present\_voltage} and \texttt{present\_current} for safety monitoring.
+    \end{itemize}
+
+    \item[Termination] Safe shutdown sequence.
+    \begin{itemize}
+        \item \textbf{EV Action}: Calls \texttt{v2gStopCharging()} when SOC target is reached.
+        \item \textbf{EVSE Notification} (0x8A): Notification \texttt{RequestStopCharging} received. EVSE ramps down current and opens contactors.
+        \item \textbf{EV Notification} (0xC9): Notification \texttt{ChargingStopped} received.
+        \item \textbf{EV Action}: Calls \texttt{v2gStopSession()}.
+        \item \textbf{EVSE Notification} (0x8C): Notification \texttt{SessionStopped} received.
+    \end{itemize}
+\end{description}
+
 \subsection{CSMS-EVSE-EV Interaction}
 This diagram focuses on the 3-tier communication flow involving the management system, the charging station, and the vehicle. It illustrates a scenario where a remote command initiates a session with smart charging limits.
 

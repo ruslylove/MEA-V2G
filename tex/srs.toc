@@ -11,6 +11,7 @@
 \contentsline {section}{\numberline {2.6}EVSE State Machine}{6}{section.2.6}%
 \contentsline {section}{\numberline {2.7}State Synchronization}{9}{section.2.7}%
 \contentsline {section}{\numberline {2.8}Charging Loop Sequence}{9}{section.2.8}%
+<<<<<<< HEAD
 \contentsline {subsection}{\numberline {2.8.1}CSMS-EVSE-EV Interaction}{9}{subsection.2.8.1}%
 \contentsline {section}{\numberline {2.9}Core Components}{10}{section.2.9}%
 \contentsline {subsection}{\numberline {2.9.1}Whitebeet Component}{10}{subsection.2.9.1}%
@@ -96,3 +97,91 @@
 \contentsline {subsection}{\numberline {B.4.1}Configuration}{39}{subsection.B.4.1}%
 \contentsline {subsection}{\numberline {B.4.2}Session Control}{39}{subsection.B.4.2}%
 \contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{39}{subsection.B.4.3}%
+=======
+\contentsline {subsection}{\numberline {2.8.1}Detailed Implementation Sequence}{9}{subsection.2.8.1}%
+\contentsline {subsubsection}{Transaction Value Analysis}{10}{figure.2.7}%
+\contentsline {subsection}{\numberline {2.8.2}CSMS-EVSE-EV Interaction}{12}{subsection.2.8.2}%
+\contentsline {section}{\numberline {2.9}Core Components}{12}{section.2.9}%
+\contentsline {subsection}{\numberline {2.9.1}Whitebeet Component}{12}{subsection.2.9.1}%
+\contentsline {subsubsection}{Protocol Structure}{13}{subsection.2.9.1}%
+\contentsline {subsubsection}{HCI State Transition Mapping}{13}{subsection.2.9.1}%
+\contentsline {subsection}{\numberline {2.9.2}EV Component}{14}{subsection.2.9.2}%
+\contentsline {subsection}{\numberline {2.9.3}EVSE Component}{14}{subsection.2.9.3}%
+\contentsline {subsection}{\numberline {2.9.4}OCPP Component}{14}{subsection.2.9.4}%
+\contentsline {section}{\numberline {2.10}Charger Component}{14}{section.2.10}%
+\contentsline {subsection}{\numberline {2.10.1}Implementing a Custom Charger}{15}{subsection.2.10.1}%
+\contentsline {subsubsection}{Lifecycle Management}{15}{figure.2.9}%
+\contentsline {subsubsection}{Control Loop Methods}{15}{figure.2.9}%
+\contentsline {subsubsection}{Telemetry Methods}{15}{figure.2.9}%
+\contentsline {subsubsection}{Configuration Accessors}{16}{figure.2.9}%
+\contentsline {subsection}{\numberline {2.10.2}TRIO-HP Charger Protocol}{16}{subsection.2.10.2}%
+\contentsline {subsubsection}{Hardware Description}{17}{subsection.2.10.2}%
+\contentsline {subsubsection}{Protocol Structure}{17}{subsection.2.10.2}%
+\contentsline {subsubsection}{Key Commands}{17}{subsection.2.10.2}%
+\contentsline {subsubsection}{Protocol Integration}{17}{subsection.2.10.2}%
+\contentsline {subsubsection}{CanCharger Implementation}{18}{subsection.2.10.2}%
+\contentsline {section}{\numberline {2.11}Battery Component}{18}{section.2.11}%
+\contentsline {section}{\numberline {2.12}Default Charging Routine}{19}{section.2.12}%
+\contentsline {subsection}{\numberline {2.12.1}Default Schedule}{19}{subsection.2.12.1}%
+\contentsline {subsection}{\numberline {2.12.2}Physics Simulation Parameters}{19}{subsection.2.12.2}%
+\contentsline {section}{\numberline {2.13}Project File Structure}{19}{section.2.13}%
+\contentsline {chapter}{\numberline {3}Specific Requirements}{21}{chapter.3}%
+\contentsline {section}{\numberline {3.1}External Interfaces}{21}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Communication Interfaces}{21}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}User Interfaces}{21}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Functional Requirements}{21}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}FR-01: Protocol Negotiation}{21}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}FR-01-A: OCPP Version Selection}{21}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}FR-02: Authorization}{22}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}FR-03: Charging Control}{22}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}FR-04: OCPP Integration}{22}{subsection.3.2.5}%
+\contentsline {section}{\numberline {3.3}Communication Flow}{22}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}OCPP 1.6 Sequence Flow}{22}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}OCPP 2.0.1 Sequence Flow}{22}{subsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.3.3}Key Differences: OCPP 1.6 vs 2.0.1}{22}{subsection.3.3.3}%
+\contentsline {section}{\numberline {3.4}OCPP Connector State Machine}{23}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}State Transition Logic}{25}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}EVSE to OCPP State Mapping}{25}{subsection.3.4.2}%
+\contentsline {chapter}{\numberline {4}Configuration and Deployment}{27}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Command Line Interface (CLI)}{27}{section.4.1}%
+\contentsline {section}{\numberline {4.2}JSON Configuration}{27}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}EV Configuration (ev.json)}{27}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}EVSE Configuration (evse.json)}{27}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Software Dependencies}{28}{section.4.3}%
+\contentsline {chapter}{\numberline {5}Test Plan}{29}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Testing Scope}{29}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Test Environment}{29}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Automated Test Strategy}{29}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Unit Testing}{29}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Integration Testing}{30}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}System Testing}{30}{subsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.3.4}Test Execution}{30}{subsection.5.3.4}%
+\contentsline {subsection}{\numberline {5.3.5}Initial Test Results}{30}{subsection.5.3.5}%
+\contentsline {section}{\numberline {5.4}Test Procedures}{31}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}TC-01: System Initialization}{31}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}TC-02: EV Connection}{31}{subsection.5.4.2}%
+\contentsline {subsection}{\numberline {5.4.3}TC-03: Authorization}{31}{subsection.5.4.3}%
+\contentsline {subsection}{\numberline {5.4.4}TC-04: Charging Loop}{31}{subsection.5.4.4}%
+\contentsline {subsection}{\numberline {5.4.5}TC-05: Session Stop}{32}{subsection.5.4.5}%
+\contentsline {subsection}{\numberline {5.4.6}TC-06: Safety/Emergency Stop}{32}{subsection.5.4.6}%
+\contentsline {chapter}{\numberline {6}MEA Compliance Test}{33}{chapter.6}%
+\contentsline {section}{\numberline {6.1}MEA Test Configuration}{33}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Connectivity Details}{33}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Test Execution Instructions}{33}{subsection.6.1.2}%
+\contentsline {section}{\numberline {6.2}OCPP 1.6 V2G Workaround (Special Test Case)}{33}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Custom Configuration Key: MEA\_V2G\_PowerDemand}{33}{subsection.6.2.1}%
+\contentsline {section}{\numberline {6.3}MEA OCPP 1.6 Compliance Verification}{34}{section.6.3}%
+\contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{35}{section.6.4}%
+\contentsline {chapter}{\numberline {7}Reference Documents}{38}{chapter.7}%
+\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{39}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Overview}{39}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Core Message Reference}{39}{section.A.2}%
+\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{41}{appendix.B}%
+\contentsline {section}{\numberline {B.1}System \& Configuration}{41}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{41}{section.B.2}%
+\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{41}{section.B.3}%
+\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{41}{section.B.4}%
+\contentsline {subsection}{\numberline {B.4.1}Configuration}{42}{subsection.B.4.1}%
+\contentsline {subsection}{\numberline {B.4.2}Session Control}{42}{subsection.B.4.2}%
+\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{42}{subsection.B.4.3}%
+>>>>>>> 1d3fa92 (docs: Add detailed EV-EVSE implementation sequence documentation and update SRS table of contents.)
