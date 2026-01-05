@@ -1244,8 +1244,8 @@ The following table outlines the verification matrix mandated by the Metropolita
 \section{MEA Compliance Test Results}
 This section details the results of the automated unit tests executed against the MEA Compliance Matrix.
 
-\textbf{Execution Date}: December 24, 2025 \\
-\textbf{Total Tests}: 30+ Scenarios \\
+\textbf{Execution Date}: January 5, 2026 \\
+\textbf{Total Tests}: 30+ Scenarios (Validated via \texttt{tests/system/test\_mea\_mock.py}) \\
 \textbf{Status}: \textbf{PASS} (100\% Success Rate)
 
 \begin{footnotesize}
@@ -1340,75 +1340,245 @@ This section details the results of the automated unit tests executed against th
 \hline
 2.13 & Status (Unplug) & Available & Pass \\
 \hline
+2.14 & Status (Plug) & Preparing & Pass \\
+\hline
+2.15 & Authorize (Auto Charge) & VID tag Authorized & Pass \\
+\hline
+2.16 & StartTransaction & Tx started & Pass \\
+\hline
+2.17 & Status & Charging & Pass \\
+\hline
+2.18 & MeterValues & Periodic values received (2nd Cycle) & Pass \\
+\hline
+2.19 & Status (SuspendedEV) & Status: SuspendedEV & Pass \\
+\hline
+2.20 & StopTransaction (Unplug) & Reason: EVDisconnected & Pass \\
+\hline
+2.21 & Status (Unplug) & Return to Available & Pass \\
+\hline
 
 \multicolumn{4}{|l|}{\textbf{3. Normal Operation}} \\
 \hline
-3.1 & BootSequence & Boot -> Status Available & Pass \\
+3.1 & BootSequence & Boot $\to$ Status Available & Pass \\
 \hline
-3.3 & Plug In & Preparing & Pass \\
+3.2 & Status (Plug) & Preparing & Pass \\
 \hline
-3.4 & Card Authorize & Tag Accepted & Pass \\
+3.3 & Authorize (RFID) & Tag Accepted & Pass \\
 \hline
-3.5 & StartTransaction & Tx started with Card tag & Pass \\
+3.4 & StartTransaction & Tx started with Card tag & Pass \\
 \hline
-3.6 & Status & Charging & Pass \\
+3.5 & Status & Charging & Pass \\
 \hline
-3.8 & Stop (Card) & Tx stopped. Reason: Local. & Pass \\
+3.6 & MeterValues & Periodic values received (30s) & Pass \\
 \hline
-3.12 & RemoteStart & Accepted. Tx started. & Pass \\
+3.7 & StopTransaction & Tx stopped (Local) & Pass \\
 \hline
-3.16 & RemoteStop & Accepted. Tx stopped. & Pass \\
+3.8 & Status (Finishing) & Finishing & Pass \\
+\hline
+3.9 & Status (Unplug) & Available & Pass \\
+\hline
+3.10 & Status (Plug) & Preparing & Pass \\
+\hline
+3.11 & RemoteStart & Accepted. Tx started. & Pass \\
+\hline
+3.12 & StartTransaction & Tx started (Remote) & Pass \\
+\hline
+3.13 & Status & Charging & Pass \\
+\hline
+3.14 & MeterValues & Values received & Pass \\
+\hline
+3.15 & RemoteStop & Accepted & Pass \\
+\hline
+3.16 & StopTransaction & Tx stopped (Remote) & Pass \\
+\hline
+3.17 & Status (Finishing) & Finishing & Pass \\
+\hline
+3.18 & Status (Unplug) & Available & Pass \\
+\hline
+3.19 & MeterValues (Idle) & Checked & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{4. Reset Verification}} \\
 \hline
 4.1 & Hard Reset & Accepted. System rebooting. & Pass \\
 \hline
-4.2 & Post-Reset Boot & BootNotification sent after reboot & Pass \\
+4.2 & Notification & Status during reboot & Pass \\
+\hline
+4.3 & BootNotification & Boot after Hard Reset & Pass \\
+\hline
+4.4 & Status (Available) & Available & Pass \\
+\hline
+4.5 & StartTransaction & Tx started & Pass \\
+\hline
+4.6 & Hard Reset (Tx) & Accepted. Tx interrupted. & Pass \\
+\hline
+4.7 & StopTransaction & Reason: HardReset & Pass \\
+\hline
+4.8 & BootNotification & Boot after Hard Reset & Pass \\
 \hline
 4.9 & Soft Reset & Accepted. Process restart. & Pass \\
+\hline
+4.10 & StopTransaction & Not applicable (Idle) & N/A \\
+\hline
+4.11 & BootNotification & Boot after Soft Reset & Pass \\
+\hline
+4.12 & Status (Available) & Available & Pass \\
+\hline
+4.13 & StartTransaction & Tx started & Pass \\
+\hline
+4.14 & Soft Reset (Tx) & Accepted. Tx interrupted. & Pass \\
+\hline
+4.15 & StopTransaction & Reason: SoftReset & Pass \\
+\hline
+4.16 & BootNotification & Boot after Soft Reset & Pass \\
+\hline
+4.17 & Status (Available) & Available & Pass \\
+\hline
+4.18-4.21 & Reset Cycles & Verified multiple cycles & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{5. Reservation Verification}} \\
 \hline
+5.1 & Status (Available) & Available & Pass \\
+\hline
 5.2 & ReserveNow & Accepted. Reserved for Tag. & Pass \\
+\hline
+5.3 & Status (Reserved) & Reserved & Pass \\
 \hline
 5.4 & CancelReservation & Accepted. Reservation cleared. & Pass \\
 \hline
-5.6 & Reserve (Expiry) & Accepted. 1 min expiry set. & Pass \\
+5.5 & Status (Available) & Available & Pass \\
 \hline
-5.8 & Timeout Status & Return to Available after timeout & Pass \\
+5.6 & Reserve (Expiry) & Accepted. 2s expiry set. & Pass \\
 \hline
-5.13 & Start w/ Reservation & Tx Started (reservationId matched) & Pass \\
+5.7 & Status (Reserved) & Reserved & Pass \\
+\hline
+5.8 & Expiry Wait & Wait for expiry & Pass \\
+\hline
+5.9 & Status (Available) & Auto-revert to Available & Pass \\
+\hline
+5.10 & ReserveNow (Tx) & Accepted for Tx & Pass \\
+\hline
+5.11 & Status (Reserved) & Reserved & Pass \\
+\hline
+5.12 & StartTransaction & Tx Started (Reserve Tag) & Pass \\
+\hline
+5.13 & Status & Charging & Pass \\
+\hline
+5.19 & StopTransaction & Tx Stopped & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{6. Charging Profile}} \\
 \hline
-6.7 & SetProfile (Tx) & Profile accepted for Transaction & Pass \\
+6.1 & Status (Unplug) & Available & Pass \\
 \hline
-6.9 & UpdateProfile & Updated profile accepted & Pass \\
+6.2 & Status (Plug) & Preparing & Pass \\
 \hline
-6.11 & Verify Effect & Charging rate adjusted by profile & Pass \\
+6.3 & Authorize (Card) & Accepted & Pass \\
+\hline
+6.4 & StartTransaction & Tx started & Pass \\
+\hline
+6.5 & Status & Charging & Pass \\
+\hline
+6.6 & MeterValues & Initial values received & Pass \\
+\hline
+6.7 & SetChargingProfile (Tx) & Profile accepted & Pass \\
+\hline
+6.8 & MeterValues & Effect verified (Mock) & Pass \\
+\hline
+6.9 & SetChargingProfile (Update) & Updated profile accepted & Pass \\
+\hline
+6.10 & MeterValues & Values received & Pass \\
+\hline
+6.11 & StopTransaction (Card) & Tx stopped (Local) & Pass \\
+\hline
+6.12 & Status (Finishing) & Finishing & Pass \\
+\hline
+6.13 & Status (Unplug) & Available & Pass \\
+\hline
+6.14 & Status (Plug) & Preparing & Pass \\
+\hline
+6.15 & RemoteStartTransaction & Accepted & Pass \\
+\hline
+6.16 & StartTransaction & Tx started (Remote) & Pass \\
+\hline
+6.17 & Status & Charging & Pass \\
+\hline
+6.18 & MeterValues & Values received & Pass \\
+\hline
+6.19 & SetChargingProfile (2) & Profile accepted & Pass \\
+\hline
+6.20 & MeterValues & Values received & Pass \\
+\hline
+6.21 & SetChargingProfile (3) & Updated profile accepted & Pass \\
+\hline
+6.22 & MeterValues & Values received & Pass \\
+\hline
+6.23 & RemoteStopTransaction & Accepted & Pass \\
+\hline
+6.24 & StopTransaction & Tx stopped (Remote) & Pass \\
+\hline
+6.25 & Status (Finishing) & Finishing & Pass \\
+\hline
+6.26 & Status (Unplug) & Available & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{7. Abnormal Operation}} \\
 \hline
-7.1 & RemoteStart (Unplug) & Rejected (Connector Unplugged) & Pass \\
+7.1.1 & Status (Unplug) & Available & Pass \\
 \hline
-7.2 & Concurrent Remote & 2nd Request Rejected (Busy) & Pass \\
+7.1.2 & RemoteStart & Rejected (Connector Unplugged) & Pass \\
 \hline
-7.3 & Swap Card Stop & Stop Rejected (Invalid ID) & Pass \\
+7.1.3 & Status & Available (No change) & Pass \\
+\hline
+7.2.1 & Status (Plug) & Preparing & Pass \\
+\hline
+7.2.2 & RemoteStart (1) & Accepted & Pass \\
+\hline
+7.2.3 & Concurrent Remote & 2nd Request Rejected (Busy) & Pass \\
+\hline
+7.2.4 & StartTransaction & Tx Started & Pass \\
+\hline
+7.2.9 & StopTransaction & Tx Stopped (Remote) & Pass \\
+\hline
+7.3.1 & StartTransaction & Tx Started & Pass \\
+\hline
+7.3.2 & Stop (Invalid ID) & Rejected (IdTag mismatch) & Pass \\
+\hline
+7.3.3 & Stop (Valid ID) & Accepted & Pass \\
 \hline
 7.4 & Emergency Stop & Tx Stopped immediately & Pass \\
 \hline
-7.6 & Power Loss & Tx Stopped (PowerLoss) on boot & Pass \\
+7.5 & Open Door & Status: DoorOpen (Simulated) & Pass \\
+\hline
+7.6.1 & StartTransaction & Tx Started & Pass \\
+\hline
+7.6.2 & Power Loss & Tx Stopped (PowerLoss) on boot & Pass \\
+\hline
+7.7 & Local List Offline & Auth Offline Accepted & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{8. Dual Connector}} \\
 \hline
-8.1 & Concurrent Start & Both connectors started & Pass \\
+8.1.1 & Status (Both) & Available & Pass \\
+\hline
+8.1.2 & Status (Plug Both) & Preparing & Pass \\
+\hline
+8.1.3 & RemoteStart (1) & Accepted & Pass \\
+\hline
+8.1.4 & RemoteStart (2) & Accepted & Pass \\
+\hline
+8.1.5 & StartTransaction (1) & Tx Started & Pass \\
+\hline
+8.1.7 & StartTransaction (2) & Tx Started & Pass \\
+\hline
+8.1.12 & StopTransaction (1) & Tx Stopped (Remote) & Pass \\
+\hline
+8.1.16 & StopTransaction (2) & Tx Stopped (Remote) & Pass \\
 \hline
 8.2 & Shared E-Stop & Both Tx stopped via E-Stop & Pass \\
+\hline
+8.3 & Power Loss (Dual) & Recovery for both connectors & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{9. MEA Config}} \\
@@ -1417,9 +1587,9 @@ This section details the results of the automated unit tests executed against th
 \hline
 9.2 & SampleInterval & Set to 60s (MEA Default) & Pass \\
 \hline
-9.3 & LocalAuth & LocalAuthOffline=False & Pass \\
+9.3 & LocalAuthorize & LocalAuthorizeOffline=False & Pass \\
 \hline
-9.4.1 & ChangeConfig (V2G: Discharge) & Input: 5000 $\to$ Status: Accepted (Discharging) & Pass \\
+9.4.1 & ChangeConfig (V2G: Discharge) & \textbf{Key: MEA\_V2G\_PowerDemand}. Input: 5000 $\to$ Status: Accepted (Discharging) & Pass \\
 \hline
 9.4.2 & ChangeConfig (V2G: Charge) & Input: -2000 $\to$ Status: Accepted (Charging) & Pass \\
 \hline
@@ -1428,7 +1598,49 @@ This section details the results of the automated unit tests executed against th
 
 \multicolumn{4}{|l|}{\textbf{10. Message Summary}} \\
 \hline
-10.x & JSON Schema & Messages conform to schema & Pass \\
+10.1 & Authorize & Schema Verified & Pass \\
+\hline
+10.2 & BootNotification & Schema Verified & Pass \\
+\hline
+10.3 & DataTransfer & Schema Verified & Pass \\
+\hline
+10.4 & Heartbeat & Schema Verified & Pass \\
+\hline
+10.5 & MeterValues & Schema Verified & Pass \\
+\hline
+10.6 & RemoteStartTx & Schema Verified & Pass \\
+\hline
+10.7 & RemoteStopTx & Schema Verified & Pass \\
+\hline
+10.8 & Reset & Schema Verified & Pass \\
+\hline
+10.9 & StartTransaction & Schema Verified & Pass \\
+\hline
+10.10 & StatusNotification & Schema Verified & Pass \\
+\hline
+10.11 & StopTransaction & Schema Verified & Pass \\
+\hline
+10.12 & ReserveNow & Schema Verified & Pass \\
+\hline
+10.13 & CancelReservation & Schema Verified & Pass \\
+\hline
+10.14 & SetChargingProfile & Schema Verified & Pass \\
+\hline
+10.15 & TriggerMessage & Schema Verified & Pass \\
+\hline
+10.16 & GetConfiguration & Schema Verified & Pass \\
+\hline
+10.17 & ChangeConfig & Schema Verified & Pass \\
+\hline
+10.18 & ChangeAvailability & Schema Verified & Pass \\
+\hline
+10.23 & clearCache & Schema Verified & Pass \\
+\hline
+\multicolumn{4}{|l|}{\textbf{11. Other Verification}} \\
+\hline
+11.1 & LAN Disconnect & Simulated Loss (< 1 min recovery) & Pass \\
+\hline
+11.2 & Repeated Disconnect & Handshake recovery verified & Pass \\
 \hline
 
 \end{longtable}
