@@ -85,16 +85,16 @@
 \contentsline {section}{\numberline {6.2}OCPP 1.6 V2G Workaround (Special Test Case)}{33}{section.6.2}%
 \contentsline {subsection}{\numberline {6.2.1}Custom Configuration Key: MEA\_V2G\_PowerDemand}{33}{subsection.6.2.1}%
 \contentsline {section}{\numberline {6.3}MEA OCPP 1.6 Compliance Verification}{34}{section.6.3}%
-\contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{35}{section.6.4}%
-\contentsline {chapter}{\numberline {7}Reference Documents}{40}{chapter.7}%
-\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{41}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Overview}{41}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Core Message Reference}{41}{section.A.2}%
-\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{43}{appendix.B}%
-\contentsline {section}{\numberline {B.1}System \& Configuration}{43}{section.B.1}%
-\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{43}{section.B.2}%
-\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{43}{section.B.3}%
-\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{43}{section.B.4}%
-\contentsline {subsection}{\numberline {B.4.1}Configuration}{44}{subsection.B.4.1}%
-\contentsline {subsection}{\numberline {B.4.2}Session Control}{44}{subsection.B.4.2}%
-\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{44}{subsection.B.4.3}%
+\contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{39}{section.6.4}%
+\contentsline {chapter}{\numberline {7}Reference Documents}{45}{chapter.7}%
+\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{46}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Overview}{46}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Core Message Reference}{46}{section.A.2}%
+\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{48}{appendix.B}%
+\contentsline {section}{\numberline {B.1}System \& Configuration}{48}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{48}{section.B.2}%
+\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{48}{section.B.3}%
+\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{48}{section.B.4}%
+\contentsline {subsection}{\numberline {B.4.1}Configuration}{49}{subsection.B.4.1}%
+\contentsline {subsection}{\numberline {B.4.2}Session Control}{49}{subsection.B.4.2}%
+\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{49}{subsection.B.4.3}%

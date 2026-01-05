@@ -67,12 +67,16 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         request = call.Heartbeat()
         await self.call(request)
 
-    async def send_status_notification(self, connector_id=1, status=ChargePointStatus.available, error_code="NoError"):
-        request = call.StatusNotification(
-            connector_id=connector_id,
-            error_code=error_code,
-            status=status
-        )
+    async def send_status_notification(self, connector_id=1, status=ChargePointStatus.available, error_code="NoError", info=None):
+        payload = {
+            'connector_id': connector_id,
+            'error_code': error_code,
+            'status': status
+        }
+        if info:
+             payload['info'] = info
+             
+        request = call.StatusNotification(**payload)
         await self.call(request)
         
     async def start_transaction(self, connector_id=1, id_tag="default-tag"):
@@ -135,7 +139,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         await self.call(request)
         LOGGER.info(f"Transaction stopped on {connector_id}: {transaction_id}")
         
-        del self.transactions[connector_id]
+        self.transactions.pop(connector_id, None)
         # Only stop charger if no transactions left? 
         # Simplified: Stop if no transactions.
         if not self.transactions:
@@ -227,10 +231,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
              if key == "MEA_V2G_PowerDemand":
                 try:
                     power_watts = int(value)
-                    if power_watts > 0:
-                        LOGGER.info(f"[V2G] Grid Demand: Discharging {power_watts} W")
-                    elif power_watts < 0:
-                        LOGGER.info(f"[V2G] Grid Supply: Charging {abs(power_watts)} W")
+                    if power_watts < 0:
+                        LOGGER.info(f"[V2G] Grid Demand: Discharging {abs(power_watts)} W")
+                    elif power_watts > 0:
+                        LOGGER.info(f"[V2G] Grid Supply: Charging {power_watts} W")
                     else:
                         LOGGER.info("[V2G] Idle")
                 except ValueError:

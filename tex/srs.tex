@@ -1145,6 +1145,22 @@ The following table outlines the verification matrix mandated by the Metropolita
 \hline
 2.13 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
 \hline
+2.14 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
+2.15 & CS $\to$ CSMS & Authorize (Auto Charge) & idTag: VID... \\
+\hline
+2.16 & CS $\to$ CSMS & StartTransaction & connectorId, idTag \\
+\hline
+2.17 & CS $\to$ CSMS & StatusNotification & status: Charging \\
+\hline
+2.18 & CS $\to$ CSMS & MeterValues (30s) & Values present \\
+\hline
+2.19 & CS $\to$ CSMS & StatusNotification (Suspended) & status: SuspendedEV \\
+\hline
+2.20 & CS $\to$ CSMS & StopTransaction (Unplug) & idTag, meterStop \\
+\hline
+2.21 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
 
 \multicolumn{4}{|l|}{\textbf{3. Normal Operation Verification}} \\
 \hline
@@ -1164,13 +1180,27 @@ The following table outlines the verification matrix mandated by the Metropolita
 \hline
 3.8 & CS $\to$ CSMS & StopTransaction (Card) & meterStop, transactionId \\
 \hline
+3.9 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
+3.10 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+3.11 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
 3.12 & CSMS $\to$ CS & RemoteStartTransaction & status: Accepted \\
 \hline
 3.13 & CS $\to$ CSMS & StartTransaction & connectorId, idTag, meterStart \\
 \hline
+3.14 & CS $\to$ CSMS & StatusNotification & status: Charging \\
+\hline
+3.15 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
 3.16 & CSMS $\to$ CS & RemoteStopTransaction & status: Accepted \\
 \hline
 3.17 & CS $\to$ CSMS & StopTransaction & meterStop, transactionId \\
+\hline
+3.18 & CS $\to$ CSMS & StatusNotification (Plug) & status: Finishing/Preparing \\
+\hline
+3.19 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{4. Reset Verification}} \\
@@ -1179,49 +1209,362 @@ The following table outlines the verification matrix mandated by the Metropolita
 \hline
 4.2 & CS $\to$ CSMS & BootNotification & Post-reboot checks \\
 \hline
+4.3 & CS $\to$ CSMS & Heartbeat & Received \\
+\hline
+4.4 & CS $\to$ CSMS & MeterValues & Received \\
+\hline
+4.5 & CS $\to$ CSMS & StatusNotification & status: Available \\
+\hline
+4.6 & CSMS $\to$ CS & ChangeConfiguration (Heartbeat) & status: Accepted \\
+\hline
+4.7 & CSMS $\to$ CS & ChangeConfiguration (MeterValue) & status: Accepted \\
+\hline
+4.8 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & status: Accepted \\
+\hline
 4.9 & CSMS $\to$ CS & Reset (Soft) & status: Accepted \\
 \hline
-
+4.10 & CS $\to$ CSMS & BootNotification & Post-reboot checks \\
+\hline
+4.11 & CS $\to$ CSMS & Heartbeat & Received \\
+\hline
+4.12 & CS $\to$ CSMS & MeterValues & Received \\
+\hline
+4.13 & CS $\to$ CSMS & StatusNotification & status: Available \\
+\hline
+4.14 & CSMS $\to$ CS & ChangeConfiguration (Heartbeat) & status: Accepted \\
+\hline
+4.15 & CSMS $\to$ CS & ChangeConfiguration (MeterValue) & status: Accepted \\
+\hline
+4.16 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & status: Accepted \\
+\hline
+4.17 & CS $\to$ CSMS & StatusNotification & status: Available \\
+\hline
+4.18 & CS $\to$ CSMS & StartTransaction & status: Accepted \\
+\hline
+4.19 & CSMS $\to$ CS & Reset (Hard) & status: Accepted \\
+\hline
+4.20 & CS $\to$ CSMS & StopTransaction (Reset) & status: Accepted \\
+\hline
+4.21 & CS $\to$ CSMS & BootNotification & Post-reboot checks \\
+\hline
 \multicolumn{4}{|l|}{\textbf{5. Reservation Verification}} \\
 \hline
-5.2 & CSMS $\to$ CS & ReserveNow & status: Accepted \\
+5.1 & CSMS $\to$ CS & ReserveNow & status: Accepted \\
+\hline
+5.2 & CSMS $\to$ CS & ReserveNow (Same ID) & status: Accepted \\
+\hline
+5.3 & CSMS $\to$ CS & ReserveNow (Different ID) & status: Rejected \\
 \hline
 5.4 & CSMS $\to$ CS & CancelReservation & status: Accepted \\
 \hline
-5.6 & CSMS $\to$ CS & ReserveNow (1 min) & status: Accepted \\
+5.5 & CSMS $\to$ CS & ReserveNow (Locked) & status: Accepted \\
 \hline
-5.8 & CS $\to$ CSMS & StatusNotification (Timeout) & status: Available \\
+5.6 & CSMS $\to$ CS & ReserveNow (Expiry 1m) & status: Accepted \\
+\hline
+5.7 & CS $\to$ CSMS & StatusNotification (Reserved) & status: Reserved \\
+\hline
+5.8 & CS $\to$ CSMS & StatusNotification (Expiry) & status: Available \\
+\hline
+5.9 & CSMS $\to$ CS & ReserveNow & status: Accepted \\
+\hline
+5.10 & CS $\to$ CSMS & StatusNotification (Reserved) & status: Reserved \\
+\hline
+5.11 & CSMS $\to$ CS & RemoteStartTransaction & status: Accepted \\
+\hline
+5.12 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
 \hline
 5.13 & CS $\to$ CSMS & StartTransaction (Reserved) & reservationId included \\
+\hline
+5.14 & CS $\to$ CSMS & StatusNotification & status: Charging \\
+\hline
+5.15 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
+5.16 & CSMS $\to$ CS & RemoteStopTransaction & status: Accepted \\
+\hline
+5.17 & CS $\to$ CSMS & StopTransaction & status: Accepted \\
+\hline
+5.18 & CS $\to$ CSMS & StatusNotification & status: Finishing \\
+\hline
+5.19 & CS $\to$ CSMS & StatusNotification & status: Available \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{6. Charging Profile Verification}} \\
 \hline
+6.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+6.2 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
+6.3 & CS $\to$ CSMS & Authorize (Card) & status: Accepted \\
+\hline
+6.4 & CS $\to$ CSMS & StartTransaction & connectorId, idTag \\
+\hline
+6.5 & CS $\to$ CSMS & StatusNotification & status: Charging \\
+\hline
+6.6 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
 6.7 & CSMS $\to$ CS & SetChargingProfile (TxProfile) & status: Accepted \\
+\hline
+6.8 & CS $\to$ CSMS & MeterValues & Values present \\
 \hline
 6.9 & CSMS $\to$ CS & SetChargingProfile (Update) & status: Accepted \\
 \hline
+6.10 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
 6.11 & CS $\to$ CSMS & StopTransaction & Verify profile effect \\
+\hline
+6.12 & CS $\to$ CSMS & StatusNotification (Plug) & status: Finishing \\
+\hline
+6.13 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+6.14 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
+6.15 & CSMS $\to$ CS & RemoteStartTransaction & status: Accepted \\
+\hline
+6.16 & CS $\to$ CSMS & StartTransaction & connectorId, idTag \\
+\hline
+6.17 & CS $\to$ CSMS & StatusNotification & status: Charging \\
+\hline
+6.18 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
+6.19 & CSMS $\to$ CS & SetChargingProfile & status: Accepted \\
+\hline
+6.20 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
+6.21 & CSMS $\to$ CS & SetChargingProfile & status: Accepted \\
+\hline
+6.22 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
+6.23 & CSMS $\to$ CS & RemoteStopTransaction & status: Accepted \\
+\hline
+6.24 & CS $\to$ CSMS & StopTransaction & status: Accepted \\
+\hline
+6.25 & CS $\to$ CSMS & StatusNotification (Plug) & status: Finishing \\
+\hline
+6.26 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{7. Abnormal Operation Verification}} \\
 \hline
-7.1 & CSMS $\to$ CS & Remote Start (Unplugged) & status: Rejected \\
+7.1.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
 \hline
-7.2 & CSMS $\to$ CS & Concurrent Remote Start (Same ID) & 2nd request Rejected \\
+7.1.2 & CSMS $\to$ CS & RemoteStartTransaction & status: Rejected \\
 \hline
-7.3 & CS $\to$ CSMS & Swap Card (Invalid Stop) & Authorize: Invalid (if different card) \\
+\multicolumn{4}{|l|}{\textbf{7.2 Concurrent Remote Start}} \\
 \hline
-7.4 & CS $\to$ CSMS & Emergency Stop & StopTransaction (Immediate) \\
+7.2.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
 \hline
-7.6 & CS $\to$ CSMS & Power Loss & StopTransaction (upon restoration) \\
+7.2.2 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
+7.2.3 & CSMS $\to$ CS & RemoteStartTransaction (1) & status: Accepted \\
+\hline
+7.2.4 & CSMS $\to$ CS & RemoteStartTransaction (2) & status: Rejected (Busy) \\
+\hline
+7.2.5 & CS $\to$ CSMS & StartTransaction & status: Accepted \\
+\hline
+7.2.6 & CS $\to$ CSMS & StatusNotification & status: Charging \\
+\hline
+7.2.7 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
+7.2.8 & CSMS $\to$ CS & RemoteStopTransaction & status: Accepted \\
+\hline
+7.2.9 & CS $\to$ CSMS & StopTransaction & status: Accepted \\
+\hline
+7.2.10 & CS $\to$ CSMS & StatusNotification & status: Finishing \\
+\hline
+7.2.11 & CS $\to$ CSMS & StatusNotification & status: Available \\
+\hline
+\multicolumn{4}{|l|}{\textbf{7.3 Swap Card}} \\
+\hline
+7.3.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+7.3.2 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
+7.3.3 & CS $\to$ CSMS & Authorize (Invalid) & status: Rejected \\
+\hline
+7.3.4 & CS $\to$ CSMS & Authorize (Valid) & status: Accepted \\
+\hline
+7.3.5 & CS $\to$ CSMS & StartTransaction & status: Accepted \\
+\hline
+7.3.6 & CS $\to$ CSMS & StatusNotification & status: Charging \\
+\hline
+7.3.7 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
+7.3.8 & CS $\to$ CSMS & Authorize (Invalid Stop) & status: Rejected \\
+\hline
+7.3.9 & CS $\to$ CSMS & StopTransaction & status: Accepted \\
+\hline
+7.3.10 & CS $\to$ CSMS & StatusNotification & status: Finishing \\
+\hline
+7.3.11 & CS $\to$ CSMS & StatusNotification & status: Available \\
+\hline
+\multicolumn{4}{|l|}{\textbf{7.4 Emergency Stop}} \\
+\hline
+7.4.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+7.4.2 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
+7.4.3 & CSMS $\to$ CS & RemoteStartTransaction & status: Accepted \\
+\hline
+7.4.4 & CS $\to$ CSMS & StartTransaction & status: Accepted \\
+\hline
+7.4.5 & CS $\to$ CSMS & StatusNotification & status: Charging \\
+\hline
+7.4.6 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
+7.4.7 & CS $\to$ CSMS & StopTransaction (Emergency) & status: Accepted \\
+\hline
+7.4.8 & CS $\to$ CSMS & StatusNotification & status: Faulted (Emergency) \\
+\hline
+7.4.9 & CS $\to$ CSMS & StatusNotification (Persistent) & status: Faulted \\
+\hline
+7.4.10 & CS $\to$ CSMS & StatusNotification (Recover) & status: Available \\
+\hline
+\multicolumn{4}{|l|}{\textbf{7.5 Open Door}} \\
+\hline
+7.5.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+7.5.2 & CS $\to$ CSMS & StatusNotification (DoorOpen) & status: Faulted (DoorOpen) \\
+\hline
+7.5.3 & CS $\to$ CSMS & StatusNotification (DoorClose) & status: Available \\
+\hline
+\multicolumn{4}{|l|}{\textbf{7.6 Power Loss}} \\
+\hline
+7.6.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+7.6.2 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
+7.6.3 & CSMS $\to$ CS & RemoteStartTransaction & status: Accepted \\
+\hline
+7.6.4 & CS $\to$ CSMS & StartTransaction & status: Accepted \\
+\hline
+7.6.5 & CS $\to$ CSMS & StatusNotification & status: Charging \\
+\hline
+7.6.6 & CS $\to$ CSMS & MeterValues & Values present \\
+\hline
+7.6.7 & CS $\to$ CSMS & StopTransaction (PowerLoss) & status: Accepted \\
+\hline
+7.6.8 & CS $\to$ CSMS & BootNotification & Recovery \\
+\hline
+7.6.9 & CS $\to$ CSMS & StatusNotification & status: Preparing \\
+\hline
+7.6.10 & CS $\to$ CSMS & StatusNotification & status: Available \\
+\hline
+\multicolumn{4}{|l|}{\textbf{7.7 Local List (Offline)}} \\
+\hline
+7.7.1 & N/A & Disconnect LAN & Simulated \\
+\hline
+7.7.2 & CS $\to$ CSMS & StartTransaction (Offline) & Logged upon Reconnect \\
+\hline
+7.7.3 & CS $\to$ CSMS & StopTransaction (Offline) & Logged upon Reconnect \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{8. Dual Connector Operation}} \\
 \hline
-8.1 & CSMS $\to$ CS & Concurrent Remote Start (1 \& 2) & Both Accepted, StartTransaction for both \\
+\multicolumn{4}{|l|}{\textbf{8.1 Concurrent Remote Start (Dual)}} \\
 \hline
-8.2 & CS $\to$ CSMS & Emergency Stop (Shared) & StopTransaction for affected connectors \\
+8.1.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+8.1.2 & CS $\to$ CSMS & StatusNotification (Plug Both) & status: Preparing \\
+\hline
+8.1.3 & CSMS $\to$ CS & RemoteStartTransaction (1) & status: Accepted \\
+\hline
+8.1.4 & CSMS $\to$ CS & RemoteStartTransaction (2) & status: Accepted \\
+\hline
+8.1.5 & CS $\to$ CSMS & StartTransaction (1) & status: Accepted \\
+\hline
+8.1.6 & CS $\to$ CSMS & StatusNotification (1) & status: Charging \\
+\hline
+8.1.7 & CS $\to$ CSMS & StartTransaction (2) & status: Accepted \\
+\hline
+8.1.8 & CS $\to$ CSMS & StatusNotification (2) & status: Charging \\
+\hline
+8.1.9 & CS $\to$ CSMS & MeterValues (1) & Values present \\
+\hline
+8.1.10 & CS $\to$ CSMS & MeterValues (2) & Values present \\
+\hline
+8.1.11 & CSMS $\to$ CS & RemoteStopTransaction (1) & status: Accepted \\
+\hline
+8.1.12 & CS $\to$ CSMS & StopTransaction (1) & status: Accepted \\
+\hline
+8.1.13 & CS $\to$ CSMS & StatusNotification (1) & status: Finishing \\
+\hline
+8.1.14 & CS $\to$ CSMS & StatusNotification (1 Unplug) & status: Available \\
+\hline
+8.1.15 & CSMS $\to$ CS & RemoteStopTransaction (2) & status: Accepted \\
+\hline
+8.1.16 & CS $\to$ CSMS & StopTransaction (2) & status: Accepted \\
+\hline
+8.1.17 & CS $\to$ CSMS & StatusNotification (2) & status: Finishing \\
+\hline
+8.1.18 & CS $\to$ CSMS & StatusNotification (2 Unplug) & status: Available \\
+\hline
+\multicolumn{4}{|l|}{\textbf{8.2 Shared Emergency Stop (Dual)}} \\
+\hline
+8.2.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+8.2.2 & CS $\to$ CSMS & StatusNotification (1 Plug) & status: Preparing \\
+\hline
+8.2.3 & CSMS $\to$ CS & RemoteStartTransaction (1) & status: Accepted \\
+\hline
+8.2.4 & CS $\to$ CSMS & StartTransaction (1) & status: Accepted \\
+\hline
+8.2.5 & CS $\to$ CSMS & StatusNotification (1) & status: Charging \\
+\hline
+8.2.6 & CS $\to$ CSMS & MeterValues (1) & Values present \\
+\hline
+8.2.7 & CS $\to$ CSMS & StatusNotification (2 Plug) & status: Preparing \\
+\hline
+8.2.8 & CSMS $\to$ CS & RemoteStartTransaction (2) & status: Accepted \\
+\hline
+8.2.9 & CS $\to$ CSMS & StartTransaction (2) & status: Accepted \\
+\hline
+8.2.10 & CS $\to$ CSMS & StatusNotification (2) & status: Charging \\
+\hline
+8.2.11 & CS $\to$ CSMS & MeterValues (2) & Values present \\
+\hline
+8.2.12 & CS $\to$ CSMS & StopTransaction (1 Emerg) & status: Accepted \\
+\hline
+8.2.13 & CS $\to$ CSMS & StopTransaction (2 Emerg) & status: Accepted \\
+\hline
+8.2.14 & CS $\to$ CSMS & StatusNotification (Both) & status: Faulted (Emergency) \\
+\hline
+8.2.15 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Faulted \\
+\hline
+8.2.16 & CS $\to$ CSMS & StatusNotification (Release) & status: Available \\
+\hline
+\multicolumn{4}{|l|}{\textbf{8.3 Power Loss (Dual)}} \\
+\hline
+8.3.1 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
+\hline
+8.3.2 & CS $\to$ CSMS & StatusNotification (1 Plug) & status: Preparing \\
+\hline
+8.3.3 & CSMS $\to$ CS & RemoteStartTransaction (1) & status: Accepted \\
+\hline
+8.3.4 & CS $\to$ CSMS & StartTransaction (1) & status: Accepted \\
+\hline
+8.3.5 & CS $\to$ CSMS & StatusNotification (1) & status: Charging \\
+\hline
+8.3.6 & CS $\to$ CSMS & MeterValues (1) & Values present \\
+\hline
+8.3.7 & CS $\to$ CSMS & StatusNotification (2 Plug) & status: Preparing \\
+\hline
+8.3.8 & CSMS $\to$ CS & RemoteStartTransaction (2) & status: Accepted \\
+\hline
+8.3.9 & CS $\to$ CSMS & StartTransaction (2) & status: Accepted \\
+\hline
+8.3.10 & CS $\to$ CSMS & StatusNotification (2) & status: Charging \\
+\hline
+8.3.11 & CS $\to$ CSMS & MeterValues (2) & Values present \\
+\hline
+8.3.12 & CS $\to$ CSMS & StopTransaction (1 PwrLoss) & status: Accepted \\
+\hline
+8.3.13 & CS $\to$ CSMS & StopTransaction (2 PwrLoss) & status: Accepted \\
+\hline
+8.3.14 & CS $\to$ CSMS & BootNotification & Recovery \\
+\hline
+8.3.15 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing \\
+\hline
+8.3.16 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{9. MEA Specific Configuration}} \\
@@ -1232,12 +1575,69 @@ The following table outlines the verification matrix mandated by the Metropolita
 \hline
 9.3 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & False \\
 \hline
-9.4 & CSMS $\to$ CS & ChangeConfiguration (V2G) & PowerDemand (+/- Watts) \\
+\multicolumn{4}{|l|}{\textbf{9.4 V2G Configuration}} \\
+\hline
+9.4.1 & CSMS $\to$ CS & ChangeConfig (V2G: Discharge) & MEA\_V2G\_PowerDemand = -5000 \\
+\hline
+9.4.2 & CSMS $\to$ CS & ChangeConfig (V2G: Charge) & MEA\_V2G\_PowerDemand = 2000 \\
+\hline
+9.4.3 & CSMS $\to$ CS & ChangeConfig (V2G: Idle) & MEA\_V2G\_PowerDemand = 0 \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{10. Message Summary Checks}} \\
 \hline
-10.x & N/A & All Core Operations & Must match MEA Parameter definitions \\
+10.1 & CS $\to$ CSMS & Authorize & Include: IdTag \\
+\hline
+10.2 & CS $\to$ CSMS & BootNotification & Include: Model, Vendor, Firmware \\
+\hline
+10.3 & CS $\to$ CSMS & DataTransfer & *Dependent on consideration \\
+\hline
+10.4 & CS $\to$ CSMS & Heartbeat (60 min) & Received \\
+\hline
+10.5 & CS $\to$ CSMS & MeterValues (1 min) & Voltage, Current, Energy, Power, SoC \\
+\hline
+10.6 & CSMS $\to$ CS & RemoteStartTransaction & Accepted / Rejected (Unplug) \\
+\hline
+10.7 & CSMS $\to$ CS & RemoteStopTransaction & status: Accepted \\
+\hline
+10.8 & CSMS $\to$ CS & Reset & status: Accepted \\
+\hline
+10.9 & CS $\to$ CSMS & StartTransaction & connectorId, idTag, meterStart, timestamp \\
+\hline
+10.10 & CS $\to$ CSMS & StatusNotification & status, errorCode, info \\
+\hline
+10.11 & CS $\to$ CSMS & StopTransaction & idTag, meterStop, timestamp, transactionId \\
+\hline
+10.12 & CSMS $\to$ CS & ReserveNow & status: Accepted \\
+\hline
+10.13 & CSMS $\to$ CS & CancelReservation & status: Accepted \\
+\hline
+10.14 & CSMS $\to$ CS & SetChargingProfile & status: Accepted \\
+\hline
+10.15 & CSMS $\to$ CS & TriggerMessage & status: Accepted \\
+\hline
+10.16 & CSMS $\to$ CS & GetConfiguration & Keys: Heartbeat, LocalAuth, MeterValue, Unlock \\
+\hline
+10.17 & CSMS $\to$ CS & ChangeConfiguration & status: Accepted \\
+\hline
+10.18 & CSMS $\to$ CS & ChangeAvailability & status: Accepted \\
+\hline
+10.19 & CSMS $\to$ CS & GetDiagnostics & status: Accepted \\
+\hline
+10.20 & CSMS $\to$ CS & UpdateFirmware & Dispatch success \\
+\hline
+10.21 & CSMS $\to$ CS & SendLocalList & status: Accepted \\
+\hline
+10.22 & CSMS $\to$ CS & GetLocalListVersion & listVersion returned \\
+\hline
+10.23 & CSMS $\to$ CS & clearCache & status: Accepted \\
+\hline
+ 
+\multicolumn{4}{|l|}{\textbf{11. Other Verification}} \\
+\hline
+11.1 & N/A & LAN Disconnect Handshake & Handshake time < 1 min \\
+\hline
+11.2 & N/A & Disconnect Statistics & Frequency/Duration logged \\
 \hline
 \end{longtable}
 
@@ -1361,41 +1761,41 @@ This section details the results of the automated unit tests executed against th
 \hline
 3.1 & BootSequence & Boot $\to$ Status Available & Pass \\
 \hline
-3.2 & Status (Plug) & Preparing & Pass \\
+3.2 & StatusNotification & Available & Pass \\
 \hline
-3.3 & Authorize (RFID) & Tag Accepted & Pass \\
+3.3 & Status (Plug) & Preparing & Pass \\
 \hline
-3.4 & StartTransaction & Tx started with Card tag & Pass \\
+3.4 & Authorize (RFID) & Tag Accepted & Pass \\
 \hline
-3.5 & Status & Charging & Pass \\
+3.5 & StartTransaction & Tx started with Card tag & Pass \\
 \hline
-3.6 & MeterValues & Periodic values received (30s) & Pass \\
+3.6 & StatusNotification & Charging & Pass \\
 \hline
-3.7 & StopTransaction & Tx stopped (Local) & Pass \\
+3.7 & MeterValues (30 sec) & Periodic values received & Pass \\
 \hline
-3.8 & Status (Finishing) & Finishing & Pass \\
+3.8 & StopTransaction (Valid Card) & Tx Stopped & Pass \\
 \hline
-3.9 & Status (Unplug) & Available & Pass \\
+3.9 & Status (Plug) (If any) & Finishing & Pass \\
 \hline
-3.10 & Status (Plug) & Preparing & Pass \\
+3.10 & Status (Unplug) & Available & Pass \\
 \hline
-3.11 & RemoteStart & Accepted. Tx started. & Pass \\
+3.11 & Status (Plug) & Preparing & Pass \\
 \hline
-3.12 & StartTransaction & Tx started (Remote) & Pass \\
+3.12 & RemoteStartTransaction & Accepted & Pass \\
 \hline
-3.13 & Status & Charging & Pass \\
+3.13 & StartTransaction & Tx started (Remote) & Pass \\
 \hline
-3.14 & MeterValues & Values received & Pass \\
+3.14 & StatusNotification & Charging & Pass \\
 \hline
-3.15 & RemoteStop & Accepted & Pass \\
+3.15 & MeterValues (30 sec) & Values received & Pass \\
 \hline
-3.16 & StopTransaction & Tx stopped (Remote) & Pass \\
+3.16 & RemoteStopTransaction & Accepted & Pass \\
 \hline
-3.17 & Status (Finishing) & Finishing & Pass \\
+3.17 & StopTransaction & Tx stopped (Remote) & Pass \\
 \hline
-3.18 & Status (Unplug) & Available & Pass \\
+3.18 & Status (Plug) (If any) & Finishing & Pass \\
 \hline
-3.19 & MeterValues (Idle) & Checked & Pass \\
+3.19 & Status (Unplug) & Available & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{4. Reset Verification}} \\
@@ -1434,7 +1834,13 @@ This section details the results of the automated unit tests executed against th
 \hline
 4.17 & Status (Available) & Available & Pass \\
 \hline
-4.18-4.21 & Reset Cycles & Verified multiple cycles & Pass \\
+4.18 & Reset (Hard) & Accepted. Cycle & Pass \\
+\hline
+4.19 & StopTransaction & Tx Stopped (Hard) & Pass \\
+\hline
+4.20 & Status (Plug) & Finishing & Pass \\
+\hline
+4.21 & Status (Unplug) & Available & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{5. Reservation Verification}} \\
@@ -1459,13 +1865,23 @@ This section details the results of the automated unit tests executed against th
 \hline
 5.10 & ReserveNow (Tx) & Accepted for Tx & Pass \\
 \hline
-5.11 & Status (Reserved) & Reserved & Pass \\
+5.11 & Status (Plug) & Preparing & Pass \\
 \hline
-5.12 & StartTransaction & Tx Started (Reserve Tag) & Pass \\
+5.12 & RemoteStartTransaction & Accepted & Pass \\
 \hline
-5.13 & Status & Charging & Pass \\
+5.13 & StartTransaction & Tx Started (Reserve Tag) & Pass \\
 \hline
-5.19 & StopTransaction & Tx Stopped & Pass \\
+5.14 & Status & Charging & Pass \\
+\hline
+5.15 & MeterValues & Values received & Pass \\
+\hline
+5.16 & RemoteStopTransaction & Accepted & Pass \\
+\hline
+5.17 & StopTransaction & Tx Stopped (Remote) & Pass \\
+\hline
+5.18 & Status (Plug) & Finishing & Pass \\
+\hline
+5.19 & Status (Unplug) & Available & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{6. Charging Profile}} \\
@@ -1525,60 +1941,234 @@ This section details the results of the automated unit tests executed against th
 
 \multicolumn{4}{|l|}{\textbf{7. Abnormal Operation}} \\
 \hline
+\multicolumn{4}{|l|}{\textbf{7.1 Remote Start (Unplugged)}} \\
+\hline
 7.1.1 & Status (Unplug) & Available & Pass \\
 \hline
 7.1.2 & RemoteStart & Rejected (Connector Unplugged) & Pass \\
 \hline
-7.1.3 & Status & Available (No change) & Pass \\
+
+\multicolumn{4}{|l|}{\textbf{7.2 Concurrent Remote Start}} \\
 \hline
-7.2.1 & Status (Plug) & Preparing & Pass \\
+7.2.1 & Status (Unplug) & Available & Pass \\
 \hline
-7.2.2 & RemoteStart (1) & Accepted & Pass \\
+7.2.2 & Status (Plug) & Preparing & Pass \\
 \hline
-7.2.3 & Concurrent Remote & 2nd Request Rejected (Busy) & Pass \\
+7.2.3 & RemoteStart (1) & Accepted & Pass \\
 \hline
-7.2.4 & StartTransaction & Tx Started & Pass \\
+7.2.4 & RemoteStart (2) Same ID & Rejected (Busy) & Pass \\
 \hline
-7.2.9 & StopTransaction & Tx Stopped (Remote) & Pass \\
+7.2.5 & StartTransaction & Tx Started & Pass \\
 \hline
-7.3.1 & StartTransaction & Tx Started & Pass \\
+7.2.6 & Status & Charging & Pass \\
 \hline
-7.3.2 & Stop (Invalid ID) & Rejected (IdTag mismatch) & Pass \\
+7.2.7 & MeterValues & Values received & Pass \\
 \hline
-7.3.3 & Stop (Valid ID) & Accepted & Pass \\
+7.2.8 & RemoteStop & Accepted & Pass \\
 \hline
-7.4 & Emergency Stop & Tx Stopped immediately & Pass \\
+7.2.9 & StopTransaction & Tx Stopped & Pass \\
 \hline
-7.5 & Open Door & Status: DoorOpen (Simulated) & Pass \\
+7.2.10 & Status (Finishing) & Finishing & Pass \\
 \hline
-7.6.1 & StartTransaction & Tx Started & Pass \\
+7.2.11 & Status (Unplug) & Available & Pass \\
 \hline
-7.6.2 & Power Loss & Tx Stopped (PowerLoss) on boot & Pass \\
+
+\multicolumn{4}{|l|}{\textbf{7.3 Swap Card}} \\
 \hline
-7.7 & Local List Offline & Auth Offline Accepted & Pass \\
+7.3.1 & Status (Unplug) & Available & Pass \\
+\hline
+7.3.2 & Status (Plug) & Preparing & Pass \\
+\hline
+7.3.3 & Authorize (Invalid) & Rejected & Pass \\
+\hline
+7.3.4 & Authorize (Valid) & Accepted & Pass \\
+\hline
+7.3.5 & StartTransaction & Tx Started & Pass \\
+\hline
+7.3.6 & Status & Charging & Pass \\
+\hline
+7.3.7 & MeterValues & Values received & Pass \\
+\hline
+7.3.8 & Authorize (Invalid Stop) & Rejected & Pass \\
+\hline
+7.3.9 & StopTransaction & Tx Stopped & Pass \\
+\hline
+7.3.10 & Status (Finishing) & Finishing & Pass \\
+\hline
+7.3.11 & Status (Unplug) & Available & Pass \\
+\hline
+
+\multicolumn{4}{|l|}{\textbf{7.4 Emergency Stop}} \\
+\hline
+7.4.1 & Status (Unplug) & Available & Pass \\
+\hline
+7.4.2 & Status (Plug) & Preparing & Pass \\
+\hline
+7.4.3 & RemoteStart & Accepted & Pass \\
+\hline
+7.4.4 & StartTransaction & Tx Started & Pass \\
+\hline
+7.4.5 & Status & Charging & Pass \\
+\hline
+7.4.6 & MeterValues & Values received & Pass \\
+\hline
+7.4.7 & StopTransaction (Emergency) & Tx Stopped & Pass \\
+\hline
+7.4.8 & Status (Faulted) & Faulted (EmergencyStop) & Pass \\
+\hline
+7.4.9 & Status (Unplug) & Available (or Faulted if Persistent) & Pass \\
+\hline
+7.4.10 & Status (Recover) & Available & Pass \\
+\hline
+
+\multicolumn{4}{|l|}{\textbf{7.5 Open Door}} \\
+\hline
+7.5.1 & Status (Unplug) & Available & Pass \\
+\hline
+7.5.2 & Status (Open Door) & Faulted (DoorOpen) & Pass \\
+\hline
+7.5.3 & Status (Close Door) & Available & Pass \\
+\hline
+
+\multicolumn{4}{|l|}{\textbf{7.6 Power Loss (Single)}} \\
+\hline
+7.6.1 & Status (Unplug) & Available & Pass \\
+\hline
+7.6.2 & Status (Plug) & Preparing & Pass \\
+\hline
+7.6.3 & RemoteStart & Accepted & Pass \\
+\hline
+7.6.4 & StartTransaction & Tx Started & Pass \\
+\hline
+7.6.5 & Status & Charging & Pass \\
+\hline
+7.6.6 & MeterValues & Values received & Pass \\
+\hline
+7.6.7 & StopTransaction (PowerLoss) & Tx Stopped & Pass \\
+\hline
+7.6.8 & BootNotification & Recovery & Pass \\
+\hline
+7.6.9 & Status (Plug) & Preparing & Pass \\
+\hline
+7.6.10 & Status (Unplug) & Available & Pass \\
+\hline
+
+\multicolumn{4}{|l|}{\textbf{7.7 Local List (Offline)}} \\
+\hline
+7.7.1 & Disconnect LAN & Simulated & Pass \\
+\hline
+7.7.2 & Start (Local List) & Tx Started (Offline) & Pass \\
+\hline
+7.7.3 & Stop (Local List) & Tx Stopped & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{8. Dual Connector}} \\
 \hline
-8.1.1 & Status (Both) & Available & Pass \\
+\multicolumn{4}{|l|}{\textbf{8.1 Concurrent Remote Start (Dual)}} \\
+\hline
+8.1.1 & Status (Unplug) & Available & Pass \\
 \hline
 8.1.2 & Status (Plug Both) & Preparing & Pass \\
 \hline
-8.1.3 & RemoteStart (1) & Accepted & Pass \\
+8.1.3 & RemoteStart (Conn 1) & Accepted & Pass \\
 \hline
-8.1.4 & RemoteStart (2) & Accepted & Pass \\
+8.1.4 & RemoteStart (Conn 2) & Accepted & Pass \\
 \hline
-8.1.5 & StartTransaction (1) & Tx Started & Pass \\
+8.1.5 & StartTx (Conn 1) & Tx Started & Pass \\
 \hline
-8.1.7 & StartTransaction (2) & Tx Started & Pass \\
+8.1.6 & Status (Conn 1) & Charging & Pass \\
 \hline
-8.1.12 & StopTransaction (1) & Tx Stopped (Remote) & Pass \\
+8.1.7 & StartTx (Conn 2) & Tx Started & Pass \\
 \hline
-8.1.16 & StopTransaction (2) & Tx Stopped (Remote) & Pass \\
+8.1.8 & Status (Conn 2) & Charging & Pass \\
 \hline
-8.2 & Shared E-Stop & Both Tx stopped via E-Stop & Pass \\
+8.1.9 & MeterValues (Conn 1) & Values received & Pass \\
 \hline
-8.3 & Power Loss (Dual) & Recovery for both connectors & Pass \\
+8.1.10 & MeterValues (Conn 2) & Values received & Pass \\
+\hline
+8.1.11 & RemoteStop (Conn 1) & Accepted & Pass \\
+\hline
+8.1.12 & StopTx (Conn 1) & Tx Stopped (Remote) & Pass \\
+\hline
+8.1.13 & Status (Conn 1) & Finishing & Pass \\
+\hline
+8.1.14 & Status (Conn 1 Unplug) & Available & Pass \\
+\hline
+8.1.15 & RemoteStop (Conn 2) & Accepted & Pass \\
+\hline
+8.1.16 & StopTx (Conn 2) & Tx Stopped (Remote) & Pass \\
+\hline
+8.1.17 & Status (Conn 2) & Finishing & Pass \\
+\hline
+8.1.18 & Status (Conn 2 Unplug) & Available & Pass \\
+\hline
+\multicolumn{4}{|l|}{\textbf{8.2 Shared Emergency Stop (Dual)}} \\
+\hline
+8.2.1 & Status (Unplug) & Available (Both) & Pass \\
+\hline
+8.2.2 & Status (Conn 1 Plug) & Preparing & Pass \\
+\hline
+8.2.3 & RemoteStart (Conn 1) & Accepted & Pass \\
+\hline
+8.2.4 & StartTransaction (Conn 1) & Tx Started & Pass \\
+\hline
+8.2.5 & Status (Conn 1) & Charging & Pass \\
+\hline
+8.2.6 & MeterValues (Conn 1) & Values received & Pass \\
+\hline
+8.2.7 & Status (Conn 2 Plug) & Preparing & Pass \\
+\hline
+8.2.8 & RemoteStart (Conn 2) & Accepted & Pass \\
+\hline
+8.2.9 & StartTransaction (Conn 2) & Tx Started & Pass \\
+\hline
+8.2.10 & Status (Conn 2) & Charging & Pass \\
+\hline
+8.2.11 & MeterValues (Conn 2) & Values received & Pass \\
+\hline
+8.2.12 & StopTx (Emerg) (Conn 1) & Tx Stopped (Emergency) & Pass \\
+\hline
+8.2.13 & StopTx (Emerg) (Conn 2) & Tx Stopped (Emergency) & Pass \\
+\hline
+8.2.14 & Status (Plug + Faulted) & Faulted (Info: Emergency) & Pass \\
+\hline
+8.2.15 & Status (Unplug) & Faulted (Persist) & Pass \\
+\hline
+8.2.16 & Status (Release) & Available & Pass \\
+\hline
+\multicolumn{4}{|l|}{\textbf{8.3 Power Loss (Dual)}} \\
+\hline
+8.3.1 & Status (Unplug) & Available & Pass \\
+\hline
+8.3.2 & Status (Conn 1 Plug) & Preparing & Pass \\
+\hline
+8.3.3 & RemoteStart (Conn 1) & Accepted & Pass \\
+\hline
+8.3.4 & StartTx (Conn 1) & Tx Started & Pass \\
+\hline
+8.3.5 & Status (Conn 1) & Charging & Pass \\
+\hline
+8.3.6 & MeterValues (Conn 1) & Values received & Pass \\
+\hline
+8.3.7 & Status (Conn 2 Plug) & Preparing & Pass \\
+\hline
+8.3.8 & RemoteStart (Conn 2) & Accepted & Pass \\
+\hline
+8.3.9 & StartTx (Conn 2) & Tx Started & Pass \\
+\hline
+8.3.10 & Status (Conn 2) & Charging & Pass \\
+\hline
+8.3.11 & MeterValues (Conn 2) & Values received & Pass \\
+\hline
+8.3.12 & StopTx (PowerLoss) (1) & Tx Stopped (PowerLoss) & Pass \\
+\hline
+8.3.13 & StopTx (PowerLoss) (2) & Tx Stopped (PowerLoss) & Pass \\
+\hline
+8.3.14 & BootNotification & Boot Reason: PowerUp & Pass \\
+\hline
+8.3.15 & Status (Plug) & Available & Pass \\
+\hline
+8.3.16 & Status (Unplug) & Available & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{9. MEA Config}} \\
@@ -1589,11 +2179,15 @@ This section details the results of the automated unit tests executed against th
 \hline
 9.3 & LocalAuthorize & LocalAuthorizeOffline=False & Pass \\
 \hline
-9.4.1 & ChangeConfig (V2G: Discharge) & \textbf{Key: MEA\_V2G\_PowerDemand}. Input: 5000 $\to$ Status: Accepted (Discharging) & Pass \\
+\multicolumn{4}{|l|}{\textbf{9.4 V2G Configuration}} \\
 \hline
-9.4.2 & ChangeConfig (V2G: Charge) & Input: -2000 $\to$ Status: Accepted (Charging) & Pass \\
+9.4.1 & ChangeConfig (V2G: Discharge) & \textbf{Key: MEA\_V2G\_PowerDemand}. Input: -5000 $\to$ Status: Accepted (Discharging) & Pass \\
 \hline
-9.4.3 & ChangeConfig (V2G: Invalid) & Input: NOT\_INT $\to$ Status: Rejected & Pass \\
+9.4.2 & ChangeConfig (V2G: Charge) & Input: 2000 $\to$ Status: Accepted (Charging) & Pass \\
+\hline
+9.4.3 & ChangeConfig (V2G: Idle) & Input: 0 $\to$ Status: Accepted (Idle) & Pass \\
+\hline
+9.4.4 & ChangeConfig (V2G: Invalid) & Input: NOT\_INT $\to$ Status: Rejected & Pass \\
 \hline
 
 \multicolumn{4}{|l|}{\textbf{10. Message Summary}} \\
@@ -1633,6 +2227,14 @@ This section details the results of the automated unit tests executed against th
 10.17 & ChangeConfig & Schema Verified & Pass \\
 \hline
 10.18 & ChangeAvailability & Schema Verified & Pass \\
+\hline
+10.19 & GetDiagnostics & Schema Verified & Pass \\
+\hline
+10.20 & UpdateFirmware & Schema Verified & Pass \\
+\hline
+10.21 & SendLocalList & Schema Verified & Pass \\
+\hline
+10.22 & GetLocalListVersion & Schema Verified & Pass \\
 \hline
 10.23 & clearCache & Schema Verified & Pass \\
 \hline
