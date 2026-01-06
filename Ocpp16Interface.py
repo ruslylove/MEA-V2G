@@ -22,7 +22,8 @@ from ocpp.v16.enums import (
     Measurand,
     ReadingContext,
     ValueFormat,
-    UnitOfMeasure
+    UnitOfMeasure,
+    DataTransferStatus
 )
 from ocpp.routing import on
 from Charger import Charger
@@ -305,7 +306,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         
         request = call.MeterValues(
             connector_id=1,
-            transaction_id=self.transaction_id,
+            transaction_id=self.transactions.get(1),
             meter_value=[{
                 "timestamp": datetime.utcnow().isoformat(),
                 "sampled_value": sampled_values
@@ -367,3 +368,8 @@ class Ocpp16Interface(Ocpp16ChargePoint):
     async def on_change_availability(self, connector_id, type, **kwargs):
         LOGGER.info(f"Received ChangeAvailability {type} for {connector_id}")
         return call_result.ChangeAvailability(status=AvailabilityStatus.accepted)
+
+    @on(Action.data_transfer)
+    async def on_data_transfer(self, vendor_id, message_id=None, data=None, **kwargs):
+        LOGGER.info(f"Received DataTransfer: {vendor_id}, {message_id}, {data}")
+        return call_result.DataTransfer(status=DataTransferStatus.accepted, data="Pong")

@@ -275,13 +275,19 @@ async def main():
         res = await connected_csms.call(call.ChangeConfiguration(key="AutoCharge", value="False"))
         logger.info(f"2.1 Disable AutoCharge: {res.status}")
         
+        # 2.2 StatusNotification (Plug)
+        await cp.send_status_notification(status="Preparing")
+        logger.info("2.2 StatusNotification (Plug): Sent Preparing")
+
+        # 2.3 StatusNotification (Unplug)
+        await cp.send_status_notification(status="Available")
+        logger.info("2.3 StatusNotification (Unplug): Sent Available")
+
         # 2.4 Enable AutoCharge
         res = await connected_csms.call(call.ChangeConfiguration(key="AutoCharge", value="True"))
         logger.info(f"2.4 Enable AutoCharge: {res.status}")
         
-        # 2.10 RemoteStop
-        res = await connected_csms.call(call.RemoteStopTransaction(transaction_id=999))
-        logger.info(f"2.10 RemoteStopTransaction: {res.status}")
+
         
         # --- Missing Test Cases 2.14 - 2.21 ---
         logger.info("--- 2.x Extended Auto Charge Verification ---")
@@ -315,9 +321,17 @@ async def main():
         else:
              logger.error("FAIL: No MeterValues received (2nd Cycle)!")
 
+        # 2.10 RemoteStop
+        res = await connected_csms.call(call.RemoteStopTransaction(transaction_id=999))
+        logger.info(f"2.10 RemoteStopTransaction: {res.status}")
+
         # 2.19 StatusNotification (Suspended by EV)
         await cp.send_status_notification(status="SuspendedEV")
         logger.info("2.19 StatusNotification: SuspendedEV")
+
+        # 2.12 StatusNotification (Finishing)
+        await cp.send_status_notification(status="Finishing")
+        logger.info("2.12 StatusNotification: Finishing")
 
         # 2.20 StopTransaction (Unplug)
         await cp.stop_transaction(reason="EVDisconnected")
@@ -1136,7 +1150,11 @@ async def main():
         await cp.send_boot_notification()
         logger.info("8.3.14 BootNotification: Sent")
         
-        # 8.3.15/16 Reset Status
+        # 8.3.15 Status (Plugged) -> Preparing
+        await cp.send_status_notification(connector_id=1, status="Preparing")
+        await cp.send_status_notification(connector_id=2, status="Preparing")
+        
+        # 8.3.16 Status (Unplug) -> Available
         await cp.send_status_notification(connector_id=1, status="Available")
         await cp.send_status_notification(connector_id=2, status="Available")
         
@@ -1171,6 +1189,13 @@ async def main():
         
         # 10. Summary Verification (Section 10)
         # 10.1 Check Log structure (Implicit)
+        # 10.3 DataTransfer
+        try:
+            res = await connected_csms.call(call.DataTransfer(vendor_id="MEA", message_id="Test", data="Ping"))
+            logger.info(f"10.3 DataTransfer: {res.status}")
+        except Exception as e:
+            logger.info(f"10.3 DataTransfer Failed: {e}")
+
         # 10.19 GetDiagnostics
         res = await connected_csms.call(call.GetDiagnostics(location="ftp://example.com/diagnostics"))
         logger.info(f"10.19 GetDiagnostics: {res.file_name}")

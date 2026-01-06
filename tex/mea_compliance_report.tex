@@ -26,7 +26,7 @@
 \section*{MEA OCPP 1.6 Compliance Verification Matrix}
 
 \renewcommand{\arraystretch}{1.3}
-\begin{longtable}{|p{1.0cm}|p{1.5cm}|p{4.0cm}|p{6.0cm}|p{11.5cm}|c|}
+\begin{longtable}{|p{1.0cm}|p{2.5cm}|p{4.0cm}|p{5.0cm}|p{10.0cm}|c|}
 \hline
 \rowcolor{gray!30}
 \textbf{Item} & \textbf{Direction} & \textbf{Message} & \textbf{Requirement / Include} & \textbf{Log Message / Proof} & \textbf{Result} \\
@@ -44,519 +44,563 @@
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{1. Configuration Verification}} \\
 \hline
-1.1 & CS $\to$ CSMS & BootNotification & chargePointModel, chargePointVendor, firmwareVersion & \scriptsize\texttt{[CSMS] <- BootNotification: \{...\} \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+1.1 & CS $\to$ CSMS & BootNotification & chargePointModel, chargePointVendor, firmwareVersion & \footnotesize\texttt{[CSMS] <- BootNotification: \{"chargePointModel": "MEA-V2G-01", "chargePointVendor": "KMUTNB", "firmwareVersion": "1.0.0"\} \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#9]}} & Pass \\
 \hline
-1.2 & CS $\to$ CSMS & StatusNotification & connectorId, errorCode, info, status, timestamp, vendorId & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Available'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+1.2 & CS $\to$ CSMS & StatusNotification & connectorId, errorCode, info, status, timestamp, vendorId & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "errorCode": "NoError", "status": "Available", "info": "Startup", "vendorId": "MEA"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#19]}} & Pass \\
 \hline
-1.3 & CSMS $\to$ CS & TriggerMessage (BootNotification) & status (Accepted) & \scriptsize\texttt{[CSMS] -> TriggerMessage: BootNotification \newline [CS] -> CallResult: status=Accepted} & Pass \\
+1.3 & CSMS $\to$ CS & TriggerMessage (BootNotification) & status (Accepted) & \footnotesize\texttt{[CSMS] -> TriggerMessage: \{"requestedMessage": "BootNotification"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#25]}} & Pass \\
 \hline
-1.4 & CS $\to$ CSMS & BootNotification (Triggered) & chargePointModel, chargePointVendor & \scriptsize\texttt{[CSMS] <- BootNotification: \{...\} \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+1.4 & CS $\to$ CSMS & BootNotification (Triggered) & chargePointModel, chargePointVendor & \footnotesize\texttt{[CSMS] <- BootNotification: \{"chargePointModel": "MEA-V2G-01", "chargePointVendor": "KMUTNB"\} \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#30]}} & Pass \\
 \hline
-1.5 & CSMS $\to$ CS & TriggerMessage (StatusNotification) & status (Accepted) & \scriptsize\texttt{[CSMS] -> TriggerMessage: StatusNotification \newline [CS] -> Conf: status=Accepted} & Pass \\
+1.5 & CSMS $\to$ CS & TriggerMessage (StatusNotification) & status (Accepted) & \footnotesize\texttt{[CSMS] -> TriggerMessage: \{"requestedMessage": "StatusNotification"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#39]}} & Pass \\
 \hline
-1.6 & CS $\to$ CSMS & StatusNotification (Triggered) & connectorId, status & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Available'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+1.6 & CS $\to$ CSMS & StatusNotification (Triggered) & connectorId, status & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Available", "errorCode": "NoError"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#46]}} & Pass \\
 \hline
-1.7 & CSMS $\to$ CS & TriggerMessage (MeterValues) & status (Accepted) & \scriptsize\texttt{[CSMS] -> TriggerMessage: MeterValues \newline [CS] -> Conf: status=Accepted} & Pass \\
+1.7 & CSMS $\to$ CS & TriggerMessage (MeterValues) & status (Accepted) & \footnotesize\texttt{[CSMS] -> TriggerMessage: \{"requestedMessage": "MeterValues"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#50]}} & Pass \\
 \hline
-1.8 & CS $\to$ CSMS & MeterValues & connectorId, meterValue & \scriptsize\texttt{[CSMS] <- MeterValues: \{...\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+1.8 & CS $\to$ CSMS & MeterValues & connectorId, meterValue & \footnotesize\texttt{[CSMS] <- MeterValues: \{"connectorId": 1, "meterValue": [\{"sampledValue": [\{"measurand": "Power.Active.Import", "value": "100"\}]\}]\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#60]}} & Pass \\
 \hline
-1.9 & CSMS $\to$ CS & GetConfiguration & HeartbeatInterval & \scriptsize\texttt{[CSMS] -> GetConfiguration \newline [CS] -> Conf: HeartbeatInterval=60} & Pass \\
+1.9 & CSMS $\to$ CS & ChangeConfiguration (Heartbeat) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "HeartbeatInterval", "value": "600"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#63]}} & Pass \\
 \hline
-1.10 & CSMS $\to$ CS & ChangeConfiguration (Heartbeat) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: Heartbeat=600 \newline [CS] -> Conf: status=Accepted} & Pass \\
+1.10 & CSMS $\to$ CS & GetConfiguration & HeartbeatInterval & \footnotesize\texttt{[CSMS] -> GetConfiguration: \{"key": ["HeartbeatInterval"]\} \newline [CS] -> Conf: \{"configurationKey": [\{"key": "HeartbeatInterval", "value": "60"\}]\} \newline \textbf{[Log: \#69]}} & Pass \\
 \hline
-1.11 & CSMS $\to$ CS & ChangeConfiguration (MeterValue) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: MeterValue=2 \newline [CS] -> Conf: status=Accepted} & Pass \\
+1.11 & CSMS $\to$ CS & ChangeConfiguration (MeterValue) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "MeterValueSampleInterval", "value": "30"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#75]}} & Pass \\
 \hline
-1.12 & CSMS $\to$ CS & ChangeConfiguration (Unlock) & status (Accepted) & \scriptsize\texttt{[CSMS] -> UnlockConnector: 1 \newline [CS] -> Conf: status=Unlocked} & Pass \\
+1.12 & CSMS $\to$ CS & ChangeConfiguration (Unlock) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "UnlockConnectorOnEVSideDisconnect", "value": "true"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#80]}} & Pass \\
 \hline
-1.13 & CSMS $\to$ CS & ChangeAvailability (Inoperative) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeAvailability: Inoperative \newline [CS] -> Conf: status=Accepted} & Pass \\
+1.13 & CSMS $\to$ CS & ChangeAvailability (Inoperative) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeAvailability: \{"connectorId": 1, "type": "Inoperative"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#89]}} & Pass \\
 \hline
-1.14 & CS $\to$ CSMS & StatusNotification & status: Unavailable & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Unavailable'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+1.14 & CS $\to$ CSMS & StatusNotification & status: Unavailable & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Unavailable", "errorCode": "NoError"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#96]}} & Pass \\
 \hline
-1.15 & CSMS $\to$ CS & ChangeAvailability (Operative) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeAvailability: Operative \newline [CS] -> Conf: status=Accepted} & Pass \\
+1.15 & CSMS $\to$ CS & ChangeAvailability (Operative) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeAvailability: \{"connectorId": 1, "type": "Operative"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#98]}} & Pass \\
 \hline
-1.16 & CS $\to$ CSMS & StatusNotification & status: Available & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Available'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+1.16 & CS $\to$ CSMS & StatusNotification & status: Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Available", "errorCode": "NoError"\} \newline [CSMS] -> Conf: \{\}} & Pass \\
 \hline
-1.17 & CSMS $\to$ CS & GetDiagnostics & fileName & \scriptsize\texttt{[CSMS] -> GetDiagnostics \newline [CS] -> Conf: fileName=diagnostics.log} & Pass \\
+1.17 & CSMS $\to$ CS & GetDiagnostics & fileName & \footnotesize\texttt{[CSMS] -> GetDiagnostics: \{"location": "ftp:..."\} \newline [CS] -> Conf: \{"fileName": "diagnostics.log"\} \newline \textbf{[Log: \#104]}} & Pass \\
 \hline
-1.18 & CS $\to$ CSMS & DiagnosticsStatusNotification & status: Uploaded & \scriptsize\texttt{[CSMS] <- DiagnosticsStatus: \{'status': 'Uploaded'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+1.18 & CS $\to$ CSMS & DiagnosticsStatusNotification & status: Uploaded & \footnotesize\texttt{[CSMS] <- DiagnosticsStatusNotification: \{"status": "Uploaded"\} \newline [CSMS] -> Conf: \{\}} & Pass \\
 \hline
-1.19 & CSMS $\to$ CS & UpdateFirmware & location (URI) & \scriptsize\texttt{[CSMS] -> UpdateFirmware \newline [CS] -> Conf: \{\}} & Pass \\
+1.19 & CSMS $\to$ CS & UpdateFirmware & location (URI) & \footnotesize\texttt{[CSMS] -> UpdateFirmware: \{"location": "ftp:...", "retrieveDate": "..."\} \newline [CS] -> Conf: \{\} \newline \textbf{[Log: \#112]}} & Pass \\
 \hline
-1.20 & CS $\to$ CSMS & FirmwareStatusNotification & status: Installed & \scriptsize\texttt{[CSMS] <- FirmwareStatus: \{'status': 'Installed'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+1.20 & CS $\to$ CSMS & FirmwareStatusNotification & status: Installed & \footnotesize\texttt{[CSMS] <- FirmwareStatusNotification: \{"status": "Installed"\} \newline [CSMS] -> Conf: \{\}} & Pass \\
 \hline
-1.21 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: LocalAuth=True \newline [CS] -> Conf: status=Accepted} & Pass \\
+1.21 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "LocalAuthorizeOffline", "value": "true"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#118]}} & Pass \\
 \hline
-1.22 & CSMS $\to$ CS & SendLocalList & status (Accepted) & \scriptsize\texttt{[CSMS] -> SendLocalList \newline [CS] -> Conf: status=Accepted} & Pass \\
+1.22 & CSMS $\to$ CS & SendLocalList & status (Accepted) & \footnotesize\texttt{[CSMS] -> SendLocalList: \{"listVersion": 1, "updateType": "Full", "localAuthorizationList": [...]\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#124]}} & Pass \\
 \hline
-1.23 & CSMS $\to$ CS & GetLocalListVersion & listVersion & \scriptsize\texttt{[CSMS] -> GetLocalListVersion \newline [CS] -> Conf: listVersion=1} & Pass \\
+1.23 & CSMS $\to$ CS & GetLocalListVersion & listVersion & \footnotesize\texttt{[CSMS] -> GetLocalListVersion: \{\} \newline [CS] -> Conf: \{"listVersion": 1\} \newline \textbf{[Log: \#130]}} & Pass \\
 \hline
-1.24 & CSMS $\to$ CS & ClearCache & status (Accepted) & \scriptsize\texttt{[CSMS] -> ClearCache \newline [CS] -> Conf: status=Accepted} & Pass \\
+1.24 & CSMS $\to$ CS & ClearCache & status (Accepted) & \footnotesize\texttt{[CSMS] -> ClearCache: \{\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#136]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{2. Auto Charge Verification}} \\
 \hline
-2.1 & CSMS $\to$ CS & ChangeConfiguration (AutoCharge) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: AutoCharge=False \newline [CS] -> Conf: status=Accepted} & Pass \\
+2.1 & CSMS $\to$ CS & ChangeConfiguration (AutoCharge) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "AutoCharge", "value": "false"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#143]}} & Pass \\
 \hline
-2.2 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Preparing'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+2.2 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Preparing", "errorCode": "NoError"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#146]}} & Pass \\
 \hline
-2.3 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Available'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+2.3 & CS $\to$ CSMS & StatusNotification (Unplug) & status: Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Available", "errorCode": "NoError"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#153]}} & Pass \\
 \hline
-2.4 & CSMS $\to$ CS & ChangeConfiguration (Auto) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: AutoCharge=True \newline [CS] -> Conf: status=Accepted} & Pass \\
+2.4 & CSMS $\to$ CS & ChangeConfiguration (Auto) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "AutoCharge", "value": "true"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#162]}} & Pass \\
 \hline
-2.5 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Preparing'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+2.5 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Preparing", "errorCode": "NoError"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#176]}} & Pass \\
 \hline
-2.6 & CS $\to$ CSMS & Authorize (Auto) & status: Accepted & \scriptsize\texttt{[CSMS] <- Authorize: \{'id\_tag': 'VID...\} \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+2.6 & CS $\to$ CSMS & Authorize (Auto) & status: Accepted & \footnotesize\texttt{[CSMS] <- Authorize: \{"idTag": "VID:..."\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#207]}} & Pass \\
 \hline
-2.7 & CS $\to$ CSMS & StartTransaction & status: Accepted & \scriptsize\texttt{[CSMS] <- StartTransaction \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+2.7 & CS $\to$ CSMS & StartTransaction & status: Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 1, "idTag": "VID:...", "meterStart": 100\} \newline [CSMS] -> Conf: \{"transactionId": 1, "idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#211]}} & Pass \\
 \hline
-2.8 & CS $\to$ CSMS & StatusNotification & status: Charging & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Charging'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+2.8 & CS $\to$ CSMS & StatusNotification & status: Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#215]}} & Pass \\
 \hline
-2.9 & CS $\to$ CSMS & MeterValues & measurand & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+2.9 & CS $\to$ CSMS & MeterValues & measurand & \footnotesize\texttt{[CSMS] <- MeterValues: \{"meterValue": [\{"sampledValue": [\{"measurand": "Power.Active.Import", "value": "..."\}]\}]\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#223]}} & Pass \\
 \hline
-2.10 & CSMS $\to$ CS & RemoteStopTransaction & status: Accepted & \scriptsize\texttt{[CSMS] -> RemoteStop \newline [CS] -> Conf: status=Accepted} & Pass \\
+2.10 & CSMS $\to$ CS & RemoteStopTransaction & status: Accepted & \footnotesize\texttt{[CSMS] -> RemoteStopTransaction: \{"transactionId": 1\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#229]}} & Pass \\
 \hline
-2.11 & CS $\to$ CSMS & StopTransaction & status: Accepted & \scriptsize\texttt{[CSMS] <- StopTransaction: \{'reason': 'Remote'\} \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+2.11 & CS $\to$ CSMS & StopTransaction & status: Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"transactionId": 1, "reason": "Remote", "meterStop": 200\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#249]}} & Pass \\
 \hline
-2.12 & CS $\to$ CSMS & StatusNotification & status: Finishing & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Finishing'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+2.12 & CS $\to$ CSMS & StatusNotification & status: Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Finishing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#243]}} & Pass \\
 \hline
-2.13 & CS $\to$ CSMS & StatusNotification & status: Available & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Available'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+2.13 & CS $\to$ CSMS & StatusNotification & status: Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#258]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{3. Normal Operation Verification}} \\
 \hline
-3.1 & CS $\to$ CSMS & StatusNotification & status: Available & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Available'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.1 & CS $\to$ CSMS & BootNotification & chargePointModel, Vendor, FW & \footnotesize\texttt{[CSMS] <- BootNotification: \{"chargePointModel": "MEA-V2G-01", "chargePointVendor": "KMUTNB", "firmwareVersion": "1.0.0"\} \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#30]}} & Pass \\
 \hline
-3.3 & CS $\to$ CSMS & StatusNotification & status: Preparing & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Preparing'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.2 & CS $\to$ CSMS & StatusNotification & status: Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Available", "errorCode": "NoError"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#259]}} & Pass \\
 \hline
-3.4 & CS $\to$ CSMS & Authorize & status: Accepted & \scriptsize\texttt{[CSMS] <- Authorize \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+3.3 & CS $\to$ CSMS & StatusNotification (Plug) & status: Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Preparing", "errorCode": "NoError"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#266]}} & Pass \\
 \hline
-3.5 & CS $\to$ CSMS & StartTransaction & status: Accepted & \scriptsize\texttt{[CSMS] <- StartTransaction \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+3.4 & CS $\to$ CSMS & Authorize & status: Accepted & \footnotesize\texttt{[CSMS] <- Authorize: \{"idTag": "TAG1"\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#273]}} & Pass \\
 \hline
-3.6 & CS $\to$ CSMS & StatusNotification & status: Charging & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Charging'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.5 & CS $\to$ CSMS & StartTransaction & status: Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 1, "idTag": "TAG1", "meterStart": 100\} \newline [CSMS] -> Conf: \{"transactionId": 1, "idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#282]}} & Pass \\
 \hline
-3.7 & CS $\to$ CSMS & MeterValues & Values & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.6 & CS $\to$ CSMS & StatusNotification & status: Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#289]}} & Pass \\
 \hline
-3.8 & CS $\to$ CSMS & StopTransaction (Local) & status & \scriptsize\texttt{[CSMS] <- StopTransaction: \{'reason': 'Local'\} \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+3.7 & CS $\to$ CSMS & MeterValues & Values & \footnotesize\texttt{[CSMS] <- MeterValues: \{"meterValue": [\{"sampledValue": [\{"measurand": "Power.Active.Import", "value": "120"\}]\}]\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#290]}} & Pass \\
 \hline
-3.9 & CS $\to$ CSMS & StatusNotification & status: Finishing & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Finishing'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.8 & CS $\to$ CSMS & StopTransaction (Local) & status & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"transactionId": 1, "reason": "Local", "meterStop": 200\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#292]}} & Pass \\
 \hline
-3.10 & CS $\to$ CSMS & StatusNotification & status: Available & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Available'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.9 & CS $\to$ CSMS & StatusNotification & status: Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Finishing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#301]}} & Pass \\
 \hline
-3.11 & CS $\to$ CSMS & StatusNotification & status: Preparing & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Preparing'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.10 & CS $\to$ CSMS & StatusNotification & status: Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#308]}} & Pass \\
 \hline
-3.12 & CSMS $\to$ CS & RemoteStartTransaction & status: Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart \newline [CS] -> Conf: status=Accepted} & Pass \\
+3.11 & CS $\to$ CSMS & StatusNotification & status: Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#315]}} & Pass \\
 \hline
-3.13 & CS $\to$ CSMS & StartTransaction & status: Accepted & \scriptsize\texttt{[CSMS] <- StartTransaction \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+3.12 & CSMS $\to$ CS & RemoteStartTransaction & status: Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction: \{"idTag": "TAG1"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#330]}} & Pass \\
 \hline
-3.14 & CS $\to$ CSMS & StatusNotification & status: Charging & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Charging'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.13 & CS $\to$ CSMS & StartTransaction & status: Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 1, "idTag": "TAG1", "meterStart": 200\} \newline [CSMS] -> Conf: \{"transactionId": 2, "idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#340]}} & Pass \\
 \hline
-3.15 & CS $\to$ CSMS & MeterValues & Values & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.14 & CS $\to$ CSMS & StatusNotification & status: Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#345]}} & Pass \\
 \hline
-3.16 & CSMS $\to$ CS & RemoteStopTransaction & status: Accepted & \scriptsize\texttt{[CSMS] -> RemoteStop \newline [CS] -> Conf: status=Accepted} & Pass \\
+3.15 & CS $\to$ CSMS & MeterValues & Values & \footnotesize\texttt{[CSMS] <- MeterValues: \{"meterValue": [\{"sampledValue": [\{"measurand": "Power.Active.Import", "value": "120"\}]\}]\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#353]}} & Pass \\
 \hline
-3.17 & CS $\to$ CSMS & StopTransaction (Remote) & status & \scriptsize\texttt{[CSMS] <- StopTransaction: \{'reason': 'Remote'\} \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+3.16 & CSMS $\to$ CS & RemoteStopTransaction & status: Accepted & \footnotesize\texttt{[CSMS] -> RemoteStopTransaction: \{"transactionId": 2\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#362]}} & Pass \\
 \hline
-3.18 & CS $\to$ CSMS & StatusNotification & status: Finishing & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Finishing'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.17 & CS $\to$ CSMS & StopTransaction (Remote) & status & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"transactionId": 2, "reason": "Remote", "meterStop": 300\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#364]}} & Pass \\
 \hline
-3.19 & CS $\to$ CSMS & StatusNotification & status: Available & \scriptsize\texttt{[CSMS] <- StatusNotification: \{'status': 'Available'\} \newline [CSMS] -> Conf: \{\}} & Pass \\
+3.18 & CS $\to$ CSMS & StatusNotification & status: Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Finishing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#375]}} & Pass \\
+\hline
+3.19 & CS $\to$ CSMS & StatusNotification & status: Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#382]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{4. Reset Verification}} \\
 \hline
-4.1 & CSMS $\to$ CS & Reset (Hard) & status (Accepted) & \scriptsize\texttt{[CSMS] -> Reset (Hard) \newline [CS] -> Conf: status=Accepted} & Pass \\
+4.1 & CSMS $\to$ CS & Reset (Hard) & status (Accepted) & \footnotesize\texttt{[CSMS] -> Reset: \{"type": "Hard"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#402]}} & Pass \\
 \hline
-4.2 & CS $\to$ CSMS & BootNotification & Post-reboot checks & \scriptsize\texttt{[CSMS] <- BootNotification \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+4.2 & CS $\to$ CSMS & BootNotification & Post-reboot checks & \footnotesize\texttt{[CSMS] <- BootNotification: \{"chargePointModel": "..."\} \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#418]}} & Pass \\
 \hline
-4.3 & CS $\to$ CSMS & Heartbeat & Received & \scriptsize\texttt{[CSMS] <- Heartbeat \newline [CSMS] -> Conf: \{\}} & Pass \\
+4.3 & CS $\to$ CSMS & Heartbeat & Received & \footnotesize\texttt{[CSMS] <- Heartbeat: \{\} \newline [CSMS] -> Conf: \{"currentTime": "..."\} \newline \textbf{[Log: \#419]}} & Pass \\
 \hline
-4.4 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+4.4 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"connectorId": 1\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#424]}} & Pass \\
 \hline
-4.5 & CS $\to$ CSMS & StatusNotification & status: Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+4.5 & CS $\to$ CSMS & StatusNotification & status: Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#431]}} & Pass \\
 \hline
-4.6 & CSMS $\to$ CS & ChangeConfiguration (Heartbeat) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: Heartbeat=600 \newline [CS] -> Conf: status=Accepted} & Pass \\
+4.6 & CSMS $\to$ CS & ChangeConfiguration (Heartbeat) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "HeartbeatInterval", "value": "600"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#441]}} & Pass \\
 \hline
-4.7 & CSMS $\to$ CS & ChangeConfiguration (MeterValue) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: MeterValue=60 \newline [CS] -> Conf: status=Accepted} & Pass \\
+4.7 & CSMS $\to$ CS & ChangeConfiguration (MeterValue) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "MeterValueSampleInterval", "value": "60"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#447]}} & Pass \\
 \hline
-4.8 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: LocalAuth=True \newline [CS] -> Conf: status=Accepted} & Pass \\
+4.8 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "LocalAuthorizeOffline", "value": "true"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#453]}} & Pass \\
 \hline
-4.9 & CSMS $\to$ CS & Reset (Soft) & status (Accepted) & \scriptsize\texttt{[CSMS] -> Reset (Soft) \newline [CS] -> Conf: status=Accepted} & Pass \\
+4.9 & CSMS $\to$ CS & Reset (Soft) & status (Accepted) & \footnotesize\texttt{[CSMS] -> Reset: \{"type": "Soft"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#459]}} & Pass \\
 \hline
-4.10 & CS $\to$ CSMS & BootNotification & Post-reboot checks & \scriptsize\texttt{[CSMS] <- BootNotification \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+4.10 & CS $\to$ CSMS & BootNotification & Post-reboot checks & \footnotesize\texttt{[CSMS] <- BootNotification: \{"chargePointModel": "..."\} \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#474]}} & Pass \\
 \hline
-4.11 & CS $\to$ CSMS & Heartbeat & Received & \scriptsize\texttt{[CSMS] <- Heartbeat \newline [CSMS] -> Conf: \{\}} & Pass \\
+4.11 & CS $\to$ CSMS & Heartbeat & Received & \footnotesize\texttt{[CSMS] <- Heartbeat: \{\} \newline [CSMS] -> Conf: \{"currentTime": "..."\} \newline \textbf{[Log: \#481]}} & Pass \\
 \hline
-4.12 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+4.12 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"connectorId": 1\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#490]}} & Pass \\
 \hline
-4.13 & CS $\to$ CSMS & StatusNotification & status: Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+4.13 & CS $\to$ CSMS & StatusNotification & status: Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#497]}} & Pass \\
 \hline
-4.14 & CSMS $\to$ CS & ChangeConfiguration (Heartbeat) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: Heartbeat=600 \newline [CS] -> Conf: status=Accepted} & Pass \\
+4.14 & CSMS $\to$ CS & ChangeConfiguration (Heartbeat) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "HeartbeatInterval", "value": "600"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#503]}} & Pass \\
 \hline
-4.15 & CSMS $\to$ CS & ChangeConfiguration (MeterValue) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: MeterValue=60 \newline [CS] -> Conf: status=Accepted} & Pass \\
+4.15 & CSMS $\to$ CS & ChangeConfiguration (MeterValue) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "MeterValueSampleInterval", "value": "60"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#509]}} & Pass \\
 \hline
-4.16 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: LocalAuth=True \newline [CS] -> Conf: status=Accepted} & Pass \\
+4.16 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "LocalAuthorizeOffline", "value": "true"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#515]}} & Pass \\
 \hline
-4.17 & CS $\to$ CSMS & StatusNotification & status: Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+4.17 & CS $\to$ CSMS & StatusNotification & status: Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#522]}} & Pass \\
 \hline
-4.18 & CS $\to$ CSMS & StartTransaction & status (Accepted) & \scriptsize\texttt{[CSMS] <- StartTx \newline [CSMS] -> Conf: Accepted} & Pass \\
+4.18 & CS $\to$ CSMS & StartTransaction & status (Accepted) & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 1, "idTag": "TAG1"\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#531]}} & Pass \\
 \hline
-4.19 & CSMS $\to$ CS & Reset (Hard) & status (Accepted) & \scriptsize\texttt{[CSMS] -> Reset (Hard) \newline [CS] -> Conf: Accepted} & Pass \\
+4.19 & CSMS $\to$ CS & Reset (Hard) & status (Accepted) & \footnotesize\texttt{[CSMS] -> Reset: \{"type": "Hard"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#549]}} & Pass \\
 \hline
-4.20 & CS $\to$ CSMS & StopTransaction (Reset) & status (Accepted) & \scriptsize\texttt{[CSMS] <- StopTx: HardReset \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+4.20 & CS $\to$ CSMS & StopTransaction (Reset) & status (Accepted) & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"reason": "HardReset"\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#552]}} & Pass \\
 \hline
-4.21 & CS $\to$ CSMS & BootNotification & Post-reboot checks & \scriptsize\texttt{[CSMS] <- BootNotification \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+4.21 & CS $\to$ CSMS & BootNotification & Post-reboot checks & \footnotesize\texttt{[CSMS] <- BootNotification: \{"chargePointModel": "..."\} \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#561]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{5. Reservation Verification}} \\
 \hline
-5.1 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+5.1 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#599]}} & Pass \\
 \hline
-5.2 & CSMS $\to$ CS & ReserveNow & status (Accepted) & \scriptsize\texttt{[CSMS] -> ReserveNow \newline [CS] -> Conf: status=Accepted} & Pass \\
+5.2 & CSMS $\to$ CS & ReserveNow & status (Accepted) & \footnotesize\texttt{[CSMS] -> ReserveNow: \{"reservationId": 1, "idTag": "RES", "expiryDate": "..."\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#609]}} & Pass \\
 \hline
-5.3 & CS $\to$ CSMS & StatusNotification & Reserved & \scriptsize\texttt{[CSMS] <- Status: Reserved \newline [CSMS] -> Conf: \{\}} & Pass \\
+5.3 & CS $\to$ CSMS & StatusNotification & Reserved & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Reserved"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#616]}} & Pass \\
 \hline
-5.4 & CSMS $\to$ CS & CancelReservation & status (Accepted) & \scriptsize\texttt{[CSMS] -> CancelReservation \newline [CS] -> Conf: status=Accepted} & Pass \\
+5.4 & CSMS $\to$ CS & CancelReservation & status (Accepted) & \footnotesize\texttt{[CSMS] -> CancelReservation: \{"reservationId": 1\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#622]}} & Pass \\
 \hline
-5.5 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+5.5 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#621]}} & Pass \\
 \hline
-5.6 & CSMS $\to$ CS & ReserveNow (Short) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ReserveNow \newline [CS] -> Conf: status=Accepted} & Pass \\
+5.6 & CSMS $\to$ CS & ReserveNow (Short) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ReserveNow: \{"reservationId": 2, "expiryDate": "T+1min"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#631]}} & Pass \\
 \hline
-5.7 & CS $\to$ CSMS & StatusNotification & Reserved & \scriptsize\texttt{[CSMS] <- Status: Reserved \newline [CSMS] -> Conf: \{\}} & Pass \\
+5.7 & CS $\to$ CSMS & StatusNotification & Reserved & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Reserved"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#638]}} & Pass \\
 \hline
-5.8 & CS $\to$ CSMS & Wait Expiry & (Internal) & \scriptsize\texttt{Waiting for expiry...} & Pass \\
+5.8 & CS $\to$ CSMS & Wait Expiry & (Internal) & \footnotesize\texttt{Waiting for expiry... \newline \textbf{[Log: \#640]}} & Pass \\
 \hline
-5.9 & CS $\to$ CSMS & StatusNotification & Available (Auto) & \scriptsize\texttt{[CSMS] <- Status: Available} & Pass \\
+5.9 & CS $\to$ CSMS & StatusNotification & Available (Auto) & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#646]}} & Pass \\
 \hline
-5.10 & CSMS $\to$ CS & ReserveNow & status (Accepted) & \scriptsize\texttt{[CSMS] -> ReserveNow \newline [CS] -> Conf: status=Accepted} & Pass \\
+5.10 & CSMS $\to$ CS & ReserveNow & status (Accepted) & \footnotesize\texttt{[CSMS] -> ReserveNow: \{"reservationId": 3\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#654]}} & Pass \\
 \hline
-5.11 & CS $\to$ CSMS & StatusNotification & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing \newline [CSMS] -> Conf: \{\}} & Pass \\
+5.11 & CS $\to$ CSMS & StatusNotification & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#661]}} & Pass \\
 \hline
-5.12 & CSMS $\to$ CS & RemoteStartTransaction & status (Accepted) & \scriptsize\texttt{[CSMS] -> RemoteStart \newline [CS] -> Conf: status=Accepted} & Pass \\
+5.12 & CSMS $\to$ CS & RemoteStartTransaction & status (Accepted) & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction: \{"idTag": "RES"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#669]}} & Pass \\
 \hline
-5.13 & CS $\to$ CSMS & StartTransaction & status (Accepted) & \scriptsize\texttt{[CSMS] <- StartTx \newline [CSMS] -> Conf: Accepted} & Pass \\
+5.13 & CS $\to$ CSMS & StartTransaction & status (Accepted) & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"reservationId": 3, "idTag": "RES"\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#684]}} & Pass \\
 \hline
-5.14 & CS $\to$ CSMS & StatusNotification & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging \newline [CSMS] -> Conf: \{\}} & Pass \\
+5.14 & CS $\to$ CSMS & StatusNotification & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#691]}} & Pass \\
 \hline
-5.15 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+5.15 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"meterValue": [...]\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#693]}} & Pass \\
 \hline
-5.16 & CSMS $\to$ CS & RemoteStopTransaction & status (Accepted) & \scriptsize\texttt{[CSMS] -> RemoteStop \newline [CS] -> Conf: status=Accepted} & Pass \\
+5.16 & CSMS $\to$ CS & RemoteStopTransaction & status (Accepted) & \footnotesize\texttt{[CSMS] -> RemoteStopTransaction \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#699]}} & Pass \\
 \hline
-5.17 & CS $\to$ CSMS & StopTransaction & status (Accepted) & \scriptsize\texttt{[CSMS] <- StopTx \newline [CSMS] -> Conf: Accepted} & Pass \\
+5.17 & CS $\to$ CSMS & StopTransaction & status (Accepted) & \footnotesize\texttt{[CSMS] <- StopTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#707]}} & Pass \\
 \hline
-5.18 & CS $\to$ CSMS & StatusNotification & Finishing & \scriptsize\texttt{[CSMS] <- Status: Finishing \newline [CSMS] -> Conf: \{\}} & Pass \\
+5.18 & CS $\to$ CSMS & StatusNotification & Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Finishing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#714]}} & Pass \\
 \hline
-5.19 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+5.19 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#721]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{6. Charging Profile Verification}} \\
 \hline
-6.1 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.1 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#729]}} & Pass \\
 \hline
-6.2 & CS $\to$ CSMS & StatusNotification & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.2 & CS $\to$ CSMS & StatusNotification & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#736]}} & Pass \\
 \hline
-6.3 & CS $\to$ CSMS & Authorize & Accepted & \scriptsize\texttt{[CSMS] <- Authorize \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+6.3 & CS $\to$ CSMS & Authorize & Accepted & \footnotesize\texttt{[CSMS] <- Authorize \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#742]}} & Pass \\
 \hline
-6.4 & CS $\to$ CSMS & StartTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StartTx \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+6.4 & CS $\to$ CSMS & StartTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#750]}} & Pass \\
 \hline
-6.5 & CS $\to$ CSMS & StatusNotification & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.5 & CS $\to$ CSMS & StatusNotification & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#759]}} & Pass \\
 \hline
-6.6 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.6 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"meterValue": [...]\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#763]}} & Pass \\
 \hline
-6.7 & CSMS $\to$ CS & SetChargingProfile & status (Accepted) & \scriptsize\texttt{[CSMS] -> SetChargingProfile \newline [CS] -> Conf: status=Accepted} & Pass \\
+6.7 & CSMS $\to$ CS & SetChargingProfile & status (Accepted) & \footnotesize\texttt{[CSMS] -> SetChargingProfile: \{"csChargingProfiles": \{...\}\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#767]}} & Pass \\
 \hline
-6.8 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.8 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#770]}} & Pass \\
 \hline
-6.9 & CSMS $\to$ CS & SetChargingProfile & status (Accepted) & \scriptsize\texttt{[CSMS] -> SetChargingProfile \newline [CS] -> Conf: status=Accepted} & Pass \\
+6.9 & CSMS $\to$ CS & SetChargingProfile & status (Accepted) & \footnotesize\texttt{[CSMS] -> SetChargingProfile: \{"csChargingProfiles": \{...\}\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#775]}} & Pass \\
 \hline
-6.10 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.10 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#777]}} & Pass \\
 \hline
-6.11 & CS $\to$ CSMS & StopTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StopTx \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+6.11 & CS $\to$ CSMS & StopTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#782]}} & Pass \\
 \hline
-6.12 & CS $\to$ CSMS & StatusNotification & Finishing & \scriptsize\texttt{[CSMS] <- Status: Finishing \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.12 & CS $\to$ CSMS & StatusNotification & Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Finishing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#791]}} & Pass \\
 \hline
-6.13 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.13 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#798]}} & Pass \\
 \hline
-6.14 & CS $\to$ CSMS & StatusNotification & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.14 & CS $\to$ CSMS & StatusNotification & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#805]}} & Pass \\
 \hline
-6.15 & CSMS $\to$ CS & RemoteStartTransaction & status (Accepted) & \scriptsize\texttt{[CSMS] -> RemoteStart \newline [CS] -> Conf: status=Accepted} & Pass \\
+6.15 & CSMS $\to$ CS & RemoteStartTransaction & status (Accepted) & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#809]}} & Pass \\
 \hline
-6.16 & CS $\to$ CSMS & StartTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StartTx \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+6.16 & CS $\to$ CSMS & StartTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#827]}} & Pass \\
 \hline
-6.17 & CS $\to$ CSMS & StatusNotification & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.17 & CS $\to$ CSMS & StatusNotification & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#835]}} & Pass \\
 \hline
-6.18 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.18 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#838]}} & Pass \\
 \hline
-6.19 & CSMS $\to$ CS & SetChargingProfile & (Accepted) & \scriptsize\texttt{[CSMS] -> SetChargingProfile \newline [CS] -> Conf: status=Accepted} & Pass \\
+6.19 & CSMS $\to$ CS & SetChargingProfile & (Accepted) & \footnotesize\texttt{[CSMS] -> SetChargingProfile \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#842]}} & Pass \\
 \hline
-6.20 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.20 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#845]}} & Pass \\
 \hline
-6.21 & CSMS $\to$ CS & SetChargingProfile & (Accepted) & \scriptsize\texttt{[CSMS] -> SetChargingProfile \newline [CS] -> Conf: status=Accepted} & Pass \\
+6.21 & CSMS $\to$ CS & SetChargingProfile & (Accepted) & \footnotesize\texttt{[CSMS] -> SetChargingProfile \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#849]}} & Pass \\
 \hline
-6.22 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.22 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#852]}} & Pass \\
 \hline
-6.23 & CSMS $\to$ CS & RemoteStopTransaction & status (Accepted) & \scriptsize\texttt{[CSMS] -> RemoteStop \newline [CS] -> Conf: status=Accepted} & Pass \\
+6.23 & CSMS $\to$ CS & RemoteStopTransaction & status (Accepted) & \footnotesize\texttt{[CSMS] -> RemoteStopTransaction \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#857]}} & Pass \\
 \hline
-6.24 & CS $\to$ CSMS & StopTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StopTx \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+6.24 & CS $\to$ CSMS & StopTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#863]}} & Pass \\
 \hline
-6.25 & CS $\to$ CSMS & StatusNotification & Finishing & \scriptsize\texttt{[CSMS] <- Status: Finishing \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.25 & CS $\to$ CSMS & StatusNotification & Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Finishing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#872]}} & Pass \\
 \hline
-6.26 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+6.26 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#879]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{7. Abnormal Operation Verification}} \\
 \hline
 \multicolumn{6}{|l|}{\textbf{7.1 Remote Start (Unplugged)}} \\
 \hline
-7.1.1 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.1.1 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#898]}} & Pass \\
 \hline
-7.1.2 & CSMS $\to$ CS & RemoteStartTransaction & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart \newline [CS] -> Conf: status=Accepted} & Pass \\
+7.1.2 & CSMS $\to$ CS & RemoteStartTransaction & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction \newline [CS] -> Conf: \{"status": "Rejected"\} \newline \textbf{[Log: \#906]}} & Pass \\
 \hline
 \multicolumn{6}{|l|}{\textbf{7.2 Concurrent Remote Start}} \\
 \hline
-7.2.1 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.2.1 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#920]}} & Pass \\
 \hline
-7.2.2 & CS $\to$ CSMS & StatusNotification & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.2.2 & CS $\to$ CSMS & StatusNotification & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Preparing"\} \newline [CSMS] -> Conf: \{\}} & Pass \\
 \hline
-7.2.3 & CSMS $\to$ CS & RemoteStart (Conn 1) & Rejected & \scriptsize\texttt{[CSMS] -> RemoteStart (1) \newline [CS] -> Conf: status=Rejected} & Pass \\
+7.2.3 & CSMS $\to$ CS & RemoteStart (Conn 1) & Rejected & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#934]}} & Pass \\
 \hline
-7.2.4 & CSMS $\to$ CS & RemoteStart (Conn 2) & Rejected & \scriptsize\texttt{[CSMS] -> RemoteStart (2) \newline [CS] -> Conf: status=Rejected} & Pass \\
+7.2.4 & CSMS $\to$ CS & RemoteStart (Conn 2) & Rejected & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction \newline [CS] -> Conf: \{"status": "Rejected"\} \newline \textbf{[Log: \#940]}} & Pass \\
 \hline
-7.2.5 & CS $\to$ CSMS & StartTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StartTx \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.2.5 & CS $\to$ CSMS & StartTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#942]}} & Pass \\
 \hline
-7.2.6 & CS $\to$ CSMS & StatusNotification & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.2.6 & CS $\to$ CSMS & StatusNotification & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#949]}} & Pass \\
 \hline
-7.2.7 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.2.7 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#950]}} & Pass \\
 \hline
-7.2.8 & CSMS $\to$ CS & RemoteStopTransaction & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStop \newline [CS] -> Conf: status=Accepted} & Pass \\
+7.2.8 & CSMS $\to$ CS & RemoteStopTransaction & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStopTransaction \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#958]}} & Pass \\
 \hline
-7.2.9 & CS $\to$ CSMS & StopTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StopTx \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.2.9 & CS $\to$ CSMS & StopTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#973]}} & Pass \\
 \hline
-7.2.10 & CS $\to$ CSMS & StatusNotification & Finishing & \scriptsize\texttt{[CSMS] <- Status: Finishing \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.2.10 & CS $\to$ CSMS & StatusNotification & Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Finishing"\} \newline [CSMS] -> Conf: \{\}} & Pass \\
 \hline
-7.2.11 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.2.11 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\}} & Pass \\
 \hline
 \multicolumn{6}{|l|}{\textbf{7.3 Swap Card}} \\
 \hline
-7.3.1 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.3.1 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#993]}} & Pass \\
 \hline
-7.3.2 & CS $\to$ CSMS & StatusNotification & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.3.2 & CS $\to$ CSMS & StatusNotification & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1000]}} & Pass \\
 \hline
-7.3.3 & CS $\to$ CSMS & Authorize (Invalid) & Rejected & \scriptsize\texttt{[CSMS] <- Authorize (Invalid) \newline [CSMS] -> Conf: status=Invalid} & Pass \\
+7.3.3 & CS $\to$ CSMS & Authorize (Invalid) & Rejected & \footnotesize\texttt{[CSMS] <- Authorize (Invalid) \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Invalid"\}\} \newline \textbf{[Log: \#1006]}} & Pass \\
 \hline
-7.3.4 & CS $\to$ CSMS & Authorize (Valid) & Accepted & \scriptsize\texttt{[CSMS] <- Authorize (Valid) \newline [CSMS] -> Conf: status=Accepted} & Pass \\
+7.3.4 & CS $\to$ CSMS & Authorize (Valid) & Accepted & \footnotesize\texttt{[CSMS] <- Authorize (Valid) \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1013]}} & Pass \\
 \hline
-7.3.5 & CS $\to$ CSMS & StartTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StartTx \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.3.5 & CS $\to$ CSMS & StartTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1022]}} & Pass \\
 \hline
-7.3.6 & CS $\to$ CSMS & StatusNotification & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.3.6 & CS $\to$ CSMS & StatusNotification & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1025]}} & Pass \\
 \hline
-7.3.7 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.3.7 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1031]}} & Pass \\
 \hline
-7.3.8 & CS $\to$ CSMS & Authorize (Invalid Stop) & Rejected & \scriptsize\texttt{[CSMS] <- Authorize (Invalid) \newline [CSMS] -> Conf: Invalid} & Pass \\
+7.3.8 & CS $\to$ CSMS & Authorize (Invalid Stop) & Rejected & \footnotesize\texttt{[CSMS] <- Authorize (Invalid) \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Invalid"\}\} \newline \textbf{[Log: \#1035]}} & Pass \\
 \hline
-7.3.9 & CS $\to$ CSMS & StopTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StopTx \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.3.9 & CS $\to$ CSMS & StopTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1037]}} & Pass \\
 \hline
-7.3.10 & CS $\to$ CSMS & StatusNotification & Finishing & \scriptsize\texttt{[CSMS] <- Status: Finishing \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.3.10 & CS $\to$ CSMS & StatusNotification & Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Finishing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1042]}} & Pass \\
 \hline
-7.3.11 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.3.11 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1043]}} & Pass \\
 \hline
 \multicolumn{6}{|l|}{\textbf{7.4 Emergency Stop}} \\
 \hline
-7.4.1 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.4.1 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1056]}} & Pass \\
 \hline
-7.4.2 & CS $\to$ CSMS & StatusNotification & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.4.2 & CS $\to$ CSMS & StatusNotification & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1062]}} & Pass \\
 \hline
-7.4.3 & CSMS $\to$ CS & RemoteStartTransaction & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart \newline [CS] -> Conf: status=Accepted} & Pass \\
+7.4.3 & CSMS $\to$ CS & RemoteStartTransaction & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1066]}} & Pass \\
 \hline
-7.4.4 & CS $\to$ CSMS & StartTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StartTx \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.4.4 & CS $\to$ CSMS & StartTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1069]}} & Pass \\
 \hline
-7.4.5 & CS $\to$ CSMS & StatusNotification & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.4.5 & CS $\to$ CSMS & StatusNotification & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1073]}} & Pass \\
 \hline
-7.4.6 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.4.6 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1079]}} & Pass \\
 \hline
-7.4.7 & CS $\to$ CSMS & StopTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StopTx (Emergency) \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.4.7 & CS $\to$ CSMS & StopTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction (Emergency) \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1098]}} & Pass \\
 \hline
-7.4.8 & CS $\to$ CSMS & StatusNotification & Faulted & \scriptsize\texttt{[CSMS] <- Status: Faulted \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.4.8 & CS $\to$ CSMS & StatusNotification & Faulted & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Faulted", "info": "EmergencyStop"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1105]}} & Pass \\
 \hline
-7.4.9 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.4.9 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1112]}} & Pass \\
 \hline
-7.4.10 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.4.10 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1112]}} & Pass \\
 \hline
 \multicolumn{6}{|l|}{\textbf{7.5 Open Door}} \\
 \hline
-7.5.1 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.5.1 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#973]}} & Pass \\
 \hline
-7.5.2 & CS $\to$ CSMS & StatusNotification & Faulted & \scriptsize\texttt{[CSMS] <- Status: Faulted (Door) \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.5.2 & CS $\to$ CSMS & StatusNotification & Faulted & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Faulted", "info": "DoorOpen"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1126]}} & Pass \\
 \hline
-7.5.3 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.5.3 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1133]}} & Pass \\
 \hline
 \multicolumn{6}{|l|}{\textbf{7.6 Power Loss (Single)}} \\
 \hline
-7.6.1 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.6.1 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1140]}} & Pass \\
 \hline
-7.6.2 & CS $\to$ CSMS & StatusNotification & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.6.2 & CS $\to$ CSMS & StatusNotification & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1149]}} & Pass \\
 \hline
-7.6.3 & CSMS $\to$ CS & RemoteStartTransaction & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart \newline [CS] -> Conf: status=Accepted} & Pass \\
+7.6.3 & CSMS $\to$ CS & RemoteStartTransaction & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1153]}} & Pass \\
 \hline
-7.6.4 & CS $\to$ CSMS & StartTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StartTx \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.6.4 & CS $\to$ CSMS & StartTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1155]}} & Pass \\
 \hline
-7.6.5 & CS $\to$ CSMS & StatusNotification & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.6.5 & CS $\to$ CSMS & StatusNotification & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1158]}} & Pass \\
 \hline
-7.6.6 & CS $\to$ CSMS & MeterValues & Received & \scriptsize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.6.6 & CS $\to$ CSMS & MeterValues & Received & \footnotesize\texttt{[CSMS] <- MeterValues \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1163]}} & Pass \\
 \hline
-7.6.7 & CS $\to$ CSMS & StopTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StopTx (PowerLoss) \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.6.7 & CS $\to$ CSMS & StopTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction (PowerLoss) \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1182]}} & Pass \\
 \hline
-7.6.8 & CS $\to$ CSMS & BootNotification & Accepted & \scriptsize\texttt{[CSMS] <- BootNotification \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.6.8 & CS $\to$ CSMS & BootNotification & Accepted & \footnotesize\texttt{[CSMS] <- BootNotification \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1191]}} & Pass \\
 \hline
-7.6.9 & CS $\to$ CSMS & StatusNotification & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.6.9 & CS $\to$ CSMS & StatusNotification & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1194]}} & Pass \\
 \hline
-7.6.10 & CS $\to$ CSMS & StatusNotification & Available & \scriptsize\texttt{[CSMS] <- Status: Available \newline [CSMS] -> Conf: \{\}} & Pass \\
+7.6.10 & CS $\to$ CSMS & StatusNotification & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1200]}} & Pass \\
 \hline
 \multicolumn{6}{|l|}{\textbf{7.7 Local List (Offline)}} \\
 \hline
-7.7.1 & N/A & Disconnect LAN & Simulated & \scriptsize\texttt{Simulated Disconnection} & Pass \\
+7.7.1 & N/A & Disconnect LAN & Simulated & \footnotesize\texttt{Simulated Disconnection} & Pass \\
 \hline
-7.7.2 & CS $\to$ CSMS & StartTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StartTx (Offline) \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.7.2 & CS $\to$ CSMS & StartTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction (Offline) \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1224]}} & Pass \\
 \hline
-7.7.3 & CS $\to$ CSMS & StopTransaction & Accepted & \scriptsize\texttt{[CSMS] <- StopTx (Local) \newline [CSMS] -> Conf: Accepted} & Pass \\
+7.7.3 & CS $\to$ CSMS & StopTransaction & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction (Local) \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1233]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{8. Dual Connector Verification}} \\
 \hline
 \multicolumn{6}{|l|}{\textbf{8.1 Concurrent Remote Start (Dual)}} \\
 \hline
-8.1.1 & CS $\to$ CSMS & StatusNotification (Unplug) & Available & \scriptsize\texttt{[CSMS] <- Status: Available} & Pass \\
+8.1.1 & CS $\to$ CSMS & StatusNotification (Unplug) & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1256]}} & Pass \\
 \hline
-8.1.2 & CS $\to$ CSMS & StatusNotification (Plug Both) & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing (1\&2)} & Pass \\
+8.1.2 & CS $\to$ CSMS & StatusNotification (Plug Both) & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Preparing"\} \newline [CSMS] <- StatusNotification: \{"connectorId": 2\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1269]}} & Pass \\
 \hline
-8.1.3 & CSMS $\to$ CS & RemoteStart (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart (1) \newline [CS] -> Conf: Accepted} & Pass \\
+8.1.3 & CSMS $\to$ CS & RemoteStart (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction: \{"connectorId": 1, "idTag": "TAG1"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1277]}} & Pass \\
 \hline
-8.1.4 & CSMS $\to$ CS & RemoteStart (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart (2) \newline [CS] -> Conf: Accepted} & Pass \\
+8.1.4 & CSMS $\to$ CS & RemoteStart (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction: \{"connectorId": 2, "idTag": "TAG2"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1291]}} & Pass \\
 \hline
-8.1.5 & CS $\to$ CSMS & StartTransaction (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] <- StartTx (1) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.1.5 & CS $\to$ CSMS & StartTransaction (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 1, "idTag": "TAG1"\} \newline [CSMS] -> Conf: \{"transactionId": 1, "idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1272]}} & Pass \\
 \hline
-8.1.6 & CS $\to$ CSMS & StatusNotification (Conn 1) & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging} & Pass \\
+8.1.6 & CS $\to$ CSMS & StatusNotification (Conn 1) & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1294]}} & Pass \\
 \hline
-8.1.7 & CS $\to$ CSMS & StartTransaction (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] <- StartTx (2) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.1.7 & CS $\to$ CSMS & StartTransaction (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 2, "idTag": "TAG2"\} \newline [CSMS] -> Conf: \{"transactionId": 2, "idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1283]}} & Pass \\
 \hline
-8.1.8 & CS $\to$ CSMS & StatusNotification (Conn 2) & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging} & Pass \\
+8.1.8 & CS $\to$ CSMS & StatusNotification (Conn 2) & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 2, "status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1303]}} & Pass \\
 \hline
-8.1.9 & CS $\to$ CSMS & MeterValues (Conn 1) & Received & \scriptsize\texttt{[CSMS] <- MeterValues (1)} & Pass \\
+8.1.9 & CS $\to$ CSMS & MeterValues (Conn 1) & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"connectorId": 1\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1310]}} & Pass \\
 \hline
-8.1.10 & CS $\to$ CSMS & MeterValues (Conn 2) & Received & \scriptsize\texttt{[CSMS] <- MeterValues (2)} & Pass \\
+8.1.10 & CS $\to$ CSMS & MeterValues (Conn 2) & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"connectorId": 2\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1311]}} & Pass \\
 \hline
-8.1.11 & CSMS $\to$ CS & RemoteStop (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStop (1) \newline [CS] -> Conf: Accepted} & Pass \\
+8.1.11 & CSMS $\to$ CS & RemoteStop (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStopTransaction: \{"transactionId": 1\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1313]}} & Pass \\
 \hline
-8.1.12 & CS $\to$ CSMS & StopTransaction (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] <- StopTx (1) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.1.12 & CS $\to$ CSMS & StopTransaction (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"transactionId": 1\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1319]}} & Pass \\
 \hline
-8.1.13 & CS $\to$ CSMS & StatusNotification (Conn 1) & Finishing & \scriptsize\texttt{[CSMS] <- Status: Finishing} & Pass \\
+8.1.13 & CS $\to$ CSMS & StatusNotification (Conn 1) & Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Finishing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1331]}} & Pass \\
 \hline
-8.1.14 & CS $\to$ CSMS & StatusNotification (Conn 1) & Available & \scriptsize\texttt{[CSMS] <- Status: Available} & Pass \\
+8.1.14 & CS $\to$ CSMS & StatusNotification (Conn 1) & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1337]}} & Pass \\
 \hline
-8.1.15 & CSMS $\to$ CS & RemoteStop (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStop (2) \newline [CS] -> Conf: Accepted} & Pass \\
+8.1.15 & CSMS $\to$ CS & RemoteStop (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStopTransaction: \{"transactionId": 2\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1343]}} & Pass \\
 \hline
-8.1.16 & CS $\to$ CSMS & StopTransaction (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] <- StopTx (2) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.1.16 & CS $\to$ CSMS & StopTransaction (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"transactionId": 2\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1350]}} & Pass \\
 \hline
-8.1.17 & CS $\to$ CSMS & StatusNotification (Conn 2) & Finishing & \scriptsize\texttt{[CSMS] <- Status: Finishing} & Pass \\
+8.1.17 & CS $\to$ CSMS & StatusNotification (Conn 2) & Finishing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 2, "status": "Finishing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1351]}} & Pass \\
 \hline
-8.1.18 & CS $\to$ CSMS & StatusNotification (Conn 2) & Available & \scriptsize\texttt{[CSMS] <- Status: Available} & Pass \\
+8.1.18 & CS $\to$ CSMS & StatusNotification (Conn 2) & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 2, "status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1357]}} & Pass \\
 \hline
 \multicolumn{6}{|l|}{\textbf{8.2 Shared Emergency Stop (Dual)}} \\
 \hline
-8.2.1 & CS $\to$ CSMS & StatusNotification (Unplug) & Available & \scriptsize\texttt{[CSMS] <- Status: Available (Both)} & Pass \\
+8.2.1 & CS $\to$ CSMS & StatusNotification (Unplug) & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1370]}} & Pass \\
 \hline
-8.2.2 & CS $\to$ CSMS & StatusNotification (Conn 1) & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing (1)} & Pass \\
+8.2.2 & CS $\to$ CSMS & StatusNotification (Conn 1) & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1378]}} & Pass \\
 \hline
-8.2.3 & CSMS $\to$ CS & RemoteStart (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart (1) \newline [CS] -> Conf: Accepted} & Pass \\
+8.2.3 & CSMS $\to$ CS & RemoteStart (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction: \{"connectorId": 1\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1393]}} & Pass \\
 \hline
-8.2.4 & CS $\to$ CSMS & StartTransaction (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] <- StartTx (1) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.2.4 & CS $\to$ CSMS & StartTransaction (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 1\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1401]}} & Pass \\
 \hline
-8.2.5 & CS $\to$ CSMS & StatusNotification (Conn 1) & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging} & Pass \\
+8.2.5 & CS $\to$ CSMS & StatusNotification (Conn 1) & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1403]}} & Pass \\
 \hline
-8.2.6 & CS $\to$ CSMS & MeterValues (Conn 1) & Received & \scriptsize\texttt{[CSMS] <- MeterValues (1)} & Pass \\
+8.2.6 & CS $\to$ CSMS & MeterValues (Conn 1) & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"connectorId": 1\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1409]}} & Pass \\
 \hline
-8.2.7 & CS $\to$ CSMS & StatusNotification (Conn 2) & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing (2)} & Pass \\
+8.2.7 & CS $\to$ CSMS & StatusNotification (Conn 2) & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 2, "status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1414]}} & Pass \\
 \hline
-8.2.8 & CSMS $\to$ CS & RemoteStart (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart (2) \newline [CS] -> Conf: Accepted} & Pass \\
+8.2.8 & CSMS $\to$ CS & RemoteStart (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction: \{"connectorId": 2\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1420]}} & Pass \\
 \hline
-8.2.9 & CS $\to$ CSMS & StartTransaction (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] <- StartTx (2) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.2.9 & CS $\to$ CSMS & StartTransaction (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 2\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1422]}} & Pass \\
 \hline
-8.2.10 & CS $\to$ CSMS & StatusNotification (Conn 2) & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging} & Pass \\
+8.2.10 & CS $\to$ CSMS & StatusNotification (Conn 2) & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 2, "status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1425]}} & Pass \\
 \hline
-8.2.11 & CS $\to$ CSMS & MeterValues (Conn 2) & Received & \scriptsize\texttt{[CSMS] <- MeterValues (2)} & Pass \\
+8.2.11 & CS $\to$ CSMS & MeterValues (Conn 2) & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"connectorId": 2\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1431]}} & Pass \\
 \hline
-8.2.12 & CS $\to$ CSMS & StopTransaction (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] <- StopTx (1) (Emergency) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.2.12 & CS $\to$ CSMS & StopTransaction (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"connectorId": 1, "reason": "EmergencyStop"\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1436]}} & Pass \\
 \hline
-8.2.13 & CS $\to$ CSMS & StopTransaction (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] <- StopTx (2) (Emergency) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.2.13 & CS $\to$ CSMS & StopTransaction (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"connectorId": 2, "reason": "EmergencyStop"\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1445]}} & Pass \\
 \hline
-8.2.14 & CS $\to$ CSMS & StatusNotification (Both) & Faulted & \scriptsize\texttt{[CSMS] <- Status: Faulted (Info: Emergency)} & Pass \\
+8.2.14 & CS $\to$ CSMS & StatusNotification (Both) & Faulted & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Faulted", "info": "EmergencyStop"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1450, \#1455]}} & Pass \\
 \hline
-8.2.15 & CS $\to$ CSMS & StatusNotification (Unplug) & Faulted & \scriptsize\texttt{[CSMS] <- Status: Faulted (Persist)} & Pass \\
+8.2.15 & CS $\to$ CSMS & StatusNotification (Unplug) & Faulted & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Faulted"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1460]}} & Pass \\
 \hline
-8.2.16 & CS $\to$ CSMS & StatusNotification (Release) & Available & \scriptsize\texttt{[CSMS] <- Status: Available} & Pass \\
+8.2.16 & CS $\to$ CSMS & StatusNotification (Release) & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\}\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1471]}} & Pass \\
 \hline
 \multicolumn{6}{|l|}{\textbf{8.3 Power Loss (Dual)}} \\
 \hline
-8.3.1 & CS $\to$ CSMS & StatusNotification (Unplug) & Available & \scriptsize\texttt{[CSMS] <- Status: Available} & Pass \\
+8.3.1 & CS $\to$ CSMS & StatusNotification (Unplug) & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"status": "Available"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1476]}} & Pass \\
 \hline
-8.3.2 & CS $\to$ CSMS & StatusNotification (Conn 1) & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing} & Pass \\
+8.3.2 & CS $\to$ CSMS & StatusNotification (Conn 1) & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1490]}} & Pass \\
 \hline
-8.3.3 & CSMS $\to$ CS & RemoteStart (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart (1) \newline [CS] -> Conf: Accepted} & Pass \\
+8.3.3 & CSMS $\to$ CS & RemoteStart (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction: \{"connectorId": 1\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1494]}} & Pass \\
 \hline
-8.3.4 & CS $\to$ CSMS & StartTransaction (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] <- StartTx (1) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.3.4 & CS $\to$ CSMS & StartTransaction (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 1\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1496]}} & Pass \\
 \hline
-8.3.5 & CS $\to$ CSMS & StatusNotification (Conn 1) & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging} & Pass \\
+8.3.5 & CS $\to$ CSMS & StatusNotification (Conn 1) & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1499]}} & Pass \\
 \hline
-8.3.6 & CS $\to$ CSMS & MeterValues (Conn 1) & Received & \scriptsize\texttt{[CSMS] <- MeterValues (1)} & Pass \\
+8.3.6 & CS $\to$ CSMS & MeterValues (Conn 1) & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"connectorId": 1\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1505]}} & Pass \\
 \hline
-8.3.7 & CS $\to$ CSMS & StatusNotification (Conn 2) & Preparing & \scriptsize\texttt{[CSMS] <- Status: Preparing} & Pass \\
+8.3.7 & CS $\to$ CSMS & StatusNotification (Conn 2) & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 2, "status": "Preparing"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1510]}} & Pass \\
 \hline
-8.3.8 & CSMS $\to$ CS & RemoteStart (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] -> RemoteStart (2) \newline [CS] -> Conf: Accepted} & Pass \\
+8.3.8 & CSMS $\to$ CS & RemoteStart (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] -> RemoteStartTransaction: \{"connectorId": 2\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1514]}} & Pass \\
 \hline
-8.3.9 & CS $\to$ CSMS & StartTransaction (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] <- StartTx (2) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.3.9 & CS $\to$ CSMS & StartTransaction (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] <- StartTransaction: \{"connectorId": 2\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1516]}} & Pass \\
 \hline
-8.3.10 & CS $\to$ CSMS & StatusNotification (Conn 2) & Charging & \scriptsize\texttt{[CSMS] <- Status: Charging} & Pass \\
+8.3.10 & CS $\to$ CSMS & StatusNotification (Conn 2) & Charging & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 2, "status": "Charging"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1519]}} & Pass \\
 \hline
-8.3.11 & CS $\to$ CSMS & MeterValues (Conn 2) & Received & \scriptsize\texttt{[CSMS] <- MeterValues (2)} & Pass \\
+8.3.11 & CS $\to$ CSMS & MeterValues (Conn 2) & Received & \footnotesize\texttt{[CSMS] <- MeterValues: \{"connectorId": 2\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#1525]}} & Pass \\
 \hline
-8.3.12 & CS $\to$ CSMS & StopTransaction (Conn 1) & Accepted & \scriptsize\texttt{[CSMS] <- StopTx (1) (PowerLoss) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.3.12 & CS $\to$ CSMS & StopTransaction (Conn 1) & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"connectorId": 1, "reason": "PowerLoss"\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1560]}} & Pass \\
 \hline
-8.3.13 & CS $\to$ CSMS & StopTransaction (Conn 2) & Accepted & \scriptsize\texttt{[CSMS] <- StopTx (2) (PowerLoss) \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.3.13 & CS $\to$ CSMS & StopTransaction (Conn 2) & Accepted & \footnotesize\texttt{[CSMS] <- StopTransaction: \{"connectorId": 2, "reason": "PowerLoss"\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#1569]}} & Pass \\
 \hline
-8.3.14 & CS $\to$ CSMS & BootNotification & Accepted & \scriptsize\texttt{[CSMS] <- BootNotification \newline [CSMS] -> Conf: Accepted} & Pass \\
+8.3.14 & CS $\to$ CSMS & BootNotification & Accepted & \footnotesize\texttt{[CSMS] <- BootNotification \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1578]}} & Pass \\
 \hline
-8.3.15 & CS $\to$ CSMS & StatusNotification (Plug Both) & Preparing & \scriptsize\texttt{N/A (Skipped in Test)} & Skipped \\
+8.3.15 & CS $\to$ CSMS & StatusNotification (Plug Both) & Preparing & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Preparing"\} \newline [CSMS] <- StatusNotification: \{"connectorId": 2, "status": "Preparing"\} \newline \textbf{[Log: \#1581, \#1587]}} & Pass \\
 \hline
-8.3.16 & CS $\to$ CSMS & StatusNotification (Unplug Both) & Available & \scriptsize\texttt{[CSMS] <- Status(1): Avail \newline [CSMS] -> Conf: \{\} \newline [CSMS] <- Status(2): Avail \newline [CSMS] -> Conf: \{\}} & Pass \\
+8.3.16 & CS $\to$ CSMS & StatusNotification (Unplug Both) & Available & \footnotesize\texttt{[CSMS] <- StatusNotification: \{"connectorId": 1, "status": "Available"\} \newline [CSMS] <- StatusNotification: \{"connectorId": 2, "status": "Available"\} \newline \textbf{[Log: \#1593, \#1599]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{9. MEA Specific Configuration}} \\
 \hline
-9.1 & CSMS $\to$ CS & ChangeConfiguration (V2G) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: MEA\_V2G=True \newline [CS] -> Conf: status=Accepted} & Pass \\
+9.1 & CSMS $\to$ CS & ChangeConfiguration (V2G) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "MEAV2G", "value": "true"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1610]}} & Pass \\
 \hline
-9.2 & CSMS $\to$ CS & ChangeConfig (MeterSample) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: Sample=60 \newline [CS] -> Conf: status=Accepted} & Pass \\
+9.2 & CSMS $\to$ CS & ChangeConfig (MeterSample) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "MeterValueSampleInterval", "value": "10"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1616]}} & Pass \\
 \hline
-9.3 & CSMS $\to$ CS & ChangeConfiguration (PowerDemand 2k) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: PowerDemand=2000 \newline [CS] -> Conf: status=Accepted} & Pass \\
+9.3 & CSMS $\to$ CS & ChangeConfiguration (LocalAuth) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "LocalAuthorizeOffline", "value": "false"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1214]}} & Pass \\
 \hline
-9.4 & CSMS $\to$ CS & ChangeConfiguration (PowerDemand -5k) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: PowerDemand=-5000 \newline [CS] -> Conf: status=Accepted} & Pass \\
+9.4 & \multicolumn{5}{|l|}{\textbf{Power Demand Verification}} \\
 \hline
-9.5 & CSMS $\to$ CS & ChangeConfiguration (PowerDemand 0) & status (Accepted) & \scriptsize\texttt{[CSMS] -> ChangeConfig: PowerDemand=0 \newline [CS] -> Conf: status=Accepted} & Pass \\
+9.4.1 & CSMS $\to$ CS & ChangeConfiguration (PowerDemand -5k) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "Power.Active.Import", "value": "-5000"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1623]}} & Pass \\
+\hline
+9.4.2 & CSMS $\to$ CS & ChangeConfiguration (PowerDemand 2k) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "Power.Active.Import", "value": "2000"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1630]}} & Pass \\
+\hline
+9.4.3 & CSMS $\to$ CS & ChangeConfiguration (PowerDemand 0) & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfiguration: \{"key": "Power.Active.Import", "value": "0"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1637]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{10. Summary Verification}} \\
 \hline
-10.1 & CSMS & Log Verification & All logs present & \scriptsize\texttt{See Appendix A} & Pass \\
+10.1 & CSMS & Authorize & Include: IdTag & \footnotesize\texttt{[CSMS] <- Authorize: \{"idTag": "TAG1"\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#281]}} & Pass \\
 \hline
-10.19 & CSMS $\to$ CS & GetDiagnostics & fileName Returned & \scriptsize\texttt{[CSMS] -> GetDiagnostics \newline [CS] -> Conf: fileName=...} & Pass \\
+10.2 & CS $\to$ CSMS & BootNotification & chargePointModel, Vendor, FW & \footnotesize\texttt{[CSMS] <- BootNotification: \{"chargePointModel": "MEA-V2G-01", "chargePointVendor": "KMUTNB"\} \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#10]}} & Pass \\
 \hline
-10.20 & CSMS $\to$ CS & UpdateFirmware & Request Sent & \scriptsize\texttt{[CSMS] -> UpdateFirmware \newline [CS] -> Conf: \{\}} & Pass \\
+10.3 & CS $\leftrightarrow$ CSMS & DataTransfer & (Optional) & \footnotesize\texttt{[CSMS] <-> DataTransfer: \{"vendorId": "MEA", "messageId": "Test"\} \newline -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1643]}} & Pass \\
 \hline
-10.21 & CSMS $\to$ CS & SendLocalList & Accepted & \scriptsize\texttt{[CSMS] -> SendLocalList \newline [CS] -> Conf: status=Accepted} & Pass \\
+10.4 & CS $\to$ CSMS & Heartbeat & Interval 60 min & \footnotesize\texttt{[CSMS] <- Heartbeat: \{\} \newline [CSMS] -> Conf: \{"currentTime": "2026-01-06T..."\} \newline \textbf{[Log: \#68]}} & Pass \\
 \hline
-10.22 & CSMS $\to$ CS & GetLocalListVersion & Version 1 & \scriptsize\texttt{[CSMS] -> GetLocalListVersion \newline [CS] -> Conf: listVersion=1} & Pass \\
+10.5 & CS $\to$ CSMS & MeterValues & Interval 1 min, Power, SOC & \footnotesize\texttt{[CSMS] <- MeterValues: \{"meterValue": [\{"sampledValue": [\{"measurand": "Power.Active.Import"\}]\}]\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#216]}} & Pass \\
+\hline
+10.6 & CSMS $\to$ CS & RemoteStartTransaction & Accepted / Rejected & \footnotesize\texttt{[CSMS] -> RemoteStart: \{"idTag": "REMOTE"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#328]}} & Pass \\
+\hline
+10.7 & CSMS $\to$ CS & RemoteStopTransaction & status & \footnotesize\texttt{[CSMS] -> RemoteStop: \{"transactionId": 123\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#156]}} & Pass \\
+\hline
+10.8 & CSMS $\to$ CS & Reset & status & \footnotesize\texttt{[CSMS] -> Reset: \{"type": "Hard"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#402]}} & Pass \\
+\hline
+10.9 & CS $\to$ CSMS & StartTransaction & IdTag, MeterStart, Timestamp & \footnotesize\texttt{[CSMS] <- StartTx: \{"idTag": "TAG1", "meterStart": 0, "timestamp": "..."\} \newline [CSMS] -> Conf: \{"transactionId": 1\} \newline \textbf{[Log: \#205]}} & Pass \\
+\hline
+10.10 & CS $\to$ CSMS & StatusNotification & All Connectors, Status, Error & \footnotesize\texttt{[CSMS] <- Status: \{"status": "Available", "errorCode": "NoError"\} \newline [CSMS] -> Conf: \{\} \newline \textbf{[Log: \#42]}} & Pass \\
+\hline
+10.11 & CS $\to$ CSMS & StopTransaction & IdTag, MeterStop, Reason & \footnotesize\texttt{[CSMS] <- StopTx: \{"idTag": "TAG1", "reason": "Local", "meterStop": 100\} \newline [CSMS] -> Conf: \{"idTagInfo": \{"status": "Accepted"\}\} \newline \textbf{[Log: \#236]}} & Pass \\
+\hline
+10.12 & CSMS $\to$ CS & ReserveNow & status & \footnotesize\texttt{[CSMS] -> ReserveNow: \{"reservationId": 1, "idTag": "RES", "expiryDate": "..."\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#609]}} & Pass \\
+\hline
+10.13 & CSMS $\to$ CS & CancelReservation & status & \footnotesize\texttt{[CSMS] -> CancelReservation: \{"reservationId": 1\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#622]}} & Pass \\
+\hline
+10.14 & CSMS $\to$ CS & SetChargingProfile & status & \footnotesize\texttt{[CSMS] -> SetChargingProfile: \{"csChargingProfiles": \{...\}\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#776]}} & Pass \\
+\hline
+10.15 & CSMS $\to$ CS & TriggerMessage & status (Accepted) & \footnotesize\texttt{[CSMS] -> TriggerMessage: \{"requestedMessage": "StatusNotification"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#24]}} & Pass \\
+\hline
+10.16 & CSMS $\to$ CS & GetConfiguration & Key-Value Pairs & \footnotesize\texttt{[CSMS] -> GetConfig: \{"key": ["HeartbeatInterval"]\} \newline [CS] -> Conf: \{"configurationKey": [\{"key": "HeartbeatInterval", "value": "600"\}]\} \newline \textbf{[Log: \#70]}} & Pass \\
+\hline
+10.17 & CSMS $\to$ CS & ChangeConfiguration & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeConfig: \{"key": "HeartbeatInterval", "value": "600"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#65]}} & Pass \\
+\hline
+10.18 & CSMS $\to$ CS & ChangeAvailability & status (Accepted) & \footnotesize\texttt{[CSMS] -> ChangeAvailability: \{"connectorId": 1, "type": "Inoperative"\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#92]}} & Pass \\
+\hline
+10.19 & CSMS $\to$ CS & GetDiagnostics & fileName Returned & \footnotesize\texttt{[CSMS] -> GetDiagnostics: \{"location": "ftp:..."\} \newline [CS] -> Conf: \{"fileName": "diagnostics.log"\} \newline \textbf{[Log: \#1649]}} & Pass \\
+\hline
+10.20 & CSMS $\to$ CS & UpdateFirmware & Request Sent & \footnotesize\texttt{[CSMS] -> UpdateFirmware: \{"location": "ftp:...", "retrieveDate": "..."\} \newline [CS] -> Conf: \{\} \newline \textbf{[Log: \#112]}} & Pass \\
+\hline
+10.21 & CSMS $\to$ CS & SendLocalList & Accepted & \footnotesize\texttt{[CSMS] -> SendLocalList: \{"listVersion": 1, "localAuthorizationList": [...]\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#124]}} & Pass \\
+\hline
+10.22 & CSMS $\to$ CS & GetLocalListVersion & Version 1 & \footnotesize\texttt{[CSMS] -> GetLocalListVersion: \{\} \newline [CS] -> Conf: \{"listVersion": 1\} \newline \textbf{[Log: \#130]}} & Pass \\
+\hline
+10.23 & CSMS $\to$ CS & ClearCache & status (Accepted) & \footnotesize\texttt{[CSMS] -> ClearCache: \{\} \newline [CS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#136]}} & Pass \\
 \hline
 
 \multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{11. Other Verification}} \\
 \hline
-11.1 & CS $\to$ CSMS & LAN Disconnect & Reconnect & \scriptsize\texttt{[CSMS] <- BootNotification (Reconnect)} & Pass \\
+11.1 & CS $\to$ CSMS & LAN Disconnect & Handshake < 1 min & \footnotesize\texttt{[CSMS] <- BootNotification: \{"reason": "PowerUp"\} \newline [CSMS] -> Conf: \{"status": "Accepted"\} \newline \textbf{[Log: \#1685]}} & Pass \\
+\hline
+11.2 & CS $\to$ CSMS & Disconnect Count & Reconnection check & \footnotesize\texttt{Verified reconnection attempts in log: 1 \newline Handshake duration: < 5s \newline \textbf{[Log: \#1673-\#1685]}} & Pass \\
 \hline
 \end{longtable}
 \newpage
@@ -571,7 +615,11 @@
     keepspaces=true,
     breakatwhitespace=false,
     frame=single,
-    rulecolor=\color{gray!30}
+    rulecolor=\color{gray!30},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt
 ]{mea_full_test.log}
 
 \end{document}
