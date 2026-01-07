@@ -1,0 +1,58 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 10.1 Authorize
+    \begin{umlcall}[op=10.1: Authorize(Tag1), type=synchron, return=Accepted, dt=17]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 10.2 BootNotification
+    \begin{umlcall}[op=10.2: BootNotification, type=synchron, return=Accepted, dt=7]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 10.3 DataTransfer
+    \begin{umlcall}[op=10.3: DataTransfer, type=synchron, return=Accepted, dt=7]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 10.4 Heartbeat
+    \begin{umlcall}[op=10.4: Heartbeat, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 10.5 MeterValues
+    \begin{umlcall}[op=10.5: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 10.6 RemoteStartTransaction
+    \begin{umlcall}[op=10.6: RemoteStartTransaction, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % 10.7 RemoteStopTransaction
+    \begin{umlcall}[op=10.7: RemoteStopTransaction, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % 10.8 Reset
+    \begin{umlcall}[op=10.8: Reset(Hard), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % 10.9 StartTransaction
+    \begin{umlcall}[op=10.9: StartTransaction, type=synchron, return=idTagInfo, dt=7]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 10.10 StatusNotification
+    \begin{umlcall}[op=10.10: StatusNotification(Available), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 10.11 StopTransaction
+    \begin{umlcall}[op=10.11: StopTransaction, type=synchron, return=Accepted, dt=7]{EVSE}{CSMS}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

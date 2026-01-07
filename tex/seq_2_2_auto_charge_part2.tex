@@ -1,0 +1,45 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 2.14 - 2.21 Re-plug and Suspended EV
+    \begin{umlcall}[op=2.14: PlugIn, type=synchron, dt=9]{EV}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=StatusNotification(Preparing), type=synchron, return=Conf]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.15: Authorize(Auto), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.16: StartTransaction, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.17: StatusNotification(Charging), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.18: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=StopCharge, type=synchron, dt=35]{EV}{EVSE}
+    \end{umlcall}
+
+    \begin{umlcall}[op=2.19: StatusNotification(SuspendedEV), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.20: StopTransaction(EVDisconnected), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    \begin{umlcall}[op=2.21: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

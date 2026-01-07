@@ -1,0 +1,70 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 2.1 Disable AutoCharge
+    \begin{umlcall}[op=2.1: ChangeConfig(AutoCharge:False), type=synchron, return=Accepted]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % 2.2 - 2.3 Manual Plug/Unplug Check
+    \begin{umlcall}[op=2.2: PlugIn, type=synchron, dt=9]{EV}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=StatusNotification(Preparing), type=synchron, return=Conf]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.3: Unplug, type=synchron, dt=10]{EV}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=StatusNotification(Available), type=synchron, return=Conf]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 2.4 Enable AutoCharge
+    \begin{umlcall}[op=2.4: ChangeConfig(AutoCharge:True), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % 2.5 - 2.8 Auto Charge Flow
+    \begin{umlcall}[op=2.5: PlugIn, type=synchron, dt=18]{EV}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=StatusNotification(Preparing), type=synchron, return=Conf]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.6: Authorize(Auto), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.7: StartTransaction, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.8: StatusNotification(Charging), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \umlfragment[type=loop, label=Charging]{
+      \begin{umlcall}[op=2.9: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+      \end{umlcall}
+    }
+
+    % 2.10 - 2.13 Remote Stop
+    \begin{umlcall}[op=2.10: RemoteStopTransaction, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.11: StopTransaction(Remote), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=2.12: StatusNotification(Finishing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=Unplug, type=synchron, dt=58]{EV}{EVSE}
+    \end{umlcall}
+
+    \begin{umlcall}[op=2.13: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

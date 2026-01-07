@@ -1,0 +1,49 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 1.13 - 1.16 Availability
+    \begin{umlcall}[op=1.13: ChangeAvailability(Inoperative), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=1.14: StatusNotification(Unavailable), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    \begin{umlcall}[op=1.15: ChangeAvailability(Operative), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=1.16: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 1.17 - 1.20 Diagnostics & Firmware
+    \begin{umlcall}[op=1.17: GetDiagnostics, type=synchron, return=fileName, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=1.18: DiagnosticsStatusNotification(Uploaded), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=1.19: UpdateFirmware, type=synchron, return=Conf, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=1.20: FirmwareStatusNotification(Installed), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 1.21 - 1.24 Local List & Cache
+    \begin{umlcall}[op=1.21: ChangeConfig(LocalAuth), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=1.22: SendLocalList, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+
+    \begin{umlcall}[op=1.23: GetLocalListVersion, type=synchron, return=Conf(v1), dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=1.24: ClearCache, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

@@ -1,0 +1,27 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 9.1 V2G
+    \begin{umlcall}[op=9.1: ChangeConfiguration(Key:MEAV2G Value:true), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \end{umlcall}
+    \node[draw, fill=white] at (0, -2) {Enable V2G Mode};
+
+    % 9.2 Meter Sample
+    \begin{umlcall}[op=9.2: ChangeConfiguration(Key:MeterSample Value:10), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % 9.3 Local Auth
+    \begin{umlcall}[op=9.3: ChangeConfiguration(Key:LocalAuth Value:false), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

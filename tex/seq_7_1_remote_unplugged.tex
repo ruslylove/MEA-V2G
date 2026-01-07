@@ -1,0 +1,23 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 7.1.1 Status Available (Unplugged)
+    \begin{umlcall}[op=7.1.1: StatusNotification(Available), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 7.1.2 Remote Start Attempt
+    \begin{umlcall}[op=7.1.2: RemoteStartTransaction, type=synchron, return=Rejected, dt=17]{CSMS}{EVSE}
+    \end{umlcall}
+    \node[draw, fill=white] at (-1, -3) {Rejected: No EV Plugged};
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

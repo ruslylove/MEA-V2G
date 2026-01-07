@@ -1,0 +1,48 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 7.4.1 - 7.4.4 Start Session
+    \begin{umlcall}[op=7.4.1: StatusNotification(Available), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \end{umlcall}
+    \begin{umlcall}[op=7.4.2: StatusNotification(Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    \begin{umlcall}[op=7.4.3: RemoteStartTransaction, type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=7.4.4: StartTransaction, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 7.4.5 Charging
+    \begin{umlcall}[op=7.4.5: StatusNotification(Charging), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    \begin{umlcall}[op=7.4.6: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 7.4.7 Emergency Stop
+    \begin{umlcall}[op=7.4.7: EmergencyButton, type=synchron, dt=17]{EV}{EVSE}
+    \end{umlcall}
+    
+    \begin{umlcall}[op=7.4.8: StopTransaction(Reason:Emergency), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 7.4.8 Faulted
+    \begin{umlcall}[op=7.4.9: StatusNotification(Faulted), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 7.4.10 Recovery
+    \begin{umlcall}[op=7.4.10: ResetButton, type=synchron, dt=17]{EV}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=7.4.11: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

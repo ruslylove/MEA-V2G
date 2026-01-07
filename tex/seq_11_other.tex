@@ -1,0 +1,26 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 11.1 Disconnect
+    \node[draw, fill=white] at (4, -1) {LAN Disconnect (Simulated)};
+    \node[draw, fill=white] at (4, -2) {Wait 1 min...};
+
+    % 11.1 Reconnect
+    \node[draw, fill=white] at (4, -4) {LAN Reconnected};
+    
+    \begin{umlcall}[op=11.1: BootNotification(Reason:PowerUp), type=synchron, return=Accepted, dt=17]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    \node[draw, fill=white] at (4, -7) {Handshake Duration < 5s};
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

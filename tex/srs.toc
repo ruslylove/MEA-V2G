@@ -89,16 +89,40 @@
 \contentsline {section}{\numberline {6.2}OCPP 1.6 V2G Workaround (Special Test Case)}{34}{section.6.2}%
 \contentsline {subsection}{\numberline {6.2.1}Custom Configuration Key: MEA\_V2G\_PowerDemand}{34}{subsection.6.2.1}%
 \contentsline {section}{\numberline {6.3}MEA OCPP 1.6 Compliance Verification}{34}{section.6.3}%
-\contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{39}{section.6.4}%
-\contentsline {chapter}{\numberline {7}Reference Documents}{45}{chapter.7}%
-\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{46}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Overview}{46}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Core Message Reference}{46}{section.A.2}%
-\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{48}{appendix.B}%
-\contentsline {section}{\numberline {B.1}System \& Configuration}{48}{section.B.1}%
-\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{48}{section.B.2}%
-\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{48}{section.B.3}%
-\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{48}{section.B.4}%
-\contentsline {subsection}{\numberline {B.4.1}Configuration}{49}{subsection.B.4.1}%
-\contentsline {subsection}{\numberline {B.4.2}Session Control}{49}{subsection.B.4.2}%
-\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{49}{subsection.B.4.3}%
+\contentsline {subsection}{\numberline {6.3.1}MEA OCPP Compliance Verification Flows}{39}{subsection.6.3.1}%
+\contentsline {subsubsection}{1. Configuration Verification}{40}{subsection.6.3.1}%
+\contentsline {subsubsection}{2. Auto Charge Verification}{41}{figure.6.2}%
+\contentsline {subsubsection}{3. Normal Operation Verification}{43}{figure.6.4}%
+\contentsline {subsubsection}{4. Reset Verification}{45}{figure.6.6}%
+\contentsline {subsubsection}{5. Reservation Verification}{47}{figure.6.8}%
+\contentsline {subsubsection}{6. Charging Profile Verification}{49}{figure.6.10}%
+\contentsline {subsubsection}{7. Abnormal Operation Verification}{51}{figure.6.12}%
+\contentsline {paragraph}{7.1 Remote Start (Unplugged)}{51}{figure.6.12}%
+\contentsline {paragraph}{7.2 Concurrent Remote Start}{52}{figure.6.13}%
+\contentsline {paragraph}{7.3 Swap Card}{53}{figure.6.14}%
+\contentsline {paragraph}{7.4 Emergency Stop}{54}{figure.6.15}%
+\contentsline {paragraph}{7.5 Open Door}{55}{figure.6.16}%
+\contentsline {paragraph}{7.6 Power Loss}{55}{figure.6.17}%
+\contentsline {paragraph}{7.7 Local List (Offline)}{56}{figure.6.18}%
+\contentsline {subsubsection}{8. Dual Connector Verification}{57}{figure.6.19}%
+\contentsline {paragraph}{8.1 Dual Concurrent}{57}{figure.6.19}%
+\contentsline {paragraph}{8.2 Dual Emergency}{59}{figure.6.20}%
+\contentsline {paragraph}{8.3 Dual Power Loss}{59}{figure.6.21}%
+\contentsline {subsubsection}{9. MEA Specific Configuration}{60}{figure.6.22}%
+\contentsline {paragraph}{9.1-9.3 General Configuration}{60}{figure.6.22}%
+\contentsline {paragraph}{9.4 Power Demand Verification}{61}{figure.6.23}%
+\contentsline {subsubsection}{10. Summary Verification}{61}{figure.6.24}%
+\contentsline {subsubsection}{11. Other Verification}{64}{figure.6.26}%
+\contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{64}{section.6.4}%
+\contentsline {chapter}{\numberline {7}Reference Documents}{70}{chapter.7}%
+\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{71}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Overview}{71}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Core Message Reference}{71}{section.A.2}%
+\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{73}{appendix.B}%
+\contentsline {section}{\numberline {B.1}System \& Configuration}{73}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{73}{section.B.2}%
+\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{73}{section.B.3}%
+\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{73}{section.B.4}%
+\contentsline {subsection}{\numberline {B.4.1}Configuration}{74}{subsection.B.4.1}%
+\contentsline {subsection}{\numberline {B.4.2}Session Control}{74}{subsection.B.4.2}%
+\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{74}{subsection.B.4.3}%

@@ -1,0 +1,57 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 4.1 Reset (Hard)
+    \begin{umlcall}[op=4.1: Reset(Hard), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    
+    \node[draw, fill=white] at (3, -2.2) {Rebooting...};
+
+    % 4.2 BootNotification
+    \begin{umlcall}[op=4.2: BootNotification, type=synchron, return=Accepted, dt=10]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.3 StatusNotification (Unplug)
+    \begin{umlcall}[op=4.3: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.4 StatusNotification (Plug)
+    \begin{umlcall}[op=PlugIn, type=synchron, dt=32]{EV}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=4.4: StatusNotification(Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.5 RemoteStartTransaction
+    \begin{umlcall}[op=4.5: RemoteStartTransaction, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % 4.6 StartTransaction
+    \begin{umlcall}[op=4.6: StartTransaction, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.7 StatusNotification
+    \begin{umlcall}[op=4.7: StatusNotification(Charging), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.8 MeterValues
+    \begin{umlcall}[op=4.8: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.9 Reset (Soft)
+    \begin{umlcall}[op=4.9: Reset(Soft), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    \end{umlcall}
+
+    \node[draw, fill=white] at (3, -12.5) {Restarting SW...};
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

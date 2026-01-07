@@ -1,0 +1,73 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 4.10 StopTransaction
+    \begin{umlcall}[op=4.10: StopTransaction, type=synchron, return=Accepted, dt=7]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.11 StatusNotification (Plug)
+    % Assuming it's still plugged from part 1 (4.9 reset happened while plugged)
+    % But report asks for Status Plug.
+    \begin{umlcall}[op=4.11: StatusNotification(Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.12 StatusNotification (Unplug)
+    \begin{umlcall}[op=Unplug, type=synchron, dt=20]{EV}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=4.12: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.13 StatusNotification (Plug)
+    \begin{umlcall}[op=PlugIn, type=synchron, dt=10]{EV}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=4.13: StatusNotification(Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.14 RemoteStartTransaction
+    \begin{umlcall}[op=4.14: RemoteStartTransaction, type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    \end{umlcall}
+
+    % 4.15 StartTransaction
+    \begin{umlcall}[op=4.15: StartTransaction, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.16 StatusNotification
+    \begin{umlcall}[op=4.16: StatusNotification(Charging), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.17 MeterValues
+    \begin{umlcall}[op=4.17: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.18 Reset (Hard)
+    \begin{umlcall}[op=4.18: Reset(Hard), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    \end{umlcall}
+    
+    \node[draw, fill=white] at (3, -12) {Rebooting...};
+
+    % 4.19 StopTransaction
+    \begin{umlcall}[op=4.19: StopTransaction(HardReset), type=synchron, return=Accepted, dt=12]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.20 StatusNotification (Plug)
+    \begin{umlcall}[op=4.20: StatusNotification(Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 4.21 StatusNotification (Unplug)
+    \begin{umlcall}[op=Unplug, type=synchron, dt=65]{EV}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=4.21: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

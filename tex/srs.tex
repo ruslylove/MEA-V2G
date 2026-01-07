@@ -635,6 +635,8 @@ The following diagram illustrates the interaction between the EVSE (Charge Point
 
 
 
+
+
 \subsection{Key Differences: OCPP 1.6 vs 2.0.1}
 The following table highlights the primary differences in message terminology and functionality between the two supported versions.
 
@@ -1664,6 +1666,244 @@ The following table outlines the verification matrix mandated by the Metropolita
 11.2 & N/A & Disconnect Statistics & Frequency/Duration logged \\
 \hline
 \end{longtable}
+
+\subsection{MEA OCPP Compliance Verification Flows}
+The following sequence diagrams illustrate the specific user journeys and system interactions for each test case defined in the MEA Compliance Report.
+
+\subsubsection{1. Configuration Verification}
+Verification of the system's ability to handle boot notifications, status updates, and remote configuration changes from the CSMS.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_1_1_config_part1.pdf}
+    \caption{Configuration Verification (Part 1)}
+    \label{fig:seq1_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_1_2_config_part2.pdf}
+    \caption{Configuration Verification (Part 2)}
+    \label{fig:seq1_2}
+\end{figure}
+
+\subsubsection{2. Auto Charge Verification}
+Verification of the "Auto Charge" (Plug \& Charge emulation) logic, including remote stops and automatic authorization updates.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_2_1_auto_charge_part1.pdf}
+    \caption{Auto Charge Verification (Part 1)}
+    \label{fig:seq2_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_2_2_auto_charge_part2.pdf}
+    \caption{Auto Charge Verification (Part 2)}
+    \label{fig:seq2_2}
+\end{figure}
+
+\subsubsection{3. Normal Operation Verification}
+Verification of the standard RFID-based authorization and charging session lifecycle.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_3_1_normal_part1.pdf}
+    \caption{Normal Operation Verification (Part 1)}
+    \label{fig:seq3_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_3_2_normal_part2.pdf}
+    \caption{Normal Operation Verification (Part 2)}
+    \label{fig:seq3_2}
+\end{figure}
+
+\subsubsection{4. Reset Verification}
+Verification of the system's behavior during Hard and Soft remote resets, ensuring proper state recovery and notification.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_4_1_reset_part1.pdf}
+    \caption{Reset Verification (Part 1)}
+    \label{fig:seq4_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_4_2_reset_part2.pdf}
+    \caption{Reset Verification (Part 2)}
+    \label{fig:seq4_2}
+\end{figure}
+
+\subsubsection{5. Reservation Verification}
+Verification of the reservation system, including reservation creation, cancellation, expiry, and fulfillment.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_5_1_reservation_part1.pdf}
+    \caption{Reservation Verification (Part 1)}
+    \label{fig:seq5_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_5_2_reservation_part2.pdf}
+    \caption{Reservation Verification (Part 2)}
+    \label{fig:seq5_2}
+\end{figure}
+
+\subsubsection{6. Charging Profile Verification}
+Verification of dynamic Smart Charging profiles sent by the CSMS to limit power draw during an active transaction.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_6_1_profile_part1.pdf}
+    \caption{Charging Profile Verification (Part 1)}
+    \label{fig:seq6_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_6_2_profile_part2.pdf}
+    \caption{Charging Profile Verification (Part 2)}
+    \label{fig:seq6_2}
+\end{figure}
+
+\subsubsection{7. Abnormal Operation Verification}
+
+\paragraph{7.1 Remote Start (Unplugged)}
+Ensures the system rejects a Remote Start request if no vehicle is connected.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{seq_7_1_remote_unplugged.pdf}
+    \caption{Remote Start (Unplugged) Sequence}
+    \label{fig:seq71}
+\end{figure}
+
+\paragraph{7.2 Concurrent Remote Start}
+Ensures the system correctly handles overlapping remote start requests on the same connector.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{seq_7_2_concurrent.pdf}
+    \caption{Concurrent Remote Start Sequence}
+    \label{fig:seq72}
+\end{figure}
+
+\paragraph{7.3 Swap Card}
+Verification of authorization logic when using invalid cards or swapping cards during a session.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{seq_7_3_swap_card.pdf}
+    \caption{Swap Card Sequence}
+    \label{fig:seq73}
+\end{figure}
+
+\paragraph{7.4 Emergency Stop}
+Verification of the system's response to a physical Emergency Stop button press.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_7_4_emergency.pdf}
+    \caption{Emergency Stop Sequence}
+    \label{fig:seq74}
+\end{figure}
+
+\paragraph{7.5 Open Door}
+Verification of safety interlocks checking for open maintenance doors.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{seq_7_5_opendoor.pdf}
+    \caption{Open Door Fault Sequence}
+    \label{fig:seq75}
+\end{figure}
+
+\paragraph{7.6 Power Loss}
+Verification of transaction recovery and reporting after a power outage.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{seq_7_6_powerloss.pdf}
+    \caption{Power Loss Recovery Sequence}
+    \label{fig:seq76}
+\end{figure}
+
+\paragraph{7.7 Local List (Offline)}
+Verification of offline authorization using the Local Authorization List when CSMS is unreachable.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_7_7_locallist.pdf}
+    \caption{Local List (Offline) Sequence}
+    \label{fig:seq77}
+\end{figure}
+
+\subsubsection{8. Dual Connector Verification}
+
+\paragraph{8.1 Dual Concurrent}
+Verification of simultaneous charging sessions on a dual-connector station.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_8_1_dual_concurrent.pdf}
+    \caption{Dual Concurrent Charging Sequence}
+    \label{fig:seq81}
+\end{figure}
+
+\paragraph{8.2 Dual Emergency}
+Verification that an Emergency Stop affects all connectors (safety priority).
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_8_2_dual_emergency.pdf}
+    \caption{Dual Emergency Stop Sequence}
+    \label{fig:seq82}
+\end{figure}
+
+\paragraph{8.3 Dual Power Loss}
+Verification of transaction recovery for multiple connectors after power loss.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_8_3_dual_powerloss.pdf}
+    \caption{Dual Power Loss Sequence}
+    \label{fig:seq83}
+\end{figure}
+
+\subsubsection{9. MEA Specific Configuration}
+
+\paragraph{9.1-9.3 General Configuration}
+Configuration of MEA-specific flags, meter sampling intervals, and local authorization behavior.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{seq_9_1_3_config.pdf}
+    \caption{MEA General Configuration Sequence}
+    \label{fig:seq91}
+\end{figure}
+
+\paragraph{9.4 Power Demand Verification}
+Verification of Grid-to-Vehicle (G2V) and Vehicle-to-Grid (V2G) power flow control via CSMS.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{seq_9_4_power_demand.pdf}
+    \caption{Power Demand Verification Sequence}
+    \label{fig:seq94}
+\end{figure}
+
+\subsubsection{10. Summary Verification}
+A comprehensive sanity check covering the full lifecycle of a standard session to ensure system stability.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_10_1_summary_part1.pdf}
+    \caption{Summary Verification (Part 1)}
+    \label{fig:seq10_1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_10_2_summary_part2.pdf}
+    \caption{Summary Verification (Part 2)}
+    \label{fig:seq10_2}
+\end{figure}
+
+\subsubsection{11. Other Verification}
+Verification of network resilience, specifically LAN disconnection and automatic reconnection handshakes.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{seq_11_other.pdf}
+    \caption{LAN Disconnect/Reconnect Sequence}
+    \label{fig:seq11}
+\end{figure}
 
 \section{MEA Compliance Test Results}
 \label{sec:results}
