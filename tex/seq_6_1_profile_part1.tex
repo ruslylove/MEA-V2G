@@ -10,9 +10,12 @@
     \umlactor[class=CSMS,x=12]{CSMS}
 
     % 6.1 - 6.5 Start
-    \begin{umlcall}[op=6.1: StatusNotification(Available), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \begin{umlcall}[op=6.1: StatusNotification(Available), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
     \end{umlcall}
     
+    \begin{umlcall}[op=Plug In, type=synchron, dt=14]{EV}{EVSE}
+    \end{umlcall}
+
     \begin{umlcall}[op=6.2: StatusNotification(Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
     
@@ -26,22 +29,25 @@
     \end{umlcall}
     
     % 6.7 Set Profile 1
-    \begin{umlcall}[op=6.7: SetChargingProfile(Limit:5kW), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=6.7: SetChargingProfile(Limit:5kW), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=6.8: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
     % 6.9 Set Profile 2
-    \begin{umlcall}[op=6.9: SetChargingProfile(Limit:7kW), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=6.9: SetChargingProfile(Limit:7kW), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=6.10: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
     % 6.11 Stop
-    \begin{umlcall}[op=6.11: StopTransaction, type=synchron, return=Accepted, dt=17]{EVSE}{CSMS}
+    \begin{umlcall}[op=6.11: StopTransaction, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
     \end{umlcall}
     \begin{umlcall}[op=6.12: StatusNotification(Finishing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
+    \begin{umlcall}[op=Unplug, type=synchron, dt=75]{EV}{EVSE}
+    \end{umlcall}
+
     \begin{umlcall}[op=6.13: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 

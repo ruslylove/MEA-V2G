@@ -16,34 +16,34 @@
     \end{umlcall}
 
     % 1.3 - 1.4 Trigger Boot
-    \begin{umlcall}[op=1.3: TriggerMessage(BootNotification), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=1.3: TriggerMessage(BootNotification), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=1.4: BootNotification, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
     % 1.5 - 1.6 Trigger Status
-    \begin{umlcall}[op=1.5: TriggerMessage(StatusNotification), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=1.5: TriggerMessage(StatusNotification), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=1.6: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
     % 1.7 - 1.8 Trigger MeterValues
-    \begin{umlcall}[op=1.7: TriggerMessage(MeterValues), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=1.7: TriggerMessage(MeterValues), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=1.8: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
     % 1.9 - 1.12 Configuration
-    \begin{umlcall}[op=1.9: ChangeConfig(Heartbeat), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=1.9: ChangeConfig(Heartbeat), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     
-    \begin{umlcall}[op=1.10: GetConfiguration(Heartbeat), type=synchron, return=Conf, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=1.10: GetConfiguration(Heartbeat), type=synchron, return=Conf, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
-    \begin{umlcall}[op=1.11: ChangeConfig(MeterValue), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=1.11: ChangeConfig(MeterValue), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
-    \begin{umlcall}[op=1.12: ChangeConfig(Unlock), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=1.12: ChangeConfig(Unlock), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
   \end{umlseqdiag}

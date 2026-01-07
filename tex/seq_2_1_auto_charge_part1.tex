@@ -58,10 +58,10 @@
     \begin{umlcall}[op=2.12: StatusNotification(Finishing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
     
-    \begin{umlcall}[op=Unplug, type=synchron, dt=58]{EV}{EVSE}
+    \begin{umlcall}[op=2.13: Unplug, type=synchron, dt=58]{EV}{EVSE}
     \end{umlcall}
 
-    \begin{umlcall}[op=2.13: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \begin{umlcall}[op=StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
   \end{umlseqdiag}

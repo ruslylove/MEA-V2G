@@ -17,20 +17,20 @@
     \end{umlcall}
 
     % 5.4 - 5.5 Cancel
-    \begin{umlcall}[op=5.4: CancelReservation(ID:1), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=5.4: CancelReservation(ID:1), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=5.5: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
     % 5.6 - 5.9 Expiry
-    \begin{umlcall}[op=5.6: ReserveNow(Expiry:Short), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=5.6: ReserveNow(Expiry:Short), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=5.7: StatusNotification(Reserved), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
     
-    \node[draw, fill=white] at (6, -8) {5.8 Wait for Expiry...};
+    \node[draw, fill=white] at (6, -9.7) {5.8 Wait for Expiry...};
     
-    \begin{umlcall}[op=5.9: StatusNotification(Available), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \begin{umlcall}[op=5.9: StatusNotification(Available), type=synchron, return=Conf, dt=14]{EVSE}{CSMS}
     \end{umlcall}
 
   \end{umlseqdiag}

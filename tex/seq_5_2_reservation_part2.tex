@@ -5,12 +5,17 @@
 
 \begin{tikzpicture}
   \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
     \umlactor[class=EVSE,x=4]{EVSE}
     \umlactor[class=CSMS,x=12]{CSMS}
 
     % 5.10 - 5.11 Reserve ID 3
-    \begin{umlcall}[op=5.10: ReserveNow(ID:3), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=5.10: ReserveNow(ID:3), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
+
+    \begin{umlcall}[op=Plug In, type=synchron, dt=14]{EV}{EVSE}
+    \end{umlcall}
+
     \begin{umlcall}[op=5.11: StatusNotification(Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
@@ -27,12 +32,16 @@
     \end{umlcall}
 
     % 5.16 - 5.19 Remote Stop
-    \begin{umlcall}[op=5.16: RemoteStopTransaction, type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=5.16: RemoteStopTransaction, type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=5.17: StopTransaction, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
     \end{umlcall}
     \begin{umlcall}[op=5.18: StatusNotification(Finishing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
+    
+    \begin{umlcall}[op=Unplug, type=synchron, dt=56]{EV}{EVSE}
+    \end{umlcall}
+
     \begin{umlcall}[op=5.19: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
