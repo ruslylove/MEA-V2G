@@ -1,0 +1,82 @@
+\documentclass[10pt, a4paper, landscape]{article}
+\usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{lscape}
+\usepackage{verbatim}
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+
+\title{\textbf{MEA Live Test Report}}
+\author{MEA OCPP Certification (Automated)}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MEA Compliance Test Report - Live System}
+\rhead{Page \thepage}
+
+\begin{document}
+
+\maketitle
+
+\section*{MEA Live Test Execution Results}
+
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{|p{1.0cm}|p{2.5cm}|p{4.0cm}|p{5.0cm}|p{10.0cm}|c|}
+\hline
+\rowcolor{gray!30}
+\textbf{Item} & \textbf{Direction} & \textbf{Message} & \textbf{Requirement / Include} & \textbf{Log Message / Proof} & \textbf{Result} \\
+\hline
+\endfirsthead
+
+\hline
+\hline
+\rowcolor{gray!30}
+\textbf{Item} & \textbf{Direction} & \textbf{Message} & \textbf{Requirement / Include} & \textbf{Log Message / Proof} & \textbf{Result} \\
+\hline
+\endhead
+
+\hline
+\endfoot
+\multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{1. Boot Verification}} \\
+\hline
+1.1 & CS $\to$ CSMS & BootNotification & Sent & \footnotesize\texttt{\newline \textbf{[CS]} [2, "de364053-a0e0-4957-ba43-a605c20f510c", "BootNotification", \{ "chargePointModel":"MEA-V2G-01", "chargePointVendor":"KMUTNB" \}] \newline \textbf{[CSMS]} [3, "de364053-a0e0-4957-ba43-a605c20f510c", \{ "currentTime":"2026-01-07T04:20:37Z", "interval":3600, "status":"Accepted" \}] \newline \hyperref[lines.8]{\textbf{[Log: \#8]}}} & Pass \\
+\hline
+1.2 & CS $\to$ CSMS & StatusNotification & Timeout/Error. Details: Waited 30s for response on [2,"44a4a712-a9f5-4048-... & \footnotesize\texttt{\newline \textbf{[CS]} [2, "44a4a712-a9f5-4048-902d-1b379b572569", "StatusNotification", \{ "connectorId":1, "errorCode":"NoError", "status":"Available" \}] \newline \hyperref[lines.10]{\textbf{[Log: \#10]}}} & \textcolor{orange}{Warn} \\
+\hline
+1.3 & CS $\to$ CSMS & Heartbeat & Sent & \footnotesize\texttt{\newline \textbf{[CS]} [2, "7586a2bb-e366-412b-a68b-2a5858b0ef7c", "Heartbeat", \{  \}] \newline \textbf{[CSMS]} [3, "7586a2bb-e366-412b-a68b-2a5858b0ef7c", \{ "currentTime":"2026-01-07T04:21:07Z" \}] \newline \hyperref[lines.13]{\textbf{[Log: \#13]}}} & Pass \\
+\hline
+\multicolumn{6}{|l|}{\cellcolor{blue!10}\textbf{2. Configuration Verification}} \\
+\hline
+2.1 & CS $\to$ CSMS & GetConfiguration (HeartbeatInterval) & Sent (Status 200) & \footnotesize\texttt{ \newline \hyperref[lines.16]{\textbf{[Log: \#16]}}} & Pass \\
+\hline
+2.2 & CSMS $\to$ CS & ChangeConfiguration (MEA\_V2G\_PowerDemand 2000) & Sent (Status 200) & \footnotesize\texttt{ \newline \hyperref[lines.17]{\textbf{[Log: \#17]}}} & Pass \\
+\hline
+
+\end{longtable}
+\newpage
+\appendix
+\section{Raw Test Logs}
+\label{sec:raw_logs}
+\normalsize
+\lstinputlisting[
+    breaklines=true,
+    basicstyle=\normalsize\ttfamily,
+    columns=fullflexible,
+    keepspaces=true,
+    breakatwhitespace=false,
+    frame=single,
+    rulecolor=\color{gray!30},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    escapechar=|
+]{mea_live_test.log}
+
+\end{document}

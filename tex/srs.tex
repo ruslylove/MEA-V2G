@@ -1010,9 +1010,23 @@ As of December 2025, the initial automated test suite consisting of 20 tests has
 \end{itemize}
 \newpage
 
-\chapter{MEA Compliance Test}
+\chapter{MEA Compliance Strategy}
 
-\section{MEA Test Configuration}
+\section{Testing Methodology}
+The MEA compliance validation strategy is designed to ensure the EVSE software meets the stringent requirements of the Metropolitan Electricity Authority. The process follows a three-tiered approach, progressing from software simulation to physical deployment.
+
+\subsection{Tier 1: Mock Testing (Module Level)}
+The first level of validation involves unit and system testing using a local CSMS mock server. This allows for the verification of the full OCPP 1.6 compliance matrix (see Section \ref{sec:matrix}) and MEA-specific extensions in a controlled, offline environment.
+\begin{itemize}
+    \item \textbf{Tool}: \texttt{tests/system/test\_mea\_mock.py}
+    \item \textbf{Scope}: 100\% of message flows (Happy Path + Error Scenarios).
+    \item \textbf{Outcome}: A generated test report confirming protocol adherence (see Section \ref{sec:results}).
+\end{itemize}
+
+\subsection{Tier 2: Live Sandbox Testing}
+The second level involves connecting the software to the official MEA Sandbox environment to verify connectivity and authentication mechanisms.
+
+\subsubsection{Test Configuration}
 This section details the specific configuration used for validation against the Metropolitan Electricity Authority (MEA) OCPP Sandbox.
 
 \subsection{Connectivity Details}
@@ -1029,6 +1043,15 @@ python3 tests/system/test_mea_live.py
 \end{verbatim}
 This script performs a real-time handshake, sending a \texttt{BootNotification} and \texttt{StatusNotification}, and logs the server's response.
 
+\subsection{Tier 3: On-Site Acceptance Testing}
+The final validation stage is conducted on-site using the production hardware and real electric vehicles. This "User Acceptance Test" (UAT) focuses on physical and environmental factors that cannot be simulated.
+\begin{itemize}
+    \item \textbf{Electrical Safety}: Verification of RCD tripping, ground monitoring (GFDI), and emergency stop functionality.
+    \item \textbf{Thermal Performance}: Running continuous high-power sessions (e.g., 20kW for 1 hour) to validate thermal management.
+    \item \textbf{Network Stability}: Verifying the reliability of the cellular/Ethernet backhaul (4G/5G) and OCPP heartbeat latency.
+    \item \textbf{UX Validation}: Testing the RFID authentication speed, LED status indicators, and plug handling with an actual EV.
+\end{itemize}
+
 \section{OCPP 1.6 V2G Workaround (Special Test Case)}
 \textbf{NOTE: This is a specialized test case to validate the V2G workaround mechanism.}
 
@@ -1042,15 +1065,16 @@ The Central System (CSMS) can control the charging/discharging rate by updating 
     \item \textbf{Value Type}: Integer (Watts)
     \item \textbf{Semantics}:
     \begin{itemize}
-        \item \textbf{Positive (> 0)}: Discharge to Grid [Supply]. (e.g., \texttt{5000} = export 5kW)
-        \item \textbf{Negative (< 0)}: Charge from Grid [Demand]. (e.g., \texttt{-3000} = import 3kW)
+        \item \textbf{Positive (> 0)}: Charge from Grid [Demand]. (e.g., \texttt{5000} = import 5kW)
+        \item \textbf{Negative (< 0)}: Discharge to Grid [Supply]. (e.g., \texttt{-5000} = export 5kW)
         \item \textbf{Zero (0)}: Idle / No Transfer.
     \end{itemize}
 \end{itemize}
 
-\textbf{Example Usage}: To request the EVSE to export 5kW to the grid, the CSMS sends a \texttt{ChangeConfiguration} request with key \texttt{MEA\_V2G\_PowerDemand} and value \texttt{5000}.
+\textbf{Example Usage}: To request the EVSE to export 5kW to the grid, the CSMS sends a \texttt{ChangeConfiguration} request with key \texttt{MEA\_V2G\_PowerDemand} and value \texttt{-5000}.
 
 \section{MEA OCPP 1.6 Compliance Verification}
+\label{sec:matrix}
 The following table outlines the verification matrix mandated by the Metropolitan Electricity Authority (MEA) for OCPP 1.6 compliance. The system must pass these scenarios to ensure compatibility with the MEA EV charging infrastructure.
 
 \begin{footnotesize}
@@ -1642,6 +1666,7 @@ The following table outlines the verification matrix mandated by the Metropolita
 \end{longtable}
 
 \section{MEA Compliance Test Results}
+\label{sec:results}
 This section details the results of the automated unit tests executed against the MEA Compliance Matrix.
 
 \textbf{Execution Date}: January 5, 2026 \\

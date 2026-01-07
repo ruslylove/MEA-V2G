@@ -33,7 +33,7 @@ LOGGER = logging.getLogger('ocpp_16_interface')
 
 class Ocpp16Interface(Ocpp16ChargePoint):
     def __init__(self, id, connection, charger: Charger):
-        super().__init__(id, connection)
+        super().__init__(id, connection, response_timeout=20)
         self.charger = charger
         # Transaction Management (Connector ID -> Transaction ID)
         self.transactions = {} 

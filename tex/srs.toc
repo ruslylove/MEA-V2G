@@ -78,12 +78,16 @@
 \contentsline {subsection}{\numberline {5.4.4}TC-04: Charging Loop}{32}{subsection.5.4.4}%
 \contentsline {subsection}{\numberline {5.4.5}TC-05: Session Stop}{32}{subsection.5.4.5}%
 \contentsline {subsection}{\numberline {5.4.6}TC-06: Safety/Emergency Stop}{32}{subsection.5.4.6}%
-\contentsline {chapter}{\numberline {6}MEA Compliance Test}{33}{chapter.6}%
-\contentsline {section}{\numberline {6.1}MEA Test Configuration}{33}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}Connectivity Details}{33}{subsection.6.1.1}%
-\contentsline {subsection}{\numberline {6.1.2}Test Execution Instructions}{33}{subsection.6.1.2}%
-\contentsline {section}{\numberline {6.2}OCPP 1.6 V2G Workaround (Special Test Case)}{33}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Custom Configuration Key: MEA\_V2G\_PowerDemand}{33}{subsection.6.2.1}%
+\contentsline {chapter}{\numberline {6}MEA Compliance Strategy}{33}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Testing Methodology}{33}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Tier 1: Mock Testing (Module Level)}{33}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Tier 2: Live Sandbox Testing}{33}{subsection.6.1.2}%
+\contentsline {subsubsection}{Test Configuration}{33}{subsection.6.1.2}%
+\contentsline {subsection}{\numberline {6.1.3}Connectivity Details}{33}{subsection.6.1.3}%
+\contentsline {subsection}{\numberline {6.1.4}Test Execution Instructions}{33}{subsection.6.1.4}%
+\contentsline {subsection}{\numberline {6.1.5}Tier 3: On-Site Acceptance Testing}{34}{subsection.6.1.5}%
+\contentsline {section}{\numberline {6.2}OCPP 1.6 V2G Workaround (Special Test Case)}{34}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Custom Configuration Key: MEA\_V2G\_PowerDemand}{34}{subsection.6.2.1}%
 \contentsline {section}{\numberline {6.3}MEA OCPP 1.6 Compliance Verification}{34}{section.6.3}%
 \contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{39}{section.6.4}%
 \contentsline {chapter}{\numberline {7}Reference Documents}{45}{chapter.7}%
