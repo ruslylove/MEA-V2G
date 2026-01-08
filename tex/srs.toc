@@ -102,27 +102,27 @@
 \contentsline {paragraph}{7.3 Swap Card}{53}{figure.6.14}%
 \contentsline {paragraph}{7.4 Emergency Stop}{54}{figure.6.15}%
 \contentsline {paragraph}{7.5 Open Door}{55}{figure.6.16}%
-\contentsline {paragraph}{7.6 Power Loss}{55}{figure.6.17}%
-\contentsline {paragraph}{7.7 Local List (Offline)}{56}{figure.6.18}%
-\contentsline {subsubsection}{8. Dual Connector Verification}{57}{figure.6.19}%
-\contentsline {paragraph}{8.1 Dual Concurrent}{57}{figure.6.19}%
-\contentsline {paragraph}{8.2 Dual Emergency}{59}{figure.6.20}%
-\contentsline {paragraph}{8.3 Dual Power Loss}{59}{figure.6.21}%
-\contentsline {subsubsection}{9. MEA Specific Configuration}{60}{figure.6.22}%
-\contentsline {paragraph}{9.1-9.3 General Configuration}{60}{figure.6.22}%
-\contentsline {paragraph}{9.4 Power Demand Verification}{61}{figure.6.23}%
-\contentsline {subsubsection}{10. Summary Verification}{61}{figure.6.24}%
-\contentsline {subsubsection}{11. Other Verification}{64}{figure.6.26}%
-\contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{64}{section.6.4}%
-\contentsline {chapter}{\numberline {7}Reference Documents}{70}{chapter.7}%
-\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{71}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Overview}{71}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Core Message Reference}{71}{section.A.2}%
-\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{73}{appendix.B}%
-\contentsline {section}{\numberline {B.1}System \& Configuration}{73}{section.B.1}%
-\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{73}{section.B.2}%
-\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{73}{section.B.3}%
-\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{73}{section.B.4}%
-\contentsline {subsection}{\numberline {B.4.1}Configuration}{74}{subsection.B.4.1}%
-\contentsline {subsection}{\numberline {B.4.2}Session Control}{74}{subsection.B.4.2}%
-\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{74}{subsection.B.4.3}%
+\contentsline {paragraph}{7.6 Power Loss}{56}{figure.6.17}%
+\contentsline {paragraph}{7.7 Local List (Offline)}{57}{figure.6.18}%
+\contentsline {subsubsection}{8. Dual Connector Verification}{58}{figure.6.19}%
+\contentsline {paragraph}{8.1 Dual Concurrent}{58}{figure.6.19}%
+\contentsline {paragraph}{8.2 Dual Emergency}{60}{figure.6.20}%
+\contentsline {paragraph}{8.3 Dual Power Loss}{60}{figure.6.21}%
+\contentsline {subsubsection}{9. MEA Specific Configuration}{61}{figure.6.22}%
+\contentsline {paragraph}{9.1-9.3 General Configuration}{61}{figure.6.22}%
+\contentsline {paragraph}{9.4 Power Demand Verification}{62}{figure.6.23}%
+\contentsline {subsubsection}{10. Summary Verification}{62}{figure.6.24}%
+\contentsline {subsubsection}{11. Other Verification}{65}{figure.6.26}%
+\contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{65}{section.6.4}%
+\contentsline {chapter}{\numberline {7}Reference Documents}{71}{chapter.7}%
+\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{72}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Overview}{72}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Core Message Reference}{72}{section.A.2}%
+\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{74}{appendix.B}%
+\contentsline {section}{\numberline {B.1}System \& Configuration}{74}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{74}{section.B.2}%
+\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{74}{section.B.3}%
+\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{74}{section.B.4}%
+\contentsline {subsection}{\numberline {B.4.1}Configuration}{75}{subsection.B.4.1}%
+\contentsline {subsection}{\numberline {B.4.2}Session Control}{75}{subsection.B.4.2}%
+\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{75}{subsection.B.4.3}%

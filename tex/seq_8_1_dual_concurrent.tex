@@ -9,7 +9,7 @@
     \umlactor[class=CSMS,x=12]{CSMS}
 
     % 8.1 Initial Status
-    \begin{umlcall}[op=8.1.0: StatusNotification(C1 Available), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \begin{umlcall}[op=8.1.0: StatusNotification(C1 Available), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
     \end{umlcall}
     \begin{umlcall}[op=8.1.0: StatusNotification(C2 Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
@@ -21,7 +21,7 @@
     \end{umlcall}
 
     % 8.1.3 Remote Start 1
-    \begin{umlcall}[op=8.1.3: RemoteStartTransaction(C1), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=8.1.3: RemoteStartTransaction(C1), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=8.1.3: StartTransaction(C1), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
     \end{umlcall}
@@ -29,7 +29,7 @@
     \end{umlcall}
 
     % 8.1.4 Remote Start 2
-    \begin{umlcall}[op=8.1.4: RemoteStartTransaction(C2), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=8.1.4: RemoteStartTransaction(C2), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=8.1.4: StartTransaction(C2), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
     \end{umlcall}
@@ -43,7 +43,7 @@
     \end{umlcall}
 
     % 8.1.11 Remote Stop 1
-    \begin{umlcall}[op=8.1.11: RemoteStopTransaction(C1), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=8.1.11: RemoteStopTransaction(C1), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=8.1.12: StopTransaction(C1), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
     \end{umlcall}
@@ -53,7 +53,7 @@
     \end{umlcall}
 
     % 8.1.15 Remote Stop 2
-    \begin{umlcall}[op=8.1.15: RemoteStopTransaction(C2), type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=8.1.15: RemoteStopTransaction(C2), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=8.1.16: StopTransaction(C2), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
     \end{umlcall}

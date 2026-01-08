@@ -1,0 +1,45 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % 8.1.11 Remote Stop 1
+    \begin{umlcall}[op=8.1.11: RemoteStopTransaction(C1), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=8.1.12: StopTransaction(C1), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    \begin{umlcall}[op=8.1.13: StatusNotification(C1 Finishing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % Unplug C1
+    \begin{umlcall}[op=Unplug(C1), type=synchron, dt=27]{EV}{EVSE}
+    \end{umlcall}
+
+    \begin{umlcall}[op=8.1.14: StatusNotification(C1 Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 8.1.15 Remote Stop 2
+    \begin{umlcall}[op=8.1.15: RemoteStopTransaction(C2), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=8.1.16: StopTransaction(C2), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    \begin{umlcall}[op=8.1.17: StatusNotification(C2 Finishing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    % Unplug C2
+    \begin{umlcall}[op=Unplug(C2), type=synchron, dt=33]{EV}{EVSE}
+    \end{umlcall}
+
+    \begin{umlcall}[op=8.1.18: StatusNotification(C2 Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

@@ -9,7 +9,7 @@
     \umlactor[class=CSMS,x=12]{CSMS}
 
     % 7.6.1 - 7.6.4 Start Session
-    \begin{umlcall}[op=7.6.1: StatusNotification(Available), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \begin{umlcall}[op=7.6.1: StatusNotification(Available), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
     \end{umlcall}
     \begin{umlcall}[op=7.6.2: StatusNotification(Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
@@ -25,8 +25,8 @@
     \end{umlcall}
 
     % 7.6.6 Power Loss
-    \node[draw, fill=white] at (6, -2.5) {Simulated Power Loss};
-    \node[draw, fill=white] at (2, -3.5) {Reboot...};
+    \node[draw, fill=white] at (6, -7) {Simulated Power Loss};
+    \node[draw, fill=white] at (2, -8) {Reboot...};
 
     % 7.6.8 Recovery
     \begin{umlcall}[op=7.6.8: BootNotification, type=synchron, return=Accepted, dt=17]{EVSE}{CSMS}

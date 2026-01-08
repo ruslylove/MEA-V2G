@@ -6,32 +6,32 @@
 \begin{tikzpicture}
   \begin{umlseqdiag}
     \umlactor[class=EV,x=0]{EV}
-    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=EVSE,x=6]{EVSE}
     \umlactor[class=CSMS,x=12]{CSMS}
 
     % 7.7.1 Setup Local List
-    \begin{umlcall}[op=7.7.1: SendLocalList, type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=7.7.1: SendLocalList, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
 
     % 7.7.2 Offline
-    \node[draw, fill=white] at (12, -4.5) {CSMS Offline / LAN Disconnected};
+    \node[draw, fill=white] at (12, -2) {CSMS Offline / LAN Disconnected};
 
     % 7.7.2 Auth Local
-    \begin{umlcall}[op=7.7.2: Authorize(LocalList), type=synchron, return=Accepted, dt=17]{EV}{EVSE}
+    \begin{umlcall}[op=7.7.2: Authorize(LocalList), type=synchron, return=Accepted, dt=18]{EV}{EVSE}
     \end{umlcall}
     
     % 7.7.3 Transaction
     \begin{umlcall}[op=7.7.3: StartTransaction, type=synchron, dt=4]{EV}{EVSE}
     \end{umlcall}
-    \node[draw, fill=white] at (4, -4.5) {Queued StartTransaction};
+    \node[draw, fill=white] at (6, -4.8) {Queued StartTransaction};
 
     % 7.7.4 Stop
-    \begin{umlcall}[op=7.7.4: StopTransaction, type=synchron, dt=17]{EV}{EVSE}
+    \begin{umlcall}[op=7.7.4: StopTransaction, type=synchron, dt=12]{EV}{EVSE}
     \end{umlcall}
-    \node[draw, fill=white] at (4, -7) {Queued StopTransaction};
+    \node[draw, fill=white] at (6, -7) {Queued StopTransaction};
 
     % Reconnect
-    \node[draw, fill=white] at (12, -8.5) {CSMS Online / LAN Connected};
+    \node[draw, fill=white] at (12, -8) {CSMS Online / LAN Connected};
     \begin{umlcall}[op=7.7.5: StartTransaction(Offline), type=synchron, return=Accepted, dt=17]{EVSE}{CSMS}
     \end{umlcall}
     \begin{umlcall}[op=7.7.6: StopTransaction(Local), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}

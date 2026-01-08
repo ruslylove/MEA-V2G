@@ -5,21 +5,21 @@
 
 \begin{tikzpicture}
   \begin{umlseqdiag}
-    \umlactor[class=EVSE,x=4]{EVSE}
-    \umlactor[class=CSMS,x=12]{CSMS}
+    \umlactor[class=EVSE,x=0]{EVSE}
+    \umlactor[class=CSMS,x=8]{CSMS}
 
     % 7.5.1 Available
-    \begin{umlcall}[op=7.5.1: StatusNotification(Available), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \begin{umlcall}[op=7.5.1: StatusNotification(Available), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
     \end{umlcall}
 
     % 7.5.2 Door Open
-    \node[draw, fill=white] at (0, -2.5) {Door Opened};
-    \begin{umlcall}[op=7.5.2: StatusNotification(Faulted Info:DoorOpen), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \node[draw, fill=white] at (0, -2) {Door Opened};
+    \begin{umlcall}[op=7.5.2: StatusNotification(Faulted Info:DoorOpen), type=synchron, return=Conf, dt=10]{EVSE}{CSMS}
     \end{umlcall}
 
     % 7.5.3 Door Close
-    \node[draw, fill=white] at (0, -4.5) {Door Closed};
-    \begin{umlcall}[op=7.5.3: StatusNotification(Available), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \node[draw, fill=white] at (0, -4) {Door Closed};
+    \begin{umlcall}[op=7.5.3: StatusNotification(Available), type=synchron, return=Conf, dt=10]{EVSE}{CSMS}
     \end{umlcall}
 
   \end{umlseqdiag}
