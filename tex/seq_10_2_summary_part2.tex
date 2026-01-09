@@ -9,51 +9,51 @@
     \umlactor[class=CSMS,x=12]{CSMS}
 
     % 10.12 ReserveNow
-    \begin{umlcall}[op=10.12: ReserveNow, type=synchron, return=Accepted, dt=17]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.12: ReserveNow, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.13 CancelReservation
-    \begin{umlcall}[op=10.13: CancelReservation, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.13: CancelReservation, type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.14 SetChargingProfile
-    \begin{umlcall}[op=10.14: SetChargingProfile, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.14: SetChargingProfile, type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.15 TriggerMessage
-    \begin{umlcall}[op=10.15: TriggerMessage(StatusNotification), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.15: TriggerMessage(StatusNotification), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.16 GetConfiguration
-    \begin{umlcall}[op=10.16: GetConfiguration, type=synchron, return=Conf, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.16: GetConfiguration, type=synchron, return=Conf, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.17 ChangeConfiguration
-    \begin{umlcall}[op=10.17: ChangeConfiguration, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.17: ChangeConfiguration, type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.18 ChangeAvailability
-    \begin{umlcall}[op=10.18: ChangeAvailability, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.18: ChangeAvailability, type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.19 GetDiagnostics
-    \begin{umlcall}[op=10.19: GetDiagnostics, type=synchron, return=fileName, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.19: GetDiagnostics, type=synchron, return=fileName, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.20 UpdateFirmware
-    \begin{umlcall}[op=10.20: UpdateFirmware, type=synchron, return=Conf, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.20: UpdateFirmware, type=synchron, return=Conf, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.21 SendLocalList
-    \begin{umlcall}[op=10.21: SendLocalList, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.21: SendLocalList, type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.22 GetLocalListVersion
-    \begin{umlcall}[op=10.22: GetLocalListVersion, type=synchron, return=Conf(v1), dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.22: GetLocalListVersion, type=synchron, return=Conf(v1), dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
     % 10.23 ClearCache
-    \begin{umlcall}[op=10.23: ClearCache, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
+    \begin{umlcall}[op=10.23: ClearCache, type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
   \end{umlseqdiag}

@@ -1,0 +1,45 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % Simulation
+    \node[draw, fill=white] at (2, -1) {Simulated Power Loss};
+
+    % 8.3.12 Stop C1
+    \begin{umlcall}[op=8.3.12: StopTransaction(C1 PowerLoss), type=synchron, return=Accepted, dt=12]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    % 8.3.13 Stop C2
+    \begin{umlcall}[op=8.3.13: StopTransaction(C2 PowerLoss), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % Reboot
+    \node[draw, fill=white] at (2, -4) {Reboot...};
+
+    % 8.3.14 BootNotification
+    \begin{umlcall}[op=8.3.14: BootNotification, type=synchron, return=Accepted, dt=10]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 8.3.15 Status (Plug)
+    \begin{umlcall}[op=8.3.15: StatusNotification(C1/C2 Plug), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % Unplug
+    \begin{umlcall}[op=Unplug, type=synchron, dt=45]{EV}{EVSE}
+    \end{umlcall}
+
+    % 8.3.16 Status (Unplug)
+    \begin{umlcall}[op=8.3.16: StatusNotification(C1/C2 Unplug), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

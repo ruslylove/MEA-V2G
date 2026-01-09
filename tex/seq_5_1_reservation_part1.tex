@@ -9,7 +9,7 @@
     \umlactor[class=CSMS,x=12]{CSMS}
 
     % 5.1 - 5.3 Reserve
-    \begin{umlcall}[op=5.1: StatusNotification(Available), type=synchron, return=Conf, dt=17]{EVSE}{CSMS}
+    \begin{umlcall}[op=5.1: StatusNotification(Available), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
     \end{umlcall}
     \begin{umlcall}[op=5.2: ReserveNow(ID:1), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
@@ -28,9 +28,9 @@
     \begin{umlcall}[op=5.7: StatusNotification(Reserved), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
     
-    \node[draw, fill=white] at (6, -9.7) {5.8 Wait for Expiry...};
+    \node[draw, fill=white] at (6, -8) {Wait for Expiry...};
     
-    \begin{umlcall}[op=5.9: StatusNotification(Available), type=synchron, return=Conf, dt=14]{EVSE}{CSMS}
+    \begin{umlcall}[op=5.8: StatusNotification(Available), type=synchron, return=Conf, dt=14]{EVSE}{CSMS}
     \end{umlcall}
 
   \end{umlseqdiag}

@@ -5,7 +5,7 @@
 
 \begin{tikzpicture}
   \begin{umlseqdiag}
-    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=EVSE,x=0]{EVSE}
     \umlactor[class=CSMS,x=12]{CSMS}
 
     % 1.1 - 1.2 Boot & Status
@@ -33,17 +33,20 @@
     \begin{umlcall}[op=1.8: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
-    % 1.9 - 1.12 Configuration
-    \begin{umlcall}[op=1.9: ChangeConfig(Heartbeat), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    % 1.9 GetConfiguration
+    \begin{umlcall}[op=1.9: GetConfiguration(Keys...), type=synchron, return=Conf, dt=4]{CSMS}{EVSE}
     \end{umlcall}
     
-    \begin{umlcall}[op=1.10: GetConfiguration(Heartbeat), type=synchron, return=Conf, dt=4]{CSMS}{EVSE}
+    % 1.10 Change Heartbeat
+    \begin{umlcall}[op=1.10: ChangeConfiguration(HeartbeatInterval: 600), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
-    \begin{umlcall}[op=1.11: ChangeConfig(MeterValue), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    % 1.11 Change MeterValue
+    \begin{umlcall}[op=1.11: ChangeConfiguration(MeterValueSampleInterval: 30), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
-    \begin{umlcall}[op=1.12: ChangeConfig(Unlock), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    % 1.12 Change Unlock
+    \begin{umlcall}[op=1.12: ChangeConfiguration(UnlockConnectorOnEVSideDisconnect: true), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
     \end{umlcall}
 
   \end{umlseqdiag}

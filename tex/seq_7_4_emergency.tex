@@ -26,11 +26,13 @@
     % 7.4.5 Charging
     \begin{umlcall}[op=7.4.5: StatusNotification(Charging), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
-    \begin{umlcall}[op=7.4.6: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=7.4.6: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+      \end{umlcall}
+    \end{umlfragment}
 
     % 7.4.7 Emergency Stop
-    \begin{umlcall}[op=EmergencyButton, type=synchron, dt=36]{EV}{EVSE}
+    \begin{umlcall}[op=EmergencyButton, type=synchron, dt=42]{EV}{EVSE}
     \end{umlcall}
     
     \begin{umlcall}[op=7.4.7: StopTransaction(Reason:Emergency), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}

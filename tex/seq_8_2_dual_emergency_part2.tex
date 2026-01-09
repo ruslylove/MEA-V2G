@@ -1,0 +1,47 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{umlseqdiag}
+    \umlactor[class=EV,x=0]{EV}
+    \umlactor[class=EVSE,x=4]{EVSE}
+    \umlactor[class=CSMS,x=12]{CSMS}
+
+    % Emergency Stop Button Pushed
+    \node[draw, fill=white] at (2, -1) {Emergency Stop Pushed!};
+
+    % 8.2.12 Stop C1
+    \begin{umlcall}[op=8.2.12: StopTransaction(C1), type=synchron, return=Accepted, dt=16]{EVSE}{CSMS}
+    \end{umlcall}
+    
+    % 8.2.13 Stop C2
+    \begin{umlcall}[op=8.2.13: StopTransaction(C2), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % 8.2.14 Faulted Status
+    \begin{umlcall}[op=8.2.14: StatusNotification(Faulted - Error), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    \begin{umlfragment}[type=opt, label=If any, inner xsep=8]
+    % Unplug
+    \begin{umlcall}[op=Unplug, type=synchron, dt=38]{EV}{EVSE}
+    \end{umlcall}
+
+    % 8.2.15 Unplug (If any) - Optional
+    \begin{umlcall}[op=8.2.15: StatusNotification(Unplug - If Any), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+    \end{umlfragment}
+
+    % Emergency Stop Released
+    \node[draw, fill=white] at (2, -8.3) {Emergency Stop Released!};
+
+    % 8.2.16 Unplug (Release)
+    \begin{umlcall}[op=8.2.16: StatusNotification(Available - Released), type=synchron, return=Conf, dt=14]{EVSE}{CSMS}
+    \end{umlcall}
+
+  \end{umlseqdiag}
+\end{tikzpicture}
+
+\end{document}

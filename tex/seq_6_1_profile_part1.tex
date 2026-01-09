@@ -25,27 +25,33 @@
     \end{umlcall}
     \begin{umlcall}[op=6.5: StatusNotification(Charging), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
-    \begin{umlcall}[op=6.6: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=6.6: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+      \end{umlcall}
+    \end{umlfragment}
     
     % 6.7 Set Profile 1
-    \begin{umlcall}[op=6.7: SetChargingProfile(Limit:5kW), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    \begin{umlcall}[op=6.7: SetChargingProfile(Limit:5kW), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
-    \begin{umlcall}[op=6.8: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=6.8: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+      \end{umlcall}
+    \end{umlfragment}
 
     % 6.9 Set Profile 2
-    \begin{umlcall}[op=6.9: SetChargingProfile(Limit:7kW), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    \begin{umlcall}[op=6.9: SetChargingProfile(Limit:7kW), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
-    \begin{umlcall}[op=6.10: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=6.10: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+      \end{umlcall}
+    \end{umlfragment}
 
     % 6.11 Stop
-    \begin{umlcall}[op=6.11: StopTransaction, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \begin{umlcall}[op=6.11: StopTransaction, type=synchron, return=Accepted, dt=7]{EVSE}{CSMS}
     \end{umlcall}
     \begin{umlcall}[op=6.12: StatusNotification(Finishing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
-    \begin{umlcall}[op=Unplug, type=synchron, dt=75]{EV}{EVSE}
+    \begin{umlcall}[op=Unplug, type=synchron, dt=93]{EV}{EVSE}
     \end{umlcall}
 
     \begin{umlcall}[op=6.13: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}

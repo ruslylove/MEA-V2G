@@ -1674,14 +1674,14 @@ The following sequence diagrams illustrate the specific user journeys and system
 Verification of the system's ability to handle boot notifications, status updates, and remote configuration changes from the CSMS.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{seq_1_1_config_part1.pdf}
+    \includegraphics[width=0.9\textwidth]{seq_1_1_config_part1.pdf}
     \caption{Configuration Verification (Part 1)}
     \label{fig:seq1_1}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{seq_1_2_config_part2.pdf}
+    \includegraphics[width=0.7\textwidth]{seq_1_2_config_part2.pdf}
     \caption{Configuration Verification (Part 2)}
     \label{fig:seq1_2}
 \end{figure}
@@ -1817,7 +1817,7 @@ Verification of safety interlocks checking for open maintenance doors.
 Verification of transaction recovery and reporting after a power outage.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{seq_7_6_powerloss.pdf}
+    \includegraphics[width=0.9\textwidth]{seq_7_6_powerloss.pdf}
     \caption{Power Loss Recovery Sequence}
     \label{fig:seq76}
 \end{figure}
@@ -1826,7 +1826,7 @@ Verification of transaction recovery and reporting after a power outage.
 Verification of offline authorization using the Local Authorization List when CSMS is unreachable.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{seq_7_7_locallist.pdf}
+    \includegraphics[width=0.9\textwidth]{seq_7_7_locallist.pdf}
     \caption{Local List (Offline) Sequence}
     \label{fig:seq77}
 \end{figure}
@@ -1837,7 +1837,7 @@ Verification of offline authorization using the Local Authorization List when CS
 Verification of simultaneous charging sessions on a dual-connector station.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{seq_8_1_dual_concurrent_part1.pdf}
+    \includegraphics[width=0.9\textwidth]{seq_8_1_dual_concurrent_part1.pdf}
     \caption{Dual Concurrent Sequence (Part 1)}
     \label{fig:seq81_part1}
 \end{figure}
@@ -1852,7 +1852,13 @@ Verification of simultaneous charging sessions on a dual-connector station.
 Verification that an Emergency Stop affects all connectors (safety priority).
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{seq_8_2_dual_emergency.pdf}
+    \includegraphics[width=0.9\textwidth]{seq_8_2_dual_emergency_part1.pdf}
+    \caption{Dual Connector Emergency Stop Sequence Part 1}
+    \end{figure}
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{seq_8_2_dual_emergency_part2.pdf}
     \caption{Dual Emergency Stop Sequence}
     \label{fig:seq82}
 \end{figure}
@@ -1861,8 +1867,14 @@ Verification that an Emergency Stop affects all connectors (safety priority).
 Verification of transaction recovery for multiple connectors after power loss.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{seq_8_3_dual_powerloss.pdf}
-    \caption{Dual Power Loss Sequence}
+    \includegraphics[width=0.9\textwidth]{seq_8_3_dual_powerloss_part1.pdf}
+    \caption{Dual Power Loss Sequence Part 1}
+    \end{figure}
+
+    \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{seq_8_3_dual_powerloss_part2.pdf}
+    \caption{Dual Power Loss Sequence Part 2}
     \label{fig:seq83}
 \end{figure}
 
@@ -1872,7 +1884,7 @@ Verification of transaction recovery for multiple connectors after power loss.
 Configuration of MEA-specific flags, meter sampling intervals, and local authorization behavior.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{seq_9_1_3_config.pdf}
+    \includegraphics[width=0.9\textwidth]{seq_9_1_3_config.pdf}
     \caption{MEA General Configuration Sequence}
     \label{fig:seq91}
 \end{figure}
@@ -1881,7 +1893,7 @@ Configuration of MEA-specific flags, meter sampling intervals, and local authori
 Verification of Grid-to-Vehicle (G2V) and Vehicle-to-Grid (V2G) power flow control via CSMS.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{seq_9_4_power_demand.pdf}
+    \includegraphics[width=0.9\textwidth]{seq_9_4_power_demand.pdf}
     \caption{Power Demand Verification Sequence}
     \label{fig:seq94}
 \end{figure}
@@ -1906,7 +1918,7 @@ A comprehensive sanity check covering the full lifecycle of a standard session t
 Verification of network resilience, specifically LAN disconnection and automatic reconnection handshakes.
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{seq_11_other.pdf}
+    \includegraphics[width=0.9\textwidth]{seq_11_other.pdf}
     \caption{LAN Disconnect/Reconnect Sequence}
     \label{fig:seq11}
 \end{figure}

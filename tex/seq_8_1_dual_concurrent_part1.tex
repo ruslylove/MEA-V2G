@@ -10,9 +10,9 @@
     \umlactor[class=CSMS,x=12]{CSMS}
 
     % 8.1 Initial Status
-    \begin{umlcall}[op=8.1.0: StatusNotification(C1 Available), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+    \begin{umlcall}[op=8.1.1: StatusNotification(C1 Available), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
     \end{umlcall}
-    \begin{umlcall}[op=8.1.0: StatusNotification(C2 Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \begin{umlcall}[op=8.1.1: StatusNotification(C2 Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
     % Plugin C1 & C2
@@ -21,8 +21,8 @@
     \begin{umlcall}[op=Plugin(C2), type=synchron, dt=4]{EV}{EVSE}
     \end{umlcall}
 
-    % 8.1.1 Both Preparing
-    \begin{umlcall}[op=8.1.1: StatusNotification(C1 Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    % 8.1.2 Both Preparing
+    \begin{umlcall}[op=8.1.2: StatusNotification(C1 Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
     \begin{umlcall}[op=8.1.2: StatusNotification(C2 Preparing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
@@ -46,10 +46,12 @@
     \end{umlcall}
     
     % Meter Values
-    \begin{umlcall}[op=8.1.9: MeterValues(C1), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
-    \begin{umlcall}[op=8.1.10: MeterValues(C2), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=8.1.9: MeterValues(C1), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+      \end{umlcall}
+      \begin{umlcall}[op=8.1.10: MeterValues(C2), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+      \end{umlcall}
+    \end{umlfragment}
 
   \end{umlseqdiag}
 \end{tikzpicture}

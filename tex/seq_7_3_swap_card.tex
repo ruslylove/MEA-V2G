@@ -32,19 +32,21 @@
     \end{umlcall}
     \begin{umlcall}[op=7.3.4: Authorize(ValidCard), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
     \end{umlcall}
-    \begin{umlcall}[op=7.3.5: StartTransaction, type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \begin{umlcall}[op=7.3.5: StartTransaction, type=synchron, return=Accepted, dt=7]{EVSE}{CSMS}
     \end{umlcall}
-    \begin{umlcall}[op=7.3.6: StatusNotification(Charging), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \begin{umlcall}[op=7.3.6: StatusNotification(Charging), type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
     \end{umlcall}
-    \begin{umlcall}[op=7.3.7: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=7.3.7: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+      \end{umlcall}
+    \end{umlfragment}
 
     % 7.3.8 Invalid Stop
-    \begin{umlcall}[op=Swipe(Invalid), type=synchron, return=, dt=30]{EV}{EVSE}
+    \begin{umlcall}[op=Swipe(Invalid), type=synchron, return=, dt=42]{EV}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=7.3.8: Authorize(InvalidCard), type=synchron, return=Invalid, dt=4]{EVSE}{CSMS}
     \end{umlcall}
-    \node[draw, fill=white] at (3, -12.8) {Stop Failed};
+    \node[draw, fill=white] at (3, -14.7) {Stop Failed};
 
     % 7.3.9 Valid Stop
     \begin{umlcall}[op=Swipe(Valid), type=synchron, return=, dt=18]{EV}{EVSE}

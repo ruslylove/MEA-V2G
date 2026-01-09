@@ -44,14 +44,16 @@
     \end{umlcall}
 
     % 4.17 MeterValues
-    \begin{umlcall}[op=4.17: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=4.17: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+      \end{umlcall}
+    \end{umlfragment}
 
     % 4.18 Reset (Hard)
-    \begin{umlcall}[op=4.18: Reset(Hard), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    \begin{umlcall}[op=4.18: Reset(Hard), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
     
-    \node[draw, fill=white] at (3, -12) {Rebooting...};
+    \node[draw, fill=white] at (3, -13) {Rebooting...};
 
     % 4.19 StopTransaction
     \begin{umlcall}[op=4.19: StopTransaction(HardReset), type=synchron, return=Accepted, dt=12]{EVSE}{CSMS}
@@ -62,7 +64,7 @@
     \end{umlcall}
 
     % 4.21 StatusNotification (Unplug)
-    \begin{umlcall}[op=Unplug, type=synchron, dt=65]{EV}{EVSE}
+    \begin{umlcall}[op=Unplug, type=synchron, dt=70]{EV}{EVSE}
     \end{umlcall}
     \begin{umlcall}[op=4.21: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}

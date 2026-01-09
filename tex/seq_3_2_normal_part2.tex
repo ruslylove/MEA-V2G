@@ -26,8 +26,10 @@
     \end{umlcall}
     
     % 3.15 MeterValues
-    \begin{umlcall}[op=3.15: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=3.15: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+      \end{umlcall}
+    \end{umlfragment}
 
     % 3.16 - 3.19 Remote Stop
     \begin{umlcall}[op=3.16: RemoteStopTransaction, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}

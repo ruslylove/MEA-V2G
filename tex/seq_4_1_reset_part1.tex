@@ -42,14 +42,16 @@
     \end{umlcall}
 
     % 4.8 MeterValues
-    \begin{umlcall}[op=4.8: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
-    \end{umlcall}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=4.8: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
+      \end{umlcall}
+    \end{umlfragment}
 
     % 4.9 Reset (Soft)
-    \begin{umlcall}[op=4.9: Reset(Soft), type=synchron, return=Accepted, dt=4]{CSMS}{EVSE}
+    \begin{umlcall}[op=4.9: Reset(Soft), type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
     \end{umlcall}
 
-    \node[draw, fill=white] at (3, -12.5) {Restarting SW...};
+    \node[draw, fill=white] at (3, -13.5) {Restarting SW...};
 
   \end{umlseqdiag}
 \end{tikzpicture}

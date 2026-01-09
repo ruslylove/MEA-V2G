@@ -14,14 +14,14 @@
     \end{umlcall}
 
     % 2.2 - 2.3 Manual Plug/Unplug Check
-    \begin{umlcall}[op=2.2: PlugIn, type=synchron, dt=9]{EV}{EVSE}
+    \begin{umlcall}[op=PlugIn, type=synchron, dt=9]{EV}{EVSE}
     \end{umlcall}
-    \begin{umlcall}[op=StatusNotification(Preparing), type=synchron, return=Conf]{EVSE}{CSMS}
+    \begin{umlcall}[op=2.2: StatusNotification(Preparing), type=synchron, return=Conf]{EVSE}{CSMS}
     \end{umlcall}
     
-    \begin{umlcall}[op=2.3: Unplug, type=synchron, dt=10]{EV}{EVSE}
+    \begin{umlcall}[op=Unplug, type=synchron, dt=10]{EV}{EVSE}
     \end{umlcall}
-    \begin{umlcall}[op=StatusNotification(Available), type=synchron, return=Conf]{EVSE}{CSMS}
+    \begin{umlcall}[op=2.3: StatusNotification(Available), type=synchron, return=Conf]{EVSE}{CSMS}
     \end{umlcall}
 
     % 2.4 Enable AutoCharge
@@ -29,9 +29,9 @@
     \end{umlcall}
 
     % 2.5 - 2.8 Auto Charge Flow
-    \begin{umlcall}[op=2.5: PlugIn, type=synchron, dt=18]{EV}{EVSE}
+    \begin{umlcall}[op=PlugIn, type=synchron, dt=18]{EV}{EVSE}
     \end{umlcall}
-    \begin{umlcall}[op=StatusNotification(Preparing), type=synchron, return=Conf]{EVSE}{CSMS}
+    \begin{umlcall}[op=2.5: StatusNotification(Preparing), type=synchron, return=Conf]{EVSE}{CSMS}
     \end{umlcall}
     
     \begin{umlcall}[op=2.6: Authorize(Auto), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
@@ -43,10 +43,10 @@
     \begin{umlcall}[op=2.8: StatusNotification(Charging), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
     
-    \umlfragment[type=loop, label=Charging]{
-      \begin{umlcall}[op=2.9: MeterValues, type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \begin{umlfragment}[type=loop, label=Charging, inner xsep=6]
+      \begin{umlcall}[op=2.9: MeterValues, type=synchron, return=Conf, dt=7]{EVSE}{CSMS}
       \end{umlcall}
-    }
+    \end{umlfragment}
 
     % 2.10 - 2.13 Remote Stop
     \begin{umlcall}[op=2.10: RemoteStopTransaction, type=synchron, return=Accepted, dt=7]{CSMS}{EVSE}
@@ -58,10 +58,10 @@
     \begin{umlcall}[op=2.12: StatusNotification(Finishing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
     
-    \begin{umlcall}[op=2.13: Unplug, type=synchron, dt=58]{EV}{EVSE}
+    \begin{umlcall}[op=Unplug, type=synchron, dt=62]{EV}{EVSE}
     \end{umlcall}
 
-    \begin{umlcall}[op=StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \begin{umlcall}[op=2.13: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
   \end{umlseqdiag}
