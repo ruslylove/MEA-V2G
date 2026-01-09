@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="9" time="163.099" timestamp="2026-01-09T22:06:11.266010+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_postman" name="test_00_connection_setup" time="2.006"><system-out>--------------------------------- Captured Log ---------------------------------
+#x1B[32mINFO    #x1B[0m EVSE_Sim:conftest.py:129 Starting EVSE Simulation...
+#x1B[32mINFO    #x1B[0m EVSE_Sim:conftest.py:50 Connecting to wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001
+#x1B[32mINFO    #x1B[0m EVSE_Sim:conftest.py:69 Connected to CSMS!
+#x1B[32mINFO    #x1B[0m EVSE_Sim:conftest.py:90 Sending BootNotification...
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:471 rddQC4000001: send [2,"01b1c515-8e7e-40a0-aa72-f2d3b450c4c4","BootNotification",{"chargePointModel":"MEA-V2G-01","chargePointVendor":"KMUTNB"}]
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:247 rddQC4000001: receive message [3,"01b1c515-8e7e-40a0-aa72-f2d3b450c4c4",{"currentTime":"2026-01-09T15:06:48Z","interval":3600,"status":"Accepted"}]
+#x1B[32mINFO    #x1B[0m ocpp_16_interface:Ocpp16Interface.py:82 Connected to central system.
+#x1B[32mINFO    #x1B[0m EVSE_Sim:conftest.py:95 Sending StatusNotification (Available)...
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:471 rddQC4000001: send [2,"8e1e37a9-c099-4c48-8ce7-eaba242083db","StatusNotification",{"connectorId":0,"errorCode":"NoError","status":"Available","timestamp":"2026-01-09T15:06:12.462573Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:247 rddQC4000001: receive message [3,"8e1e37a9-c099-4c48-8ce7-eaba242083db",{}]
+#x1B[32mINFO    #x1B[0m EVSE_Sim:conftest.py:100 Sending StatusNotification (Connector 1: Available)...
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:471 rddQC4000001: send [2,"a891c932-46bd-46d9-abd0-b0c829c82cec","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-09T15:06:12.513448Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:247 rddQC4000001: receive message [3,"a891c932-46bd-46d9-abd0-b0c829c82cec",{}]
+#x1B[32mINFO    #x1B[0m EVSE_Sim:conftest.py:105 Sending Authorize (RFID_SIM)...
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:471 rddQC4000001: send [2,"e91cb1ad-9ed6-4ee7-b5ca-f4a77488b4a0","Authorize",{"idTag":"RFID_SIM"}]
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:247 rddQC4000001: receive message [3,"e91cb1ad-9ed6-4ee7-b5ca-f4a77488b4a0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+#x1B[32mINFO    #x1B[0m EVSE_Sim:conftest.py:110 Sending StatusNotification (Connector 1: Preparing)...
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:471 rddQC4000001: send [2,"2b391bd0-d6fa-4408-91ca-361ca701c034","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-09T15:06:12.634064Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:247 rddQC4000001: receive message [3,"2b391bd0-d6fa-4408-91ca-361ca701c034",{}]
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:471 rddQC4000001: send [2,"9e24e3a3-ebea-44a6-a6e1-9d12dcd52d1a","Heartbeat",{}]
+#x1B[32mINFO    #x1B[0m ocpp:charge_point.py:247 rddQC4000001: receive message [3,"9e24e3a3-ebea-44a6-a6e1-9d12dcd52d1a",{"currentTime":"2026-01-09T15:06:48Z"}]
+--------------------------------- Captured Out ---------------------------------
+DEBUG: conftest PACKET_QUEUE ID: 4412954944
+
+[EVSE] RAW RECV: [3,"01b1c515-8e7e-40a0-aa72-f2d3b450c4c4",{"currentTime":"2026-01-09T15:06:48Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"8e1e37a9-c099-4c48-8ce7-eaba242083db",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"a891c932-46bd-46d9-abd0-b0c829c82cec",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e91cb1ad-9ed6-4ee7-b5ca-f4a77488b4a0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+
+[EVSE] RAW RECV: [3,"2b391bd0-d6fa-4408-91ca-361ca701c034",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"9e24e3a3-ebea-44a6-a6e1-9d12dcd52d1a",{"currentTime":"2026-01-09T15:06:48Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-09T15:06:48Z)
+
+--- TEST CASE: Connection Setup ---
+Waiting for EVSE to initialize...
+--- EVSE Interactions ---
+[EVSE] Connected to CSMS!
+[EVSE] Sending BootNotification...
+[EVSE] RAW RECV: [3,"01b1c515-8e7e-40a0-aa72-f2d3b450c4c4",{"currentTime":"2026-01-09T15:06:48Z","interval":3600,"status":"Accepted"}]
+[EVSE] BootNotification ACCEPTED
+[EVSE] Sending StatusNotification (Available)...
+[EVSE] RAW RECV: [3,"8e1e37a9-c099-4c48-8ce7-eaba242083db",{}]
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+[EVSE] Sending StatusNotification (Connector 1: Available)...
+[EVSE] RAW RECV: [3,"a891c932-46bd-46d9-abd0-b0c829c82cec",{}]
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+[EVSE] Sending Authorize (RFID_SIM)...
+[EVSE] RAW RECV: [3,"e91cb1ad-9ed6-4ee7-b5ca-f4a77488b4a0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+[EVSE] Sending StatusNotification (Connector 1: Preparing)...
+[EVSE] RAW RECV: [3,"2b391bd0-d6fa-4408-91ca-361ca701c034",{}]
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+[EVSE] Sending Heartbeat...
+[EVSE] RAW RECV: [3,"9e24e3a3-ebea-44a6-a6e1-9d12dcd52d1a",{"currentTime":"2026-01-09T15:06:48Z"}]
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-09T15:06:48Z)
+--------------------------------
+SUCCESS: BootNotification was accepted.
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+INFO:EVSE_Sim:Starting EVSE Simulation...
+INFO:EVSE_Sim:Connecting to wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001
+INFO:EVSE_Sim:Connected to CSMS!
+INFO:EVSE_Sim:Sending BootNotification...
+INFO:ocpp:rddQC4000001: send [2,"01b1c515-8e7e-40a0-aa72-f2d3b450c4c4","BootNotification",{"chargePointModel":"MEA-V2G-01","chargePointVendor":"KMUTNB"}]
+INFO:ocpp:rddQC4000001: receive message [3,"01b1c515-8e7e-40a0-aa72-f2d3b450c4c4",{"currentTime":"2026-01-09T15:06:48Z","interval":3600,"status":"Accepted"}]
+INFO:ocpp_16_interface:Connected to central system.
+INFO:EVSE_Sim:Sending StatusNotification (Available)...
+INFO:ocpp:rddQC4000001: send [2,"8e1e37a9-c099-4c48-8ce7-eaba242083db","StatusNotification",{"connectorId":0,"errorCode":"NoError","status":"Available","timestamp":"2026-01-09T15:06:12.462573Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"8e1e37a9-c099-4c48-8ce7-eaba242083db",{}]
+INFO:EVSE_Sim:Sending StatusNotification (Connector 1: Available)...
+INFO:ocpp:rddQC4000001: send [2,"a891c932-46bd-46d9-abd0-b0c829c82cec","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-09T15:06:12.513448Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"a891c932-46bd-46d9-abd0-b0c829c82cec",{}]
+INFO:EVSE_Sim:Sending Authorize (RFID_SIM)...
+INFO:ocpp:rddQC4000001: send [2,"e91cb1ad-9ed6-4ee7-b5ca-f4a77488b4a0","Authorize",{"idTag":"RFID_SIM"}]
+INFO:ocpp:rddQC4000001: receive message [3,"e91cb1ad-9ed6-4ee7-b5ca-f4a77488b4a0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+INFO:EVSE_Sim:Sending StatusNotification (Connector 1: Preparing)...
+INFO:ocpp:rddQC4000001: send [2,"2b391bd0-d6fa-4408-91ca-361ca701c034","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-09T15:06:12.634064Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"2b391bd0-d6fa-4408-91ca-361ca701c034",{}]
+INFO:ocpp:rddQC4000001: send [2,"9e24e3a3-ebea-44a6-a6e1-9d12dcd52d1a","Heartbeat",{}]
+INFO:ocpp:rddQC4000001: receive message [3,"9e24e3a3-ebea-44a6-a6e1-9d12dcd52d1a",{"currentTime":"2026-01-09T15:06:48Z"}]
+
+</system-err></testcase><testcase classname="tests.api.test_mea_postman" name="test_remote_start_transaction" time="20.132"><system-out>--------------------------------- Captured Log ---------------------------------
+
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: Remote Start Transaction ---
+API Request: POST https://ocppapi.measandbox.com/EV/cmd/chargepoint/remoteStart
+Payload: {
+  "chargepoint_id": "rddQC4000001",
+  "connector_id": 1,
+  "card_id": "RFID_SIM"
+}
+Response Code: 200
+Response Body: ""
+--- EVSE Interactions ---
+--------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.api.test_mea_postman" name="test_remote_stop_transaction" time="20.133"><system-out>--------------------------------- Captured Log ---------------------------------
+
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: Remote Stop Transaction ---
+API Request: POST https://ocppapi.measandbox.com/EV/cmd/chargepoint/remoteStop
+Payload: {
+  "chargepoint_id": "rddQC4000001",
+  "transaction_id": 321
+}
+Response Code: 200
+Response Body: ""
+--- EVSE Interactions ---
+--------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.api.test_mea_postman" name="test_reserve_now" time="20.104"><system-out>--------------------------------- Captured Log ---------------------------------
+
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: Reserve Now ---
+API Request: POST https://ocppapi.measandbox.com/EV/cmd/chargepoint/reserve
+Payload: {
+  "chargepoint": "rddQC4000001",
+  "connector": 1,
+  "duration": 15,
+  "card_id": "0FABD4C1234"
+}
+Response Code: 200
+Response Body: ""
+--- EVSE Interactions ---
+--------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.api.test_mea_postman" name="test_cancel_reservation" time="20.125"><system-out>--------------------------------- Captured Log ---------------------------------
+
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: Cancel Reservation ---
+API Request: POST https://ocppapi.measandbox.com/EV/cmd/chargepoint/cancel
+Payload: {
+  "chargepoint": "rddQC4000001",
+  "reservation_id": 205
+}
+Response Code: 200
+Response Body: ""
+--- EVSE Interactions ---
+--------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.api.test_mea_postman" name="test_change_configuration" time="20.099"><system-out>--------------------------------- Captured Log ---------------------------------
+
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: Change Configuration ---
+API Request: POST https://ocppapi.measandbox.com/EV/remote/changeConfiguration
+Payload: {
+  "chargepoint_id": "rddQC4000001",
+  "key": "test",
+  "value": "1"
+}
+Response Code: 200
+Response Body: ""
+--- EVSE Interactions ---
+--------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.api.test_mea_postman" name="test_set_charging_profile" time="20.159"><system-out>--------------------------------- Captured Log ---------------------------------
+
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: Set Charging Profile ---
+API Request: POST https://ocppapi.measandbox.com/EV/remote/SetChargingProfile
+Payload: {
+  "chargepoint_id": "rddQC4000001",
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "chargingProfileId": 99,
+    "transactionId": 7337,
+    "stackLevel": 1,
+    "chargingProfilePurpose": "TxProfile",
+    "chargingProfileKind": "Absolute",
+    "recurrencyKind": "Daily",
+    "validFrom": "2026-01-08T15:07:53.964633Z",
+    "validTo": "2027-01-09T15:07:53.964633Z",
+    "chargingSchedule": {
+      "duration": 6000,
+      "startSchedule": "2026-01-09T15:12:53.964633Z",
+      "chargingRateUnit": "A",
+      "minChargingRate": 1,
+      "chargingSchedulePeriod": [
+        {
+          "startPeriod": 1,
+          "limit": 20,
+          "numberPhases": 1
+        }
+      ]
+    }
+  }
+}
+Response Code: 200
+Response Body: ""
+--- EVSE Interactions ---
+--------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.api.test_mea_postman" name="test_remote_reset" time="20.121"><system-out>--------------------------------- Captured Log ---------------------------------
+
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: Remote Reset ---
+API Request: POST https://ocppapi.measandbox.com/EV/remote/reset
+Payload: {
+  "chargepoint": "rddQC4000001",
+  "reset_type": "Soft"
+}
+Response Code: 200
+Response Body: ""
+--- EVSE Interactions ---
+--------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase><testcase classname="tests.api.test_mea_postman" name="test_get_configuration" time="20.122"><system-out>--------------------------------- Captured Log ---------------------------------
+
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: Get Configuration ---
+API Request: POST https://ocppapi.measandbox.com/EV/cmd/chargepoint/getConfiguration
+Payload: {
+  "chargepoint": "rddQC4000001",
+  "key": []
+}
+Response Code: 200
+Response Body: ""
+--- EVSE Interactions ---
+--------------------------------
+
+</system-out><system-err>--------------------------------- Captured Err ---------------------------------
+
+</system-err></testcase></testsuite></testsuites>

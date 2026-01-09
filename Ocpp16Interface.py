@@ -27,6 +27,11 @@ from ocpp.v16.enums import (
 )
 from ocpp.routing import on
 from Charger import Charger
+import queue
+import json
+
+# Global queue for tracing packets in tests
+PACKET_QUEUE = queue.Queue()
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger('ocpp_16_interface')
@@ -39,6 +44,19 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         self.transactions = {} 
         # Meter Values Tasks (Connector ID -> Task)
         self._meter_value_tasks = {}
+        
+    async def route_message(self, raw_msg):
+        # Log raw message for debugging purposes
+        # Note: raw_msg is a string usually
+        print(f"\n[EVSE] RAW RECV: {raw_msg}", flush=True)
+        # Avoid flooding queue with Heartbeats/Boot if unwanted, but valuable for now
+        # Parse minimal to see type? 
+        # For now, just log everything to see if RemoteStart arrives.
+        # PACKET_QUEUE.put(f"[EVSE] RAW RECV: {raw_msg}") 
+        # Keeping it out of queue to avoid messing up test logic assertions? 
+        # User wants "log the ocpp message". So I SHOULD put it in queue!
+        PACKET_QUEUE.put(f"[EVSE] RAW RECV: {raw_msg}")
+        await super().route_message(raw_msg)
         
         # Configuration Store
         self.configuration = {
@@ -58,6 +76,9 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         )
         response = await self.call(request)
         if response.status == RegistrationStatus.accepted:
+            msg = "[EVSE] BootNotification ACCEPTED"
+            print(f"\n{msg}", flush=True)
+            PACKET_QUEUE.put(msg)
             LOGGER.info("Connected to central system.")
             self.charger.start()
         else:
@@ -66,20 +87,37 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
     async def send_heartbeat(self):
         request = call.Heartbeat()
-        await self.call(request)
+        response = await self.call(request)
+        msg = f"[EVSE] Heartbeat ACKNOWLEDGED (Time: {response.current_time})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
 
     async def send_status_notification(self, connector_id=1, status=ChargePointStatus.available, error_code="NoError", info=None):
         payload = {
             'connector_id': connector_id,
             'error_code': error_code,
-            'status': status
+            'status': status,
+            'timestamp': datetime.utcnow().isoformat() + "Z",
+            'vendor_id': "KMUTNB",
+            'vendor_error_code': ""
         }
         if info:
              payload['info'] = info
              
         request = call.StatusNotification(**payload)
-        await self.call(request)
+        response = await self.call(request)
+        msg = f"[EVSE] StatusNotification ACKNOWLEDGED ({status})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         
+    async def send_authorize(self, id_tag="RFID_SIM"):
+        request = call.Authorize(id_tag=id_tag)
+        response = await self.call(request)
+        msg = f"[EVSE] Authorize ACKNOWLEDGED ({response.id_tag_info['status']})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
+        return response.id_tag_info['status']
+
     async def start_transaction(self, connector_id=1, id_tag="default-tag"):
         """
         Starts a transaction locally and sends StartTransaction to CSMS.
@@ -190,6 +228,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
     @on(Action.remote_start_transaction)
     async def on_remote_start_transaction(self, id_tag, connector_id=None, **kwargs):
+        payload = {"idTag": id_tag, "connectorId": connector_id}
+        payload.update(kwargs)
+        msg = f"[EVSE] RECV Packet: RemoteStartTransaction\nPayload: {json.dumps(payload, indent=2)}"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received RemoteStartTransaction for id_tag: {id_tag}")
 
         target_connector = connector_id or 1
@@ -200,10 +243,19 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         # Trigger internal start transaction logic in background to not block response
         asyncio.create_task(self.start_transaction(target_connector, id_tag))
         
+        msg_resp = f"[EVSE] Sending RemoteStartTransaction Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
+
         return call_result.RemoteStartTransaction(status=RemoteStartStopStatus.accepted)
 
     @on(Action.remote_stop_transaction)
     async def on_remote_stop_transaction(self, transaction_id, **kwargs):
+        payload = {"transactionId": transaction_id}
+        payload.update(kwargs)
+        msg = f"[EVSE] RECV Packet: RemoteStopTransaction\nPayload: {json.dumps(payload, indent=2)}"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received RemoteStopTransaction for transaction_id: {transaction_id}")
         
         target_connector = None
@@ -217,10 +269,19 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
         asyncio.create_task(self.stop_transaction(connector_id=target_connector, reason="Remote"))
         
+        msg_resp = f"[EVSE] Sending RemoteStopTransaction Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
+        
         return call_result.RemoteStopTransaction(status=RemoteStartStopStatus.accepted)
 
     @on(Action.change_configuration)
     async def on_change_configuration(self, key, value, **kwargs):
+        payload = {"key": key, "value": value}
+        payload.update(kwargs)
+        msg = f"[EVSE] RECV Packet: ChangeConfiguration\nPayload: {json.dumps(payload, indent=2)}"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received ChangeConfiguration for {key} to {value}")
         
         # Validation Logic can be expanded here
@@ -241,6 +302,9 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                 except ValueError:
                     return call_result.ChangeConfiguration(status=ConfigurationStatus.rejected)
 
+             msg_resp = f"[EVSE] Sending ChangeConfiguration Response (Accepted)"
+             print(f"\n{msg_resp}", flush=True)
+             PACKET_QUEUE.put(msg_resp)
              return call_result.ChangeConfiguration(status=ConfigurationStatus.accepted)
         else:
              # Allow unknown keys? Usually Rejected or NotSupported, but for mock flexible
@@ -249,6 +313,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         
     @on(Action.get_configuration)
     async def on_get_configuration(self, keys=None, **kwargs):
+        payload = {"keys": keys}
+        payload.update(kwargs)
+        msg = f"[EVSE] RECV Packet: GetConfiguration\nPayload: {json.dumps(payload, indent=2)}"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received GetConfiguration for {keys}")
         
         result_keys = []
@@ -272,6 +341,9 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                     'value': v
                 })
         
+        msg_resp = f"[EVSE] Sending GetConfiguration Response (Count: {len(result_keys)})"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.GetConfiguration(configuration_key=result_keys)
 
     @on(Action.trigger_message)
@@ -331,22 +403,59 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
     @on(Action.reset)
     async def on_reset(self, type, **kwargs):
+        payload = {"type": type}
+        payload.update(kwargs)
+        msg = f"[EVSE] RECV Packet: Reset\nPayload: {json.dumps(payload, indent=2)}"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received Reset type: {type}")
+        msg_resp = f"[EVSE] Sending Reset Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.Reset(status=ResetStatus.accepted)
 
     @on(Action.reserve_now)
     async def on_reserve_now(self, reservation_id, expiry_date, id_tag, connector_id, **kwargs):
+        payload = {
+            "reservationId": reservation_id,
+            "expiryDate": expiry_date,
+            "idTag": id_tag,
+            "connectorId": connector_id
+        }
+        payload.update(kwargs)
+        msg = f"[EVSE] RECV Packet: ReserveNow\nPayload: {json.dumps(payload, indent=2)}"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received ReserveNow for {id_tag}")
+        msg_resp = f"[EVSE] Sending ReserveNow Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.ReserveNow(status=ReservationStatus.accepted)
 
     @on(Action.cancel_reservation)
     async def on_cancel_reservation(self, reservation_id, **kwargs):
+        payload = {"reservationId": reservation_id}
+        payload.update(kwargs)
+        msg = f"[EVSE] RECV Packet: CancelReservation\nPayload: {json.dumps(payload, indent=2)}"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received CancelReservation for {reservation_id}")
+        msg_resp = f"[EVSE] Sending CancelReservation Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.CancelReservation(status=CancelReservationStatus.accepted)
 
     @on(Action.set_charging_profile)
     async def on_set_charging_profile(self, connector_id, cs_charging_profiles, **kwargs):
+        payload = {"connectorId": connector_id, "csChargingProfiles": cs_charging_profiles}
+        payload.update(kwargs)
+        msg = f"[EVSE] RECV Packet: SetChargingProfile\nPayload: {json.dumps(payload, indent=2)}"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received SetChargingProfile for connector {connector_id}")
+        msg_resp = f"[EVSE] Sending SetChargingProfile Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.SetChargingProfile(status=ChargingProfileStatus.accepted)
 
     @on(Action.clear_cache)

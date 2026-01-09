@@ -1,0 +1,18 @@
+BootNotification :
+[2,"510f54a8-b978-456c-8830-40764577ef45","BootNotification",{"chargePointModel":"DC-120KW","chargePointSerialNumber":"0000000000000020","chargePointVendor":"SINEXCEL","firmwareVersion":"V1.6_OCPP_105.02"}]
+
+StatusNotification:
+[2,"b1e0e262-20eb-478c-8a4a-13a5695feba5","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2025-12-23T05:21:09.161Z","vendorId":"sinexcel","vendorErrorCode":""}]
+
+Authorize
+[2,"f06fffcc-b5a5-442b-b8d5-90e76829d67a","Authorize",{"idTag":"VID:0024AC489C46"}]
+
+StartTransaction:
+[2,"1431e3c3-adaa-49ee-bbaa-005a9b40486a","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2025-12-23T01:32:07.686Z"}]
+
+MeterValues:
+[2,"JhxWv5RWOyPQ4afk8TXkroBDDeIiuzX7bNTN","MeterValues",{ "connectorId": 2, "transactionId": 7306, "meterValue": [ { "timestamp": "2025-12-16T07:33:39.000Z", "sampledValue": [ {"value": "424.6", "context": "Sample.Periodic", "measurand": "Voltage", "location": "Outlet", "unit": "V"},{"value": "251.51", "context": "Sample.Periodic", "measurand": "Current.Import", "location": "Outlet", "unit": "A"},{ "value": "106791", "context": "Sample.Periodic", "measurand": "Power.Active.Import","location": "Outlet", "unit": "W" },{ "value": "60", "context": "Sample.Periodic", "measurand": "SoC","location": "EV", "unit": "Percent" },{ "value": "127200", "context": "Sample.Periodic", "measurand": "Power.Offered","location": "Outlet", "unit": "W" },{ "value": "517450", "context": "Sample.Periodic", "measurand": "Energy.Active.Import.Register","location": "Outlet", "unit": "Wh" } ] } ] }]
+
+StopTransaction:
+[2,"WOC6xIMqppLStQxfuYUIyAl27Gay33GKBCBp","StopTransaction",{ "meterStop": 525150, "transactionId": 7312, "timestamp": "2025-12-16T08:10:44.000Z", "idTag": "86721A87", "reason": "Local" }]
+
