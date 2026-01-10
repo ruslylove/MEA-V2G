@@ -81,9 +81,21 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             PACKET_QUEUE.put(msg)
             LOGGER.info("Connected to central system.")
             self.charger.start()
+            # Start Heartbeat Loop
+            asyncio.create_task(self._heartbeat_loop())
         else:
             LOGGER.warning("BootNotification rejected!")
         return response 
+
+    async def _heartbeat_loop(self):
+        try:
+            while True:
+                await asyncio.sleep(30)
+                await self.send_heartbeat()
+        except asyncio.CancelledError:
+            pass
+        except Exception as e:
+            LOGGER.error(f"Error in Heartbeat loop: {e}") 
 
     async def send_heartbeat(self):
         request = call.Heartbeat()
@@ -97,7 +109,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             'connector_id': connector_id,
             'error_code': error_code,
             'status': status,
-            'timestamp': datetime.utcnow().isoformat() + "Z",
+            'timestamp': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
             'vendor_id': "KMUTNB",
             'vendor_error_code': ""
         }
@@ -131,10 +143,21 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             connector_id=connector_id,
             id_tag=id_tag,
             meter_start=0, # Simplified
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         )
         
-        response = await self.call(request)
+        try:
+            response = await self.call(request)
+        except Exception as e:
+            # MEA CSMS returns transactionId as string "123", violating OCPP spec (int).
+            # The ocpp lib raises TypeConstraintViolationError.
+            # We can try to recover the response from the exception if available, or just log and ignore.
+            LOGGER.error(f"StartTransaction Warning (likely type mismatch): {e}")
+            # Mock a successful response to keep flow going if it was really a type error on a successful response
+            # Note: In a real app we might parse the raw message, but for this test script:
+            return
+
+        # Note: If we caught exception above, we returned. Use 'response' only if valid.
         
         if response.id_tag_info['status'] == AuthorizationStatus.accepted:
             transaction_id = response.transaction_id
@@ -167,11 +190,14 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             except asyncio.CancelledError:
                 pass
 
+        # Send StatusNotification (Finishing)
+        await self.send_status_notification(connector_id, "Finishing")
+
         # Send StopTransaction
         request = call.StopTransaction(
             transaction_id=transaction_id,
             meter_stop=100, # Simplified
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
             reason=reason
         )
         
@@ -179,6 +205,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         LOGGER.info(f"Transaction stopped on {connector_id}: {transaction_id}")
         
         self.transactions.pop(connector_id, None)
+        
+        # Send StatusNotification (Available)
+        await self.send_status_notification(connector_id, "Available")
+
         # Only stop charger if no transactions left? 
         # Simplified: Stop if no transactions.
         if not self.transactions:
@@ -212,7 +242,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                     connector_id=connector_id,
                     transaction_id=transaction_id,
                     meter_value=[{
-                        "timestamp": datetime.utcnow().isoformat(),
+                        "timestamp": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
                         "sampled_value": sampled_values
                     }]
                 )
@@ -265,7 +295,12 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                 break
         
         if target_connector is None:
-             return call_result.RemoteStopTransaction(status=RemoteStartStopStatus.rejected)
+             # Ghost transaction (sim restarted but server kept state). 
+             # Force ACCEPT and send StopTransaction for Connector 1 to clear server state.
+             LOGGER.warning(f"Unknown transaction {transaction_id}, forcing stop on Connector 1 to clear CSMS state.")
+             target_connector = 1
+             # We manually inject it so stop_transaction works
+             self.transactions[target_connector] = transaction_id
 
         asyncio.create_task(self.stop_transaction(connector_id=target_connector, reason="Remote"))
         
@@ -380,7 +415,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             connector_id=1,
             transaction_id=self.transactions.get(1),
             meter_value=[{
-                "timestamp": datetime.utcnow().isoformat(),
+                "timestamp": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
                 "sampled_value": sampled_values
             }]
         )

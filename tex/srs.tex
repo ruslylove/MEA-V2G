@@ -1029,21 +1029,38 @@ The first level of validation involves unit and system testing using a local CSM
 The second level involves connecting the software to the official MEA Sandbox environment to verify connectivity and authentication mechanisms.
 
 \subsubsection{Test Configuration}
-This section details the specific configuration used for validation against the Metropolitan Electricity Authority (MEA) OCPP Sandbox.
+The validation environment consists of two secure channels: the OCPP WebSocket connection to the MEA Sandbox and the REST API channel for test orchestration.
 
-\subsection{Connectivity Details}
+\paragraph{OCPP Connectivity (EVSE $\to$ CSMS)}
 \begin{itemize}
     \item \textbf{Charge Point ID}: \texttt{rddQC4000001}
-    \item \textbf{CSMS Endpoint}: \texttt{wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001}
+    \item \textbf{Endpoint}: \texttt{wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001}
     \item \textbf{Protocol}: OCPP 1.6J (JSON over WebSockets)
 \end{itemize}
 
-\subsection{Test Execution Instructions}
+\paragraph{API Authorization (Test Client $\to$ EVSE)}
+To ensure secure command execution, the API test harness implements a custom strict HTTP Digest Authentication scheme:
+\begin{itemize}
+    \item \textbf{Authorization}: RFC 2617 Digest Auth with \texttt{realm="EV"}.
+    \item \textbf{Pre-request}: A custom pre-request routine generates a unique, time-based \texttt{nonce} for every packet. This mirrors the behavior of the Postman collection's pre-request script, ensuring that the embedded server accepts the commands validly.
+\end{itemize}
+
+\subsubsection{Test Execution Instructions}
+
+\paragraph{Basic Connectivity}
 To verify connectivity and basic message exchange with the live MEA server, execute the following system test script:
 \begin{verbatim}
 python3 tests/system/test_mea_live.py
 \end{verbatim}
 This script performs a real-time handshake, sending a \texttt{BootNotification} and \texttt{StatusNotification}, and logs the server's response.
+
+\paragraph{Comprehensive API Validation}
+For full validation of the MEA Sandbox capabilities (including Remote Start/Stop, Reservations, and Smart Charging), the project employs a dedicated API test suite. This suite simulates an EVSE and verifies the correct handling of commands sent from the Sandbox API.
+\begin{verbatim}
+# Run the API Test Suite and Generate Report
+pytest tests/api/test_mea_postman.py; python3 tex/generate_api_report.py
+\end{verbatim}
+This process automatically generates the \texttt{api\_test\_report.pdf}, which serves as the formal proof of validation for the Sandbox environment (Tier 2).
 
 \subsection{Tier 3: On-Site Acceptance Testing}
 The final validation stage is conducted on-site using the production hardware and real electric vehicles. This "User Acceptance Test" (UAT) focuses on physical and environmental factors that cannot be simulated.
@@ -2531,6 +2548,25 @@ This section details the results of the automated unit tests executed against th
 \end{longtable}
 \end{footnotesize}
 \end{footnotesize}
+
+\section{MEA API Test Report}
+To further validate the OCPP implementation, a comprehensive API Test Report is generated automatically. This report complements the standard compliance tests by focusing on the server-side validation and specific MEA extensions.
+
+\subsection{Report Content}
+The \texttt{api\_test\_report.pdf} includes:
+\begin{itemize}
+    \item \textbf{Test Summary}: A high-level overview of the pass/fail status for all 9 critical API checkpoints.
+    \item \textbf{Detailed Logs}: Complete captured stdout/stderr logs for each test case, demonstrating the exact JSON payloads exchanged between the Test Client (Postman/Python), the EVSE, and the CSMS.
+    \item \textbf{Efficiency Metrics}: Execution time for each test.
+    \item \textbf{Server-Side Verification}: Appendices containing the actual PDF logs extracted from the CSMS (OCPP - Admin) to prove that messages were correctly received and processed by the backend.
+\end{itemize}
+
+\subsection{Generated Artifacts}
+The report is generated using the \texttt{tex/generate\_api\_report.py} script, which aggregates checks from:
+\begin{itemize}
+    \item \texttt{tests/api/test\_mea\_postman.py}: The Python-based API test suite.
+    \item \texttt{doc/MEA/*.pdf}: The server-side confirmation logs.
+\end{itemize}
 
 
 
