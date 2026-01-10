@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{pdfpages} % Added for including external PDFs
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    showstringspaces=false
+}
+
+\title{MEA API Test Report}
+\author{Automated Test Suite}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary}
+\begin{itemize}
+    \item \textbf{Total Tests:} 24
+    \item \textbf{Passed:} 7
+    \item \textbf{Failed:} 0
+    \item \textbf{Errors:} 0
+    \item \textbf{Skipped:} 17
+    \item \textbf{Total Duration:} 13.997 seconds
+\end{itemize}
+
+\section{Detailed Results}
+\begin{longtable}{p{0.6\textwidth} p{0.2\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+test\_1\_1\_boot\_notification & \textcolor{green}{Pass} & 2.003 \\
+test\_1\_2\_status\_notification & \textcolor{green}{Pass} & 0.000 \\
+test\_1\_3\_trigger\_boot & \textcolor{orange}{Skipped} & 0.001 \\
+test\_1\_4\_boot\_notification\_response & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_5\_trigger\_status & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_6\_status\_notification\_response & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_7\_trigger\_meter\_values & \textcolor{orange}{Skipped} & 0.001 \\
+test\_1\_8\_meter\_values\_response & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_9\_get\_configuration & \textcolor{green}{Pass} & 10.440 \\
+test\_1\_10\_change\_heartbeat & \textcolor{green}{Pass} & 0.348 \\
+test\_1\_11\_change\_meter\_sample & \textcolor{green}{Pass} & 0.348 \\
+test\_1\_12\_change\_unlock\_connector & \textcolor{green}{Pass} & 0.348 \\
+test\_1\_13\_change\_availability\_inoperative & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_14\_status\_unavailable & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_15\_change\_availability\_operative & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_16\_status\_available & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_17\_get\_diagnostics & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_18\_diagnostics\_status & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_19\_update\_firmware & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_20\_firmware\_status & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_21\_change\_local\_auth & \textcolor{green}{Pass} & 0.335 \\
+test\_1\_22\_send\_local\_list & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_23\_get\_local\_list\_version & \textcolor{orange}{Skipped} & 0.000 \\
+test\_1\_24\_clear\_cache & \textcolor{orange}{Skipped} & 0.001 \\
+\bottomrule
+\end{longtable}
+
+\newpage
+\section{Server Side Logs}
+The following pages contain the official server-side logs from the MEA Sandbox admin panel, confirming the receipt and processing of the OCPP messages.
+
+\includepdf[pages=1, viewport=0 3125.067226890756 1450.0 5177.0, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_msgs.pdf_0]{server_log_msgs.pdf}
+\includepdf[pages=1, viewport=0 1073.134453781512 1450.0 3125.067226890756, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_msgs.pdf_1]{server_log_msgs.pdf}
+\includepdf[pages=1, viewport=0 0 1450.0 1073.134453781512, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_msgs.pdf_2]{server_log_msgs.pdf}
+\includepdf[pages=1, viewport=0 459.4773109243697 1608.0 2735.0, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_comms.pdf_0]{server_log_comms.pdf}
+\includepdf[pages=1, viewport=0 0 1608.0 459.4773109243697, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_comms.pdf_1]{server_log_comms.pdf}
+
+\end{document}

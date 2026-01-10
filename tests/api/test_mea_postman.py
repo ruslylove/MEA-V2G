@@ -3,7 +3,7 @@ import requests
 # from requests.auth import HTTPDigestAuth # Replaced by custom auth
 import json
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import time
 import hashlib
 
@@ -44,7 +44,7 @@ class PreemptiveDigestAuth(requests.auth.AuthBase):
         else:
              # Default to ISO format if NOT provided (Postman logic)
              # Note: Postman uses 'new Date().toISOString()', Python equivalent:
-             nonce = datetime.utcnow().isoformat() + "Z"
+             nonce = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
 
         # 4. Response = MD5(HA1:nonce:HA2) (No qop/cnonce case as per Postman empty fields)
         resp_input = f"{ha1}:{nonce}:{ha2}"

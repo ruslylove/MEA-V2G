@@ -1,0 +1,348 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{pdfpages} % Added for including external PDFs
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    showstringspaces=false
+}
+
+\title{MEA OCPP Live Test}
+\author{Automated Test Suite}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary}
+\begin{itemize}
+    \item \textbf{Total Tests:} 15
+    \item \textbf{Passed:} 15
+    \item \textbf{Failed:} 0
+    \item \textbf{Errors:} 0
+    \item \textbf{Skipped:} 0
+    \item \textbf{Total Duration:} 13.829 seconds
+\end{itemize}
+
+\section{Detailed Results}
+\begin{longtable}{p{0.6\textwidth} p{0.2\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+test\_5\_01\_status\_available & \textcolor{green}{Pass} & 3.009 \\
+test\_5\_02\_reserve\_now & \textcolor{green}{Pass} & 0.336 \\
+test\_5\_04\_cancel\_reservation & \textcolor{green}{Pass} & 0.331 \\
+test\_5\_06\_reserve\_now\_expiry & \textcolor{green}{Pass} & 0.342 \\
+test\_5\_09\_reserve\_now & \textcolor{green}{Pass} & 4.696 \\
+test\_5\_10\_status\_reserved & \textcolor{green}{Pass} & 0.000 \\
+test\_5\_11\_status\_plug & \textcolor{green}{Pass} & 0.131 \\
+test\_5\_12\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.459 \\
+test\_5\_13\_start\_transaction & \textcolor{green}{Pass} & 0.000 \\
+test\_5\_14\_status\_notification\_charging & \textcolor{green}{Pass} & 0.000 \\
+test\_5\_15\_meter\_values & \textcolor{green}{Pass} & 2.004 \\
+test\_5\_16\_remote\_stop\_transaction & \textcolor{green}{Pass} & 2.434 \\
+test\_5\_17\_stop\_transaction & \textcolor{green}{Pass} & 0.000 \\
+test\_5\_18\_status\_plug & \textcolor{green}{Pass} & 0.000 \\
+test\_5\_19\_status\_notification\_unplug & \textcolor{green}{Pass} & 0.000 \\
+\bottomrule
+\end{longtable}
+
+\section{Global Execution Log}
+\begin{lstlisting}
+============================= test session starts ==============================
+platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/rus/development/MEA-V2G
+collected 15 items
+
+tests/api/test_mea_section5.py INFO:EVSE_Sim:Starting EVSE Simulation...
+INFO:EVSE_Sim:Connecting to wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001
+INFO:EVSE_Sim:Connected to CSMS!
+INFO:EVSE_Sim:Command processing loop started.
+INFO:ocpp:rddQC4000001: send [2,"6ace4c35-dbab-4d92-896e-d065b3e06940","BootNotification",{"chargePointModel":"MEA-V2G-01","chargePointVendor":"KMUTNB"}]
+INFO:ocpp:rddQC4000001: receive message [3,"6ace4c35-dbab-4d92-896e-d065b3e06940",{"currentTime":"2026-01-10T17:29:32Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] RAW RECV: [3,"6ace4c35-dbab-4d92-896e-d065b3e06940",{"currentTime":"2026-01-10T17:29:32Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+INFO:ocpp_16_interface:Connected to central system.
+INFO:ocpp:rddQC4000001: send [2,"1a2a0239-cd58-46df-b647-6731603d94cd","StatusNotification",{"connectorId":0,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T17:28:56Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"1a2a0239-cd58-46df-b647-6731603d94cd",{}]
+
+[EVSE] RAW RECV: [3,"1a2a0239-cd58-46df-b647-6731603d94cd",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:ocpp:rddQC4000001: send [2,"4b13306f-53c7-4cab-95d5-d3c07d5c6cff","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T17:28:56Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"4b13306f-53c7-4cab-95d5-d3c07d5c6cff",{}]
+
+[EVSE] RAW RECV: [3,"4b13306f-53c7-4cab-95d5-d3c07d5c6cff",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:ocpp:rddQC4000001: send [2,"49c7b7b1-d55f-4e03-9e82-ccd4cda2237c","Heartbeat",{}]
+INFO:ocpp:rddQC4000001: receive message [3,"49c7b7b1-d55f-4e03-9e82-ccd4cda2237c",{"currentTime":"2026-01-10T17:29:32Z"}]
+
+[EVSE] RAW RECV: [3,"49c7b7b1-d55f-4e03-9e82-ccd4cda2237c",{"currentTime":"2026-01-10T17:29:32Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-10T17:29:32Z)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available', 'info': 'Unplugged'}
+INFO:ocpp:rddQC4000001: send [2,"51a3e094-2743-4f2f-9168-a7a0ff8c2703","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T17:28:57Z","info":"Unplugged","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"51a3e094-2743-4f2f-9168-a7a0ff8c2703",{}]
+
+--- 5.1 StatusNotification (Unplug) -> Available ---
+
+[EVSE] RAW RECV: [3,"51a3e094-2743-4f2f-9168-a7a0ff8c2703",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+.INFO:ocpp:rddQC4000001: receive message [2,"ee46f417ee4911f0a9f60242c0a8300e","ReserveNow",{"connectorId":1,"expiryDate":"2026-01-10T22:29:34Z","idTag":"RFID_SIM","parentIdTag":"pid2025","reservationId":1002}]
+
+--- 5.2 ReserveNow ---
+
+[EVSE] RAW RECV: [2,"ee46f417ee4911f0a9f60242c0a8300e","ReserveNow",{"connectorId":1,"expiryDate":"2026-01-10T22:29:34Z","idTag":"RFID_SIM","parentIdTag":"pid2025","reservationId":1002}]
+
+[EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1002,
+  "expiryDate": "2026-01-10T22:29:34Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1,
+  "parent_id_tag": "pid2025"
+}
+INFO:ocpp_16_interface:Received ReserveNow for RFID_SIM
+
+[EVSE] Sending ReserveNow Response (Accepted)
+INFO:ocpp:rddQC4000001: send [2,"48253d5f-9a1b-4fdb-b17e-d27293958620","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Reserved","timestamp":"2026-01-10T17:28:58Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: send [3,"ee46f417ee4911f0a9f60242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: receive message [3,"48253d5f-9a1b-4fdb-b17e-d27293958620",{}]
+
+[EVSE] RAW RECV: [3,"48253d5f-9a1b-4fdb-b17e-d27293958620",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+Reserve API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-10T17:29:34Z","result":{"status":"Accepted","reservation_id":1002}}
+.INFO:ocpp:rddQC4000001: receive message [2,"ee769883ee4911f0a1ef0242c0a8300e","CancelReservation",{"reservationId":1002}]
+
+--- 5.4 CancelReservation ---
+
+[EVSE] RAW RECV: [2,"ee769883ee4911f0a1ef0242c0a8300e","CancelReservation",{"reservationId":1002}]
+
+[EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1002
+}
+INFO:ocpp_16_interface:Received CancelReservation for 1002
+
+[EVSE] Sending CancelReservation Response (Accepted)
+INFO:ocpp:rddQC4000001: send [2,"05762e56-e3e8-403b-8b77-4349a47b6940","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T17:28:58Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: send [3,"ee769883ee4911f0a1ef0242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: receive message [3,"05762e56-e3e8-403b-8b77-4349a47b6940",{}]
+
+[EVSE] RAW RECV: [3,"05762e56-e3e8-403b-8b77-4349a47b6940",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+Cancel API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-10T17:29:34Z","result":{"status":"Accepted","reservation_id":1002}}
+.INFO:ocpp:rddQC4000001: receive message [2,"eeac9c46ee4911f0afe00242c0a8300e","ReserveNow",{"connectorId":1,"expiryDate":"2026-01-10T18:34:35Z","idTag":"RFID_SIM","parentIdTag":"pid2025","reservationId":1003}]
+
+--- 5.6 ReserveNow (1 min) ---
+
+[EVSE] RAW RECV: [2,"eeac9c46ee4911f0afe00242c0a8300e","ReserveNow",{"connectorId":1,"expiryDate":"2026-01-10T18:34:35Z","idTag":"RFID_SIM","parentIdTag":"pid2025","reservationId":1003}]
+
+[EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1003,
+  "expiryDate": "2026-01-10T18:34:35Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1,
+  "parent_id_tag": "pid2025"
+}
+INFO:ocpp_16_interface:Received ReserveNow for RFID_SIM
+
+[EVSE] Sending ReserveNow Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"eeac9c46ee4911f0afe00242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: send [2,"2e10ed85-c0af-43b7-ac0d-1d6138ff2d45","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Reserved","timestamp":"2026-01-10T17:28:59Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"2e10ed85-c0af-43b7-ac0d-1d6138ff2d45",{}]
+
+[EVSE] RAW RECV: [3,"2e10ed85-c0af-43b7-ac0d-1d6138ff2d45",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+.INFO:EVSE_Sim:Processing Command: HEARTBEAT with args: {}
+INFO:ocpp:rddQC4000001: send [2,"966e4b7a-bdbf-42de-aa9f-fa63772a8587","Heartbeat",{}]
+INFO:ocpp:rddQC4000001: receive message [3,"966e4b7a-bdbf-42de-aa9f-fa63772a8587",{"currentTime":"2026-01-10T17:29:35Z"}]
+
+--- 5.9 ReserveNow ---
+
+[EVSE] RAW RECV: [3,"966e4b7a-bdbf-42de-aa9f-fa63772a8587",{"currentTime":"2026-01-10T17:29:35Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-10T17:29:35Z)
+INFO:ocpp:rddQC4000001: receive message [2,"f011c21cee4911f082f70242c0a8300e","CancelReservation",{"reservationId":1003}]
+Ensuring cleanup of expired reservation: 1003
+
+[EVSE] RAW RECV: [2,"f011c21cee4911f082f70242c0a8300e","CancelReservation",{"reservationId":1003}]
+
+[EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1003
+}
+INFO:ocpp_16_interface:Received CancelReservation for 1003
+
+[EVSE] Sending CancelReservation Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"f011c21cee4911f082f70242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: send [2,"d9e401ef-5a75-4c95-99c6-1351ab9f5db0","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T17:29:01Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"d9e401ef-5a75-4c95-99c6-1351ab9f5db0",{}]
+
+[EVSE] RAW RECV: [3,"d9e401ef-5a75-4c95-99c6-1351ab9f5db0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:ocpp:rddQC4000001: receive message [2,"f1794659ee4911f09a9a0242c0a8300e","ReserveNow",{"connectorId":1,"expiryDate":"2026-01-11T03:29:39Z","idTag":"RFID_SIM","parentIdTag":"pid2025","reservationId":1004}]
+
+[EVSE] RAW RECV: [2,"f1794659ee4911f09a9a0242c0a8300e","ReserveNow",{"connectorId":1,"expiryDate":"2026-01-11T03:29:39Z","idTag":"RFID_SIM","parentIdTag":"pid2025","reservationId":1004}]
+
+[EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1004,
+  "expiryDate": "2026-01-11T03:29:39Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1,
+  "parent_id_tag": "pid2025"
+}
+INFO:ocpp_16_interface:Received ReserveNow for RFID_SIM
+
+[EVSE] Sending ReserveNow Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"f1794659ee4911f09a9a0242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: send [2,"fcba1708-b18f-4c93-ba98-2de57158b613","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Reserved","timestamp":"2026-01-10T17:29:03Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"fcba1708-b18f-4c93-ba98-2de57158b613",{}]
+
+[EVSE] RAW RECV: [3,"fcba1708-b18f-4c93-ba98-2de57158b613",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+Reserve API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-10T17:29:39Z","result":{"status":"Accepted","reservation_id":1004}}
+.
+--- 5.10 StatusNotification (Reserved) ---
+.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Reserved', 'info': 'PluggedIn'}
+INFO:ocpp:rddQC4000001: send [2,"b1f6355b-67ff-4d9c-834c-c637b70cd686","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Reserved","timestamp":"2026-01-10T17:29:04Z","info":"PluggedIn","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"b1f6355b-67ff-4d9c-834c-c637b70cd686",{}]
+
+--- 5.11 StatusNotification (Plug) ---
+
+[EVSE] RAW RECV: [3,"b1f6355b-67ff-4d9c-834c-c637b70cd686",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+.INFO:ocpp:rddQC4000001: receive message [2,"f1c46fffee4911f0bdce0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+--- 5.12 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"f1c46fffee4911f0bdce0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+INFO:ocpp_16_interface:Received RemoteStartTransaction for id_tag: RFID_SIM
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+INFO:ocpp_16_interface:Consuming Reservation 1004 for transaction.
+INFO:ocpp:rddQC4000001: send [2,"a70d722f-cb0e-4005-9c77-d35f40283aba","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-10T17:29:04Z","reservationId":1004}]
+INFO:ocpp:rddQC4000001: send [3,"f1c46fffee4911f0bdce0242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: receive message [3,"a70d722f-cb0e-4005-9c77-d35f40283aba",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7378}]
+
+[EVSE] RAW RECV: [3,"a70d722f-cb0e-4005-9c77-d35f40283aba",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7378}]
+INFO:ocpp_16_interface:Transaction started on 1: 7378
+INFO:ocpp:rddQC4000001: send [2,"b45fcc25-4104-4aac-8697-e6565998b927","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-10T17:29:04Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"b45fcc25-4104-4aac-8697-e6565998b927",{}]
+
+[EVSE] RAW RECV: [3,"b45fcc25-4104-4aac-8697-e6565998b927",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+.
+--- 5.13 StartTransaction ---
+.
+--- 5.14 StatusNotification (Charging) ---
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"7e53b0f7-c117-4af3-9824-9f3bf086b1eb","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-10T17:29:04Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7378}]
+INFO:ocpp:rddQC4000001: receive message [3,"7e53b0f7-c117-4af3-9824-9f3bf086b1eb",{}]
+
+--- 5.15 MeterValues ---
+
+[EVSE] RAW RECV: [3,"7e53b0f7-c117-4af3-9824-9f3bf086b1eb",{}]
+.INFO:ocpp:rddQC4000001: receive message [2,"f469b4e8ee4911f08a750242c0a8300e","RemoteStopTransaction",{"transactionId":7378}]
+
+--- 5.16 RemoteStopTransaction ---
+
+[EVSE] RAW RECV: [2,"f469b4e8ee4911f08a750242c0a8300e","RemoteStopTransaction",{"transactionId":7378}]
+
+[EVSE] RECV Packet: RemoteStopTransaction
+Payload: {
+  "transactionId": 7378
+}
+INFO:ocpp_16_interface:Received RemoteStopTransaction for transaction_id: 7378
+
+[EVSE] Sending RemoteStopTransaction Response (Accepted)
+INFO:ocpp:rddQC4000001: send [2,"f66b03ce-f2c7-43d7-8ede-a5b007d583cf","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-10T17:29:08Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: send [3,"f469b4e8ee4911f08a750242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: receive message [3,"f66b03ce-f2c7-43d7-8ede-a5b007d583cf",{}]
+
+[EVSE] RAW RECV: [3,"f66b03ce-f2c7-43d7-8ede-a5b007d583cf",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+INFO:ocpp:rddQC4000001: send [2,"bac289b6-6dea-4396-9a52-d2a6be1fb04c","StopTransaction",{"meterStop":100,"timestamp":"2026-01-10T17:29:08Z","transactionId":7378,"reason":"Remote"}]
+INFO:ocpp:rddQC4000001: receive message [3,"bac289b6-6dea-4396-9a52-d2a6be1fb04c",{}]
+
+[EVSE] RAW RECV: [3,"bac289b6-6dea-4396-9a52-d2a6be1fb04c",{}]
+INFO:ocpp_16_interface:Transaction stopped on 1: 7378
+INFO:ocpp:rddQC4000001: send [2,"dc94b96b-8fb5-4624-8a77-7fa20d0d6367","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T17:29:08Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"dc94b96b-8fb5-4624-8a77-7fa20d0d6367",{}]
+
+[EVSE] RAW RECV: [3,"dc94b96b-8fb5-4624-8a77-7fa20d0d6367",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+.
+--- 5.17 StopTransaction ---
+.
+--- 5.18 StatusNotification (Plug) ---
+.
+--- 5.19 StatusNotification (Unplug) -> Available ---
+.
+
+=============================== warnings summary ===============================
+tests/api/test_mea_section5.py: 12 warnings
+  /Users/rus/development/MEA-V2G/Ocpp16Interface.py:115: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    'timestamp': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_02_reserve_now
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_04_cancel_reservation
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_06_reserve_now_expiry
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_09_reserve_now
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_09_reserve_now
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_12_remote_start_transaction
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_16_remote_stop_transaction
+  /Users/rus/development/MEA-V2G/tests/api/test_mea_postman.py:47: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    nonce = datetime.utcnow().isoformat() + "Z"
+
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_12_remote_start_transaction
+  /Users/rus/development/MEA-V2G/Ocpp16Interface.py:151: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    'timestamp': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_15_meter_values
+  /Users/rus/development/MEA-V2G/Ocpp16Interface.py:479: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+
+tests/api/test_mea_section5.py::TestMeaSection5::test_5_16_remote_stop_transaction
+  /Users/rus/development/MEA-V2G/Ocpp16Interface.py:261: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section5.xml -
+======================= 15 passed, 22 warnings in 13.83s =======================
+
+\end{lstlisting}
+
+\end{document}

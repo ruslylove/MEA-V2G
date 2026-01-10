@@ -1,7 +1,7 @@
 import logging
 import asyncio
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from ocpp.v16 import ChargePoint as Ocpp16ChargePoint
 from ocpp.v16 import call, call_result
 from ocpp.v16.enums import (
@@ -40,8 +40,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
     def __init__(self, id, connection, charger: Charger):
         super().__init__(id, connection, response_timeout=20)
         self.charger = charger
+        self.heartbeat_interval = 60 # Default
         # Transaction Management (Connector ID -> Transaction ID)
         self.transactions = {} 
+        # Reservation Management (Connector ID -> {reservationId, idTag, expiryDate})
+        self.reservations = {} 
         # Meter Values Tasks (Connector ID -> Task)
         self._meter_value_tasks = {}
         
@@ -109,7 +112,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             'connector_id': connector_id,
             'error_code': error_code,
             'status': status,
-            'timestamp': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'timestamp': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             'vendor_id': "KMUTNB",
             'vendor_error_code': ""
         }
@@ -136,15 +139,30 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         """
         if connector_id in self.transactions:
              LOGGER.warning(f"Transaction already in progress for connector {connector_id}.")
-             return
+             if self.charger.is_charging():
+                print("[Sim] Charging already in progress for StartTransaction request")
+                return
 
-        # 1. Send StartTransaction
-        request = call.StartTransaction(
-            connector_id=connector_id,
-            id_tag=id_tag,
-            meter_start=0, # Simplified
-            timestamp=datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
-        )
+        # Prepare payload
+        request_payload = {
+            'connector_id': connector_id,
+            'id_tag': id_tag if id_tag else "UnknownTag",
+            'meter_start': 0, # Simplified
+            'timestamp': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+        }
+        
+        # Check active reservation for this connector/tag
+        # Ideally we'd match parentIdTag etc, but simplified:
+        if connector_id in self.reservations:
+            res = self.reservations[connector_id]
+            # Expired? match idTag? (Simplified: Just use it if it exists)
+            # In 5.13 we need to send reservationId.
+            request_payload['reservation_id'] = res['reservationId']
+            # Consume reservation
+            del self.reservations[connector_id]
+            LOGGER.info(f"Consuming Reservation {request_payload['reservation_id']} for transaction.")
+
+        request = call.StartTransaction(**request_payload)
         
         try:
             response = await self.call(request)
@@ -153,8 +171,48 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             # The ocpp lib raises TypeConstraintViolationError.
             # We can try to recover the response from the exception if available, or just log and ignore.
             LOGGER.error(f"StartTransaction Warning (likely type mismatch): {e}")
-            # Mock a successful response to keep flow going if it was really a type error on a successful response
-            # Note: In a real app we might parse the raw message, but for this test script:
+            # Attempt to recover if it's just a type error (MEA sends string ID)
+            if hasattr(e, 'ocpp_message') and hasattr(e.ocpp_message, 'payload'):
+                p = e.ocpp_message.payload
+                if 'transactionId' in p and 'idTagInfo' in p:
+                     try:
+                         tid = int(p['transactionId'])
+                         status = p['idTagInfo'].get('status')
+                         LOGGER.info(f"Recovered Transaction ID {tid} (Status: {status}) from invalid payload.")
+                         
+                         if status == AuthorizationStatus.accepted or status == 'ConcurrentTx':
+                             self.transactions[connector_id] = tid
+                             if status == AuthorizationStatus.accepted:
+                                 self.charger.start()
+                                 self._meter_value_tasks[connector_id] = asyncio.create_task(self._meter_values_loop(connector_id, tid))
+                             elif status == 'ConcurrentTx':
+                                 LOGGER.warning(f"Transaction {tid} is concurrent. Assuming active.")
+                                 # We treat it as active so we can stop it later
+                                 self.transactions[connector_id] = tid
+                         return
+                     except ValueError:
+                         pass
+            
+            # Fallback: Regex on string representation (because it shows up in logs)
+            import re
+            match = re.search(r"'transactionId':\s*'(\d+)'", str(e))
+            if match:
+                 try:
+                     tid = int(match.group(1))
+                     # Check for status in string too
+                     status = 'Accepted' # Default assumption
+                     if 'ConcurrentTx' in str(e):
+                         status = 'ConcurrentTx'
+                     
+                     LOGGER.info(f"Recovered Transaction ID {tid} (Status: {status}) via REGEX.")
+                     self.transactions[connector_id] = tid
+                     if status == 'Accepted' or status == 'ConcurrentTx':
+                         if status == 'Accepted':
+                             self.charger.start()
+                             self._meter_value_tasks[connector_id] = asyncio.create_task(self._meter_values_loop(connector_id, tid))
+                     return
+                 except:
+                     pass
             return
 
         # Note: If we caught exception above, we returned. Use 'response' only if valid.
@@ -164,6 +222,9 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             self.transactions[connector_id] = transaction_id
             LOGGER.info(f"Transaction started on {connector_id}: {transaction_id}")
             self.charger.start()
+            
+            # Send StatusNotification (Charging)
+            await self.send_status_notification(connector_id, ChargePointStatus.charging)
             
             # Start MeterValues Loop
             self._meter_value_tasks[connector_id] = asyncio.create_task(self._meter_values_loop(connector_id, transaction_id))
@@ -197,7 +258,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         request = call.StopTransaction(
             transaction_id=transaction_id,
             meter_stop=100, # Simplified
-            timestamp=datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+            timestamp=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             reason=reason
         )
         
@@ -242,7 +303,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                     connector_id=connector_id,
                     transaction_id=transaction_id,
                     meter_value=[{
-                        "timestamp": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+                        "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                         "sampled_value": sampled_values
                     }]
                 )
@@ -356,6 +417,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         LOGGER.info(f"Received GetConfiguration for {keys}")
         
         result_keys = []
+        unknown_keys = []
         if keys:
             for key in keys:
                 if key in self.configuration:
@@ -365,8 +427,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                         'value': self.configuration[key]
                     })
                 else:
-                    # Unknown key
-                    pass
+                    unknown_keys.append(key)
         else:
             # Return all
             for k, v in self.configuration.items():
@@ -379,7 +440,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         msg_resp = f"[EVSE] Sending GetConfiguration Response (Count: {len(result_keys)})"
         print(f"\n{msg_resp}", flush=True)
         PACKET_QUEUE.put(msg_resp)
-        return call_result.GetConfiguration(configuration_key=result_keys)
+        return call_result.GetConfiguration(configuration_key=result_keys, unknown_key=unknown_keys)
 
     @on(Action.trigger_message)
     async def on_trigger_message(self, requested_message, **kwargs):
@@ -415,7 +476,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             connector_id=1,
             transaction_id=self.transactions.get(1),
             meter_value=[{
-                "timestamp": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+                "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                 "sampled_value": sampled_values
             }]
         )
@@ -462,6 +523,17 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         print(f"\n{msg}", flush=True)
         PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received ReserveNow for {id_tag}")
+        
+        # Store reservation
+        self.reservations[connector_id] = {
+            "reservationId": reservation_id,
+            "idTag": id_tag,
+            "expiryDate": expiry_date
+        }
+        
+        # Send Status Reserved (Background task to avoid deadlock)
+        asyncio.create_task(self.send_status_notification(connector_id, ChargePointStatus.reserved))
+        
         msg_resp = f"[EVSE] Sending ReserveNow Response (Accepted)"
         print(f"\n{msg_resp}", flush=True)
         PACKET_QUEUE.put(msg_resp)
@@ -475,6 +547,23 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         print(f"\n{msg}", flush=True)
         PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received CancelReservation for {reservation_id}")
+        
+        # Remove reservation if exists
+        target_conn = None
+        for conn_id, res in list(self.reservations.items()):
+            if res["reservationId"] == reservation_id:
+                target_conn = conn_id
+                del self.reservations[conn_id]
+                break
+        
+        if target_conn:
+             # Send Status Available (Background task to avoid deadlock)
+             asyncio.create_task(self.send_status_notification(target_conn, ChargePointStatus.available))
+        
+        msg_resp = f"[EVSE] Sending CancelReservation Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
+        return call_result.CancelReservation(status=CancelReservationStatus.accepted)
         msg_resp = f"[EVSE] Sending CancelReservation Response (Accepted)"
         print(f"\n{msg_resp}", flush=True)
         PACKET_QUEUE.put(msg_resp)
