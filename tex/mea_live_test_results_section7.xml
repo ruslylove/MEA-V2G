@@ -1,160 +1,4 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{geometry}
-\usepackage{longtable}
-\usepackage{xcolor}
-\usepackage{booktabs}
-\usepackage{listings}
-\usepackage{pdfpages} % Added for including external PDFs
-\geometry{a4paper, margin=1in}
-
-\lstset{
-    basicstyle=\ttfamily\scriptsize,
-    breaklines=true,
-    breakatwhitespace=false,
-    frame=single,
-    showstringspaces=false
-}
-
-\title{MEA OCPP Live Test}
-\author{Automated Test Suite}
-\date{\today}
-
-\begin{document}
-
-\maketitle
-
-\section{Summary}
-\begin{itemize}
-    \item \textbf{Total Tests:} 54
-    \item \textbf{Passed:} 54
-    \item \textbf{Failed:} 0
-    \item \textbf{Errors:} 0
-    \item \textbf{Skipped:} 0
-    \item \textbf{Total Duration:} 16.556 seconds
-\end{itemize}
-
-\section{Detailed Results}
-\subsection{Remote Start (Unplugged)}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-7.1.1 & test\_7\_01\_01\_status\_available & \textcolor{green}{Pass} & 2.004 \\
-7.1.2 & test\_7\_01\_02\_remote\_start\_rejected & \textcolor{green}{Pass} & 0.367 \\
-\bottomrule
-\end{longtable}
-\subsection{Concurrent Remote Start}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-7.2.1 & test\_7\_02\_01\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-7.2.2 & test\_7\_02\_02\_status\_preparing & \textcolor{green}{Pass} & 0.119 \\
-7.2.3 & test\_7\_02\_03\_remote\_start\_1 & \textcolor{green}{Pass} & 0.449 \\
-7.2.4 & test\_7\_02\_04\_remote\_start\_2 & \textcolor{green}{Pass} & 2.366 \\
-7.2.5 & test\_7\_02\_05\_start\_transaction & \textcolor{green}{Pass} & 0.001 \\
-7.2.6 & test\_7\_02\_06\_status\_charging & \textcolor{green}{Pass} & 0.001 \\
-7.2.7 & test\_7\_02\_07\_meter\_values & \textcolor{green}{Pass} & 1.003 \\
-7.2.8 & test\_7\_02\_08\_remote\_stop & \textcolor{green}{Pass} & 0.446 \\
-7.2.9 & test\_7\_02\_09\_stop\_transaction & \textcolor{green}{Pass} & 0.001 \\
-7.2.10 & test\_7\_02\_10\_status\_finishing & \textcolor{green}{Pass} & 0.001 \\
-7.2.11 & test\_7\_02\_11\_status\_available & \textcolor{green}{Pass} & 0.000 \\
-\bottomrule
-\end{longtable}
-\subsection{Swap Card}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-7.3.1 & test\_7\_03\_01\_status\_available & \textcolor{green}{Pass} & 0.000 \\
-7.3.2 & test\_7\_03\_02\_status\_preparing & \textcolor{green}{Pass} & 0.000 \\
-7.3.3 & test\_7\_03\_03\_authorize\_invalid & \textcolor{green}{Pass} & 0.167 \\
-7.3.4 & test\_7\_03\_04\_authorize\_valid & \textcolor{green}{Pass} & 0.166 \\
-7.3.5 & test\_7\_03\_05\_start\_transaction & \textcolor{green}{Pass} & 0.237 \\
-7.3.6 & test\_7\_03\_06\_status\_charging & \textcolor{green}{Pass} & 0.037 \\
-7.3.7 & test\_7\_03\_07\_meter\_values & \textcolor{green}{Pass} & 1.004 \\
-7.3.8 & test\_7\_03\_08\_authorize\_invalid\_stop & \textcolor{green}{Pass} & 0.135 \\
-7.3.9 & test\_7\_03\_09\_stop\_transaction & \textcolor{green}{Pass} & 0.215 \\
-7.3.10 & test\_7\_03\_10\_status\_finishing & \textcolor{green}{Pass} & 0.001 \\
-7.3.11 & test\_7\_03\_11\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-\bottomrule
-\end{longtable}
-\subsection{Emergency Stop}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-7.4.1 & test\_7\_04\_01\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-7.4.2 & test\_7\_04\_02\_status\_preparing & \textcolor{green}{Pass} & 0.000 \\
-7.4.3 & test\_7\_04\_03\_remote\_start & \textcolor{green}{Pass} & 0.441 \\
-7.4.4 & test\_7\_04\_04\_start\_transaction & \textcolor{green}{Pass} & 0.001 \\
-7.4.5 & test\_7\_04\_05\_status\_charging & \textcolor{green}{Pass} & 0.001 \\
-7.4.6 & test\_7\_04\_06\_meter\_values & \textcolor{green}{Pass} & 1.005 \\
-7.4.7 & test\_7\_04\_07\_stop\_emergency & \textcolor{green}{Pass} & 0.158 \\
-7.4.8 & test\_7\_04\_08\_status\_faulted & \textcolor{green}{Pass} & 0.071 \\
-7.4.9 & test\_7\_04\_09\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-7.4.10 & test\_7\_04\_10\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-\bottomrule
-\end{longtable}
-\subsection{Open Door}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-7.5.1 & test\_7\_05\_01\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-7.5.2 & test\_7\_05\_02\_status\_faulted\_door & \textcolor{green}{Pass} & 0.215 \\
-7.5.3 & test\_7\_05\_03\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-\bottomrule
-\end{longtable}
-\subsection{Power Loss}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-7.6.1 & test\_7\_06\_01\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-7.6.2 & test\_7\_06\_02\_status\_preparing & \textcolor{green}{Pass} & 0.001 \\
-7.6.3 & test\_7\_06\_03\_remote\_start & \textcolor{green}{Pass} & 0.457 \\
-7.6.4 & test\_7\_06\_04\_start\_transaction & \textcolor{green}{Pass} & 0.001 \\
-7.6.5 & test\_7\_06\_05\_status\_charging & \textcolor{green}{Pass} & 0.001 \\
-7.6.6 & test\_7\_06\_06\_meter\_values & \textcolor{green}{Pass} & 1.004 \\
-7.6.7 & test\_7\_06\_07\_stop\_power\_loss & \textcolor{green}{Pass} & 0.120 \\
-7.6.8 & test\_7\_06\_08\_boot\_notification & \textcolor{green}{Pass} & 0.001 \\
-7.6.9 & test\_7\_06\_09\_status\_preparing & \textcolor{green}{Pass} & 0.001 \\
-7.6.10 & test\_7\_06\_10\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-\bottomrule
-\end{longtable}
-\subsection{Local List (Offline)}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-7.7.1 & test\_7\_07\_01\_send\_local\_list & \textcolor{green}{Pass} & 0.166 \\
-7.7.2 & test\_7\_07\_02\_disconnect & \textcolor{green}{Pass} & 1.006 \\
-7.7.3 & test\_7\_07\_03\_start\_transaction & \textcolor{green}{Pass} & 1.001 \\
-7.7.4 & test\_7\_07\_04\_stop\_transaction & \textcolor{green}{Pass} & 1.008 \\
-7.7.5 & test\_7\_07\_05\_reconnect & \textcolor{green}{Pass} & 1.005 \\
-7.7.6 & test\_7\_07\_06\_send\_start & \textcolor{green}{Pass} & 0.001 \\
-7.7.7 & test\_7\_07\_07\_send\_stop & \textcolor{green}{Pass} & 0.001 \\
-\bottomrule
-\end{longtable}
-\section{Individual Test Case Logs}\subsection*{test\_7\_01\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="54" time="16.556" timestamp="2026-01-11T19:49:40.727866+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_01_01_status_available" time="2.004"><system-out>--------------------------------- Captured Out ---------------------------------
 
 [EVSE] RAW RECV: [3,"f3ad723c-c04c-433f-9b6d-21b187d41cea",{"currentTime":"2026-01-11T12:50:18Z","interval":3600,"status":"Accepted"}]
 
@@ -177,10 +21,8 @@
 --- 7.1.1 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 0)
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_01\_02\_remote\_start\_rejected}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_01_02_remote_start_rejected" time="0.367"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.1.2 Remote Start (Rejected/Accepted) ---
 
@@ -201,18 +43,14 @@ Payload: {
 [EVSE] Sending RemoteStartTransaction Response (Rejected)
 DEBUG: Checking buffer for 'RemoteStartTransaction Response (Rejected)' (Size: 4)
 DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Rejected)
-\end{lstlisting}
-\subsection*{test\_7\_02\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_01_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.1 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 13)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_02\_02\_status\_preparing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_02_status_preparing" time="0.119"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.2 Status Preparing ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 12)
@@ -229,10 +67,8 @@ DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 
 
 [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-\end{lstlisting}
-\subsection*{test\_7\_02\_03\_remote\_start\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_03_remote_start_1" time="0.449"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.3 Remote Start 1 (Accepted) ---
 
@@ -269,35 +105,27 @@ Payload: {
 [EVSE] StatusNotification ACKNOWLEDGED (Charging)
 DEBUG: Checking buffer for 'RemoteStartTransaction Response (Accepted)' (Size: 17)
 DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
-\end{lstlisting}
-\subsection*{test\_7\_02\_04\_remote\_start\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_04_remote_start_2" time="2.366"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.4 Remote Start 2 (Rejected) ---
 DEBUG: RemoteStart 2 API Response: 200 {"status":"Bad Request","code":400,"messages":"The connector status is Charging.","server-time":"2026-01-11T12:50:20Z","result":{}}
 NOTE: The second Remote Start is denied by the API itself.
 WARNING: concurrent RemoteStart accepted by API (200 OK) but no packet sent to EVSE. CSMS likely blocked it.
-\end{lstlisting}
-\subsection*{test\_7\_02\_05\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_05_start_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.5 Start Transaction (Conn 1) ---
 DEBUG: Checking buffer for 'Transaction started on 1' (Size: 19)
 DEBUG: Found in queue: Transaction started on 1: 7638
-\end{lstlisting}
-\subsection*{test\_7\_02\_06\_status\_charging}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_06_status_charging" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.6 Status Charging ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Charging)' (Size: 24)
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_7\_02\_07\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_07_meter_values" time="1.003"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.7 Meter Values ---
 
@@ -306,10 +134,8 @@ DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
 [EVSE] RAW RECV: [3,"c7e1f074-29a8-4320-b8cc-ecbe094388b3",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_7\_02\_08\_remote\_stop}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_08_remote_stop" time="0.446"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.8 Remote Stop ---
 
@@ -334,50 +160,38 @@ DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
 DEBUG: Checking buffer for 'RemoteStopTransaction Response (Accepted)' (Size: 26)
 DEBUG: Found in queue: [EVSE] Sending RemoteStopTransaction Response (Accepted)
-\end{lstlisting}
-\subsection*{test\_7\_02\_09\_stop\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_09_stop_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.9 Stop Transaction ---
 DEBUG: Checking buffer for 'Transaction stopped' (Size: 30)
 DEBUG: Found in queue: Transaction stopped on 1: 7638
-\end{lstlisting}
-\subsection*{test\_7\_02\_10\_status\_finishing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_10_status_finishing" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.10 Status Finishing ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Finishing)' (Size: 35)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
-\end{lstlisting}
-\subsection*{test\_7\_02\_11\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_02_11_status_available" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.2.11 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 34)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_03\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_01_status_available" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.3.1 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 33)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_03\_02\_status\_preparing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_02_status_preparing" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.3.2 Status Preparing ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 32)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-\end{lstlisting}
-\subsection*{test\_7\_03\_03\_authorize\_invalid}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_03_authorize_invalid" time="0.167"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.3.3 Authorize Invalid ---
 DEBUG: Checking buffer for 'Authorize ACKNOWLEDGED (Invalid)' (Size: 31)
@@ -400,10 +214,8 @@ DEBUG: Checking buffer for 'Authorize ACKNOWLEDGED (Invalid)' (Size: 31)
 
 [EVSE] Authorize ACKNOWLEDGED (Invalid)
 DEBUG: Found in queue: [EVSE] Authorize ACKNOWLEDGED (Invalid)
-\end{lstlisting}
-\subsection*{test\_7\_03\_04\_authorize\_valid}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_04_authorize_valid" time="0.166"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.3.4 Authorize Valid ---
 DEBUG: Checking buffer for 'Authorize ACKNOWLEDGED (Accepted)' (Size: 42)
@@ -414,10 +226,8 @@ DEBUG: Checking buffer for 'Authorize ACKNOWLEDGED (Accepted)' (Size: 42)
 
 [EVSE] Authorize ACKNOWLEDGED (Accepted)
 DEBUG: Found in queue: [EVSE] Authorize ACKNOWLEDGED (Accepted)
-\end{lstlisting}
-\subsection*{test\_7\_03\_05\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_05_start_transaction" time="0.237"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.3.5 Start Transaction ---
 DEBUG: Checking buffer for 'Transaction started on 1' (Size: 44)
@@ -439,30 +249,25 @@ Payload: {
 [EVSE] RAW RECV: [3,"325f2d01-b22a-4afc-a5b5-5c762c7b2d64",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7639}]
 
 [EVSE] SENDING Packet: StatusNotification (Charging)DEBUG: Found in queue: Transaction started on 1: 7639
-\end{lstlisting}
-\subsection*{test\_7\_03\_06\_status\_charging}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_06_status_charging" time="0.037"><system-out>--------------------------------- Captured Out ---------------------------------
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Charging)' (Size: 49)
 
 [EVSE] RAW RECV: [3,"4feb43ad-233c-419c-aad3-c412d0d01a9b",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Charging)
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_7\_03\_07\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_07_meter_values" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
 
 [EVSE] SENDING Packet: MeterValues (One-off)
 
 [EVSE] RAW RECV: [3,"dd904f17-cb62-4aac-bd22-bd2aad7113b5",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_7\_03\_08\_authorize\_invalid\_stop}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_08_authorize_invalid_stop" time="0.135"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.3.8 Authorize Invalid (Stop) ---
 DEBUG: Checking buffer for 'Authorize ACKNOWLEDGED (Invalid)' (Size: 51)
@@ -473,10 +278,8 @@ DEBUG: Checking buffer for 'Authorize ACKNOWLEDGED (Invalid)' (Size: 51)
 
 [EVSE] Authorize ACKNOWLEDGED (Invalid)
 DEBUG: Found in queue: [EVSE] Authorize ACKNOWLEDGED (Invalid)
-\end{lstlisting}
-\subsection*{test\_7\_03\_09\_stop\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_09_stop_transaction" time="0.215"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.3.9 Stop Transaction ---
 DEBUG: Checking buffer for 'Transaction stopped' (Size: 56)
@@ -493,38 +296,28 @@ DEBUG: Checking buffer for 'Transaction stopped' (Size: 56)
 
 [EVSE] SENDING Packet: StatusNotification (Available)
 DEBUG: Found in queue: Transaction stopped on 1: 7639
-\end{lstlisting}
-\subsection*{test\_7\_03\_10\_status\_finishing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_10_status_finishing" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Finishing)' (Size: 61)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
-\end{lstlisting}
-\subsection*{test\_7\_03\_11\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_03_11_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 60)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_04\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_01_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.1 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 59)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_04\_02\_status\_preparing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_02_status_preparing" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.2 Status Preparing ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 58)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-\end{lstlisting}
-\subsection*{test\_7\_04\_03\_remote\_start}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_03_remote_start" time="0.441"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.3 Remote Start (Accepted) ---
 
@@ -577,26 +370,20 @@ Payload: {
 [EVSE] StatusNotification ACKNOWLEDGED (Charging)
 DEBUG: Checking buffer for 'RemoteStartTransaction Response (Accepted)' (Size: 57)
 DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
-\end{lstlisting}
-\subsection*{test\_7\_04\_04\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_04_start_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.4 Start Transaction ---
 DEBUG: Checking buffer for 'Transaction started on 1' (Size: 68)
 DEBUG: Found in queue: Transaction started on 1: 7640
-\end{lstlisting}
-\subsection*{test\_7\_04\_05\_status\_charging}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_05_status_charging" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.5 Status Charging ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Charging)' (Size: 73)
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_7\_04\_06\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_06_meter_values" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.6 Meter Values ---
 
@@ -605,10 +392,8 @@ DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
 [EVSE] RAW RECV: [3,"05428b5b-aba0-496f-8c69-ba2617ac864e",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_7\_04\_07\_stop\_emergency}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_07_stop_emergency" time="0.158"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.7 Stop Transaction (Emergency) ---
 DEBUG: Checking buffer for 'Transaction stopped' (Size: 75)
@@ -625,10 +410,8 @@ DEBUG: Checking buffer for 'Transaction stopped' (Size: 75)
 
 [EVSE] SENDING Packet: StatusNotification (Available)
 DEBUG: Found in queue: Transaction stopped on 1: 7640
-\end{lstlisting}
-\subsection*{test\_7\_04\_08\_status\_faulted}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_08_status_faulted" time="0.071"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.8 Status Faulted (EmergencyStop) ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Faulted)' (Size: 83)
@@ -643,34 +426,26 @@ DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Faulted)' (Size: 83
 
 [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
-\end{lstlisting}
-\subsection*{test\_7\_04\_09\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_09_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.9 Status Available (Reset) ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 88)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_04\_10\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_04_10_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.4.10 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 87)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_05\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_05_01_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.5.1 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 86)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_05\_02\_status\_faulted\_door}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_05_02_status_faulted_door" time="0.215"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.5.2 Status Faulted (DoorOpen) ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Faulted)' (Size: 85)
@@ -693,34 +468,26 @@ DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Faulted)' (Size: 85
 
 [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
-\end{lstlisting}
-\subsection*{test\_7\_05\_03\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_05_03_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.5.3 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 93)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_06\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_01_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.1 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 92)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_06\_02\_status\_preparing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_02_status_preparing" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.2 Status Preparing ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 91)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-\end{lstlisting}
-\subsection*{test\_7\_06\_03\_remote\_start}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_03_remote_start" time="0.457"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.3 Remote Start (Accepted) ---
 
@@ -775,26 +542,20 @@ Payload: {
 [EVSE] StatusNotification ACKNOWLEDGED (Charging)
 DEBUG: Checking buffer for 'RemoteStartTransaction Response (Accepted)' (Size: 90)
 DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
-\end{lstlisting}
-\subsection*{test\_7\_06\_04\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_04_start_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.4 Start Transaction ---
 DEBUG: Checking buffer for 'Transaction started on 1' (Size: 101)
 DEBUG: Found in queue: Transaction started on 1: 7641
-\end{lstlisting}
-\subsection*{test\_7\_06\_05\_status\_charging}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_05_status_charging" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.5 Status Charging ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Charging)' (Size: 106)
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_7\_06\_06\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_06_meter_values" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.6 Meter Values ---
 
@@ -803,10 +564,8 @@ DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
 [EVSE] RAW RECV: [3,"df05ba73-a989-456a-a5d1-87d5b4e12e39",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_7\_06\_07\_stop\_power\_loss}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_07_stop_power_loss" time="0.120"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.7 Stop Transaction (PowerLoss) ---
 DEBUG: Checking buffer for 'Transaction stopped' (Size: 108)
@@ -822,34 +581,27 @@ DEBUG: Checking buffer for 'Transaction stopped' (Size: 108)
 [EVSE] RAW RECV: [3,"b75fa377-2de8-48b7-a374-75b20612451e",{}]
 
 [EVSE] SENDING Packet: StatusNotification (Available)DEBUG: Found in queue: Transaction stopped on 1: 7641
-\end{lstlisting}
-\subsection*{test\_7\_06\_08\_boot\_notification}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_08_boot_notification" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.8 BootNotification (Reboot) ---
 DEBUG: Checking buffer for 'BootNotification ACCEPTED' (Size: 116)
 DEBUG: Found in buffer: [EVSE] BootNotification ACCEPTED
-\end{lstlisting}
-\subsection*{test\_7\_06\_09\_status\_preparing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_09_status_preparing" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.9 Status Preparing ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 115)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-\end{lstlisting}
-\subsection*{test\_7\_06\_10\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_06_10_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.6.10 Status Available ---
 DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 114)
 DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_07\_01\_send\_local\_list}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_01_send_local_list" time="0.166"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.7.1 Send Local List (Simulated) ---
 DEBUG: Checking buffer for 'SendLocalList (ver=1, type=Full, len=1)' (Size: 113)
@@ -884,22 +636,18 @@ Payload: {
 
 [EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=1)
 DEBUG: Found in queue: [EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=1)
-\end{lstlisting}
-\subsection*{test\_7\_07\_02\_disconnect}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_02_disconnect" time="1.006"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.7.2 Disconnect LAN ---
 [EVSE] Went OFFLINE
-\end{lstlisting}
-\subsection*{test\_7\_07\_03\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_03_start_transaction" time="1.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.7.3 Start Transaction (Offline) ---
 
 [EVSE] SENDING Packet: StatusNotification (Preparing)
-[EVSE] OFFLINE: Buffering StatusNotification(connector_id=1, error_code='NoError', status=<ChargePointStatus.preparing: 'Preparing'>, timestamp='2026-01-11T12:49:54Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+[EVSE] OFFLINE: Buffering StatusNotification(connector_id=1, error_code='NoError', status=&lt;ChargePointStatus.preparing: 'Preparing'&gt;, timestamp='2026-01-11T12:49:54Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
 
 [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
 
@@ -913,13 +661,11 @@ Payload: {
 [EVSE] OFFLINE: Buffering StartTransaction(connector_id=1, id_tag='RFID_SIM', meter_start=0, timestamp='2026-01-11T12:49:54Z', reservation_id=None)
 
 [EVSE] SENDING Packet: StatusNotification (Charging)
-[EVSE] OFFLINE: Buffering StatusNotification(connector_id=1, error_code='NoError', status=<ChargePointStatus.charging: 'Charging'>, timestamp='2026-01-11T12:49:54Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+[EVSE] OFFLINE: Buffering StatusNotification(connector_id=1, error_code='NoError', status=&lt;ChargePointStatus.charging: 'Charging'&gt;, timestamp='2026-01-11T12:49:54Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
 
 [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_7\_07\_04\_stop\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_04_stop_transaction" time="1.008"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.7.4 Stop Transaction (Local) ---
 
@@ -935,20 +681,18 @@ Payload: {
 [EVSE] OFFLINE: Buffering StatusNotification(connector_id=1, error_code='NoError', status='Available', timestamp='2026-01-11T12:49:55Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_7\_07\_05\_reconnect}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_05_reconnect" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.7.5 Reconnect LAN ---
 [EVSE] Went ONLINE. Flushing 6 messages...
-[EVSE] FLUSHING: StatusNotification(connector_id=1, error_code='NoError', status=<ChargePointStatus.preparing: 'Preparing'>, timestamp='2026-01-11T12:49:54Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+[EVSE] FLUSHING: StatusNotification(connector_id=1, error_code='NoError', status=&lt;ChargePointStatus.preparing: 'Preparing'&gt;, timestamp='2026-01-11T12:49:54Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
 
 [EVSE] RAW RECV: [3,"0e7edacd-da45-409f-81cf-6b0dadffa2bc",{}]
 [EVSE] FLUSHING: StartTransaction(connector_id=1, id_tag='RFID_SIM', meter_start=0, timestamp='2026-01-11T12:49:54Z', reservation_id=None)
 
 [EVSE] RAW RECV: [3,"ccb51e76-b3e4-406c-ad15-9f782d076cdf",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7642}]
-[EVSE] FLUSHING: StatusNotification(connector_id=1, error_code='NoError', status=<ChargePointStatus.charging: 'Charging'>, timestamp='2026-01-11T12:49:54Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+[EVSE] FLUSHING: StatusNotification(connector_id=1, error_code='NoError', status=&lt;ChargePointStatus.charging: 'Charging'&gt;, timestamp='2026-01-11T12:49:54Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
 
 [EVSE] RAW RECV: [3,"5bd8932e-2934-4e00-bc7b-be8ad5d11877",{}]
 [EVSE] FLUSHING: StatusNotification(connector_id=1, error_code='NoError', status='Finishing', timestamp='2026-01-11T12:49:55Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
@@ -960,38 +704,19 @@ Payload: {
 [EVSE] FLUSHING: StatusNotification(connector_id=1, error_code='NoError', status='Available', timestamp='2026-01-11T12:49:55Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
 
 [EVSE] RAW RECV: [3,"5d222ed1-2acd-4c46-b13c-df5d42191690",{}]
-\end{lstlisting}
-\subsection*{test\_7\_07\_06\_send\_start}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_06_send_start" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.7.6 Send Buffered Start ---
 DEBUG: Checking buffer for 'Transaction started on 1' (Size: 126)
 DEBUG: Found in queue: Transaction started on 1: 1
-\end{lstlisting}
-\subsection*{test\_7\_07\_07\_send\_stop}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_07_send_stop" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 7.7.7 Send Buffered Stop ---
 DEBUG: Checking buffer for 'Transaction stopped' (Size: 129)
 DEBUG: Found in queue: Transaction stopped on 1: 1
 
 [TestMeaSection7] Extended Logging DISABLED
-\end{lstlisting}
 
-\section{Global Execution Log}
-\begin{lstlisting}
-============================= test session starts ==============================
-platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
-rootdir: /Users/rus/development/MEA-V2G
-collected 54 items
-
-tests/api/test_mea_section7.py ......................................... [ 75%]
-.............                                                            [100%]
-
-- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section7.xml -
-============================= 54 passed in 16.56s ==============================
-\end{lstlisting}
-
-\end{document}
+</system-out></testcase></testsuite></testsuites>

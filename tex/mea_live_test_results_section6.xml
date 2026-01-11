@@ -1,78 +1,4 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{geometry}
-\usepackage{longtable}
-\usepackage{xcolor}
-\usepackage{booktabs}
-\usepackage{listings}
-\usepackage{pdfpages} % Added for including external PDFs
-\geometry{a4paper, margin=1in}
-
-\lstset{
-    basicstyle=\ttfamily\scriptsize,
-    breaklines=true,
-    breakatwhitespace=false,
-    frame=single,
-    showstringspaces=false
-}
-
-\title{MEA OCPP Live Test}
-\author{Automated Test Suite}
-\date{\today}
-
-\begin{document}
-
-\maketitle
-
-\section{Summary}
-\begin{itemize}
-    \item \textbf{Total Tests:} 26
-    \item \textbf{Passed:} 26
-    \item \textbf{Failed:} 0
-    \item \textbf{Errors:} 0
-    \item \textbf{Skipped:} 0
-    \item \textbf{Total Duration:} 17.154 seconds
-\end{itemize}
-
-\section{Detailed Results}
-\subsection{Smart Charging Profile Verification}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-6.1 & test\_6\_01\_status\_available & \textcolor{green}{Pass} & 2.007 \\
-6.2 & test\_6\_02\_status\_preparing & \textcolor{green}{Pass} & 0.090 \\
-6.3 & test\_6\_03\_authorize & \textcolor{green}{Pass} & 0.173 \\
-6.4 & test\_6\_04\_start\_transaction & \textcolor{green}{Pass} & 0.236 \\
-6.5 & test\_6\_05\_status\_charging & \textcolor{green}{Pass} & 0.038 \\
-6.6 & test\_6\_06\_meter\_values & \textcolor{green}{Pass} & 2.002 \\
-6.7 & test\_6\_07\_set\_charging\_profile\_1 & \textcolor{green}{Pass} & 0.349 \\
-6.8 & test\_6\_08\_meter\_values & \textcolor{green}{Pass} & 2.005 \\
-6.9 & test\_6\_09\_set\_charging\_profile\_2 & \textcolor{green}{Pass} & 0.348 \\
-6.10 & test\_6\_10\_meter\_values & \textcolor{green}{Pass} & 2.001 \\
-6.11 & test\_6\_11\_stop\_transaction & \textcolor{green}{Pass} & 0.126 \\
-6.12 & test\_6\_12\_status\_finishing & \textcolor{green}{Pass} & 0.001 \\
-6.13 & test\_6\_13\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-6.14 & test\_6\_14\_status\_preparing & \textcolor{green}{Pass} & 0.001 \\
-6.15 & test\_6\_15\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.434 \\
-6.16 & test\_6\_16\_start\_transaction & \textcolor{green}{Pass} & 0.001 \\
-6.17 & test\_6\_17\_status\_charging & \textcolor{green}{Pass} & 0.001 \\
-6.18 & test\_6\_18\_meter\_values & \textcolor{green}{Pass} & 2.005 \\
-6.19 & test\_6\_19\_set\_charging\_profile\_3 & \textcolor{green}{Pass} & 0.362 \\
-6.20 & test\_6\_20\_meter\_values & \textcolor{green}{Pass} & 2.005 \\
-6.21 & test\_6\_21\_set\_charging\_profile\_4 & \textcolor{green}{Pass} & 0.356 \\
-6.22 & test\_6\_22\_meter\_values & \textcolor{green}{Pass} & 2.005 \\
-6.23 & test\_6\_23\_remote\_stop\_transaction & \textcolor{green}{Pass} & 0.473 \\
-6.24 & test\_6\_24\_stop\_transaction & \textcolor{green}{Pass} & 0.001 \\
-6.25 & test\_6\_25\_status\_finishing & \textcolor{green}{Pass} & 0.001 \\
-6.26 & test\_6\_26\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-\bottomrule
-\end{longtable}
-\section{Individual Test Case Logs}\subsection*{test\_6\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="26" time="17.154" timestamp="2026-01-11T19:30:43.196941+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_01_status_available" time="2.007"><system-out>--------------------------------- Captured Out ---------------------------------
 
 [EVSE] RAW RECV: [3,"98d00358-47bc-45f6-9a73-68f9a9cf1425",{"currentTime":"2026-01-11T12:31:20Z","interval":3600,"status":"Accepted"}]
 
@@ -93,10 +19,8 @@
 [TestMeaSection6] Extended Logging ENABLED for Report Generation
 
 --- 6.1 StatusNotification (Available) ---
-\end{lstlisting}
-\subsection*{test\_6\_02\_status\_preparing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_02_status_preparing" time="0.090"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.2 StatusNotification (Preparing) ---
 
@@ -111,10 +35,8 @@
 [EVSE] RAW RECV: [3,"f7eec074-4abe-4954-a2cf-135a01f83c6a",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-\end{lstlisting}
-\subsection*{test\_6\_03\_authorize}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_03_authorize" time="0.173"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.3 Authorize ---
 
@@ -123,10 +45,8 @@
 [EVSE] RAW RECV: [3,"3b24ff20-1b7d-48c3-8179-c92fe3d308d6",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
 
 [EVSE] Authorize ACKNOWLEDGED (Accepted)
-\end{lstlisting}
-\subsection*{test\_6\_04\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_04_start_transaction" time="0.236"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.4 StartTransaction ---
 
@@ -147,20 +67,16 @@ Payload: {
 [EVSE] RAW RECV: [3,"9d363040-933d-4693-959e-5f8a7df797e1",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7636}]
 
 [EVSE] SENDING Packet: StatusNotification (Charging)
-\end{lstlisting}
-\subsection*{test\_6\_05\_status\_charging}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_05_status_charging" time="0.038"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.5 StatusNotification (Charging) ---
 
 [EVSE] RAW RECV: [3,"d4758252-76c5-4a8d-a248-716704b12794",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_6\_06\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_06_meter_values" time="2.002"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.6 MeterValues ---
 
@@ -169,10 +85,8 @@ Payload: {
 [EVSE] RAW RECV: [3,"2ccfb2ef-9f55-4d3f-8514-7fa97f90b817",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_6\_07\_set\_charging\_profile\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_07_set_charging_profile_1" time="0.349"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.7 SetChargingProfile (TxProfile) ---
 
@@ -207,10 +121,8 @@ Payload: {
 
 [EVSE] Sending SetChargingProfile Response (Accepted)
 SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T12:31:24Z","result":{"status":"Accepted"}}
-\end{lstlisting}
-\subsection*{test\_6\_08\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_08_meter_values" time="2.005"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.8 MeterValues ---
 
@@ -219,10 +131,8 @@ SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time"
 [EVSE] RAW RECV: [3,"1a16e2b2-7135-43f2-97c3-b23df9a1b39f",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_6\_09\_set\_charging\_profile\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_09_set_charging_profile_2" time="0.348"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.9 SetChargingProfile (Update/New) ---
 
@@ -259,10 +169,8 @@ Payload: {
 
 [EVSE] Sending SetChargingProfile Response (Accepted)
 SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T12:31:26Z","result":{"status":"Accepted"}}
-\end{lstlisting}
-\subsection*{test\_6\_10\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_10_meter_values" time="2.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.10 MeterValues ---
 
@@ -277,10 +185,8 @@ SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time"
 [EVSE] RAW RECV: [3,"f1ebd7d4-a112-4922-b6ae-714b9fd4ff2a",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_6\_11\_stop\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_11_stop_transaction" time="0.126"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.11 StopTransaction ---
 
@@ -295,31 +201,23 @@ SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time"
 [EVSE] RAW RECV: [3,"b95ae798-c72c-454f-9548-8ae692891c17",{}]
 
 [EVSE] SENDING Packet: StatusNotification (Available)
-\end{lstlisting}
-\subsection*{test\_6\_12\_status\_finishing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_12_status_finishing" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.12 StatusNotification (Finishing) ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in buffer
-\end{lstlisting}
-\subsection*{test\_6\_13\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_13_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.13 StatusNotification (Available) ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in buffer
-\end{lstlisting}
-\subsection*{test\_6\_14\_status\_preparing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_14_status_preparing" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.14 StatusNotification (Preparing) ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Preparing)' in buffer
-\end{lstlisting}
-\subsection*{test\_6\_15\_remote\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_15_remote_start_transaction" time="0.434"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.15 RemoteStartTransaction ---
 
@@ -364,22 +262,16 @@ Payload: {
 [EVSE] RAW RECV: [3,"aaae1031-d822-4441-8547-61e5968f58cf",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_6\_16\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_16_start_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.16 StartTransaction ---
-\end{lstlisting}
-\subsection*{test\_6\_17\_status\_charging}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_17_status_charging" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.17 StatusNotification (Charging) ---
-\end{lstlisting}
-\subsection*{test\_6\_18\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_18_meter_values" time="2.005"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.18 MeterValues ---
 
@@ -388,10 +280,8 @@ Payload: {
 [EVSE] RAW RECV: [3,"a1f5310b-9064-4e07-82c7-bedb0e835ef1",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_6\_19\_set\_charging\_profile\_3}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_19_set_charging_profile_3" time="0.362"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.19 SetChargingProfile ---
 
@@ -428,10 +318,8 @@ Payload: {
 
 [EVSE] Sending SetChargingProfile Response (Accepted)
 SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T12:31:31Z","result":{"status":"Accepted"}}
-\end{lstlisting}
-\subsection*{test\_6\_20\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_20_meter_values" time="2.005"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.20 MeterValues ---
 
@@ -440,10 +328,8 @@ SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time"
 [EVSE] RAW RECV: [3,"e7dfe9e5-b0f0-41eb-ad0d-81b284217a02",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_6\_21\_set\_charging\_profile\_4}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_21_set_charging_profile_4" time="0.356"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.21 SetChargingProfile ---
 
@@ -480,10 +366,8 @@ Payload: {
 
 [EVSE] Sending SetChargingProfile Response (Accepted)
 SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T12:31:33Z","result":{"status":"Accepted"}}
-\end{lstlisting}
-\subsection*{test\_6\_22\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_22_meter_values" time="2.005"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.22 MeterValues ---
 
@@ -498,10 +382,8 @@ SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time"
 [EVSE] RAW RECV: [3,"aab52583-59b3-4578-ae6b-c2864a7984cc",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_6\_23\_remote\_stop\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_23_remote_stop_transaction" time="0.473"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.23 RemoteStopTransaction ---
 
@@ -524,81 +406,21 @@ SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time"
 [EVSE] RAW RECV: [3,"f8119e4a-60ec-4f4a-b8ff-096a3011ccf3",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_6\_24\_stop\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_24_stop_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.24 StopTransaction ---
-\end{lstlisting}
-\subsection*{test\_6\_25\_status\_finishing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_25_status_finishing" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.25 StatusNotification (Finishing) ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in buffer
-\end{lstlisting}
-\subsection*{test\_6\_26\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_26_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 6.26 StatusNotification (Available) ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in buffer
 
 [TestMeaSection6] Extended Logging DISABLED
-\end{lstlisting}
 
-\section{Global Execution Log}
-\begin{lstlisting}
-============================= test session starts ==============================
-platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
-rootdir: /Users/rus/development/MEA-V2G
-collected 26 items
-
-tests/api/test_mea_section6.py ..........................                [100%]--- Logging error ---
-
-
-- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section6.xml -
-============================= 26 passed in 17.15s ==============================
-Traceback (most recent call last):
-  File "/Users/rus/development/MEA-V2G/tests/api/conftest.py", line 211, in _main
-    await block_task
-  File "/Users/rus/Library/Python/3.12/lib/python/site-packages/ocpp/charge_point.py", line 246, in start
-    message = await self._connection.recv()
-              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/rus/Library/Python/3.12/lib/python/site-packages/websockets/asyncio/connection.py", line 322, in recv
-    raise self.protocol.close_exc from self.recv_exc
-websockets.exceptions.ConnectionClosedOK: sent 1000 (OK); then received 1000 (OK)
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/logging/__init__.py", line 1164, in emit
-    self.flush()
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/logging/__init__.py", line 1144, in flush
-    self.stream.flush()
-ValueError: I/O operation on closed file.
-Call stack:
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1030, in _bootstrap
-    self._bootstrap_inner()
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1073, in _bootstrap_inner
-    self.run()
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1010, in run
-    self._target(*self._args, **self._kwargs)
-  File "/Users/rus/development/MEA-V2G/tests/api/conftest.py", line 54, in _run_loop
-    self.loop.run_until_complete(self._main())
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 674, in run_until_complete
-    self.run_forever()
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 641, in run_forever
-    self._run_once()
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 1987, in _run_once
-    handle._run()
-  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/events.py", line 88, in _run
-    self._context.run(self._callback, *self._args)
-  File "/Users/rus/development/MEA-V2G/tests/api/conftest.py", line 213, in _main
-    LOGGER.error(f"Connection failed: {e}")
-Message: 'Connection failed: sent 1000 (OK); then received 1000 (OK)'
-Arguments: ()
-\end{lstlisting}
-
-\end{document}
+</system-out></testcase></testsuite></testsuites>

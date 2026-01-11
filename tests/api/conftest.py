@@ -104,7 +104,7 @@ class EvseSimulator:
                     # We reuse internal method if possible or create new one?
                     # Ocpp16Interface has send_meter_values_one_off hardcoded to con 1.
                     # Ideally we fix that or just use the logic here.
-                    await self.cp.send_meter_values_one_off() 
+                    await self.cp.send_meter_values_one_off(connector_id=args.get('connector_id', 1)) 
 
                 elif command == 'BOOT':
                      await self.cp.send_boot_notification()

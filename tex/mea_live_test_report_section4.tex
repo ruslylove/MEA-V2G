@@ -31,7 +31,7 @@
     \item \textbf{Failed:} 0
     \item \textbf{Errors:} 0
     \item \textbf{Skipped:} 0
-    \item \textbf{Total Duration:} 21.982 seconds
+    \item \textbf{Total Duration:} 22.195 seconds
 \end{itemize}
 
 \section{Detailed Results}
@@ -42,28 +42,415 @@
 \textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
 \midrule
 \endhead
-4.1 & test\_4\_01\_reset\_hard & \textcolor{green}{Pass} & 5.357 \\
-4.2 & test\_4\_02\_boot\_notification & \textcolor{green}{Pass} & 0.000 \\
-4.3 & test\_4\_03\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.002 \\
-4.4 & test\_4\_04\_status\_notification\_plug & \textcolor{green}{Pass} & 1.001 \\
-4.5 & test\_4\_05\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.356 \\
-4.6 & test\_4\_06\_start\_transaction & \textcolor{green}{Pass} & 2.001 \\
-4.7 & test\_4\_07\_status\_notification\_charging & \textcolor{green}{Pass} & 1.001 \\
-4.8 & test\_4\_08\_meter\_values & \textcolor{green}{Pass} & 1.001 \\
-4.9 & test\_4\_09\_reset\_soft & \textcolor{green}{Pass} & 1.352 \\
-4.10 & test\_4\_10\_stop\_transaction & \textcolor{green}{Pass} & 0.000 \\
+4.1 & test\_4\_01\_reset\_hard & \textcolor{green}{Pass} & 5.344 \\
+4.2 & test\_4\_02\_boot\_notification & \textcolor{green}{Pass} & 0.001 \\
+4.3 & test\_4\_03\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.004 \\
+4.4 & test\_4\_04\_status\_notification\_plug & \textcolor{green}{Pass} & 1.006 \\
+4.5 & test\_4\_05\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.462 \\
+4.6 & test\_4\_06\_start\_transaction & \textcolor{green}{Pass} & 2.005 \\
+4.7 & test\_4\_07\_status\_notification\_charging & \textcolor{green}{Pass} & 1.004 \\
+4.8 & test\_4\_08\_meter\_values & \textcolor{green}{Pass} & 1.006 \\
+4.9 & test\_4\_09\_reset\_soft & \textcolor{green}{Pass} & 1.393 \\
+4.10 & test\_4\_10\_stop\_transaction & \textcolor{green}{Pass} & 0.001 \\
 4.11 & test\_4\_11\_status\_notification\_plug & \textcolor{green}{Pass} & 0.000 \\
-4.12 & test\_4\_12\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.002 \\
-4.13 & test\_4\_13\_status\_notification\_plug & \textcolor{green}{Pass} & 1.003 \\
-4.14 & test\_4\_14\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.456 \\
-4.15 & test\_4\_15\_start\_transaction & \textcolor{green}{Pass} & 2.002 \\
-4.16 & test\_4\_16\_status\_notification\_charging & \textcolor{green}{Pass} & 1.005 \\
-4.17 & test\_4\_17\_meter\_values & \textcolor{green}{Pass} & 1.005 \\
-4.18 & test\_4\_18\_reset\_hard & \textcolor{green}{Pass} & 1.334 \\
-4.19 & test\_4\_19\_stop\_transaction & \textcolor{green}{Pass} & 0.000 \\
-4.20 & test\_4\_20\_status\_notification\_plug & \textcolor{green}{Pass} & 0.000 \\
-4.21 & test\_4\_21\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.005 \\
+4.12 & test\_4\_12\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.004 \\
+4.13 & test\_4\_13\_status\_notification\_plug & \textcolor{green}{Pass} & 1.006 \\
+4.14 & test\_4\_14\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.465 \\
+4.15 & test\_4\_15\_start\_transaction & \textcolor{green}{Pass} & 2.006 \\
+4.16 & test\_4\_16\_status\_notification\_charging & \textcolor{green}{Pass} & 1.001 \\
+4.17 & test\_4\_17\_meter\_values & \textcolor{green}{Pass} & 1.006 \\
+4.18 & test\_4\_18\_reset\_hard & \textcolor{green}{Pass} & 1.346 \\
+4.19 & test\_4\_19\_stop\_transaction & \textcolor{green}{Pass} & 0.001 \\
+4.20 & test\_4\_20\_status\_notification\_plug & \textcolor{green}{Pass} & 0.001 \\
+4.21 & test\_4\_21\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.006 \\
 \bottomrule
 \end{longtable}
+\section{Individual Test Case Logs}\subsection*{test\_4\_01\_reset\_hard}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"849f8413-13fc-44b8-b60a-cd90a05076d3",{"currentTime":"2026-01-11T12:27:58Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"c4b2702c-5437-43ad-af8a-016d32ad3ce9",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"893c17cd-c201-4f92-9841-8b83a1d132d6",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"7d0b4a8c-1a92-41ed-a0e6-67416d39bb7d",{"currentTime":"2026-01-11T12:27:58Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T12:27:58Z)
+
+[TestMeaSection4] Extended Logging ENABLED for Report Generation
+
+--- 4.1 Reset (Hard) ---
+
+[EVSE] RAW RECV: [2,"f755ad59eee811f0b7ea0242c0a8300e","Reset",{"type":"Hard"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+
+[EVSE] SENDING Packet: BootNotification
+Payload: {
+  "chargePointModel": "MEA-V2G-01",
+  "chargePointVendor": "KMUTNB"
+}
+
+[EVSE] RAW RECV: [3,"a9a17ed1-90f0-42f5-8a7c-6fa1a167a345",{"currentTime":"2026-01-11T12:28:01Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+\end{lstlisting}
+\subsection*{test\_4\_02\_boot\_notification}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.2 BootNotification ---
+\end{lstlisting}
+\subsection*{test\_4\_03\_status\_notification\_unplug}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.3 StatusNotification (Unplug) -> Available ---
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"9326e03b-dd31-4b0a-a926-1e202e3ced90",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+\end{lstlisting}
+\subsection*{test\_4\_04\_status\_notification\_plug}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.4 StatusNotification (Plug) -> Preparing ---
+
+[EVSE] SENDING Packet: StatusNotification (Preparing)
+
+[EVSE] RAW RECV: [3,"327dca09-cb95-4571-9b3d-7b0821fd35bf",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+\end{lstlisting}
+\subsection*{test\_4\_05\_remote\_start\_transaction}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.5 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"fa89c005eee811f094390242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] SENDING Packet: StatusNotification (Preparing)
+
+[EVSE] RAW RECV: [3,"323b18d6-8c71-43d0-838a-dd02f2d8b180",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] SENDING Packet: StartTransaction
+Payload: {
+  "connector_id": 1,
+  "id_tag": "RFID_SIM",
+  "meter_start": 0,
+  "timestamp": "2026-01-11T12:27:28Z"
+}
+
+[EVSE] RAW RECV: [3,"6c15fe7d-e7a4-40a2-b675-08d36f001e5b",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7633}]
+
+[EVSE] SENDING Packet: StatusNotification (Charging)
+
+[EVSE] RAW RECV: [3,"7cc9059d-14e3-4ab8-b6c2-dddc4cda1b1d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_4\_06\_start\_transaction}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.6 StartTransaction ---
+Transaction Started: 7633
+\end{lstlisting}
+\subsection*{test\_4\_07\_status\_notification\_charging}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.7 StatusNotification (Charging) ---
+
+[EVSE] SENDING Packet: StatusNotification (Charging)
+
+[EVSE] RAW RECV: [3,"71dc1d81-687f-43ca-bd2d-6231601ba790",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_4\_08\_meter\_values}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.8 MeterValues ---
+
+[EVSE] SENDING Packet: MeterValues (One-off)
+
+[EVSE] RAW RECV: [3,"4daa0585-4608-468d-b794-5a02b05f51f3",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+\end{lstlisting}
+\subsection*{test\_4\_09\_reset\_soft}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.9 Reset (Soft) ---
+
+[EVSE] RAW RECV: [2,"fd3a617feee811f091f50242c0a8300e","Reset",{"type":"Soft"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Soft"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+
+[EVSE] SENDING Packet: StatusNotification (Finishing)
+
+[EVSE] RAW RECV: [3,"81debbca-d5ab-4d35-b72e-6ed6db5e2bc1",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] SENDING Packet: StopTransaction (ID: 7633, Reason: HardReset)
+
+[EVSE] RAW RECV: [3,"dd5752a1-4a8b-4d62-90cc-c39ba29a35bf",{}]
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"4f73af21-08c1-45db-8dcf-f736e13244d7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+\end{lstlisting}
+\subsection*{test\_4\_10\_stop\_transaction}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.10 StopTransaction ---
+\end{lstlisting}
+\subsection*{test\_4\_11\_status\_notification\_plug}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.11 StatusNotification (Plug) ---
+\end{lstlisting}
+\subsection*{test\_4\_12\_status\_notification\_unplug}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.12 StatusNotification (Unplug) -> Available ---
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"d71bb64e-cafd-4100-8a6d-77092a40e761",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+\end{lstlisting}
+\subsection*{test\_4\_13\_status\_notification\_plug}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.13 StatusNotification (Plug) -> Preparing ---
+
+[EVSE] SENDING Packet: StatusNotification (Preparing)
+
+[EVSE] RAW RECV: [3,"04f0c5b0-4337-4e9c-8dc6-d5f9bb870939",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+\end{lstlisting}
+\subsection*{test\_4\_14\_remote\_start\_transaction}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.14 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"ff407ce7eee811f092f00242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] SENDING Packet: StatusNotification (Preparing)
+
+[EVSE] RAW RECV: [3,"f3f82d96-d781-4294-8cca-ee609726ecd7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] SENDING Packet: StartTransaction
+Payload: {
+  "connector_id": 1,
+  "id_tag": "RFID_SIM",
+  "meter_start": 0,
+  "timestamp": "2026-01-11T12:27:36Z"
+}
+
+[EVSE] RAW RECV: [3,"6e0338d1-0e7f-4c0e-96bb-edacdcc4487e",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7634}]
+
+[EVSE] SENDING Packet: StatusNotification (Charging)
+\end{lstlisting}
+\subsection*{test\_4\_15\_start\_transaction}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.15 StartTransaction ---
+
+[EVSE] RAW RECV: [3,"c15c2d13-7836-4c03-b5c1-328a2392089c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_4\_16\_status\_notification\_charging}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.16 StatusNotification (Charging) ---
+
+[EVSE] SENDING Packet: StatusNotification (Charging)
+
+[EVSE] RAW RECV: [3,"ef5c04d7-590a-48f2-af05-732d058f5779",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_4\_17\_meter\_values}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.17 MeterValues ---
+
+[EVSE] SENDING Packet: MeterValues (One-off)
+
+[EVSE] RAW RECV: [3,"60f18ee9-0138-4f45-a051-f2c4cad1070d",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+\end{lstlisting}
+\subsection*{test\_4\_18\_reset\_hard}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.18 Reset (Hard) ---
+
+[EVSE] RAW RECV: [2,"01e7169aeee911f0bd230242c0a8300e","Reset",{"type":"Hard"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+
+[EVSE] SENDING Packet: StatusNotification (Finishing)
+
+[EVSE] RAW RECV: [3,"097bebd3-4ff8-404a-97d8-67ad39fdcb6c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] SENDING Packet: StopTransaction (ID: 7634, Reason: HardReset)
+
+[EVSE] RAW RECV: [3,"9e014a59-f27e-4a02-a644-aa894f171e62",{}]
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"b1bc7677-1989-4285-9cfb-1fe6638cc4b9",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+\end{lstlisting}
+\subsection*{test\_4\_19\_stop\_transaction}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.19 StopTransaction ---
+\end{lstlisting}
+\subsection*{test\_4\_20\_status\_notification\_plug}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.20 StatusNotification (Plug) ---
+\end{lstlisting}
+\subsection*{test\_4\_21\_status\_notification\_unplug}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 4.21 StatusNotification (Unplug) -> Available ---
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"550edca9-bcac-4733-826f-1e104e0db3b2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[TestMeaSection4] Extended Logging DISABLED
+\end{lstlisting}
+
+\section{Global Execution Log}
+\begin{lstlisting}
+============================= test session starts ==============================
+platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/rus/development/MEA-V2G
+collected 21 items
+
+tests/api/test_mea_section4.py .....................                     [100%]--- Logging error ---
+
+
+- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section4.xml -
+============================= 21 passed in 22.19s ==============================
+Traceback (most recent call last):
+  File "/Users/rus/development/MEA-V2G/tests/api/conftest.py", line 211, in _main
+    await block_task
+  File "/Users/rus/Library/Python/3.12/lib/python/site-packages/ocpp/charge_point.py", line 246, in start
+    message = await self._connection.recv()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/rus/Library/Python/3.12/lib/python/site-packages/websockets/asyncio/connection.py", line 322, in recv
+    raise self.protocol.close_exc from self.recv_exc
+websockets.exceptions.ConnectionClosedOK: sent 1000 (OK); then received 1000 (OK)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/logging/__init__.py", line 1164, in emit
+    self.flush()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/logging/__init__.py", line 1144, in flush
+    self.stream.flush()
+ValueError: I/O operation on closed file.
+Call stack:
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1030, in _bootstrap
+    self._bootstrap_inner()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1073, in _bootstrap_inner
+    self.run()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/threading.py", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/rus/development/MEA-V2G/tests/api/conftest.py", line 54, in _run_loop
+    self.loop.run_until_complete(self._main())
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 674, in run_until_complete
+    self.run_forever()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 641, in run_forever
+    self._run_once()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 1987, in _run_once
+    handle._run()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/events.py", line 88, in _run
+    self._context.run(self._callback, *self._args)
+  File "/Users/rus/development/MEA-V2G/tests/api/conftest.py", line 213, in _main
+    LOGGER.error(f"Connection failed: {e}")
+Message: 'Connection failed: sent 1000 (OK); then received 1000 (OK)'
+Arguments: ()
+\end{lstlisting}
 
 \end{document}

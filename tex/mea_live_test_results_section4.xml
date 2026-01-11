@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="21" time="22.195" timestamp="2026-01-11T19:27:21.105810+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_01_reset_hard" time="5.344"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"849f8413-13fc-44b8-b60a-cd90a05076d3",{"currentTime":"2026-01-11T12:27:58Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"c4b2702c-5437-43ad-af8a-016d32ad3ce9",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"893c17cd-c201-4f92-9841-8b83a1d132d6",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"7d0b4a8c-1a92-41ed-a0e6-67416d39bb7d",{"currentTime":"2026-01-11T12:27:58Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T12:27:58Z)
+
+[TestMeaSection4] Extended Logging ENABLED for Report Generation
+
+--- 4.1 Reset (Hard) ---
+
+[EVSE] RAW RECV: [2,"f755ad59eee811f0b7ea0242c0a8300e","Reset",{"type":"Hard"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+
+[EVSE] SENDING Packet: BootNotification
+Payload: {
+  "chargePointModel": "MEA-V2G-01",
+  "chargePointVendor": "KMUTNB"
+}
+
+[EVSE] RAW RECV: [3,"a9a17ed1-90f0-42f5-8a7c-6fa1a167a345",{"currentTime":"2026-01-11T12:28:01Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_02_boot_notification" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.2 BootNotification ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_03_status_notification_unplug" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.3 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"9326e03b-dd31-4b0a-a926-1e202e3ced90",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_04_status_notification_plug" time="1.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.4 StatusNotification (Plug) -&gt; Preparing ---
+
+[EVSE] SENDING Packet: StatusNotification (Preparing)
+
+[EVSE] RAW RECV: [3,"327dca09-cb95-4571-9b3d-7b0821fd35bf",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_05_remote_start_transaction" time="0.462"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.5 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"fa89c005eee811f094390242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] SENDING Packet: StatusNotification (Preparing)
+
+[EVSE] RAW RECV: [3,"323b18d6-8c71-43d0-838a-dd02f2d8b180",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] SENDING Packet: StartTransaction
+Payload: {
+  "connector_id": 1,
+  "id_tag": "RFID_SIM",
+  "meter_start": 0,
+  "timestamp": "2026-01-11T12:27:28Z"
+}
+
+[EVSE] RAW RECV: [3,"6c15fe7d-e7a4-40a2-b675-08d36f001e5b",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7633}]
+
+[EVSE] SENDING Packet: StatusNotification (Charging)
+
+[EVSE] RAW RECV: [3,"7cc9059d-14e3-4ab8-b6c2-dddc4cda1b1d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_06_start_transaction" time="2.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.6 StartTransaction ---
+Transaction Started: 7633
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_07_status_notification_charging" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.7 StatusNotification (Charging) ---
+
+[EVSE] SENDING Packet: StatusNotification (Charging)
+
+[EVSE] RAW RECV: [3,"71dc1d81-687f-43ca-bd2d-6231601ba790",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_08_meter_values" time="1.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.8 MeterValues ---
+
+[EVSE] SENDING Packet: MeterValues (One-off)
+
+[EVSE] RAW RECV: [3,"4daa0585-4608-468d-b794-5a02b05f51f3",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_09_reset_soft" time="1.393"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.9 Reset (Soft) ---
+
+[EVSE] RAW RECV: [2,"fd3a617feee811f091f50242c0a8300e","Reset",{"type":"Soft"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Soft"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+
+[EVSE] SENDING Packet: StatusNotification (Finishing)
+
+[EVSE] RAW RECV: [3,"81debbca-d5ab-4d35-b72e-6ed6db5e2bc1",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] SENDING Packet: StopTransaction (ID: 7633, Reason: HardReset)
+
+[EVSE] RAW RECV: [3,"dd5752a1-4a8b-4d62-90cc-c39ba29a35bf",{}]
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"4f73af21-08c1-45db-8dcf-f736e13244d7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_10_stop_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.10 StopTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_11_status_notification_plug" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.11 StatusNotification (Plug) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_12_status_notification_unplug" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.12 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"d71bb64e-cafd-4100-8a6d-77092a40e761",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_13_status_notification_plug" time="1.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.13 StatusNotification (Plug) -&gt; Preparing ---
+
+[EVSE] SENDING Packet: StatusNotification (Preparing)
+
+[EVSE] RAW RECV: [3,"04f0c5b0-4337-4e9c-8dc6-d5f9bb870939",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_14_remote_start_transaction" time="0.465"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.14 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"ff407ce7eee811f092f00242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] SENDING Packet: StatusNotification (Preparing)
+
+[EVSE] RAW RECV: [3,"f3f82d96-d781-4294-8cca-ee609726ecd7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] SENDING Packet: StartTransaction
+Payload: {
+  "connector_id": 1,
+  "id_tag": "RFID_SIM",
+  "meter_start": 0,
+  "timestamp": "2026-01-11T12:27:36Z"
+}
+
+[EVSE] RAW RECV: [3,"6e0338d1-0e7f-4c0e-96bb-edacdcc4487e",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7634}]
+
+[EVSE] SENDING Packet: StatusNotification (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_15_start_transaction" time="2.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.15 StartTransaction ---
+
+[EVSE] RAW RECV: [3,"c15c2d13-7836-4c03-b5c1-328a2392089c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_16_status_notification_charging" time="1.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.16 StatusNotification (Charging) ---
+
+[EVSE] SENDING Packet: StatusNotification (Charging)
+
+[EVSE] RAW RECV: [3,"ef5c04d7-590a-48f2-af05-732d058f5779",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_17_meter_values" time="1.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.17 MeterValues ---
+
+[EVSE] SENDING Packet: MeterValues (One-off)
+
+[EVSE] RAW RECV: [3,"60f18ee9-0138-4f45-a051-f2c4cad1070d",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_18_reset_hard" time="1.346"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.18 Reset (Hard) ---
+
+[EVSE] RAW RECV: [2,"01e7169aeee911f0bd230242c0a8300e","Reset",{"type":"Hard"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+
+[EVSE] SENDING Packet: StatusNotification (Finishing)
+
+[EVSE] RAW RECV: [3,"097bebd3-4ff8-404a-97d8-67ad39fdcb6c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] SENDING Packet: StopTransaction (ID: 7634, Reason: HardReset)
+
+[EVSE] RAW RECV: [3,"9e014a59-f27e-4a02-a644-aa894f171e62",{}]
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"b1bc7677-1989-4285-9cfb-1fe6638cc4b9",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_19_stop_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.19 StopTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_20_status_notification_plug" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.20 StatusNotification (Plug) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_21_status_notification_unplug" time="1.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.21 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"550edca9-bcac-4733-826f-1e104e0db3b2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[TestMeaSection4] Extended Logging DISABLED
+
+</system-out></testcase></testsuite></testsuites>

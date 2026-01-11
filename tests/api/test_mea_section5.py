@@ -5,7 +5,7 @@ import datetime
 import logging
 import requests
 from tests.api.test_mea_postman import PreemptiveDigestAuth, BASE_URL, USERNAME, PASSWORD, log_api_interaction
-from Ocpp16Interface import PACKET_QUEUE, ChargePointStatus
+from Ocpp16Interface import PACKET_QUEUE, ChargePointStatus, Ocpp16Interface
 import queue
 
 # Re-use config
@@ -40,7 +40,18 @@ class TestMeaSection5:
     Test Case 5: Reservation Check.
     Sequence 5.1 - 5.19.
     """
-    
+    @classmethod
+    def setup_class(cls):
+        # Enable extended logging for this section report
+        Ocpp16Interface.LOG_SEND_PACKETS = True
+        print("\n[TestMeaSection5] Extended Logging ENABLED for Report Generation")
+
+    @classmethod
+    def teardown_class(cls):
+        # Restore default
+        Ocpp16Interface.LOG_SEND_PACKETS = False
+        print("\n[TestMeaSection5] Extended Logging DISABLED")
+
     # Shared state
     reservation_id_cancel = 101
     reservation_id_expire = 102

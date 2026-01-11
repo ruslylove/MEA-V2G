@@ -1,6 +1,5 @@
-import logging
 import asyncio
-import time
+import logging
 from datetime import datetime, timezone
 from ocpp.v16 import ChargePoint as Ocpp16ChargePoint
 from ocpp.v16 import call, call_result
@@ -25,6 +24,7 @@ from ocpp.v16.enums import (
     UnitOfMeasure,
     DataTransferStatus
 )
+from ocpp.exceptions import TypeConstraintViolationError, FormatViolationError
 from ocpp.routing import on
 from Charger import Charger
 import queue
@@ -35,9 +35,16 @@ PACKET_QUEUE = queue.Queue()
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger('ocpp_16_interface')
+# DEBUG: Write to file
+fh = logging.FileHandler('/tmp/evse_debug.log')
+fh.setLevel(logging.DEBUG)
+LOGGER.addHandler(fh)
 
 class Ocpp16Interface(Ocpp16ChargePoint):
-    def __init__(self, id, connection, charger: Charger):
+    # Configurable flags
+    LOG_SEND_PACKETS = False
+
+    def __init__(self, id, connection, charger=None):
         super().__init__(id, connection, response_timeout=20)
         self.charger = charger
         self.heartbeat_interval = 60 # Default
@@ -45,6 +52,9 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         self.transactions = {} 
         # Reservation Management (Connector ID -> {reservationId, idTag, expiryDate})
         self.reservations = {} 
+        # Cache for ConcurrentTx recovery
+        self._concurrent_tx_cache = {} 
+        self._waiting_for_start_tx = None # connector_id
         # Meter Values Tasks (Connector ID -> Task)
         self._meter_value_tasks = {}
         # Connector Status Tracking
@@ -74,7 +84,40 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         # PACKET_QUEUE.put(f"[EVSE] RAW RECV: {raw_msg}") 
         # Keeping it out of queue to avoid messing up test logic assertions? 
         # User wants "log the ocpp message". So I SHOULD put it in queue!
-        PACKET_QUEUE.put(f"[EVSE] RAW RECV: {raw_msg}")
+        if "[" in raw_msg and "ConcurrentTx" in raw_msg:
+             try:
+                 import json
+                 msg = json.loads(raw_msg)
+                 # Check if it's a CallResult (type 3) and contains idTagInfo with ConcurrentTx
+                 # [3, "UniqueId", Payload]
+                 if isinstance(msg, list) and len(msg) == 3 and msg[0] == 3:
+                     unique_id = msg[1]
+                     payload = msg[2]
+                     if isinstance(payload, dict):
+                         status = payload.get('idTagInfo', {}).get('status')
+                         tid = payload.get('transactionId')
+                         if status == 'ConcurrentTx' and tid:
+                              # Direct Recovery via Pending Flag
+                              LOGGER.info(f"SNIFFER: Checking Flag on obj {id(self)}: {self._waiting_for_start_tx}")
+                              if self._waiting_for_start_tx:
+                                   cid = self._waiting_for_start_tx
+                                   LOGGER.info(f"SNIFFER: Intercepted ConcurrentTx ID {tid} for pending Connector {cid}")
+                                   self.transactions[cid] = tid
+                                   
+                                   msg_tx = f"Transaction started on {cid}: {tid}"
+                                   LOGGER.info(msg_tx)
+                                   PACKET_QUEUE.put(msg_tx)
+                                   
+                                   # We can't easily start the charger logic here because it's async?
+                                   # Actually we can let the main loop discover it or do it here?
+                                   # Doing it in start_transaction is safer if we just suppress exception.
+                              else:
+                                   LOGGER.warning(f"SNIFFER: Cached ConcurrentTx ID {tid} but no pending start_tx")
+             except Exception as e:
+                 LOGGER.error(f"SNIFFER ERROR: {e}")
+
+        if self.LOG_SEND_PACKETS:
+            PACKET_QUEUE.put(f"[EVSE] RAW RECV: {raw_msg}")
         await super().route_message(raw_msg)
         
     async def call(self, payload, suppress=False):
@@ -88,7 +131,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             # Construct Mock Response
             # We need to return a CallResult compatible object or Payload.
             # ocpp library returns the Payload object (e.g. StartTransactionConf) directly if unpacked?
-            # No, self.call returns the response payload INSTANCE.
+            # No, self.call returns the Payload object (e.g. StartTransactionConf) directly.
             
             action_name = payload.__class__.__name__.replace('Payload', '')
              # Map request to response class?
@@ -163,6 +206,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             charge_point_model=model,
             charge_point_vendor=vendor
         )
+        msg_send = f"[EVSE] SENDING Packet: BootNotification\nPayload: {json.dumps({'chargePointModel': model, 'chargePointVendor': vendor}, indent=2)}"
+        if self.LOG_SEND_PACKETS:
+            print(f"\n{msg_send}", flush=True)
+            PACKET_QUEUE.put(msg_send)
         response = await self.call(request)
         if response.status == RegistrationStatus.accepted:
             msg = "[EVSE] BootNotification ACCEPTED"
@@ -228,6 +275,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
     async def send_heartbeat(self):
         request = call.Heartbeat()
+        msg_send = "[EVSE] SENDING Packet: Heartbeat"
+        if self.LOG_SEND_PACKETS:
+            print(f"\n{msg_send}", flush=True)
+            PACKET_QUEUE.put(msg_send)
         response = await self.call(request)
         msg = f"[EVSE] Heartbeat ACKNOWLEDGED (Time: {response.current_time})"
         print(f"\n{msg}", flush=True)
@@ -246,9 +297,14 @@ class Ocpp16Interface(Ocpp16ChargePoint):
              payload['info'] = info
              
         request = call.StatusNotification(**payload)
-    
+        
         # Update local state
         self.connector_status[connector_id] = status
+
+        msg_send = f"[EVSE] SENDING Packet: StatusNotification ({status})"
+        if self.LOG_SEND_PACKETS:
+            print(f"\n{msg_send}", flush=True)
+            PACKET_QUEUE.put(msg_send)
     
         response = await self.call(request)
         msg = f"[EVSE] StatusNotification ACKNOWLEDGED ({status})"
@@ -257,6 +313,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         
     async def send_authorize(self, id_tag="RFID_SIM"):
         request = call.Authorize(id_tag=id_tag)
+        msg_send = f"[EVSE] SENDING Packet: Authorize (idTag={id_tag})"
+        if self.LOG_SEND_PACKETS:
+            print(f"\n{msg_send}", flush=True)
+            PACKET_QUEUE.put(msg_send)
         response = await self.call(request)
         msg = f"[EVSE] Authorize ACKNOWLEDGED ({response.id_tag_info['status']})"
         print(f"\n{msg}", flush=True)
@@ -296,11 +356,19 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         await self.send_status_notification(connector_id, ChargePointStatus.preparing)
 
         request = call.StartTransaction(**request_payload)
+
+        msg_send = f"[EVSE] SENDING Packet: StartTransaction\nPayload: {json.dumps(request_payload, indent=2)}"
+        if self.LOG_SEND_PACKETS:
+            print(f"\n{msg_send}", flush=True)
+            PACKET_QUEUE.put(msg_send)
         
+        self._waiting_for_start_tx = connector_id
+        LOGGER.info(f"StartTransaction: Set Flag on obj {id(self)} to {connector_id}")
         try:
             response = await self.call(request)
+            self._waiting_for_start_tx = None # Clear on success
             # Response is valid
-            if response.id_tag_info['status'] == AuthorizationStatus.accepted:
+            if response.id_tag_info['status'] == AuthorizationStatus.accepted or response.id_tag_info['status'] == "ConcurrentTx":
                  LOGGER.info("Transaction Accepted")
                  self.transactions[connector_id] = response.transaction_id
                  msg_tx = f"Transaction started on {connector_id}: {response.transaction_id}"
@@ -315,9 +383,21 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                  LOGGER.warning(f"Transaction Rejected: {response.id_tag_info['status']}")
 
         except (TypeConstraintViolationError, FormatViolationError, Exception) as e:
+             self._waiting_for_start_tx = None # Clear on error
+             
+             # Check if Sniffer handled it
+             if connector_id in self.transactions:
+                  tid = self.transactions[connector_id]
+                  LOGGER.info(f"Transaction ID {tid} recovered via SNIFFER (Pending Flag).")
+                  # Complete the setup
+                  self.charger.start()
+                  await self.send_status_notification(connector_id, ChargePointStatus.charging)
+                  self._meter_value_tasks[connector_id] = asyncio.create_task(self._meter_values_loop(connector_id, tid))
+                  return
+
              LOGGER.warning(f"StartTransaction Warning (likely type mismatch or structure): {e}")
              
-             # Recovery Logic
+             # Recovery Logic (Regex fallback)
              import re
              # Extract transactionId and status from string representation of the exception/message
              match = re.search(r"'transactionId':\s*'?(-?\d+|[a-zA-Z0-9_\-]+)'?", str(e))
@@ -326,6 +406,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
              if "'status': 'Invalid'" in str(e): status = "Invalid"
              if "'status': 'ConcurrentTx'" in str(e): status = "ConcurrentTx"
              
+             tid = None
              if match:
                   tid_str = match.group(1)
                   # If ID is -1 and status Invalid, it is Rejected
@@ -342,7 +423,15 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                        LOGGER.warning(f"Transaction Rejected (Invalid) with ID {tid}")
                        return
 
-                  LOGGER.info(f"Recovered Transaction ID {tid} (Status: {status}) via REGEX.")
+             # Fallback: Check Sniffer Cache for ConcurrentTx
+             # We rely on request.unique_id to link the request to the cached response
+             if not tid and hasattr(self, '_concurrent_tx_cache') and request.unique_id in self._concurrent_tx_cache:
+                  tid = int(self._concurrent_tx_cache[request.unique_id])
+                  status = "ConcurrentTx"
+                  LOGGER.info(f"Recovered Transaction ID {tid} from SNIFFER cache.")
+
+             if tid:
+                  LOGGER.info(f"Recovered Transaction ID {tid} (Status: {status}) via RECOVERY.")
                   self.transactions[connector_id] = tid
                   
                   msg_tx = f"Transaction started on {connector_id}: {tid}"
@@ -366,6 +455,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
              return
 
         transaction_id = self.transactions[connector_id]
+        # Ensure int
+        try:
+             transaction_id = int(transaction_id)
+        except ValueError:
+             LOGGER.warning(f"Could not cast transaction_id {transaction_id} to int. Keeping original.")
 
         # Stop MeterValues
         if connector_id in self._meter_value_tasks:
@@ -387,6 +481,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             reason=reason
         )
         
+        msg_send = f"[EVSE] SENDING Packet: StopTransaction (ID: {transaction_id}, Reason: {reason})"
+        if self.LOG_SEND_PACKETS:
+            print(f"\n{msg_send}", flush=True)
+            PACKET_QUEUE.put(msg_send)
+
         await self.call(request)
         msg_stop = f"Transaction stopped on {connector_id}: {transaction_id}"
         LOGGER.info(msg_stop)
@@ -435,6 +534,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                     }]
                 )
                 
+                msg_send = f"[EVSE] SENDING Packet: MeterValues (TxID: {transaction_id})"
+                if self.LOG_SEND_PACKETS:
+                    print(f"\n{msg_send}", flush=True)
+                    PACKET_QUEUE.put(msg_send)
+
                 await self.call(request)
                 msg_mv = f"[EVSE] MeterValues ACKNOWLEDGED"
                 print(f"\n{msg_mv}", flush=True)
@@ -612,7 +716,7 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         PACKET_QUEUE.put(msg_resp)
         return call_result.TriggerMessage(status=ConfigurationStatus.accepted)
 
-    async def send_meter_values_one_off(self):
+    async def send_meter_values_one_off(self, connector_id=1):
          # Snapshot values
         voltage = self.charger.getEvsePresentVoltage()
         current = self.charger.getEvsePresentCurrent()
@@ -625,13 +729,17 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         ]
         
         request = call.MeterValues(
-            connector_id=1,
-            transaction_id=self.transactions.get(1),
+            connector_id=connector_id,
+            transaction_id=self.transactions.get(connector_id),
             meter_value=[{
                 "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                 "sampled_value": sampled_values
             }]
         )
+        msg_send = f"[EVSE] SENDING Packet: MeterValues (One-off)"
+        if self.LOG_SEND_PACKETS:
+            print(f"\n{msg_send}", flush=True)
+            PACKET_QUEUE.put(msg_send)
         await self.call(request)
         msg_mv = f"[EVSE] MeterValues ACKNOWLEDGED"
         print(f"\n{msg_mv}", flush=True)

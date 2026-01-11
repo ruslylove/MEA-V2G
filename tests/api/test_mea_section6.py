@@ -5,7 +5,7 @@ import datetime
 import logging
 import requests
 from tests.api.test_mea_postman import PreemptiveDigestAuth, BASE_URL, USERNAME, PASSWORD, log_api_interaction
-from Ocpp16Interface import PACKET_QUEUE, ChargePointStatus
+from Ocpp16Interface import PACKET_QUEUE, ChargePointStatus, Ocpp16Interface
 import queue
 
 # Re-use config
@@ -40,7 +40,18 @@ class TestMeaSection6:
     Test Case 6: Charging Profile Verification.
     Sequence 6.1 - 6.26.
     """
-    
+    @classmethod
+    def setup_class(cls):
+        # Enable extended logging for this section report
+        Ocpp16Interface.LOG_SEND_PACKETS = True
+        print("\n[TestMeaSection6] Extended Logging ENABLED for Report Generation")
+
+    @classmethod
+    def teardown_class(cls):
+        # Restore default
+        Ocpp16Interface.LOG_SEND_PACKETS = False
+        print("\n[TestMeaSection6] Extended Logging DISABLED")
+
     # State
     transaction_id_1 = None
     transaction_id_2 = None

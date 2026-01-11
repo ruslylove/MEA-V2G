@@ -1,0 +1,2031 @@
+<?xml version='1.0' encoding='utf-8'?>
+<testsuites time="270.68699999999995"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="24" time="4.470" timestamp="2026-01-11T16:43:22.442193+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_00_initialization" time="2.008"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"2a773ee9-dc99-4db7-b71e-076e3a284179",{"currentTime":"2026-01-11T09:44:00Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"f066f390-7b77-419d-9486-8fb4577444b5",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"565f8c95-d36b-4858-8d71-d04a47d518b5",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"42c6f5c2-3e01-49a1-9041-73079e2ac04b",{"currentTime":"2026-01-11T09:44:00Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:00Z)
+
+--- 10.0 Initialization ---
+DEBUG: Found in queue: [EVSE] Connected to CSMS!
+DEBUG: Found in queue: [EVSE] Sending BootNotification...
+DEBUG: Buffering unmatched: [EVSE] Sending BootNotification...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2a773ee9-dc99-4db7-b71e-076e3a284179",{"currentTime":"2026-01-11T09:44:00Z","interval":3600,"status":"Accepted"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2a773ee9-dc99-4db7-b71e-076e3a284179",{"currentTime":"2026-01-11T09:44:00Z","interval":3600,"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] BootNotification ACCEPTED
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"f066f390-7b77-419d-9486-8fb4577444b5",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"f066f390-7b77-419d-9486-8fb4577444b5",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_01_authorize" time="0.208"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.1 Authorize ---
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"565f8c95-d36b-4858-8d71-d04a47d518b5",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"565f8c95-d36b-4858-8d71-d04a47d518b5",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] Sending Heartbeat...
+DEBUG: Buffering unmatched: [EVSE] Sending Heartbeat...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"42c6f5c2-3e01-49a1-9041-73079e2ac04b",{"currentTime":"2026-01-11T09:44:00Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"42c6f5c2-3e01-49a1-9041-73079e2ac04b",{"currentTime":"2026-01-11T09:44:00Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:00Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:00Z)
+
+[EVSE] RAW RECV: [3,"c9e2150f-976b-43d9-a5eb-890d4d418990",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c9e2150f-976b-43d9-a5eb-890d4d418990",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c9e2150f-976b-43d9-a5eb-890d4d418990",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+DEBUG: Found in queue: [EVSE] Authorize ACKNOWLEDGED (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_02_boot_notification" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.2 BootNotification ---
+
+[EVSE] RAW RECV: [3,"af563e60-875b-4764-a6fd-5412e7f8dea5",{"currentTime":"2026-01-11T09:44:01Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"af563e60-875b-4764-a6fd-5412e7f8dea5",{"currentTime":"2026-01-11T09:44:01Z","interval":3600,"status":"Accepted"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"af563e60-875b-4764-a6fd-5412e7f8dea5",{"currentTime":"2026-01-11T09:44:01Z","interval":3600,"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] BootNotification ACCEPTED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_03_data_transfer" time="0.102"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.3 DataTransfer ---
+
+[EVSE] RAW RECV: [2, "uuid-DataTransfer", "DataTransfer", {"vendorId": "MEA", "messageId": "Test"}]
+
+[EVSE] RECV Packet: DataTransfer (MEA, Test)
+
+[EVSE] Sending DataTransfer Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-DataTransfer", "DataTransfer", {"vendorId": "MEA", "messageId": "Test"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-DataTransfer", "DataTransfer", {"vendorId": "MEA", "messageId": "Test"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: DataTransfer (MEA, Test)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: DataTransfer (MEA, Test)
+DEBUG: Found in queue: [EVSE] Sending DataTransfer Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_04_heartbeat" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.4 Heartbeat ---
+DEBUG: Found 'Heartbeat ACKNOWLEDGED' in BUFFER
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_05_meter_values" time="0.209"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.5 MeterValues ---
+
+[EVSE] RAW RECV: [3,"fc3dfe60-bc7d-4622-a067-44801c81564f",{"currentTime":"2026-01-11T09:44:01Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:01Z)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"fc3dfe60-bc7d-4622-a067-44801c81564f",{"currentTime":"2026-01-11T09:44:01Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"fc3dfe60-bc7d-4622-a067-44801c81564f",{"currentTime":"2026-01-11T09:44:01Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:01Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:01Z)
+
+[EVSE] RAW RECV: [3,"9f372c00-4cd0-4643-9b36-30333d6dee0b",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"9f372c00-4cd0-4643-9b36-30333d6dee0b",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"9f372c00-4cd0-4643-9b36-30333d6dee0b",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_06_remote_start" time="0.209"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.6 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [3,"028bd4c0-5176-4451-8e1d-ec7a04cf1f98",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"028bd4c0-5176-4451-8e1d-ec7a04cf1f98",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"028bd4c0-5176-4451-8e1d-ec7a04cf1f98",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [2, "uuid-RemoteStartTransaction", "RemoteStartTransaction", {"idTag": "RFID_SIM", "connectorId": 1}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"c578153f-a89d-46c6-b721-fef04b26defe",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-RemoteStartTransaction", "RemoteStartTransaction", {"idTag": "RFID_SIM", "connectorId": 1}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-RemoteStartTransaction", "RemoteStartTransaction", {"idTag": "RFID_SIM", "connectorId": 1}]
+DEBUG: Found in queue: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_07_remote_stop" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.7 RemoteStopTransaction ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c578153f-a89d-46c6-b721-fef04b26defe",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c578153f-a89d-46c6-b721-fef04b26defe",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [2, "uuid-RemoteStopTransaction", "RemoteStopTransaction", {"transactionId": 1}]
+
+[EVSE] Sending RemoteStopTransaction Response (Rejected)
+
+[EVSE] RAW RECV: [3,"ad61cf22-53f8-41d6-ae6a-856945749d04",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7586}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-RemoteStopTransaction", "RemoteStopTransaction", {"transactionId": 1}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-RemoteStopTransaction", "RemoteStopTransaction", {"transactionId": 1}]
+DEBUG: Found in queue: [EVSE] Sending RemoteStopTransaction Response (Rejected)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_08_reset" time="0.102"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.8 Reset ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ad61cf22-53f8-41d6-ae6a-856945749d04",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7586}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ad61cf22-53f8-41d6-ae6a-856945749d04",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7586}]
+DEBUG: Found in queue: Transaction started on 1: 7586
+DEBUG: Buffering unmatched: Transaction started on 1: 7586
+
+[EVSE] RAW RECV: [3,"60c0742e-96b1-485d-b610-48c3c36b87b7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+[EVSE] RAW RECV: [2, "uuid-Reset", "Reset", {"type": "Hard"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"60c0742e-96b1-485d-b610-48c3c36b87b7",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"60c0742e-96b1-485d-b610-48c3c36b87b7",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Reset", "Reset", {"type": "Hard"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Reset", "Reset", {"type": "Hard"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+DEBUG: Found in queue: [EVSE] Sending Reset Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_09_start_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.9 StartTransaction ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Preparing)' in BUFFER
+DEBUG: Found 'Transaction started on 1' in BUFFER
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_10_status_notification" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.10 StatusNotification ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED' in BUFFER
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_11_stop_transaction" time="0.208"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.11 StopTransaction ---
+[Sim] Charging already in progress for StartTransaction request
+
+[EVSE] RAW RECV: [3,"62299c9c-4a1b-4ae2-8266-cc08c6805c28",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"62299c9c-4a1b-4ae2-8266-cc08c6805c28",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"62299c9c-4a1b-4ae2-8266-cc08c6805c28",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"a7d5f2aa-69c2-46f2-a5ea-f41677dedd3c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"a3053a9d-1071-4ca2-8005-b64fe168d777",{}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"a7d5f2aa-69c2-46f2-a5ea-f41677dedd3c",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"a7d5f2aa-69c2-46f2-a5ea-f41677dedd3c",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"a3053a9d-1071-4ca2-8005-b64fe168d777",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"a3053a9d-1071-4ca2-8005-b64fe168d777",{}]
+DEBUG: Found in queue: Transaction stopped on 1: 7586
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_12_reserve_now" time="0.103"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.12 ReserveNow ---
+
+[EVSE] RAW RECV: [3,"be0d6d3b-0eb1-4720-b6ed-6a53292b5e71",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [2, "uuid-ReserveNow", "ReserveNow", {"reservationId": 1, "connectorId": 1, "idTag": "RFID_SIM", "expiryDate": "2026-01-11T09:43:25.754899Z"}]
+
+[EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1,
+  "expiryDate": "2026-01-11T09:43:25.754899Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending ReserveNow Response (Accepted)
+
+[EVSE] RAW RECV: [3,"851996fe-349a-474c-8061-65ddbad840ca",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"be0d6d3b-0eb1-4720-b6ed-6a53292b5e71",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"be0d6d3b-0eb1-4720-b6ed-6a53292b5e71",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-ReserveNow", "ReserveNow", {"reservationId": 1, "connectorId": 1, "idTag": "RFID_SIM", "expiryDate": "2026-01-11T09:43:25.754899Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-ReserveNow", "ReserveNow", {"reservationId": 1, "connectorId": 1, "idTag": "RFID_SIM", "expiryDate": "2026-01-11T09:43:25.754899Z"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1,
+  "expiryDate": "2026-01-11T09:43:25.754899Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1,
+  "expiryDate": "2026-01-11T09:43:25.754899Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Found in queue: [EVSE] Sending ReserveNow Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_13_cancel_reservation" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.13 CancelReservation ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"851996fe-349a-474c-8061-65ddbad840ca",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"851996fe-349a-474c-8061-65ddbad840ca",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+
+[EVSE] RAW RECV: [2, "uuid-CancelReservation", "CancelReservation", {"reservationId": 1}]
+
+[EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1
+}
+
+[EVSE] Sending CancelReservation Response (Accepted)
+
+[EVSE] RAW RECV: [3,"6e75d118-3908-4053-8df8-f65cfd22f272",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-CancelReservation", "CancelReservation", {"reservationId": 1}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-CancelReservation", "CancelReservation", {"reservationId": 1}]
+DEBUG: Found in queue: [EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1
+}
+DEBUG: Found in queue: [EVSE] Sending CancelReservation Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_14_set_charging_profile" time="0.105"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.14 SetChargingProfile ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"6e75d118-3908-4053-8df8-f65cfd22f272",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"6e75d118-3908-4053-8df8-f65cfd22f272",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [2, "uuid-SetChargingProfile", "SetChargingProfile", {"connectorId": 1, "csChargingProfiles": {"chargingProfileId": 1, "stackLevel": 0, "chargingProfilePurpose": "TxDefaultProfile", "chargingProfileKind": "Absolute", "chargingSchedule": {"chargingRateUnit": "A", "chargingSchedulePeriod": [{"startPeriod": 0, "limit": 32}]}}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 1,
+    "stack_level": 0,
+    "charging_profile_purpose": "TxDefaultProfile",
+    "charging_profile_kind": "Absolute",
+    "charging_schedule": {
+      "charging_rate_unit": "A",
+      "charging_schedule_period": [
+        {
+          "start_period": 0,
+          "limit": 32
+        }
+      ]
+    }
+  }
+}
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-SetChargingProfile", "SetChargingProfile", {"connectorId": 1, "csChargingProfiles": {"chargingProfileId": 1, "stackLevel": 0, "chargingProfilePurpose": "TxDefaultProfile", "chargingProfileKind": "Absolute", "chargingSchedule": {"chargingRateUnit": "A", "chargingSchedulePeriod": [{"startPeriod": 0, "limit": 32}]}}}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-SetChargingProfile", "SetChargingProfile", {"connectorId": 1, "csChargingProfiles": {"chargingProfileId": 1, "stackLevel": 0, "chargingProfilePurpose": "TxDefaultProfile", "chargingProfileKind": "Absolute", "chargingSchedule": {"chargingRateUnit": "A", "chargingSchedulePeriod": [{"startPeriod": 0, "limit": 32}]}}}]
+DEBUG: Found in queue: [EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 1,
+    "stack_level": 0,
+    "charging_profile_purpose": "TxDefaultProfile",
+    "charging_profile_kind": "Absolute",
+    "charging_schedule": {
+      "charging_rate_unit": "A",
+      "charging_schedule_period": [
+        {
+          "start_period": 0,
+          "limit": 32
+        }
+      ]
+    }
+  }
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 1,
+    "stack_level": 0,
+    "charging_profile_purpose": "TxDefaultProfile",
+    "charging_profile_kind": "Absolute",
+    "charging_schedule": {
+      "charging_rate_unit": "A",
+      "charging_schedule_period": [
+        {
+          "start_period": 0,
+          "limit": 32
+        }
+      ]
+    }
+  }
+}
+DEBUG: Found in queue: [EVSE] Sending SetChargingProfile Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_15_trigger_message" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.15 TriggerMessage ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED' in BUFFER
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_16_get_configuration" time="0.103"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.16 GetConfiguration ---
+
+[EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "StatusNotification"}]
+
+[EVSE] RECV Packet: TriggerMessage (StatusNotification)
+
+[EVSE] Sending TriggerMessage Response (Accepted)
+
+[EVSE] RAW RECV: [2, "uuid-GetConfiguration", "GetConfiguration", {"key": ["HeartbeatInterval"]}]
+
+[EVSE] RECV Packet: GetConfiguration
+Payload: {
+  "keys": null,
+  "key": [
+    "HeartbeatInterval"
+  ]
+}
+
+[EVSE] Sending GetConfiguration Response (Count: 5)
+
+[EVSE] RAW RECV: [3,"bf440acd-2353-414b-9757-8f04ad69b00a",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "StatusNotification"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "StatusNotification"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: TriggerMessage (StatusNotification)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: TriggerMessage (StatusNotification)
+DEBUG: Found in queue: [EVSE] Sending TriggerMessage Response (Accepted)
+DEBUG: Buffering unmatched: [EVSE] Sending TriggerMessage Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-GetConfiguration", "GetConfiguration", {"key": ["HeartbeatInterval"]}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-GetConfiguration", "GetConfiguration", {"key": ["HeartbeatInterval"]}]
+DEBUG: Found in queue: [EVSE] RECV Packet: GetConfiguration
+Payload: {
+  "keys": null,
+  "key": [
+    "HeartbeatInterval"
+  ]
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: GetConfiguration
+Payload: {
+  "keys": null,
+  "key": [
+    "HeartbeatInterval"
+  ]
+}
+DEBUG: Found in queue: [EVSE] Sending GetConfiguration Response (Count: 5)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_17_change_configuration" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.17 ChangeConfiguration ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"bf440acd-2353-414b-9757-8f04ad69b00a",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"bf440acd-2353-414b-9757-8f04ad69b00a",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [2, "uuid-ChangeConfiguration", "ChangeConfiguration", {"key": "HeartbeatInterval", "value": "600"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "HeartbeatInterval",
+  "value": "600"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-ChangeConfiguration", "ChangeConfiguration", {"key": "HeartbeatInterval", "value": "600"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-ChangeConfiguration", "ChangeConfiguration", {"key": "HeartbeatInterval", "value": "600"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "HeartbeatInterval",
+  "value": "600"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "HeartbeatInterval",
+  "value": "600"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_18_change_availability" time="0.102"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.18 ChangeAvailability ---
+
+[EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Inoperative"}]
+
+[EVSE] RECV Packet: ChangeAvailability (Inoperative for 1)
+
+[EVSE] Sending ChangeAvailability Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Inoperative"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Inoperative"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeAvailability (Inoperative for 1)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeAvailability (Inoperative for 1)
+DEBUG: Found in queue: [EVSE] Sending ChangeAvailability Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_19_get_diagnostics" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.19 GetDiagnostics ---
+
+[EVSE] RAW RECV: [2, "uuid-GetDiagnostics", "GetDiagnostics", {"location": "ftp://example.com"}]
+
+[EVSE] RECV Packet: GetDiagnostics (ftp://example.com)
+
+[EVSE] Sending GetDiagnostics Response (fileName: diagnostics.log)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-GetDiagnostics", "GetDiagnostics", {"location": "ftp://example.com"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-GetDiagnostics", "GetDiagnostics", {"location": "ftp://example.com"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: GetDiagnostics (ftp://example.com)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: GetDiagnostics (ftp://example.com)
+DEBUG: Found in queue: [EVSE] Sending GetDiagnostics Response (fileName: diagnostics.log)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_20_update_firmware" time="0.105"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.20 UpdateFirmware ---
+
+[EVSE] RAW RECV: [2, "uuid-UpdateFirmware", "UpdateFirmware", {"location": "ftp://example.com", "retrieveDate": "2026-01-11T09:43:26.491593Z"}]
+
+[EVSE] RECV Packet: UpdateFirmware (ftp://example.com)
+
+[EVSE] Sending UpdateFirmware Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-UpdateFirmware", "UpdateFirmware", {"location": "ftp://example.com", "retrieveDate": "2026-01-11T09:43:26.491593Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-UpdateFirmware", "UpdateFirmware", {"location": "ftp://example.com", "retrieveDate": "2026-01-11T09:43:26.491593Z"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: UpdateFirmware (ftp://example.com)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: UpdateFirmware (ftp://example.com)
+DEBUG: Found in queue: [EVSE] Sending UpdateFirmware Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_21_send_local_list" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.21 SendLocalList ---
+
+[EVSE] RAW RECV: [2, "uuid-SendLocalList", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [], "updateType": "Full"}]
+
+[EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=0)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-SendLocalList", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [], "updateType": "Full"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-SendLocalList", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [], "updateType": "Full"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=0)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_22_get_local_list_version" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.22 GetLocalListVersion ---
+
+[EVSE] RAW RECV: [2, "uuid-GetLocalListVersion", "GetLocalListVersion", {}]
+
+[EVSE] RECV Packet: GetLocalListVersion
+
+[EVSE] Sending GetLocalListVersion Response (Version: 1)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-GetLocalListVersion", "GetLocalListVersion", {}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-GetLocalListVersion", "GetLocalListVersion", {}]
+DEBUG: Found in queue: [EVSE] RECV Packet: GetLocalListVersion
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: GetLocalListVersion
+DEBUG: Found in queue: [EVSE] Sending GetLocalListVersion Response (Version: 1)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_23_clear_cache" time="0.102"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.23 ClearCache ---
+
+[EVSE] RAW RECV: [2, "uuid-ClearCache", "ClearCache", {}]
+
+[EVSE] RECV Packet: ClearCache
+
+[EVSE] Sending ClearCache Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-ClearCache", "ClearCache", {}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-ClearCache", "ClearCache", {}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ClearCache
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ClearCache
+DEBUG: Found in queue: [EVSE] Sending ClearCache Response (Accepted)
+
+</system-out></testcase></testsuite><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="6" time="10.593" timestamp="2026-01-11T18:01:34.806488+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_01_config_auto_charge_false" time="2.123"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"4146e97c-6c89-4870-91b4-1cb7f4973944",{"currentTime":"2026-01-11T11:02:12Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"5714dd78-db00-4464-9ee6-c947d7c167aa",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"28f83e1a-20c8-4b66-92e8-2c9a73c9e7d0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"ffb53765-2ba0-42bd-ae8a-223ae995d9e5",{"currentTime":"2026-01-11T11:02:12Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:02:12Z)
+
+--- 2.1 Config: AutoCharge = False ---
+WARNING: API refused AutoCharge Config: 200 - {"status":"Bad Request","code":400,"messages":"Additional properties are not allowed ('chargePointId' was unexpected)","server-time":"2026-01-11T11:02:13Z","result":null}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_02_plug_preparing" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.2 Plug (Preparing) ---
+
+[EVSE] RAW RECV: [3,"5c1217c3-170b-40a9-8136-ad3d3ca1b82e",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_03_unplug_available" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.3 Unplug (Available) ---
+
+[EVSE] RAW RECV: [3,"69235545-192b-4d6f-b835-4de5f53901d3",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_04_config_auto_charge_true" time="0.088"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.4 Config: AutoCharge = True ---
+WARNING: API refused AutoCharge Config: 200 - {"status":"Bad Request","code":400,"messages":"Additional properties are not allowed ('chargePointId' was unexpected)","server-time":"2026-01-11T11:02:15Z","result":null}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_05_plug_preparing" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.5 Plug (AutoCharge Mode) ---
+
+[EVSE] RAW RECV: [3,"9439d8cb-15f9-4a8b-a2df-295d0affdf1f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_06_authorize" time="1.002"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.6 Authorize (VID) ---
+
+[EVSE] RAW RECV: [3,"c79699f3-0900-4cc8-9f8d-4dd6723a9296",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+
+</system-out></testcase><testcase time="0.000" /></testsuite><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="10.561" timestamp="2026-01-11T18:05:50.905282+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_08_status_charging" time="3.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"37233491-3cf0-4ca6-bbd9-ec8fb842e51c",{"currentTime":"2026-01-11T11:06:28Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"cc6c00e0-1bde-41fe-b233-504c9e144822",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"02bb0891-44bc-4a0a-893d-933ce93c00f3",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"0cf9643a-8d56-4e54-9959-ad55cc6b886b",{"currentTime":"2026-01-11T11:06:28Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:06:28Z)
+
+--- 2.8 Status (Charging) ---
+
+[EVSE] RAW RECV: [3,"7bbfacfd-7ae0-4816-9c69-9bbc6c7a7d62",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_09_meter_values" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.9 MeterValues ---
+
+[EVSE] RAW RECV: [3,"62a03014-8340-4608-a514-d228068e69c8",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_10_remote_stop_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.10 RemoteStopTransaction API ---
+WARNING: No transaction found locally. Skipping API Call.
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_11_stop_transaction" time="5.062"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=5)">self = &lt;test_mea_section2.TestMeaSection2 object at 0x105f3ca70&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x105722a50&gt;
+
+    def test_2_11_stop_transaction(self, evse_simulation):
+        print("\n--- 2.11 StopTransaction ---")
+        # Check for Finishing status which precedes StopTx
+&gt;       assert wait_for_packet("StatusNotification ACKNOWLEDGED (Finishing)", timeout=5)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=5)
+
+tests/api/test_mea_section2.py:139: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.11 StopTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_12_status_finishing" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase time="0.000" /></testsuite><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="4" time="9.118" timestamp="2026-01-11T18:07:12.413660+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_15_authorize_session2" time="3.010"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"12a3b511-be49-4246-a661-e85fbdc3baec",{"currentTime":"2026-01-11T11:07:50Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"6e4b9d8e-8f14-4f85-bd39-2e94f11c6958",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"77acaa38-2263-4bae-9d6b-ed23040ee70c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"6649bb06-c6fd-48b1-9aee-6a85b886b18f",{"currentTime":"2026-01-11T11:07:50Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:07:50Z)
+
+--- 2.15 Authorize (Session 2) ---
+
+[EVSE] RAW RECV: [3,"5ed891b0-feb3-401e-8656-f8200896ca28",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_16_start_transaction_session2" time="3.008"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.16 StartTransaction (Session 2) ---
+
+[EVSE] RAW RECV: [3,"ad6c99ff-6a05-4106-a8d5-0a507fda54f5",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"03836039-22ed-492f-b690-e8cf6cb7ac9a",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7600"}]
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_17_status_charging_session2" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.17 Status Charging (Session 2) ---
+
+[EVSE] RAW RECV: [3,"78f2291d-98bb-40d5-9faf-4acbe6013e93",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section2.TestMeaSection2" name="test_2_18_meter_values_session2" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 2.18 MeterValues (Session 2) ---
+
+[EVSE] RAW RECV: [3,"68092091-2f5f-4b04-b970-5be2c7ec7dd5",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase time="0.000" /></testsuite><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="19" time="33.849" timestamp="2026-01-11T18:01:47.197187+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_01_boot_notification" time="3.009"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"9475869a-77e0-4499-9178-2feee84abc1a",{"currentTime":"2026-01-11T11:02:24Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"508ba0db-ba29-401b-9351-33f35f9d679c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"0ab12fd5-b091-484b-adb2-be390243075e",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"2e2acb43-7a08-486b-b00f-c548604cf196",{"currentTime":"2026-01-11T11:02:24Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:02:24Z)
+
+--- 3.1 BootNotification ---
+
+[EVSE] RAW RECV: [3,"6ddf7b67-5e4d-490b-b0fb-5a2a237e0dde",{"currentTime":"2026-01-11T11:02:25Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_02_status_notification_available" time="1.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.2 StatusNotification (Available) ---
+
+[EVSE] RAW RECV: [3,"6fba4f74-a054-4a39-b152-4f58b6f1a4bf",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_03_status_notification_plug" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.3 StatusNotification (Plug) -&gt; Preparing ---
+
+[EVSE] RAW RECV: [3,"041130c4-d435-4907-a389-8d6949ad0908",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_04_authorize" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.4 Authorize (Valid Card) ---
+
+[EVSE] RAW RECV: [3,"6044f9f0-1900-4756-82bb-0e14e2b95550",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_05_start_transaction" time="3.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.5 StartTransaction ---
+
+[EVSE] RAW RECV: [3,"268d56ac-8446-42cd-8cd0-7420de45efe1",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"c7668071-e6ad-4fc7-baa7-003da812593d",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7600"}]
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_06_status_notification_charging" time="1.002"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.6 StatusNotification (Charging) ---
+
+[EVSE] RAW RECV: [3,"5c2c3131-5048-49d5-b60d-204f9883397a",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_07_meter_values" time="2.011"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.7 MeterValues ---
+
+[EVSE] RAW RECV: [3,"941e3766-9281-46c5-80a6-497681e564a9",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_08_stop_transaction_manual" time="3.009"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.8 StopTransaction (Valid Card) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_09_status_notification_plug" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.9 StatusNotification (Plug) -&gt; Finishing/Preparing ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_10_status_notification_unplug" time="1.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.10 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] RAW RECV: [3,"7ee7029c-2066-4105-9f29-07d58d24b0a9",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_11_status_notification_plug" time="1.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.11 StatusNotification (Plug) -&gt; Preparing ---
+
+[EVSE] RAW RECV: [3,"403f553f-d436-4f48-99a1-c0df4e75b3a8",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_12_remote_start_transaction" time="0.477"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.12 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"0c4ec2b2eedd11f098180242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"a1138687-fc96-4a9f-9ebd-d2d8f6cfb16d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"1d30b1b2-a03e-4d02-a175-1b44aee88683",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7600"}]
+WARNING: Concurrent Transaction detected during RemoteStart. Attempting cleanup.
+RemoteStart API Response: {"status":"Bad Request","code":400,"messages":"The transaction is concurrent. Transaction id 7600","server-time":"2026-01-11T11:02:40Z","result":{"status":true,"transaction_id":null}}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_13_start_transaction_remote" time="3.003"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.13 StartTransaction (triggered by RemoteStart) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_14_status_notification_charging" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.14 StatusNotification (Charging) ---
+
+[EVSE] RAW RECV: [3,"aaf69d66-30ee-4c2b-a924-c98d1f4dd44d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_15_meter_values" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.15 MeterValues ---
+
+[EVSE] RAW RECV: [3,"3f5840ee-fdba-4744-8678-89df2c89bbba",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_16_remote_stop_transaction" time="0.001"><failure message="Failed: Cannot perform RemoteStop: No active transaction found.">self = &lt;test_mea_section3.TestMeaSection3 object at 0x10ae1fb30&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10ad79820&gt;
+api_auth = &lt;tests.api.test_mea_postman.PreemptiveDigestAuth object at 0x10ac98440&gt;
+
+    def test_3_16_remote_stop_transaction(self, evse_simulation, api_auth):
+        print("\n--- 3.16 RemoteStopTransaction ---")
+        active_tx = None
+        if evse_simulation.cp and 1 in evse_simulation.cp.transactions:
+             active_tx = evse_simulation.cp.transactions[1]
+    
+        if not active_tx:
+&gt;           pytest.fail("Cannot perform RemoteStop: No active transaction found.")
+E           Failed: Cannot perform RemoteStop: No active transaction found.
+
+tests/api/test_mea_section3.py:186: Failed</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.16 RemoteStopTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_17_stop_transaction_remote" time="10.173"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=10)">self = &lt;test_mea_section3.TestMeaSection3 object at 0x10ae1f680&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10ad79820&gt;
+
+    def test_3_17_stop_transaction_remote(self, evse_simulation):
+        print("\n--- 3.17 StopTransaction (triggered by RemoteStop) ---")
+        # RemoteStop in Sim AUTOMATICALLY triggers StopTransaction.
+        # We verify by checking for status change packet or just waiting.
+        # Sim helper sends: Status(Finishing) -&gt; StopTx -&gt; Status(Available)
+&gt;       assert wait_for_packet("StatusNotification ACKNOWLEDGED (Finishing)", timeout=10)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=10)
+
+tests/api/test_mea_section3.py:205: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.17 StopTransaction (triggered by RemoteStop) ---
+
+[EVSE] RAW RECV: [3,"2e09e6f4-9358-41e3-908d-f2c845ba1474",{"currentTime":"2026-01-11T11:02:54Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:02:54Z)
+
+[EVSE] RAW RECV: [3,"062a190e-5c81-4a91-b6fd-eebed2f73625",{"currentTime":"2026-01-11T11:02:55Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:02:55Z)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_18_status_notification_plug" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.18 StatusNotification (Plug) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section3.TestMeaSection3" name="test_3_19_status_notification_unplug" time="1.003"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 3.19 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] RAW RECV: [3,"fe662c53-fc9e-4291-8446-1df89275f60d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase></testsuite><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="21" time="32.433" timestamp="2026-01-11T18:02:21.488921+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_01_reset_hard" time="5.369"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"14807a28-358b-407c-9e85-f3c1dbbc015b",{"currentTime":"2026-01-11T11:02:59Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"39353058-a34e-494e-a291-7d8d792e1a3f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"608840b2-e442-4ec9-b897-b7c01000ea5f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"a80fbf1d-e8c6-4cf8-895e-dab054246173",{"currentTime":"2026-01-11T11:02:59Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:02:59Z)
+
+--- 4.1 Reset (Hard) ---
+
+[EVSE] RAW RECV: [2,"17c3a287eedd11f0a6ff0242c0a8300e","Reset",{"type":"Hard"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+
+[EVSE] RAW RECV: [3,"879d120f-80c1-41d8-999a-89702a7af02f",{"currentTime":"2026-01-11T11:03:02Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_02_boot_notification" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.2 BootNotification ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_03_status_notification_unplug" time="1.003"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.3 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] RAW RECV: [3,"89884e5b-e9d3-496c-9807-8527aba768bf",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_04_status_notification_plug" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.4 StatusNotification (Plug) -&gt; Preparing ---
+
+[EVSE] RAW RECV: [3,"dc268dd7-cca9-4e11-9bfe-52f8423fb40d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_05_remote_start_transaction" time="0.475"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.5 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"1af9cf37eedd11f0aa890242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"6fd9c405-547a-4246-9f63-87771d29ca73",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"3b1ed868-8b6a-49ca-9ba6-3a650b2b6769",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7600"}]
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_06_start_transaction" time="2.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.6 StartTransaction ---
+WARNING: Transaction not found in Sim state.
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_07_status_notification_charging" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.7 StatusNotification (Charging) ---
+
+[EVSE] RAW RECV: [3,"c73c61b9-3961-4fa7-a0b4-720fcde7abda",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_08_meter_values" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.8 MeterValues ---
+
+[EVSE] RAW RECV: [3,"da626bad-86b2-4808-b818-69766892b187",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_09_reset_soft" time="1.408"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.9 Reset (Soft) ---
+
+[EVSE] RAW RECV: [2,"1daa0ce5eedd11f0a23d0242c0a8300e","Reset",{"type":"Soft"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Soft"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_10_stop_transaction" time="5.046"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=5)">self = &lt;test_mea_section4.TestMeaSection4 object at 0x10af104a0&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10aedab40&gt;
+
+    def test_4_10_stop_transaction(self, evse_simulation):
+        print("\n--- 4.10 StopTransaction ---")
+        # Triggered above.
+&gt;       assert wait_for_packet("StatusNotification ACKNOWLEDGED (Finishing)", timeout=5)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=5)
+
+tests/api/test_mea_section4.py:137: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.10 StopTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_11_status_notification_plug" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.11 StatusNotification (Plug) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_12_status_notification_unplug" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.12 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] RAW RECV: [3,"ff0e5bf2-e6ad-4894-bf3c-b0da45e2f248",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_13_status_notification_plug" time="1.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.13 StatusNotification (Plug) -&gt; Preparing ---
+
+[EVSE] RAW RECV: [3,"aa940712-21e5-47db-951d-8e49e341ce84",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_14_remote_start_transaction" time="0.448"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.14 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"22b5f799eedd11f0ad370242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"cf713bc0-968e-439e-a7a8-6a0c4d0e3828",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"d65b9aaf-2249-4c4b-9f0f-171e0566aa5d",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7600"}]
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_15_start_transaction" time="2.003"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.15 StartTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_16_status_notification_charging" time="1.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.16 StatusNotification (Charging) ---
+
+[EVSE] RAW RECV: [3,"c717abdc-0e25-4be5-9f55-5c96994b8b26",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_17_meter_values" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.17 MeterValues ---
+
+[EVSE] RAW RECV: [3,"be01c420-8f51-41b5-a266-fa596b0e40d4",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_18_reset_hard" time="1.376"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.18 Reset (Hard) ---
+
+[EVSE] RAW RECV: [2,"2560a16ceedd11f0903a0242c0a8300e","Reset",{"type":"Hard"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_19_stop_transaction" time="5.136"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=5)">self = &lt;test_mea_section4.TestMeaSection4 object at 0x10aedac60&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10aedab40&gt;
+
+    def test_4_19_stop_transaction(self, evse_simulation):
+        print("\n--- 4.19 StopTransaction ---")
+&gt;       assert wait_for_packet("StatusNotification ACKNOWLEDGED (Finishing)", timeout=5)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=5)
+
+tests/api/test_mea_section4.py:200: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.19 StopTransaction ---
+
+[EVSE] RAW RECV: [3,"b2c517b7-4f64-4f59-ae6a-3f49f1c9371c",{"currentTime":"2026-01-11T11:03:29Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:03:29Z)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_20_status_notification_plug" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.20 StatusNotification (Plug) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section4.TestMeaSection4" name="test_4_21_status_notification_unplug" time="1.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 4.21 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] RAW RECV: [3,"21bf70b0-4ba5-459e-b181-7ab471997029",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase></testsuite><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="19" time="47.753" timestamp="2026-01-11T18:02:54.368792+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_01_status_available" time="3.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"f6889134-d9cc-4d05-9172-bd368ad036e5",{"currentTime":"2026-01-11T11:03:31Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"5d2459b8-d335-4c2e-a671-c47355da654d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"4716a08d-7dba-4a44-8a93-a1566d11b1ab",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"1c9cd3cf-6fa8-4463-96bd-d0d1be6d4ea8",{"currentTime":"2026-01-11T11:03:32Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:03:32Z)
+
+--- 5.1 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] RAW RECV: [3,"599c7f93-2614-4374-9850-a9130faf8ff7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_02_reserve_now" time="0.480"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.2 ReserveNow ---
+
+[EVSE] RAW RECV: [2,"2bfc9926eedd11f084c50242c0a8300e","ReserveNow",{"connectorId":1,"expiryDate":"2026-01-11T16:03:34Z","idTag":"RFID_SIM","parentIdTag":"pid2025","reservationId":1035}]
+
+[EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1035,
+  "expiryDate": "2026-01-11T16:03:34Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1,
+  "parent_id_tag": "pid2025"
+}
+
+[EVSE] Sending ReserveNow Response (Accepted)
+
+[EVSE] RAW RECV: [3,"b16bcc52-8f78-4afe-8e46-a6067a353de3",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+Reserve API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T11:03:33Z","result":{"status":"Accepted","reservation_id":1035}}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_03_status_reserved" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.3 StatusNotification (Reserved) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_04_cancel_reservation" time="0.360"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.4 CancelReservation ---
+
+[EVSE] RAW RECV: [2,"2c3ef328eedd11f09cf80242c0a8300e","CancelReservation",{"reservationId":1035}]
+
+[EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1035
+}
+
+[EVSE] Sending CancelReservation Response (Accepted)
+
+[EVSE] RAW RECV: [3,"082a43d4-9a2d-44f9-84d5-9f444fac4800",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+Cancel API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T11:03:34Z","result":{"status":"Accepted","reservation_id":1035}}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_05_status_available" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.5 StatusNotification (Available) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_06_reserve_now_expiry" time="0.347"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.6 ReserveNow (1 min) ---
+
+[EVSE] RAW RECV: [2,"2c78ca1beedd11f083810242c0a8300e","ReserveNow",{"connectorId":1,"expiryDate":"2026-01-11T11:08:34Z","idTag":"RFID_SIM","parentIdTag":"pid2025","reservationId":1036}]
+
+[EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1036,
+  "expiryDate": "2026-01-11T11:08:34Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1,
+  "parent_id_tag": "pid2025"
+}
+
+[EVSE] Sending ReserveNow Response (Accepted)
+
+[EVSE] RAW RECV: [3,"e24114cf-c111-43f3-b5b1-6d4e07f4efbb",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_07_wait_for_expiry" time="4.003"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.7 Wait for Reservation Expiry ---
+[EVSE] Reservation 1036 expired at 2026-01-11T11:03:00+00:00. Current: 2026-01-11 11:03:00.546105+00:00
+
+[EVSE] RAW RECV: [3,"0083799a-5b5e-4c4d-8dc7-9ca1c73dc69b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_08_status_available_after_expiry" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.8 StatusNotification (Available) after Expiry ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_09_reserve_now" time="4.733"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.9 ReserveNow ---
+
+[EVSE] RAW RECV: [3,"60865d88-9dfb-4fdb-afc6-ec5b77587f11",{"currentTime":"2026-01-11T11:03:39Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:03:39Z)
+Ensuring cleanup of expired reservation: 1036
+
+[EVSE] RAW RECV: [2,"304083c0eedd11f097ff0242c0a8300e","CancelReservation",{"reservationId":1036}]
+
+[EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1036
+}
+
+[EVSE] Sending CancelReservation Response (Accepted)
+
+[EVSE] RAW RECV: [2,"31abe7d5eedd11f0ac880242c0a8300e","ReserveNow",{"connectorId":1,"expiryDate":"2026-01-11T21:03:43Z","idTag":"RFID_SIM","parentIdTag":"pid2025","reservationId":1037}]
+
+[EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1037,
+  "expiryDate": "2026-01-11T21:03:43Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1,
+  "parent_id_tag": "pid2025"
+}
+
+[EVSE] Sending ReserveNow Response (Accepted)
+
+[EVSE] RAW RECV: [3,"265d1bc1-d3bb-410b-8124-5d2fd1c8e96b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+Reserve API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T11:03:43Z","result":{"status":"Accepted","reservation_id":1037}}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_10_status_reserved" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.10 StatusNotification (Reserved) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_11_status_plug" time="0.133"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.11 StatusNotification (Plug) ---
+
+[EVSE] RAW RECV: [3,"6ddbd8a6-dfef-4323-a884-63710e444432",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_12_remote_start_transaction" time="0.473"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.12 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"31f79f55eedd11f0907b0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"602ebb59-1262-43f3-8db2-df437cf35340",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"fb5e0ede-265e-428b-aa63-3b150ff911ff",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7600"}]
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_13_start_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.13 StartTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_14_status_notification_charging" time="14.963"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Charging)', timeout=15)">self = &lt;test_mea_section5.TestMeaSection5 object at 0x10aaccec0&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10aa946b0&gt;
+
+    def test_5_14_status_notification_charging(self, evse_simulation):
+        print("\n--- 5.14 StatusNotification (Charging) ---")
+        # Sim auto-switches to charging
+&gt;       assert wait_for_packet("StatusNotification ACKNOWLEDGED (Charging)", timeout=15)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Charging)', timeout=15)
+
+tests/api/test_mea_section5.py:226: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.14 StatusNotification (Charging) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_15_meter_values" time="2.004"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.15 MeterValues ---
+
+[EVSE] RAW RECV: [3,"a6376cd1-e705-4e57-8b6d-908b6fd7989a",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_16_remote_stop_transaction" time="2.006"><failure message="Failed: No Active Transaction for RemoteStop">self = &lt;test_mea_section5.TestMeaSection5 object at 0x10aa97b00&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10aa946b0&gt;
+api_auth = &lt;tests.api.test_mea_postman.PreemptiveDigestAuth object at 0x10a8e2330&gt;
+
+    def test_5_16_remote_stop_transaction(self, evse_simulation, api_auth):
+         print("\n--- 5.16 RemoteStopTransaction ---")
+         # Need Tid
+         active_tx = None
+         # Wait a bit for Tx to register
+         time.sleep(2)
+         if evse_simulation.cp and 1 in evse_simulation.cp.transactions:
+             active_tx = evse_simulation.cp.transactions[1]
+    
+         if not active_tx:
+             print("Active Transactions:", evse_simulation.cp.transactions if evse_simulation.cp else "None")
+             # Try to start one manually? No, test flow broken if so.
+&gt;            pytest.fail("No Active Transaction for RemoteStop")
+E            Failed: No Active Transaction for RemoteStop
+
+tests/api/test_mea_section5.py:247: Failed</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.16 RemoteStopTransaction ---
+
+[EVSE] RAW RECV: [3,"a28c759d-da99-4a23-ad7d-c2d6e7028dde",{"currentTime":"2026-01-11T11:04:02Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:04:02Z)
+Active Transactions: {}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_17_stop_transaction" time="15.009"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=15)">self = &lt;test_mea_section5.TestMeaSection5 object at 0x10aa974d0&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10aa946b0&gt;
+
+    def test_5_17_stop_transaction(self, evse_simulation):
+        print("\n--- 5.17 StopTransaction ---")
+&gt;       assert wait_for_packet("StatusNotification ACKNOWLEDGED (Finishing)", timeout=15)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=15)
+
+tests/api/test_mea_section5.py:260: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.17 StopTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_18_status_plug" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.18 StatusNotification (Plug) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_19_status_notification_unplug" time="0.099"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.19 StatusNotification (Unplug) -&gt; Available ---
+
+[EVSE] RAW RECV: [3,"dfb7fd17-7de6-4373-bf2e-e45c89811140",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase></testsuite><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="26" time="113.058" timestamp="2026-01-11T18:03:42.677523+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_01_status_available" time="2.003"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"e3f36612-7d99-4493-83ec-186a9c1d9318",{"currentTime":"2026-01-11T11:04:20Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"92d4ec21-ea55-4cb0-9749-8ebcf9e486cc",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"fe718229-c57e-4573-8969-11741d0f4cfd",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"9e90bfe3-a66c-42bd-b28e-123d397a399c",{"currentTime":"2026-01-11T11:04:20Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:04:20Z)
+
+--- 6.1 StatusNotification (Available) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_02_status_preparing" time="0.154"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.2 StatusNotification (Preparing) ---
+
+[EVSE] RAW RECV: [3,"a35b19bc-f7e6-4438-b1c7-e2ff7bb09b9b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"b0f0852f-915f-429b-8496-25e99608d976",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_03_authorize" time="0.178"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.3 Authorize ---
+
+[EVSE] RAW RECV: [3,"43dace4f-41d2-4bb9-a0ad-bedaafe65b4e",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_04_start_transaction" time="15.028"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('Transaction started on 1', timeout=15)&#10; +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3680&gt;.wait_for_packet">self = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3680&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10882ab70&gt;
+
+    def test_6_04_start_transaction(self, evse_simulation):
+        print("\n--- 6.4 StartTransaction ---")
+        # Sim sends StartTransaction
+        evse_simulation.queue.put({'command': 'START_TRANSACTION', 'args': {'connector_id': 1, 'id_tag': VID_TAG}})
+&gt;       assert self.wait_for_packet("Transaction started on 1", timeout=15)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('Transaction started on 1', timeout=15)
+E        +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3680&gt;.wait_for_packet
+
+tests/api/test_mea_section6.py:91: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.4 StartTransaction ---
+
+[EVSE] RAW RECV: [3,"624720fd-bab7-4647-9885-fe29883ee673",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"3736808d-582d-4df9-8d5a-c7371b708c44",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7600"}]
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_05_status_charging" time="10.193"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Charging)', timeout=10)&#10; +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3920&gt;.wait_for_packet">self = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3920&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10882ab70&gt;
+
+    def test_6_05_status_charging(self, evse_simulation):
+        print("\n--- 6.5 StatusNotification (Charging) ---")
+        # Auto-sent by Sim on StartTx
+&gt;       assert self.wait_for_packet("StatusNotification ACKNOWLEDGED (Charging)", timeout=10)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Charging)', timeout=10)
+E        +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3920&gt;.wait_for_packet
+
+tests/api/test_mea_section6.py:96: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.5 StatusNotification (Charging) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_06_meter_values" time="2.003"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.6 MeterValues ---
+
+[EVSE] RAW RECV: [3,"e3ec04cf-f041-40f7-bca1-33240325f8a2",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_07_set_charging_profile_1" time="0.368"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.7 SetChargingProfile (TxProfile) ---
+
+[EVSE] RAW RECV: [2,"58908555eedd11f0ad300242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T11:05:12.362054Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":0,"validFrom":"2026-01-11T11:03:12.362054Z","validTo":"2026-01-12T11:04:12.362054Z"}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 101,
+    "charging_profile_kind": "Absolute",
+    "charging_profile_purpose": "TxProfile",
+    "charging_schedule": {
+      "charging_rate_unit": "W",
+      "charging_schedule_period": [
+        {
+          "limit": 5000,
+          "number_phases": 3,
+          "start_period": 0
+        }
+      ],
+      "duration": 3600,
+      "start_schedule": "2026-01-11T11:05:12.362054Z"
+    },
+    "recurrency_kind": "Daily",
+    "stack_level": 1,
+    "transaction_id": 0,
+    "valid_from": "2026-01-11T11:03:12.362054Z",
+    "valid_to": "2026-01-12T11:04:12.362054Z"
+  }
+}
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T11:04:48Z","result":{"status":"Accepted"}}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_08_meter_values" time="2.002"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.8 MeterValues ---
+
+[EVSE] RAW RECV: [3,"2403df23-8cb9-40eb-9af1-870895603cb7",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+[EVSE] RAW RECV: [3,"4fb5c756-48f6-4c28-aafa-0d82fd1c117e",{"currentTime":"2026-01-11T11:04:50Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:04:50Z)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_09_set_charging_profile_2" time="0.365"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.9 SetChargingProfile (Update/New) ---
+
+--- 6.7 SetChargingProfile (TxProfile) ---
+
+[EVSE] RAW RECV: [2,"59f9be72eedd11f0b2190242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T11:05:14.733513Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":0,"validFrom":"2026-01-11T11:03:14.733513Z","validTo":"2026-01-12T11:04:14.733513Z"}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 101,
+    "charging_profile_kind": "Absolute",
+    "charging_profile_purpose": "TxProfile",
+    "charging_schedule": {
+      "charging_rate_unit": "W",
+      "charging_schedule_period": [
+        {
+          "limit": 5000,
+          "number_phases": 3,
+          "start_period": 0
+        }
+      ],
+      "duration": 3600,
+      "start_schedule": "2026-01-11T11:05:14.733513Z"
+    },
+    "recurrency_kind": "Daily",
+    "stack_level": 1,
+    "transaction_id": 0,
+    "valid_from": "2026-01-11T11:03:14.733513Z",
+    "valid_to": "2026-01-12T11:04:14.733513Z"
+  }
+}
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T11:04:51Z","result":{"status":"Accepted"}}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_10_meter_values" time="2.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.10 MeterValues ---
+
+[EVSE] RAW RECV: [3,"f1253a0c-258c-4203-8494-882540c8285d",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_11_stop_transaction" time="10.121"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('Transaction stopped', timeout=10)&#10; +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x108908920&gt;.wait_for_packet">self = &lt;test_mea_section6.TestMeaSection6 object at 0x108908920&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10882ab70&gt;
+
+    def test_6_11_stop_transaction(self, evse_simulation):
+        print("\n--- 6.11 StopTransaction ---")
+        evse_simulation.queue.put({'command': 'STOP_TRANSACTION', 'args': {'connector_id': 1}})
+&gt;       assert self.wait_for_packet("Transaction stopped", timeout=10)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('Transaction stopped', timeout=10)
+E        +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x108908920&gt;.wait_for_packet
+
+tests/api/test_mea_section6.py:163: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.11 StopTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_12_status_finishing" time="10.134"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=10)&#10; +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x108908bc0&gt;.wait_for_packet">self = &lt;test_mea_section6.TestMeaSection6 object at 0x108908bc0&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10882ab70&gt;
+
+    def test_6_12_status_finishing(self, evse_simulation):
+        print("\n--- 6.12 StatusNotification (Finishing) ---")
+&gt;       assert self.wait_for_packet("StatusNotification ACKNOWLEDGED (Finishing)", timeout=10)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=10)
+E        +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x108908bc0&gt;.wait_for_packet
+
+tests/api/test_mea_section6.py:167: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.12 StatusNotification (Finishing) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_13_status_available" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.13 StatusNotification (Available) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in buffer
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_14_status_preparing" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.14 StatusNotification (Preparing) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Preparing)' in buffer
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_15_remote_start_transaction" time="0.479"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.15 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [3,"004ad3f7-b929-4d51-8c9b-954cfb05248d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [2,"6777ec03eedd11f0aeff0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"54fa6643-c4ae-4546-ad3f-a3f4bb69fe93",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"98bfb793-5b9b-4fa9-bd36-ec9fe22a79e4",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7600"}]
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_16_start_transaction" time="10.147"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('Transaction started on 1', timeout=10)&#10; +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3800&gt;.wait_for_packet">self = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3800&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10882ab70&gt;
+
+    def test_6_16_start_transaction(self, evse_simulation):
+        print("\n--- 6.16 StartTransaction ---")
+        # Auto triggered by RemoteStart in Sim
+&gt;       assert self.wait_for_packet("Transaction started on 1", timeout=10)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('Transaction started on 1', timeout=10)
+E        +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3800&gt;.wait_for_packet
+
+tests/api/test_mea_section6.py:198: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.16 StartTransaction ---
+
+[EVSE] RAW RECV: [3,"c09c4ab6-143f-46f9-b1ac-20d973f57afd",{"currentTime":"2026-01-11T11:05:20Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:05:20Z)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_17_status_charging" time="10.091"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Charging)', timeout=10)&#10; +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3320&gt;.wait_for_packet">self = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3320&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10882ab70&gt;
+
+    def test_6_17_status_charging(self, evse_simulation):
+        print("\n--- 6.17 StatusNotification (Charging) ---")
+&gt;       assert self.wait_for_packet("StatusNotification ACKNOWLEDGED (Charging)", timeout=10)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Charging)', timeout=10)
+E        +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1088d3320&gt;.wait_for_packet
+
+tests/api/test_mea_section6.py:202: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.17 StatusNotification (Charging) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_18_meter_values" time="2.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.18 MeterValues ---
+
+[EVSE] RAW RECV: [3,"1f160413-246c-463b-a1ee-a320101f6721",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_19_set_charging_profile_3" time="0.392"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.19 SetChargingProfile ---
+
+--- 6.7 SetChargingProfile (TxProfile) ---
+
+[EVSE] RAW RECV: [2,"75098b42eedd11f0886a0242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T11:06:00.111705Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":0,"validFrom":"2026-01-11T11:04:00.111705Z","validTo":"2026-01-12T11:05:00.111705Z"}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 101,
+    "charging_profile_kind": "Absolute",
+    "charging_profile_purpose": "TxProfile",
+    "charging_schedule": {
+      "charging_rate_unit": "W",
+      "charging_schedule_period": [
+        {
+          "limit": 5000,
+          "number_phases": 3,
+          "start_period": 0
+        }
+      ],
+      "duration": 3600,
+      "start_schedule": "2026-01-11T11:06:00.111705Z"
+    },
+    "recurrency_kind": "Daily",
+    "stack_level": 1,
+    "transaction_id": 0,
+    "valid_from": "2026-01-11T11:04:00.111705Z",
+    "valid_to": "2026-01-12T11:05:00.111705Z"
+  }
+}
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T11:05:36Z","result":{"status":"Accepted"}}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_20_meter_values" time="2.006"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.20 MeterValues ---
+
+[EVSE] RAW RECV: [3,"8acb84c8-da42-4e47-8d78-18a5f297e7cc",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_21_set_charging_profile_4" time="0.373"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.21 SetChargingProfile ---
+
+--- 6.7 SetChargingProfile (TxProfile) ---
+
+[EVSE] RAW RECV: [2,"7674a499eedd11f0b75e0242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T11:06:02.510816Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":0,"validFrom":"2026-01-11T11:04:02.510816Z","validTo":"2026-01-12T11:05:02.510816Z"}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 101,
+    "charging_profile_kind": "Absolute",
+    "charging_profile_purpose": "TxProfile",
+    "charging_schedule": {
+      "charging_rate_unit": "W",
+      "charging_schedule_period": [
+        {
+          "limit": 5000,
+          "number_phases": 3,
+          "start_period": 0
+        }
+      ],
+      "duration": 3600,
+      "start_schedule": "2026-01-11T11:06:02.510816Z"
+    },
+    "recurrency_kind": "Daily",
+    "stack_level": 1,
+    "transaction_id": 0,
+    "valid_from": "2026-01-11T11:04:02.510816Z",
+    "valid_to": "2026-01-12T11:05:02.510816Z"
+  }
+}
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T11:05:38Z","result":{"status":"Accepted"}}
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_22_meter_values" time="2.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.22 MeterValues ---
+
+[EVSE] RAW RECV: [3,"c3ce93e0-5291-4767-bd1c-8c86ef27ffd8",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_23_remote_stop_transaction" time="10.520"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('RemoteStopTransaction Response (Accepted)', timeout=10)&#10; +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1089094f0&gt;.wait_for_packet">self = &lt;test_mea_section6.TestMeaSection6 object at 0x1089094f0&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10882ab70&gt;
+api_auth = &lt;tests.api.test_mea_postman.PreemptiveDigestAuth object at 0x10871e2a0&gt;
+
+    def test_6_23_remote_stop_transaction(self, evse_simulation, api_auth):
+        print("\n--- 6.23 RemoteStopTransaction ---")
+    
+        # Get active TID
+        tid = 0
+        if evse_simulation.cp and 1 in evse_simulation.cp.transactions:
+             tid = evse_simulation.cp.transactions[1]
+    
+        url = f"{BASE_URL}/EV/cmd/chargepoint/remoteStop"
+        payload = {
+            "chargepoint_id": CHARGEPOINT_ID,
+            "transaction_id": tid
+        }
+        resp = requests.post(url, json=payload, auth=api_auth)
+        assert resp.status_code == 200
+&gt;       assert self.wait_for_packet("RemoteStopTransaction Response (Accepted)", timeout=10)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('RemoteStopTransaction Response (Accepted)', timeout=10)
+E        +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1089094f0&gt;.wait_for_packet
+
+tests/api/test_mea_section6.py:242: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.23 RemoteStopTransaction ---
+
+[EVSE] RAW RECV: [3,"e33fcbd5-2f1a-4e9a-b239-8c6e5be9263b",{"currentTime":"2026-01-11T11:05:50Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T11:05:50Z)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_24_stop_transaction" time="10.177"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('Transaction stopped', timeout=10)&#10; +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1089097f0&gt;.wait_for_packet">self = &lt;test_mea_section6.TestMeaSection6 object at 0x1089097f0&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10882ab70&gt;
+
+    def test_6_24_stop_transaction(self, evse_simulation):
+        print("\n--- 6.24 StopTransaction ---")
+&gt;       assert self.wait_for_packet("Transaction stopped", timeout=10)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('Transaction stopped', timeout=10)
+E        +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x1089097f0&gt;.wait_for_packet
+
+tests/api/test_mea_section6.py:246: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.24 StopTransaction ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_25_status_finishing" time="10.135"><failure message="AssertionError: assert False&#10; +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=10)&#10; +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x108909b20&gt;.wait_for_packet">self = &lt;test_mea_section6.TestMeaSection6 object at 0x108909b20&gt;
+evse_simulation = &lt;conftest.EvseSimulator object at 0x10882ab70&gt;
+
+    def test_6_25_status_finishing(self, evse_simulation):
+        print("\n--- 6.25 StatusNotification (Finishing) ---")
+&gt;       assert self.wait_for_packet("StatusNotification ACKNOWLEDGED (Finishing)", timeout=10)
+E       AssertionError: assert False
+E        +  where False = wait_for_packet('StatusNotification ACKNOWLEDGED (Finishing)', timeout=10)
+E        +    where wait_for_packet = &lt;test_mea_section6.TestMeaSection6 object at 0x108909b20&gt;.wait_for_packet
+
+tests/api/test_mea_section6.py:250: AssertionError</failure><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.25 StatusNotification (Finishing) ---
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section6.TestMeaSection6" name="test_6_26_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 6.26 StatusNotification (Available) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in buffer
+
+</system-out></testcase></testsuite><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="7" time="6.174" timestamp="2026-01-11T09:46:13.489912+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_01_send_local_list" time="2.079" /><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_02_disconnect" time="1.001" /><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_03_start_transaction" time="1.001" /><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_04_stop_transaction" time="1.002" /><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_05_reconnect" time="1.003" /><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_06_send_start" time="0.000" /><testcase classname="tests.api.test_mea_section7.TestMeaSection7" name="test_7_07_07_send_stop" time="0.000" /></testsuite><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="7" time="2.678" timestamp="2026-01-11T16:44:35.672803+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_00_initialization" time="2.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"b9a074c5-ff1e-4aec-a9a1-013e7ae0cf00",{"currentTime":"2026-01-11T09:45:13Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"a7dfc0a1-0256-45ce-815c-1364ac4a179b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
+
+--- 9.0 Initialization ---
+DEBUG: Found in queue: [EVSE] Connected to CSMS!
+DEBUG: Found in queue: [EVSE] Sending BootNotification...
+DEBUG: Buffering unmatched: [EVSE] Sending BootNotification...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"b9a074c5-ff1e-4aec-a9a1-013e7ae0cf00",{"currentTime":"2026-01-11T09:45:13Z","interval":3600,"status":"Accepted"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"b9a074c5-ff1e-4aec-a9a1-013e7ae0cf00",{"currentTime":"2026-01-11T09:45:13Z","interval":3600,"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] BootNotification ACCEPTED
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"a7dfc0a1-0256-45ce-815c-1364ac4a179b",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"a7dfc0a1-0256-45ce-815c-1364ac4a179b",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_01_meav2g_config" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration MEAV2G=true ---
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] Sending Heartbeat...
+DEBUG: Buffering unmatched: [EVSE] Sending Heartbeat...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
+
+[EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_02_meter_sample" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration MeterValueSampleInterval=10 ---
+
+[EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_03_local_auth" time="0.103"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration LocalAuthorizeOffline=false ---
+
+[EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_04_01_power_neg5k" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration Power.Active.Import=-5000 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_04_02_power_2k" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration Power.Active.Import=2000 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_04_03_power_0" time="0.107"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration Power.Active.Import=0 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase></testsuite></testsuites>

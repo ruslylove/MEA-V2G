@@ -1,71 +1,4 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{geometry}
-\usepackage{longtable}
-\usepackage{xcolor}
-\usepackage{booktabs}
-\usepackage{listings}
-\usepackage{pdfpages} % Added for including external PDFs
-\geometry{a4paper, margin=1in}
-
-\lstset{
-    basicstyle=\ttfamily\scriptsize,
-    breaklines=true,
-    breakatwhitespace=false,
-    frame=single,
-    showstringspaces=false
-}
-
-\title{MEA OCPP Live Test}
-\author{Automated Test Suite}
-\date{\today}
-
-\begin{document}
-
-\maketitle
-
-\section{Summary}
-\begin{itemize}
-    \item \textbf{Total Tests:} 19
-    \item \textbf{Passed:} 19
-    \item \textbf{Failed:} 0
-    \item \textbf{Errors:} 0
-    \item \textbf{Skipped:} 0
-    \item \textbf{Total Duration:} 17.946 seconds
-\end{itemize}
-
-\section{Detailed Results}
-\subsection{Reservation Order Verification}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-5.1 & test\_5\_01\_status\_available & \textcolor{green}{Pass} & 3.007 \\
-5.2 & test\_5\_02\_reserve\_now & \textcolor{green}{Pass} & 0.386 \\
-5.3 & test\_5\_03\_status\_reserved & \textcolor{green}{Pass} & 0.001 \\
-5.4 & test\_5\_04\_cancel\_reservation & \textcolor{green}{Pass} & 0.353 \\
-5.5 & test\_5\_05\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-5.6 & test\_5\_06\_reserve\_now\_expiry & \textcolor{green}{Pass} & 0.333 \\
-5.7 & test\_5\_07\_wait\_for\_expiry & \textcolor{green}{Pass} & 4.004 \\
-5.8 & test\_5\_08\_status\_available\_after\_expiry & \textcolor{green}{Pass} & 0.001 \\
-5.9 & test\_5\_09\_reserve\_now & \textcolor{green}{Pass} & 4.685 \\
-5.10 & test\_5\_10\_status\_reserved & \textcolor{green}{Pass} & 0.003 \\
-5.11 & test\_5\_11\_status\_plug & \textcolor{green}{Pass} & 0.129 \\
-5.12 & test\_5\_12\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.469 \\
-5.13 & test\_5\_13\_start\_transaction & \textcolor{green}{Pass} & 0.000 \\
-5.14 & test\_5\_14\_status\_notification\_charging & \textcolor{green}{Pass} & 0.001 \\
-5.15 & test\_5\_15\_meter\_values & \textcolor{green}{Pass} & 2.004 \\
-5.16 & test\_5\_16\_remote\_stop\_transaction & \textcolor{green}{Pass} & 2.445 \\
-5.17 & test\_5\_17\_stop\_transaction & \textcolor{green}{Pass} & 0.001 \\
-5.18 & test\_5\_18\_status\_plug & \textcolor{green}{Pass} & 0.000 \\
-5.19 & test\_5\_19\_status\_notification\_unplug & \textcolor{green}{Pass} & 0.001 \\
-\bottomrule
-\end{longtable}
-\section{Individual Test Case Logs}\subsection*{test\_5\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="19" time="17.946" timestamp="2026-01-11T19:29:00.603158+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_01_status_available" time="3.007"><system-out>--------------------------------- Captured Out ---------------------------------
 
 [EVSE] RAW RECV: [3,"939e4b97-4097-4765-a238-a5369d040beb",{"currentTime":"2026-01-11T12:29:38Z","interval":3600,"status":"Accepted"}]
 
@@ -85,17 +18,15 @@
 
 [TestMeaSection5] Extended Logging ENABLED for Report Generation
 
---- 5.1 StatusNotification (Unplug) -> Available ---
+--- 5.1 StatusNotification (Unplug) -&gt; Available ---
 
 [EVSE] SENDING Packet: StatusNotification (Available)
 
 [EVSE] RAW RECV: [3,"5f2c17f1-38ab-42f6-bed0-2d62d82b8c84",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_5\_02\_reserve\_now}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_02_reserve_now" time="0.386"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.2 ReserveNow ---
 
@@ -118,16 +49,12 @@ Payload: {
 
 [EVSE] StatusNotification ACKNOWLEDGED (Reserved)
 Reserve API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T12:29:40Z","result":{"status":"Accepted","reservation_id":1038}}
-\end{lstlisting}
-\subsection*{test\_5\_03\_status\_reserved}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_03_status_reserved" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.3 StatusNotification (Reserved) ---
-\end{lstlisting}
-\subsection*{test\_5\_04\_cancel\_reservation}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_04_cancel_reservation" time="0.353"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.4 CancelReservation ---
 
@@ -146,16 +73,12 @@ Payload: {
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
 Cancel API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T12:29:40Z","result":{"status":"Accepted","reservation_id":1038}}
-\end{lstlisting}
-\subsection*{test\_5\_05\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_05_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.5 StatusNotification (Available) ---
-\end{lstlisting}
-\subsection*{test\_5\_06\_reserve\_now\_expiry}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_06_reserve_now_expiry" time="0.333"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.6 ReserveNow (1 min) ---
 
@@ -177,10 +100,8 @@ Payload: {
 [EVSE] RAW RECV: [3,"1f104b55-22ce-4dd6-a6e1-bfd63315e37b",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Reserved)
-\end{lstlisting}
-\subsection*{test\_5\_07\_wait\_for\_expiry}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_07_wait_for_expiry" time="4.004"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.7 Wait for Reservation Expiry ---
 [EVSE] Reservation 1039 expired at 2026-01-11T12:29:06+00:00. Current: 2026-01-11 12:29:06.842178+00:00
@@ -190,16 +111,12 @@ Payload: {
 [EVSE] RAW RECV: [3,"8c814ac6-03e9-4572-aac0-9552baa26419",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_5\_08\_status\_available\_after\_expiry}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_08_status_available_after_expiry" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.8 StatusNotification (Available) after Expiry ---
-\end{lstlisting}
-\subsection*{test\_5\_09\_reserve\_now}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_09_reserve_now" time="4.685"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.9 ReserveNow ---
 
@@ -238,16 +155,12 @@ Payload: {
 
 [EVSE] StatusNotification ACKNOWLEDGED (Reserved)
 Reserve API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T12:29:49Z","result":{"status":"Accepted","reservation_id":1040}}
-\end{lstlisting}
-\subsection*{test\_5\_10\_status\_reserved}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_10_status_reserved" time="0.003"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.10 StatusNotification (Reserved) ---
-\end{lstlisting}
-\subsection*{test\_5\_11\_status\_plug}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_11_status_plug" time="0.129"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.11 StatusNotification (Plug) ---
 
@@ -256,10 +169,8 @@ Reserve API Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-
 [EVSE] RAW RECV: [3,"8d6f1a3c-5e90-4f0e-b14d-bc194c997b6d",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Reserved)
-\end{lstlisting}
-\subsection*{test\_5\_12\_remote\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_12_remote_start_transaction" time="0.469"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.12 RemoteStartTransaction ---
 
@@ -295,22 +206,16 @@ Payload: {
 [EVSE] RAW RECV: [3,"f74dfef6-34da-402d-badc-5b9973b0074c",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_5\_13\_start\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_13_start_transaction" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.13 StartTransaction ---
-\end{lstlisting}
-\subsection*{test\_5\_14\_status\_notification\_charging}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_14_status_notification_charging" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.14 StatusNotification (Charging) ---
-\end{lstlisting}
-\subsection*{test\_5\_15\_meter\_values}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_15_meter_values" time="2.004"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.15 MeterValues ---
 
@@ -319,10 +224,8 @@ Payload: {
 [EVSE] RAW RECV: [3,"bed8de84-bb84-4992-a64e-ee5481c3c775",{}]
 
 [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_5\_16\_remote\_stop\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_16_remote_stop_transaction" time="2.445"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.16 RemoteStopTransaction ---
 
@@ -345,39 +248,19 @@ Payload: {
 [EVSE] RAW RECV: [3,"b9f34c3d-e143-4ad0-b630-3cdd55a90375",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_5\_17\_stop\_transaction}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_17_stop_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.17 StopTransaction ---
-\end{lstlisting}
-\subsection*{test\_5\_18\_status\_plug}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_18_status_plug" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 5.18 StatusNotification (Plug) ---
-\end{lstlisting}
-\subsection*{test\_5\_19\_status\_notification\_unplug}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
 
---- 5.19 StatusNotification (Unplug) -> Available ---
+</system-out></testcase><testcase classname="tests.api.test_mea_section5.TestMeaSection5" name="test_5_19_status_notification_unplug" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 5.19 StatusNotification (Unplug) -&gt; Available ---
 
 [TestMeaSection5] Extended Logging DISABLED
-\end{lstlisting}
 
-\section{Global Execution Log}
-\begin{lstlisting}
-============================= test session starts ==============================
-platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
-rootdir: /Users/rus/development/MEA-V2G
-collected 19 items
-
-tests/api/test_mea_section5.py ...................                       [100%]
-
-- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section5.xml -
-============================= 19 passed in 17.95s ==============================
-\end{lstlisting}
-
-\end{document}
+</system-out></testcase></testsuite></testsuites>

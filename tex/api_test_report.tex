@@ -16,7 +16,7 @@
     showstringspaces=false
 }
 
-\title{MEA API Test Report}
+\title{MEA OCPP Live Test}
 \author{Automated Test Suite}
 \date{\today}
 
@@ -35,20 +35,76 @@
 \end{itemize}
 
 \section{Detailed Results}
-\begin{longtable}{p{0.6\textwidth} p{0.2\textwidth} p{0.1\textwidth}}
+\subsection{Section 00}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
 \toprule
-\textbf{Test Case} & \textbf{Status} & \textbf{Time (s)} \\
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
 \midrule
 \endhead
-test\_00\_connection\_setup & \textcolor{green}{Pass} & 2.005 \\
-test\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.441 \\
-test\_remote\_stop\_transaction & \textcolor{green}{Pass} & 0.463 \\
-test\_reserve\_now & \textcolor{green}{Pass} & 0.361 \\
-test\_cancel\_reservation & \textcolor{green}{Pass} & 0.341 \\
-test\_change\_configuration & \textcolor{green}{Pass} & 0.340 \\
-test\_set\_charging\_profile & \textcolor{green}{Pass} & 0.363 \\
-test\_remote\_reset & \textcolor{green}{Pass} & 0.358 \\
-test\_get\_configuration & \textcolor{green}{Pass} & 0.346 \\
+00.connection & test\_00\_connection\_setup & \textcolor{green}{Pass} & 2.005 \\
+\bottomrule
+\end{longtable}
+\subsection{Section cancel}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+cancel.reservation & test\_cancel\_reservation & \textcolor{green}{Pass} & 0.341 \\
+\bottomrule
+\end{longtable}
+\subsection{Section change}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+change.configuration & test\_change\_configuration & \textcolor{green}{Pass} & 0.340 \\
+\bottomrule
+\end{longtable}
+\subsection{Section get}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+get.configuration & test\_get\_configuration & \textcolor{green}{Pass} & 0.346 \\
+\bottomrule
+\end{longtable}
+\subsection{Section remote}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+remote.start & test\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.441 \\
+remote.stop & test\_remote\_stop\_transaction & \textcolor{green}{Pass} & 0.463 \\
+remote.reset & test\_remote\_reset & \textcolor{green}{Pass} & 0.358 \\
+\bottomrule
+\end{longtable}
+\subsection{Section reserve}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+reserve.now & test\_reserve\_now & \textcolor{green}{Pass} & 0.361 \\
+\bottomrule
+\end{longtable}
+\subsection{Section set}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+set.charging & test\_set\_charging\_profile & \textcolor{green}{Pass} & 0.363 \\
 \bottomrule
 \end{longtable}
 
@@ -569,17 +625,6 @@ tests/api/test_mea_postman.py::test_set_charging_profile
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 - generated xml file: /Users/rus/development/MEA-V2G/tex/api_test_results.xml --
 ======================== 9 passed, 16 warnings in 5.11s ========================
-
 \end{lstlisting}
-
-\newpage
-\section{Server Side Logs}
-The following pages contain the official server-side logs from the MEA Sandbox admin panel, confirming the receipt and processing of the OCPP messages.
-
-\includepdf[pages=1, viewport=0 3125.067226890756 1450.0 5177.0, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_msgs.pdf_0]{server_log_msgs.pdf}
-\includepdf[pages=1, viewport=0 1073.134453781512 1450.0 3125.067226890756, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_msgs.pdf_1]{server_log_msgs.pdf}
-\includepdf[pages=1, viewport=0 0 1450.0 1073.134453781512, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_msgs.pdf_2]{server_log_msgs.pdf}
-\includepdf[pages=1, viewport=0 459.4773109243697 1608.0 2735.0, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_comms.pdf_0]{server_log_comms.pdf}
-\includepdf[pages=1, viewport=0 0 1608.0 459.4773109243697, clip, scale=0.85, pagecommand={\thispagestyle{plain}}, frame=true, linkname=server_log_comms.pdf_1]{server_log_comms.pdf}
 
 \end{document}

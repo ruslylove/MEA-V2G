@@ -2,8 +2,22 @@ import pytest
 import time
 import statistics
 
+from Ocpp16Interface import Ocpp16Interface
+
 @pytest.mark.usefixtures("evse_simulation")
 class TestMeaSection11:
+    @classmethod
+    def setup_class(cls):
+        # Enable extended logging for this section report
+        Ocpp16Interface.LOG_SEND_PACKETS = True
+        print("\n[TestMeaSection11] Extended Logging ENABLED for Report Generation")
+
+    @classmethod
+    def teardown_class(cls):
+        # Restore default
+        Ocpp16Interface.LOG_SEND_PACKETS = False
+        print("\n[TestMeaSection11] Extended Logging DISABLED")
+
     
     # --- Helper Methods ---
     packet_buffer = []

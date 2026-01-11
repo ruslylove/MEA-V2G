@@ -1,54 +1,4 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{geometry}
-\usepackage{longtable}
-\usepackage{xcolor}
-\usepackage{booktabs}
-\usepackage{listings}
-\usepackage{pdfpages} % Added for including external PDFs
-\geometry{a4paper, margin=1in}
-
-\lstset{
-    basicstyle=\ttfamily\scriptsize,
-    breaklines=true,
-    breakatwhitespace=false,
-    frame=single,
-    showstringspaces=false
-}
-
-\title{MEA OCPP Live Test}
-\author{Automated Test Suite}
-\date{\today}
-
-\begin{document}
-
-\maketitle
-
-\section{Summary}
-\begin{itemize}
-    \item \textbf{Total Tests:} 2
-    \item \textbf{Passed:} 2
-    \item \textbf{Failed:} 0
-    \item \textbf{Errors:} 0
-    \item \textbf{Skipped:} 0
-    \item \textbf{Total Duration:} 43.154 seconds
-\end{itemize}
-
-\section{Detailed Results}
-\subsection{Performance Verification}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-11.1 & test\_11\_01\_reconnect\_time & \textcolor{green}{Pass} & 2.007 \\
-11.2 & test\_11\_02\_average\_performance & \textcolor{green}{Pass} & 41.038 \\
-\bottomrule
-\end{longtable}
-\section{Individual Test Case Logs}\subsection*{test\_11\_01\_reconnect\_time}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="2" time="43.154" timestamp="2026-01-11T19:52:13.923505+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section11.TestMeaSection11" name="test_11_01_reconnect_time" time="2.007"><system-out>--------------------------------- Captured Out ---------------------------------
 
 [EVSE] RAW RECV: [3,"86aa6839-f735-499c-8a25-fcacd2c27743",{"currentTime":"2026-01-11T12:52:51Z","interval":3600,"status":"Accepted"}]
 
@@ -72,10 +22,8 @@
 DEBUG: Triggering Disconnect...
 DEBUG: Reconnect took 0.00 seconds
 Reconnection Time: 0.00s
-\end{lstlisting}
-\subsection*{test\_11\_02\_average\_performance}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section11.TestMeaSection11" name="test_11_02_average_performance" time="41.038"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 11.2 Average Performance ---
 Iteration 1/5...
@@ -235,19 +183,5 @@ Average Reconnection Time (5 runs): 7.20s
 Min: 6.14s, Max: 11.25s
 
 [TestMeaSection11] Extended Logging DISABLED
-\end{lstlisting}
 
-\section{Global Execution Log}
-\begin{lstlisting}
-============================= test session starts ==============================
-platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
-rootdir: /Users/rus/development/MEA-V2G
-collected 2 items
-
-tests/api/test_mea_section11.py ..                                       [100%]
-
-- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section11.xml -
-============================== 2 passed in 43.15s ==============================
-\end{lstlisting}
-
-\end{document}
+</system-out></testcase></testsuite></testsuites>

@@ -1,120 +1,4 @@
-\documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{geometry}
-\usepackage{longtable}
-\usepackage{xcolor}
-\usepackage{booktabs}
-\usepackage{listings}
-\usepackage{pdfpages} % Added for including external PDFs
-\geometry{a4paper, margin=1in}
-
-\lstset{
-    basicstyle=\ttfamily\scriptsize,
-    breaklines=true,
-    breakatwhitespace=false,
-    frame=single,
-    showstringspaces=false
-}
-
-\title{MEA OCPP Live Test}
-\author{Automated Test Suite}
-\date{\today}
-
-\begin{document}
-
-\maketitle
-
-\section{Summary}
-\begin{itemize}
-    \item \textbf{Total Tests:} 50
-    \item \textbf{Passed:} 50
-    \item \textbf{Failed:} 0
-    \item \textbf{Errors:} 0
-    \item \textbf{Skipped:} 0
-    \item \textbf{Total Duration:} 27.230 seconds
-\end{itemize}
-
-\section{Detailed Results}
-\subsection{Dual Connector Concurrent Remote Start}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-8.1.1 & test\_8\_01\_01\_status\_available & \textcolor{green}{Pass} & 2.009 \\
-8.1.2 & test\_8\_01\_02\_status\_preparing & \textcolor{green}{Pass} & 0.312 \\
-8.1.3 & test\_8\_01\_03\_remote\_start\_1 & \textcolor{green}{Pass} & 0.105 \\
-8.1.4 & test\_8\_01\_04\_remote\_start\_2 & \textcolor{green}{Pass} & 0.106 \\
-8.1.5 & test\_8\_01\_05\_start\_transaction\_1 & \textcolor{green}{Pass} & 0.001 \\
-8.1.6 & test\_8\_01\_06\_status\_charging\_1 & \textcolor{green}{Pass} & 0.104 \\
-8.1.7 & test\_8\_01\_07\_start\_transaction\_2 & \textcolor{green}{Pass} & 0.101 \\
-8.1.8 & test\_8\_01\_08\_status\_charging\_2 & \textcolor{green}{Pass} & 0.001 \\
-8.1.9 & test\_8\_01\_09\_metervalues\_1 & \textcolor{green}{Pass} & 4.914 \\
-8.1.10 & test\_8\_01\_10\_metervalues\_2 & \textcolor{green}{Pass} & 0.209 \\
-8.1.11 & test\_8\_01\_11\_remote\_stop\_1 & \textcolor{green}{Pass} & 0.204 \\
-8.1.12 & test\_8\_01\_12\_stop\_transaction\_1 & \textcolor{green}{Pass} & 0.000 \\
-8.1.13 & test\_8\_01\_13\_status\_finishing\_1 & \textcolor{green}{Pass} & 0.001 \\
-8.1.14 & test\_8\_01\_14\_status\_available\_1 & \textcolor{green}{Pass} & 0.001 \\
-8.1.15 & test\_8\_01\_15\_remote\_stop\_2 & \textcolor{green}{Pass} & 0.210 \\
-8.1.16 & test\_8\_01\_16\_stop\_transaction\_2 & \textcolor{green}{Pass} & 0.000 \\
-8.1.17 & test\_8\_01\_17\_status\_finishing\_2 & \textcolor{green}{Pass} & 0.000 \\
-8.1.18 & test\_8\_01\_18\_status\_available\_2 & \textcolor{green}{Pass} & 0.000 \\
-\bottomrule
-\end{longtable}
-\subsection{Dual Connector Shared Emergency Stop}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-8.2.1 & test\_8\_02\_01\_status\_available & \textcolor{green}{Pass} & 1.003 \\
-8.2.2 & test\_8\_02\_02\_status\_preparing\_1 & \textcolor{green}{Pass} & 0.001 \\
-8.2.3 & test\_8\_02\_03\_remote\_start\_1 & \textcolor{green}{Pass} & 0.000 \\
-8.2.4 & test\_8\_02\_04\_start\_transaction\_1 & \textcolor{green}{Pass} & 0.212 \\
-8.2.5 & test\_8\_02\_05\_status\_charging\_1 & \textcolor{green}{Pass} & 0.106 \\
-8.2.6 & test\_8\_02\_06\_metervalues\_1 & \textcolor{green}{Pass} & 5.020 \\
-8.2.7 & test\_8\_02\_07\_status\_preparing\_2 & \textcolor{green}{Pass} & 0.001 \\
-8.2.8 & test\_8\_02\_08\_remote\_start\_2 & \textcolor{green}{Pass} & 0.001 \\
-8.2.9 & test\_8\_02\_09\_start\_transaction\_2 & \textcolor{green}{Pass} & 0.308 \\
-8.2.10 & test\_8\_02\_10\_status\_charging\_2 & \textcolor{green}{Pass} & 0.001 \\
-8.2.11 & test\_8\_02\_11\_metervalues\_2 & \textcolor{green}{Pass} & 4.809 \\
-8.2.12 & test\_8\_02\_12\_stop\_conn\_1 & \textcolor{green}{Pass} & 0.208 \\
-8.2.13 & test\_8\_02\_13\_stop\_conn\_2 & \textcolor{green}{Pass} & 0.207 \\
-8.2.14 & test\_8\_02\_14\_status\_faulted & \textcolor{green}{Pass} & 0.102 \\
-8.2.15 & test\_8\_02\_15\_status\_faulted\_unplug & \textcolor{green}{Pass} & 0.001 \\
-8.2.16 & test\_8\_02\_16\_status\_available & \textcolor{green}{Pass} & 0.001 \\
-\bottomrule
-\end{longtable}
-\subsection{Dual Connector Power Loss}
-
-\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
-8.3.1 & test\_8\_03\_01\_status\_available & \textcolor{green}{Pass} & 1.001 \\
-8.3.2 & test\_8\_03\_02\_status\_preparing\_1 & \textcolor{green}{Pass} & 0.001 \\
-8.3.3 & test\_8\_03\_03\_remote\_start\_1 & \textcolor{green}{Pass} & 0.000 \\
-8.3.4 & test\_8\_03\_04\_start\_transaction\_1 & \textcolor{green}{Pass} & 0.305 \\
-8.3.5 & test\_8\_03\_05\_status\_charging\_1 & \textcolor{green}{Pass} & 0.001 \\
-8.3.6 & test\_8\_03\_06\_metervalues\_1 & \textcolor{green}{Pass} & 0.001 \\
-8.3.7 & test\_8\_03\_07\_status\_preparing\_2 & \textcolor{green}{Pass} & 0.001 \\
-8.3.8 & test\_8\_03\_08\_remote\_start\_2 & \textcolor{green}{Pass} & 0.000 \\
-8.3.9 & test\_8\_03\_09\_start\_transaction\_2 & \textcolor{green}{Pass} & 0.314 \\
-8.3.10 & test\_8\_03\_10\_status\_charging\_2 & \textcolor{green}{Pass} & 0.001 \\
-8.3.11 & test\_8\_03\_11\_metervalues\_2 & \textcolor{green}{Pass} & 4.762 \\
-8.3.12 & test\_8\_03\_12\_power\_loss\_stop\_1 & \textcolor{green}{Pass} & 0.206 \\
-8.3.13 & test\_8\_03\_13\_power\_loss\_stop\_2 & \textcolor{green}{Pass} & 0.310 \\
-8.3.14 & test\_8\_03\_14\_reboot & \textcolor{green}{Pass} & 0.001 \\
-8.3.15 & test\_8\_03\_15\_status\_preparing\_both & \textcolor{green}{Pass} & 0.001 \\
-8.3.16 & test\_8\_03\_16\_status\_available\_both & \textcolor{green}{Pass} & 0.001 \\
-\bottomrule
-\end{longtable}
-\section{Individual Test Case Logs}\subsection*{test\_8\_01\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="50" time="27.230" timestamp="2026-01-11T20:09:52.419406+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_01_status_available" time="2.009"><system-out>--------------------------------- Captured Out ---------------------------------
 
 [EVSE] RAW RECV: [3,"b73cdb2b-682c-422f-bbb2-30483ab94eb8",{"currentTime":"2026-01-11T13:10:29Z","interval":3600,"status":"Accepted"}]
 
@@ -144,10 +28,8 @@ DEBUG: Buffering unmatched: [EVSE] BootNotification ACCEPTED
 DEBUG: Found in queue: [EVSE] Sending StatusNotification (Available)...
 DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Available)...
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_8\_01\_02\_status\_preparing}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_02_status_preparing" time="0.312"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.2 Status Preparing (Plug Both) ---
 DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
@@ -199,10 +81,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Preparing
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"05db2892-881c-4c3e-9565-de07ac75a401",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"05db2892-881c-4c3e-9565-de07ac75a401",{}]
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-\end{lstlisting}
-\subsection*{test\_8\_01\_03\_remote\_start\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_03_remote_start_1" time="0.105"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.3 Remote Start Connector 1 ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Preparing)
@@ -248,10 +128,8 @@ Payload: {
   "connectorId": 1
 }
 DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
-\end{lstlisting}
-\subsection*{test\_8\_01\_04\_remote\_start\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_04_remote_start_2" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.4 Remote Start Connector 2 ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Preparing)
@@ -303,10 +181,8 @@ Payload: {
   "connectorId": 2
 }
 DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
-\end{lstlisting}
-\subsection*{test\_8\_01\_05\_start\_transaction\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_05_start_transaction_1" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.5 Start Transaction Connector 1 ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Preparing)
@@ -314,10 +190,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Preparing
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"b813544b-20b0-42b8-ad10-9c0b4953d67d",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7647}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"b813544b-20b0-42b8-ad10-9c0b4953d67d",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7647}]
 DEBUG: Found in queue: Transaction started on 1: 7647
-\end{lstlisting}
-\subsection*{test\_8\_01\_06\_status\_charging\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_06_status_charging_1" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.6 Status Charging Connector 1 ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Charging)
@@ -359,10 +233,8 @@ Payload: {
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"0f5f6a25-3c06-4a92-ace8-05ee41281805",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"0f5f6a25-3c06-4a92-ace8-05ee41281805",{}]
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_8\_01\_07\_start\_transaction\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_07_start_transaction_2" time="0.101"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.7 Start Transaction Connector 2 ---
 
@@ -376,10 +248,8 @@ DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2e5d8c59-5ef7-48d3-9ecb-79ad75ef7e42",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7648}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2e5d8c59-5ef7-48d3-9ecb-79ad75ef7e42",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7648}]
 DEBUG: Found in queue: Transaction started on 2: 7648
-\end{lstlisting}
-\subsection*{test\_8\_01\_08\_status\_charging\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_08_status_charging_2" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.8 Status Charging Connector 2 ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Charging)
@@ -387,10 +257,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Charging)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"93e33f99-646a-48a1-b996-0ee9acb7b283",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"93e33f99-646a-48a1-b996-0ee9acb7b283",{}]
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_8\_01\_09\_metervalues\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_09_metervalues_1" time="4.914"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.9 MeterValues Connector 1 ---
 
@@ -404,10 +272,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: MeterValues (TxID: 7647)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"229e38c8-0cef-4d5b-9008-3ca5e61c18c4",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"229e38c8-0cef-4d5b-9008-3ca5e61c18c4",{}]
 DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_8\_01\_10\_metervalues\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_10_metervalues_2" time="0.209"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.10 MeterValues Connector 2 ---
 
@@ -421,10 +287,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: MeterValues (TxID: 7648)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"354b24f6-3db8-4082-8cf6-18d636e8fec6",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"354b24f6-3db8-4082-8cf6-18d636e8fec6",{}]
 DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_8\_01\_11\_remote\_stop\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_11_remote_stop_1" time="0.204"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.11 Remote Stop Connector 1 ---
 
@@ -454,28 +318,20 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StopTransaction (ID: 7647, Re
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"d5984b9f-f663-4b6c-8ef0-c9c1a0914a78",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"d5984b9f-f663-4b6c-8ef0-c9c1a0914a78",{}]
 DEBUG: Found in queue: Transaction stopped on 1: 7647
-\end{lstlisting}
-\subsection*{test\_8\_01\_12\_stop\_transaction\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
-\end{lstlisting}
-\subsection*{test\_8\_01\_13\_status\_finishing\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_12_stop_transaction_1" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_13_status_finishing_1" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.13 Status Finishing 1 ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in BUFFER
-\end{lstlisting}
-\subsection*{test\_8\_01\_14\_status\_available\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_14_status_available_1" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.14 Status Available 1 ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
-\end{lstlisting}
-\subsection*{test\_8\_01\_15\_remote\_stop\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_15_remote_stop_2" time="0.210"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.15 Stop Connector 2 ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Available)
@@ -507,26 +363,18 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StopTransaction (ID: 7648, Re
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"e642fc8e-4e14-42fb-a59e-e0acd3468b94",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"e642fc8e-4e14-42fb-a59e-e0acd3468b94",{}]
 DEBUG: Found in queue: Transaction stopped on 2: 7648
-\end{lstlisting}
-\subsection*{test\_8\_01\_16\_stop\_transaction\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
-\end{lstlisting}
-\subsection*{test\_8\_01\_17\_status\_finishing\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_16_stop_transaction_2" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_17_status_finishing_2" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in BUFFER
-\end{lstlisting}
-\subsection*{test\_8\_01\_18\_status\_available\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_01_18_status_available_2" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.1.18 Status Available 2 ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
-\end{lstlisting}
-\subsection*{test\_8\_02\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_01_status_available" time="1.003"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.1 Status Available ---
 
@@ -545,22 +393,16 @@ DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
 [EVSE] RAW RECV: [3,"8117415d-42b1-4f1e-b124-75f0fc95c482",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_8\_02\_02\_status\_preparing\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_02_status_preparing_1" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.2 Status Preparing (Conn 1) ---
-\end{lstlisting}
-\subsection*{test\_8\_02\_03\_remote\_start\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_03_remote_start_1" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.3 Remote Start (Conn 1) ---
-\end{lstlisting}
-\subsection*{test\_8\_02\_04\_start\_transaction\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_04_start_transaction_1" time="0.212"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.4 Start Transaction (Conn 1) ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Available)
@@ -634,10 +476,8 @@ Payload: {
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"d78fa527-0e40-4a55-9518-14ce3c98d0bc",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7649}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"d78fa527-0e40-4a55-9518-14ce3c98d0bc",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7649}]
 DEBUG: Found in queue: Transaction started on 1: 7649
-\end{lstlisting}
-\subsection*{test\_8\_02\_05\_status\_charging\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_05_status_charging_1" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.5 Status Charging (Conn 1) ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Charging)
@@ -649,10 +489,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Charging)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"1c153c4f-7906-4917-9c42-e05a28cce4ae",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"1c153c4f-7906-4917-9c42-e05a28cce4ae",{}]
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_8\_02\_06\_metervalues\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_06_metervalues_1" time="5.020"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.6 MeterValues (Conn 1) ---
 
@@ -666,22 +504,16 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: MeterValues (TxID: 7649)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2bb929c2-701c-49d9-80a3-463232f0bc8d",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2bb929c2-701c-49d9-80a3-463232f0bc8d",{}]
 DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_8\_02\_07\_status\_preparing\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_07_status_preparing_2" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.7 Status Preparing (Conn 2) ---
-\end{lstlisting}
-\subsection*{test\_8\_02\_08\_remote\_start\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_08_remote_start_2" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.8 Remote Start (Conn 2) ---
-\end{lstlisting}
-\subsection*{test\_8\_02\_09\_start\_transaction\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_09_start_transaction_2" time="0.308"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.9 Start Transaction (Conn 2) ---
 
@@ -741,10 +573,8 @@ Payload: {
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2a7ba6e9-dc01-4114-8336-81c348cb9378",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7650}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2a7ba6e9-dc01-4114-8336-81c348cb9378",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7650}]
 DEBUG: Found in queue: Transaction started on 2: 7650
-\end{lstlisting}
-\subsection*{test\_8\_02\_10\_status\_charging\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_10_status_charging_2" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.10 Status Charging (Conn 2) ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Charging)
@@ -752,10 +582,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Charging)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"bc32ec96-8a62-4170-b252-7254c1a5ab2e",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"bc32ec96-8a62-4170-b252-7254c1a5ab2e",{}]
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_8\_02\_11\_metervalues\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_11_metervalues_2" time="4.809"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.11 MeterValues (Conn 2) ---
 
@@ -769,10 +597,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: MeterValues (TxID: 7649)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"1a81ff07-0129-4fc5-8095-3efc81faf84a",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"1a81ff07-0129-4fc5-8095-3efc81faf84a",{}]
 DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_8\_02\_12\_stop\_conn\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_12_stop_conn_1" time="0.208"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.12 Stop Transaction (Conn 1 - Emergency) ---
 
@@ -804,10 +630,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StopTransaction (ID: 7649, Re
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"fbae2dce-b6f3-4271-b83d-7a362b3de88b",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"fbae2dce-b6f3-4271-b83d-7a362b3de88b",{}]
 DEBUG: Found in queue: Transaction stopped on 1: 7649
-\end{lstlisting}
-\subsection*{test\_8\_02\_13\_stop\_conn\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_13_stop_conn_2" time="0.207"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.13 Stop Transaction (Conn 2 - Emergency) ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Available)
@@ -849,10 +673,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StopTransaction (ID: 7650, Re
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c4e53fa0-e059-49b8-8c48-848f93b8db2f",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c4e53fa0-e059-49b8-8c48-848f93b8db2f",{}]
 DEBUG: Found in queue: Transaction stopped on 2: 7650
-\end{lstlisting}
-\subsection*{test\_8\_02\_14\_status\_faulted}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_14_status_faulted" time="0.102"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.14 Status Faulted (Shared) ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Available)
@@ -878,23 +700,17 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Faulted)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"7e565e28-1ead-4884-9646-a9956cd29593",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"7e565e28-1ead-4884-9646-a9956cd29593",{}]
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
-\end{lstlisting}
-\subsection*{test\_8\_02\_15\_status\_faulted\_unplug}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_15_status_faulted_unplug" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.15 Status Faulted (Unplug) ---
-\end{lstlisting}
-\subsection*{test\_8\_02\_16\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_02_16_status_available" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.2.16 Status Available (Release) ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
-\end{lstlisting}
-\subsection*{test\_8\_03\_01\_status\_available}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_01_status_available" time="1.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.1 Status Available ---
 
@@ -925,20 +741,14 @@ DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
 [EVSE] RAW RECV: [3,"37d70272-b8d2-4ab5-be62-8e7f7674769f",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
-\end{lstlisting}
-\subsection*{test\_8\_03\_02\_status\_preparing\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_02_status_preparing_1" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.2 Status Preparing (Conn 1) ---
-\end{lstlisting}
-\subsection*{test\_8\_03\_03\_remote\_start\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
-\end{lstlisting}
-\subsection*{test\_8\_03\_04\_start\_transaction\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_03_remote_start_1" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_04_start_transaction_1" time="0.305"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.4 Start Transaction (Conn 1) ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Faulted)
@@ -1028,10 +838,8 @@ Payload: {
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"11bb80cb-94a2-482f-b9e8-5737adf5301a",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7651}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"11bb80cb-94a2-482f-b9e8-5737adf5301a",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7651}]
 DEBUG: Found in queue: Transaction started on 1: 7651
-\end{lstlisting}
-\subsection*{test\_8\_03\_05\_status\_charging\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_05_status_charging_1" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.5 Status Charging (Conn 1) ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Charging)
@@ -1039,25 +847,17 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Charging)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"0a7070e8-3d70-4393-93b6-4358ee69c79d",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"0a7070e8-3d70-4393-93b6-4358ee69c79d",{}]
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_8\_03\_06\_metervalues\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_06_metervalues_1" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 DEBUG: Found 'MeterValues ACKNOWLEDGED' in BUFFER
-\end{lstlisting}
-\subsection*{test\_8\_03\_07\_status\_preparing\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_07_status_preparing_2" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.7 Status Preparing (Conn 2) ---
-\end{lstlisting}
-\subsection*{test\_8\_03\_08\_remote\_start\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
-\end{lstlisting}
-\subsection*{test\_8\_03\_09\_start\_transaction\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_08_remote_start_2" time="0.000"><system-out>--------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_09_start_transaction_2" time="0.314"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.9 Start Transaction (Conn 2) ---
 
@@ -1117,10 +917,8 @@ Payload: {
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"b2dc98ba-f0e7-4992-9c2e-5add7cd87aaf",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7652}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"b2dc98ba-f0e7-4992-9c2e-5add7cd87aaf",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7652}]
 DEBUG: Found in queue: Transaction started on 2: 7652
-\end{lstlisting}
-\subsection*{test\_8\_03\_10\_status\_charging\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_10_status_charging_2" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.10 Status Charging (Conn 2) ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Charging)
@@ -1128,10 +926,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Charging)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"a02b9bae-595b-4484-8a68-41b00d003201",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"a02b9bae-595b-4484-8a68-41b00d003201",{}]
 DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
-\end{lstlisting}
-\subsection*{test\_8\_03\_11\_metervalues\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_11_metervalues_2" time="4.762"><system-out>--------------------------------- Captured Out ---------------------------------
 
 [EVSE] SENDING Packet: MeterValues (TxID: 7651)
 
@@ -1143,10 +939,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: MeterValues (TxID: 7651)
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"3d87b11b-38f4-41e6-856a-fc6414aae429",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"3d87b11b-38f4-41e6-856a-fc6414aae429",{}]
 DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
-\end{lstlisting}
-\subsection*{test\_8\_03\_12\_power\_loss\_stop\_1}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_12_power_loss_stop_1" time="0.206"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.12 Stop Transaction (Conn 1 - PowerLoss) ---
 
@@ -1172,10 +966,8 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StopTransaction (ID: 7651, Re
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"9a47bc45-0ecf-4388-8094-eb8b192db53c",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"9a47bc45-0ecf-4388-8094-eb8b192db53c",{}]
 DEBUG: Found in queue: Transaction stopped on 1: 7651
-\end{lstlisting}
-\subsection*{test\_8\_03\_13\_power\_loss\_stop\_2}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_13_power_loss_stop_2" time="0.310"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.13 Stop Transaction (Conn 2 - PowerLoss) ---
 DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Available)
@@ -1223,44 +1015,22 @@ DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StopTransaction (ID: 7652, Re
 DEBUG: Found in queue: [EVSE] RAW RECV: [3,"1b7e88d0-471a-4333-8513-c152d93b09f3",{}]
 DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"1b7e88d0-471a-4333-8513-c152d93b09f3",{}]
 DEBUG: Found in queue: Transaction stopped on 2: 7652
-\end{lstlisting}
-\subsection*{test\_8\_03\_14\_reboot}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_14_reboot" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.14 Recovery (Boot) ---
 DEBUG: Found 'BootNotification ACCEPTED' in BUFFER
-\end{lstlisting}
-\subsection*{test\_8\_03\_15\_status\_preparing\_both}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_15_status_preparing_both" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.15 Restore Status (Preparing) ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Preparing)' in BUFFER
-\end{lstlisting}
-\subsection*{test\_8\_03\_16\_status\_available\_both}
-\begin{lstlisting}
---------------------------------- Captured Out ---------------------------------
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section8.TestMeaSection8" name="test_8_03_16_status_available_both" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
 
 --- 8.3.16 Restore Status (Available) ---
 DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
 
 [TestMeaSection8] Extended Logging DISABLED
-\end{lstlisting}
 
-\section{Global Execution Log}
-\begin{lstlisting}
-============================= test session starts ==============================
-platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
-rootdir: /Users/rus/development/MEA-V2G
-collected 50 items
-
-tests/api/test_mea_section8.py ......................................... [ 82%]
-.........                                                                [100%]ERROR:EVSE_Sim:Connection failed: sent 1000 (OK); then received 1000 (OK)
-
-
-- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section8.xml -
-============================= 50 passed in 27.23s ==============================
-\end{lstlisting}
-
-\end{document}
+</system-out></testcase></testsuite></testsuites>

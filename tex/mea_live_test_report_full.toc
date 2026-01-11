@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Test Execution Summary}{2}{subsection.1.1}%
+\contentsline {section}{\numberline {2}\ignorespaces Section 1: Configuration}{4}{section.2}%
+\contentsline {section}{\numberline {3}\ignorespaces Section 2: Authorization}{12}{section.3}%
+\contentsline {section}{\numberline {4}\ignorespaces Section 3: Normal Operation}{20}{section.4}%
+\contentsline {section}{\numberline {5}\ignorespaces Section 4: Reset}{28}{section.5}%
+\contentsline {section}{\numberline {6}\ignorespaces Section 5: Reservations}{36}{section.6}%
+\contentsline {section}{\numberline {7}\ignorespaces Section 6: Smart Charging}{43}{section.7}%
+\contentsline {section}{\numberline {8}\ignorespaces Section 7: Abnormal Situations}{53}{section.8}%
+\contentsline {section}{\numberline {9}\ignorespaces Section 8: Dual Connector}{69}{section.9}%
+\contentsline {section}{\numberline {10}\ignorespaces Section 9: MEA Configuration}{88}{section.10}%
+\contentsline {section}{\numberline {11}\ignorespaces Section 10: Extended Features}{93}{section.11}%
+\contentsline {section}{\numberline {12}\ignorespaces Section 11: Other}{104}{section.12}%

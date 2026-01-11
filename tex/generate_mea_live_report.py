@@ -82,7 +82,7 @@ def generate_report(xml_path, tex_path, log_path=None):
     # Also keep track of other sections for generic handling if needed, but primarily 8.x
     
     SECTION_TITLES = {
-        "1": "Configuration & Boot Notification",
+        "1": "Configuration and Boot Notification",
         "2": "Auto Charge Verification",
         "3": "Normal Charge Verification",
         "4": "Reset Verification",

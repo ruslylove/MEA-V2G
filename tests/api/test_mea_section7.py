@@ -4,7 +4,7 @@ import requests
 import datetime
 import queue
 from tests.api.test_mea_postman import PreemptiveDigestAuth, BASE_URL, USERNAME, PASSWORD
-from Ocpp16Interface import PACKET_QUEUE
+from Ocpp16Interface import PACKET_QUEUE, Ocpp16Interface
 
 CHARGEPOINT_ID = "rddQC4000001"
 VID_TAG = "RFID_SIM"
@@ -20,6 +20,19 @@ class TestMeaSection7:
     """
     Test Case 7: Abnormal Operation Verification.
     """
+    
+    @classmethod
+    def setup_class(cls):
+        # Enable extended logging for this section report
+        Ocpp16Interface.LOG_SEND_PACKETS = True
+        print("\n[TestMeaSection7] Extended Logging ENABLED for Report Generation")
+
+    @classmethod
+    def teardown_class(cls):
+        # Restore default
+        Ocpp16Interface.LOG_SEND_PACKETS = False
+        print("\n[TestMeaSection7] Extended Logging DISABLED")
+
     packet_buffer = []
 
     def wait_for_packet(self, expected_substring, timeout=10):
