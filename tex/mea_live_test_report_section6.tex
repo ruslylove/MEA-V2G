@@ -1,0 +1,458 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{pdfpages} % Added for including external PDFs
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    showstringspaces=false
+}
+
+\title{MEA OCPP Live Test}
+\author{Automated Test Suite}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary}
+\begin{itemize}
+    \item \textbf{Total Tests:} 26
+    \item \textbf{Passed:} 26
+    \item \textbf{Failed:} 0
+    \item \textbf{Errors:} 0
+    \item \textbf{Skipped:} 0
+    \item \textbf{Total Duration:} 17.322 seconds
+\end{itemize}
+
+\section{Detailed Results}
+\begin{longtable}{p{0.6\textwidth} p{0.2\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+test\_6\_01\_status\_available & \textcolor{green}{Pass} & 2.004 \\
+test\_6\_02\_status\_preparing & \textcolor{green}{Pass} & 0.155 \\
+test\_6\_03\_authorize & \textcolor{green}{Pass} & 0.176 \\
+test\_6\_04\_start\_transaction & \textcolor{green}{Pass} & 0.182 \\
+test\_6\_05\_status\_charging & \textcolor{green}{Pass} & 0.036 \\
+test\_6\_06\_meter\_values & \textcolor{green}{Pass} & 2.001 \\
+test\_6\_07\_set\_charging\_profile\_1 & \textcolor{green}{Pass} & 0.347 \\
+test\_6\_08\_meter\_values & \textcolor{green}{Pass} & 2.002 \\
+test\_6\_09\_set\_charging\_profile\_2 & \textcolor{green}{Pass} & 0.363 \\
+test\_6\_10\_meter\_values & \textcolor{green}{Pass} & 2.003 \\
+test\_6\_11\_stop\_transaction & \textcolor{green}{Pass} & 0.222 \\
+test\_6\_12\_status\_finishing & \textcolor{green}{Pass} & 0.000 \\
+test\_6\_13\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+test\_6\_14\_status\_preparing & \textcolor{green}{Pass} & 0.078 \\
+test\_6\_15\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.455 \\
+test\_6\_16\_start\_transaction & \textcolor{green}{Pass} & 0.000 \\
+test\_6\_17\_status\_charging & \textcolor{green}{Pass} & 0.000 \\
+test\_6\_18\_meter\_values & \textcolor{green}{Pass} & 2.000 \\
+test\_6\_19\_set\_charging\_profile\_3 & \textcolor{green}{Pass} & 0.352 \\
+test\_6\_20\_meter\_values & \textcolor{green}{Pass} & 2.003 \\
+test\_6\_21\_set\_charging\_profile\_4 & \textcolor{green}{Pass} & 0.357 \\
+test\_6\_22\_meter\_values & \textcolor{green}{Pass} & 2.001 \\
+test\_6\_23\_remote\_stop\_transaction & \textcolor{green}{Pass} & 0.475 \\
+test\_6\_24\_stop\_transaction & \textcolor{green}{Pass} & 0.000 \\
+test\_6\_25\_status\_finishing & \textcolor{green}{Pass} & 0.000 \\
+test\_6\_26\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+\bottomrule
+\end{longtable}
+
+\section{Global Execution Log}
+\begin{lstlisting}
+============================= test session starts ==============================
+platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/rus/development/MEA-V2G
+collected 26 items
+
+tests/api/test_mea_section6.py INFO:EVSE_Sim:Starting EVSE Simulation...
+INFO:EVSE_Sim:Connecting to wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001
+INFO:EVSE_Sim:Connected to CSMS!
+INFO:EVSE_Sim:Command processing loop started.
+INFO:ocpp:rddQC4000001: send [2,"c3289623-5ba6-4ed0-98ca-3087bdb739df","BootNotification",{"chargePointModel":"MEA-V2G-01","chargePointVendor":"KMUTNB"}]
+INFO:ocpp:rddQC4000001: receive message [3,"c3289623-5ba6-4ed0-98ca-3087bdb739df",{"currentTime":"2026-01-11T01:01:50Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] RAW RECV: [3,"c3289623-5ba6-4ed0-98ca-3087bdb739df",{"currentTime":"2026-01-11T01:01:50Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+INFO:ocpp_16_interface:Connected to central system.
+INFO:ocpp:rddQC4000001: send [2,"f859be50-fa47-4ce0-be12-3e46acf3e21b","StatusNotification",{"connectorId":0,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T01:01:12Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"f859be50-fa47-4ce0-be12-3e46acf3e21b",{}]
+
+[EVSE] RAW RECV: [3,"f859be50-fa47-4ce0-be12-3e46acf3e21b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:ocpp:rddQC4000001: send [2,"784cdcff-8e68-4b5e-901a-2d4721d1b217","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T01:01:12Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"784cdcff-8e68-4b5e-901a-2d4721d1b217",{}]
+
+[EVSE] RAW RECV: [3,"784cdcff-8e68-4b5e-901a-2d4721d1b217",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:ocpp:rddQC4000001: send [2,"fa82f9f7-7a5d-4afe-bc4c-ec1c0b556022","Heartbeat",{}]
+INFO:ocpp:rddQC4000001: receive message [3,"fa82f9f7-7a5d-4afe-bc4c-ec1c0b556022",{"currentTime":"2026-01-11T01:01:51Z"}]
+
+[EVSE] RAW RECV: [3,"fa82f9f7-7a5d-4afe-bc4c-ec1c0b556022",{"currentTime":"2026-01-11T01:01:51Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T01:01:51Z)
+
+--- 6.1 StatusNotification (Available) ---
+.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"3ae0ddf4-67f8-4997-ace3-f1afc88667f5","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T01:01:13Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"3ae0ddf4-67f8-4997-ace3-f1afc88667f5",{}]
+
+--- 6.2 StatusNotification (Preparing) ---
+
+[EVSE] RAW RECV: [3,"3ae0ddf4-67f8-4997-ace3-f1afc88667f5",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Preparing'}
+INFO:ocpp:rddQC4000001: send [2,"560d10ff-dc03-495d-bb70-8796daf6cfce","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-11T01:01:13Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"560d10ff-dc03-495d-bb70-8796daf6cfce",{}]
+
+[EVSE] RAW RECV: [3,"560d10ff-dc03-495d-bb70-8796daf6cfce",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+.INFO:EVSE_Sim:Processing Command: AUTHORIZE with args: {'id_tag': 'RFID_SIM'}
+INFO:ocpp:rddQC4000001: send [2,"b6732b85-d0d4-49cf-85b1-70075cb44eaf","Authorize",{"idTag":"RFID_SIM"}]
+INFO:ocpp:rddQC4000001: receive message [3,"b6732b85-d0d4-49cf-85b1-70075cb44eaf",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+--- 6.3 Authorize ---
+
+[EVSE] RAW RECV: [3,"b6732b85-d0d4-49cf-85b1-70075cb44eaf",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+.INFO:EVSE_Sim:Processing Command: START_TRANSACTION with args: {'connector_id': 1, 'id_tag': 'RFID_SIM'}
+INFO:ocpp:rddQC4000001: send [2,"6ac7cfe7-3df1-46be-9157-b256825dea3e","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-11T01:01:14Z"}]
+INFO:ocpp:rddQC4000001: receive message [3,"6ac7cfe7-3df1-46be-9157-b256825dea3e",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7390}]
+
+--- 6.4 StartTransaction ---
+
+[EVSE] RAW RECV: [3,"6ac7cfe7-3df1-46be-9157-b256825dea3e",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7390}]
+INFO:ocpp_16_interface:Transaction started on 1: 7390
+.INFO:ocpp:rddQC4000001: send [2,"8803e9b7-da39-40d4-93f9-56895a11591a","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-11T01:01:14Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"8803e9b7-da39-40d4-93f9-56895a11591a",{}]
+
+--- 6.5 StatusNotification (Charging) ---
+
+[EVSE] RAW RECV: [3,"8803e9b7-da39-40d4-93f9-56895a11591a",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"5e3a0b47-9961-4bbf-9902-aeb6bc8a7a0f","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T01:01:14Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7390}]
+INFO:ocpp:rddQC4000001: receive message [3,"5e3a0b47-9961-4bbf-9902-aeb6bc8a7a0f",{}]
+
+--- 6.6 MeterValues ---
+
+[EVSE] RAW RECV: [3,"5e3a0b47-9961-4bbf-9902-aeb6bc8a7a0f",{}]
+.INFO:ocpp:rddQC4000001: receive message [2,"1ef8eed1ee8911f0bf8a0242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T01:02:16.331740Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":7390,"validFrom":"2026-01-11T01:00:16.331740Z","validTo":"2026-01-12T01:01:16.331740Z"}}]
+
+--- 6.7 SetChargingProfile (TxProfile) ---
+
+[EVSE] RAW RECV: [2,"1ef8eed1ee8911f0bf8a0242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T01:02:16.331740Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":7390,"validFrom":"2026-01-11T01:00:16.331740Z","validTo":"2026-01-12T01:01:16.331740Z"}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 101,
+    "charging_profile_kind": "Absolute",
+    "charging_profile_purpose": "TxProfile",
+    "charging_schedule": {
+      "charging_rate_unit": "W",
+      "charging_schedule_period": [
+        {
+          "limit": 5000,
+          "number_phases": 3,
+          "start_period": 0
+        }
+      ],
+      "duration": 3600,
+      "start_schedule": "2026-01-11T01:02:16.331740Z"
+    },
+    "recurrency_kind": "Daily",
+    "stack_level": 1,
+    "transaction_id": 7390,
+    "valid_from": "2026-01-11T01:00:16.331740Z",
+    "valid_to": "2026-01-12T01:01:16.331740Z"
+  }
+}
+INFO:ocpp_16_interface:Received SetChargingProfile for connector 1
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"1ef8eed1ee8911f0bf8a0242c0a8300e",{"status":"Accepted"}]
+SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T01:01:54Z","result":{"status":"Accepted"}}
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"fe103879-6507-454f-906e-e64d96f4b7a1","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T01:01:16Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7390}]
+INFO:ocpp:rddQC4000001: receive message [3,"fe103879-6507-454f-906e-e64d96f4b7a1",{}]
+
+--- 6.8 MeterValues ---
+
+[EVSE] RAW RECV: [3,"fe103879-6507-454f-906e-e64d96f4b7a1",{}]
+.INFO:ocpp:rddQC4000001: receive message [2,"206148a8ee8911f0ac710242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T01:02:18.682163Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":7390,"validFrom":"2026-01-11T01:00:18.682163Z","validTo":"2026-01-12T01:01:18.682163Z"}}]
+
+--- 6.9 SetChargingProfile (Update/New) ---
+
+--- 6.7 SetChargingProfile (TxProfile) ---
+
+[EVSE] RAW RECV: [2,"206148a8ee8911f0ac710242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T01:02:18.682163Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":7390,"validFrom":"2026-01-11T01:00:18.682163Z","validTo":"2026-01-12T01:01:18.682163Z"}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 101,
+    "charging_profile_kind": "Absolute",
+    "charging_profile_purpose": "TxProfile",
+    "charging_schedule": {
+      "charging_rate_unit": "W",
+      "charging_schedule_period": [
+        {
+          "limit": 5000,
+          "number_phases": 3,
+          "start_period": 0
+        }
+      ],
+      "duration": 3600,
+      "start_schedule": "2026-01-11T01:02:18.682163Z"
+    },
+    "recurrency_kind": "Daily",
+    "stack_level": 1,
+    "transaction_id": 7390,
+    "valid_from": "2026-01-11T01:00:18.682163Z",
+    "valid_to": "2026-01-12T01:01:18.682163Z"
+  }
+}
+INFO:ocpp_16_interface:Received SetChargingProfile for connector 1
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"206148a8ee8911f0ac710242c0a8300e",{"status":"Accepted"}]
+SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T01:01:56Z","result":{"status":"Accepted"}}
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"c314f3ff-a857-43d8-9d7f-b392183ef34d","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T01:01:19Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7390}]
+INFO:ocpp:rddQC4000001: receive message [3,"c314f3ff-a857-43d8-9d7f-b392183ef34d",{}]
+
+--- 6.10 MeterValues ---
+
+[EVSE] RAW RECV: [3,"c314f3ff-a857-43d8-9d7f-b392183ef34d",{}]
+.INFO:EVSE_Sim:Processing Command: STOP_TRANSACTION with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"b9f40e55-6ce8-47b8-a083-98bbb071fc82","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-11T01:01:21Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"b9f40e55-6ce8-47b8-a083-98bbb071fc82",{}]
+
+--- 6.11 StopTransaction ---
+
+[EVSE] RAW RECV: [3,"b9f40e55-6ce8-47b8-a083-98bbb071fc82",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+INFO:ocpp:rddQC4000001: send [2,"8e86166c-1ec0-4ece-8bf7-6352ce0f221b","StopTransaction",{"meterStop":100,"timestamp":"2026-01-11T01:01:21Z","transactionId":7390}]
+INFO:ocpp:rddQC4000001: receive message [3,"8e86166c-1ec0-4ece-8bf7-6352ce0f221b",{}]
+
+[EVSE] RAW RECV: [3,"8e86166c-1ec0-4ece-8bf7-6352ce0f221b",{}]
+INFO:ocpp_16_interface:Transaction stopped on 1: 7390
+.
+--- 6.12 StatusNotification (Finishing) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in buffer
+.
+--- 6.13 StatusNotification (Available) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in buffer
+.INFO:ocpp:rddQC4000001: send [2,"56893b0f-a3fd-46cf-a99e-94b1e050e8d0","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T01:01:21Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"56893b0f-a3fd-46cf-a99e-94b1e050e8d0",{}]
+
+--- 6.14 StatusNotification (Preparing) ---
+
+[EVSE] RAW RECV: [3,"56893b0f-a3fd-46cf-a99e-94b1e050e8d0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Preparing'}
+INFO:ocpp:rddQC4000001: send [2,"be5e9d14-0722-4656-9620-0140089785df","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-11T01:01:21Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"be5e9d14-0722-4656-9620-0140089785df",{}]
+
+[EVSE] RAW RECV: [3,"be5e9d14-0722-4656-9620-0140089785df",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+.INFO:ocpp:rddQC4000001: receive message [2,"21f8f66fee8911f0a72b0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+--- 6.15 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [2,"21f8f66fee8911f0a72b0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+INFO:ocpp_16_interface:Received RemoteStartTransaction for id_tag: RFID_SIM
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+INFO:ocpp:rddQC4000001: send [2,"1c505f13-c9f9-4d34-b81f-c9109f44f8f1","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-11T01:01:21Z"}]
+INFO:ocpp:rddQC4000001: send [3,"21f8f66fee8911f0a72b0242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: receive message [3,"1c505f13-c9f9-4d34-b81f-c9109f44f8f1",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7391}]
+
+[EVSE] RAW RECV: [3,"1c505f13-c9f9-4d34-b81f-c9109f44f8f1",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7391}]
+INFO:ocpp_16_interface:Transaction started on 1: 7391
+INFO:ocpp:rddQC4000001: send [2,"19b015fb-7b0e-42d0-9954-b15ca312c75f","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-11T01:01:21Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"19b015fb-7b0e-42d0-9954-b15ca312c75f",{}]
+
+[EVSE] RAW RECV: [3,"19b015fb-7b0e-42d0-9954-b15ca312c75f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+.
+--- 6.16 StartTransaction ---
+.
+--- 6.17 StatusNotification (Charging) ---
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"d782e66d-bf77-48a3-a0ba-470df9c29d7e","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T01:01:21Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7391}]
+INFO:ocpp:rddQC4000001: receive message [3,"d782e66d-bf77-48a3-a0ba-470df9c29d7e",{}]
+
+--- 6.18 MeterValues ---
+
+[EVSE] RAW RECV: [3,"d782e66d-bf77-48a3-a0ba-470df9c29d7e",{}]
+.INFO:ocpp:rddQC4000001: receive message [2,"236fe5ddee8911f08f290242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T01:02:23.811848Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":7391,"validFrom":"2026-01-11T01:00:23.811848Z","validTo":"2026-01-12T01:01:23.811848Z"}}]
+
+--- 6.19 SetChargingProfile ---
+
+--- 6.7 SetChargingProfile (TxProfile) ---
+
+[EVSE] RAW RECV: [2,"236fe5ddee8911f08f290242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T01:02:23.811848Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":7391,"validFrom":"2026-01-11T01:00:23.811848Z","validTo":"2026-01-12T01:01:23.811848Z"}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 101,
+    "charging_profile_kind": "Absolute",
+    "charging_profile_purpose": "TxProfile",
+    "charging_schedule": {
+      "charging_rate_unit": "W",
+      "charging_schedule_period": [
+        {
+          "limit": 5000,
+          "number_phases": 3,
+          "start_period": 0
+        }
+      ],
+      "duration": 3600,
+      "start_schedule": "2026-01-11T01:02:23.811848Z"
+    },
+    "recurrency_kind": "Daily",
+    "stack_level": 1,
+    "transaction_id": 7391,
+    "valid_from": "2026-01-11T01:00:23.811848Z",
+    "valid_to": "2026-01-12T01:01:23.811848Z"
+  }
+}
+INFO:ocpp_16_interface:Received SetChargingProfile for connector 1
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"236fe5ddee8911f08f290242c0a8300e",{"status":"Accepted"}]
+SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T01:02:01Z","result":{"status":"Accepted"}}
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"51038f9f-1a19-4305-9a1e-ac27cc3428eb","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T01:01:24Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7391}]
+INFO:ocpp:rddQC4000001: receive message [3,"51038f9f-1a19-4305-9a1e-ac27cc3428eb",{}]
+
+--- 6.20 MeterValues ---
+
+[EVSE] RAW RECV: [3,"51038f9f-1a19-4305-9a1e-ac27cc3428eb",{}]
+.INFO:ocpp:rddQC4000001: receive message [2,"24d724dbee8911f08b5d0242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T01:02:26.168437Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":7391,"validFrom":"2026-01-11T01:00:26.168437Z","validTo":"2026-01-12T01:01:26.168437Z"}}]
+
+--- 6.21 SetChargingProfile ---
+
+--- 6.7 SetChargingProfile (TxProfile) ---
+
+[EVSE] RAW RECV: [2,"24d724dbee8911f08b5d0242c0a8300e","SetChargingProfile",{"connectorId":1,"csChargingProfiles":{"chargingProfileId":101,"chargingProfileKind":"Absolute","chargingProfilePurpose":"TxProfile","chargingSchedule":{"chargingRateUnit":"W","chargingSchedulePeriod":[{"limit":5000,"numberPhases":3,"startPeriod":0}],"duration":3600,"startSchedule":"2026-01-11T01:02:26.168437Z"},"recurrencyKind":"Daily","stackLevel":1,"transactionId":7391,"validFrom":"2026-01-11T01:00:26.168437Z","validTo":"2026-01-12T01:01:26.168437Z"}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 101,
+    "charging_profile_kind": "Absolute",
+    "charging_profile_purpose": "TxProfile",
+    "charging_schedule": {
+      "charging_rate_unit": "W",
+      "charging_schedule_period": [
+        {
+          "limit": 5000,
+          "number_phases": 3,
+          "start_period": 0
+        }
+      ],
+      "duration": 3600,
+      "start_schedule": "2026-01-11T01:02:26.168437Z"
+    },
+    "recurrency_kind": "Daily",
+    "stack_level": 1,
+    "transaction_id": 7391,
+    "valid_from": "2026-01-11T01:00:26.168437Z",
+    "valid_to": "2026-01-12T01:01:26.168437Z"
+  }
+}
+INFO:ocpp_16_interface:Received SetChargingProfile for connector 1
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"24d724dbee8911f08b5d0242c0a8300e",{"status":"Accepted"}]
+SetChargingProfile Resp: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T01:02:04Z","result":{"status":"Accepted"}}
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"c8b6d096-4797-44ad-a13b-403f64737918","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T01:01:26Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7391}]
+INFO:ocpp:rddQC4000001: receive message [3,"c8b6d096-4797-44ad-a13b-403f64737918",{}]
+
+--- 6.22 MeterValues ---
+
+[EVSE] RAW RECV: [3,"c8b6d096-4797-44ad-a13b-403f64737918",{}]
+.INFO:ocpp:rddQC4000001: receive message [2,"26439605ee8911f0a9a80242c0a8300e","RemoteStopTransaction",{"transactionId":7391}]
+
+--- 6.23 RemoteStopTransaction ---
+
+[EVSE] RAW RECV: [2,"26439605ee8911f0a9a80242c0a8300e","RemoteStopTransaction",{"transactionId":7391}]
+
+[EVSE] RECV Packet: RemoteStopTransaction
+Payload: {
+  "transactionId": 7391
+}
+INFO:ocpp_16_interface:Received RemoteStopTransaction for transaction_id: 7391
+
+[EVSE] Sending RemoteStopTransaction Response (Accepted)
+INFO:ocpp:rddQC4000001: send [2,"5f6ae8c7-5430-4ca2-a968-92155fc80ac7","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-11T01:01:28Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: send [3,"26439605ee8911f0a9a80242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: receive message [3,"5f6ae8c7-5430-4ca2-a968-92155fc80ac7",{}]
+
+[EVSE] RAW RECV: [3,"5f6ae8c7-5430-4ca2-a968-92155fc80ac7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+INFO:ocpp:rddQC4000001: send [2,"118f6321-a429-4506-aa3c-57397176a750","StopTransaction",{"meterStop":100,"timestamp":"2026-01-11T01:01:28Z","transactionId":7391,"reason":"Remote"}]
+INFO:ocpp:rddQC4000001: receive message [3,"118f6321-a429-4506-aa3c-57397176a750",{}]
+
+[EVSE] RAW RECV: [3,"118f6321-a429-4506-aa3c-57397176a750",{}]
+INFO:ocpp_16_interface:Transaction stopped on 1: 7391
+INFO:ocpp:rddQC4000001: send [2,"0df4355a-88da-4318-b3e8-3909aee69b3d","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T01:01:28Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"0df4355a-88da-4318-b3e8-3909aee69b3d",{}]
+
+[EVSE] RAW RECV: [3,"0df4355a-88da-4318-b3e8-3909aee69b3d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+.
+--- 6.24 StopTransaction ---
+.
+--- 6.25 StatusNotification (Finishing) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in buffer
+.
+--- 6.26 StatusNotification (Available) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in buffer
+.
+
+- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section6.xml -
+============================= 26 passed in 17.32s ==============================
+
+\end{lstlisting}
+
+\end{document}

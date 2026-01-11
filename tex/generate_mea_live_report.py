@@ -69,10 +69,36 @@ def generate_report(xml_path, tex_path, log_path=None):
 
     detailed_logs = ""
     
+    current_section = None
+    
+    SECTION_TITLES = {
+        "7_01": "Remote Start (Unplugged)",
+        "7_02": "Concurrent Remote Start",
+        "7_03": "Swap Card",
+        "7_04": "Emergency Stop",
+        "7_05": "Open Door",
+        "7_06": "Power Loss (Single)",
+        "7_07": "Local List (Offline)"
+    }
+    
     for case in testsuite.findall('testcase'):
         name = case.attrib.get('name', 'Unknown')
         classname = case.attrib.get('classname', '').replace('tests.api.', '')
         time_taken = case.attrib.get('time', '0.000')
+        
+        # Check for section change
+        # Expected format: test_SECTION_SUBSECTION_...
+        # e.g. test_7_01_01 -> section "7_01"
+        parts = name.split('_') # ['test', '7', '01', '01', ...]
+        if len(parts) >= 3 and parts[0] == 'test':
+            section_key = f"{parts[1]}_{parts[2]}"
+            if section_key != current_section:
+                current_section = section_key
+                title = SECTION_TITLES.get(section_key)
+                if title:
+                    # Insert header row
+                    clean_title = title.replace('_', r'\_')
+                    tex_content += f"\\multicolumn{{3}}{{l}}{{\\textbf{{{parts[1]}.{int(parts[2])} {clean_title}}}}} \\\\ \\midrule\n"
         
         # Determine status
         status = "Pass"

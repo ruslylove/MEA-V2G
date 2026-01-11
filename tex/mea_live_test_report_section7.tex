@@ -1,0 +1,739 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{pdfpages} % Added for including external PDFs
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    showstringspaces=false
+}
+
+\title{MEA OCPP Live Test}
+\author{Automated Test Suite}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary}
+\begin{itemize}
+    \item \textbf{Total Tests:} 54
+    \item \textbf{Passed:} 54
+    \item \textbf{Failed:} 0
+    \item \textbf{Errors:} 0
+    \item \textbf{Skipped:} 0
+    \item \textbf{Total Duration:} 17.001 seconds
+\end{itemize}
+
+\section{Detailed Results}
+\begin{longtable}{p{0.6\textwidth} p{0.2\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+\multicolumn{3}{l}{\textbf{7.1 Remote Start (Unplugged)}} \\ \midrule
+test\_7\_01\_01\_status\_available & \textcolor{green}{Pass} & 2.005 \\
+test\_7\_01\_02\_remote\_start\_rejected & \textcolor{green}{Pass} & 0.345 \\
+\multicolumn{3}{l}{\textbf{7.2 Concurrent Remote Start}} \\ \midrule
+test\_7\_02\_01\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_02\_02\_status\_preparing & \textcolor{green}{Pass} & 0.135 \\
+test\_7\_02\_03\_remote\_start\_1 & \textcolor{green}{Pass} & 0.362 \\
+test\_7\_02\_04\_remote\_start\_2 & \textcolor{green}{Pass} & 2.418 \\
+test\_7\_02\_05\_start\_transaction & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_02\_06\_status\_charging & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_02\_07\_meter\_values & \textcolor{green}{Pass} & 1.003 \\
+test\_7\_02\_08\_remote\_stop & \textcolor{green}{Pass} & 0.483 \\
+test\_7\_02\_09\_stop\_transaction & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_02\_10\_status\_finishing & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_02\_11\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+\multicolumn{3}{l}{\textbf{7.3 Swap Card}} \\ \midrule
+test\_7\_03\_01\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_03\_02\_status\_preparing & \textcolor{green}{Pass} & 0.094 \\
+test\_7\_03\_03\_authorize\_invalid & \textcolor{green}{Pass} & 0.171 \\
+test\_7\_03\_04\_authorize\_valid & \textcolor{green}{Pass} & 0.181 \\
+test\_7\_03\_05\_start\_transaction & \textcolor{green}{Pass} & 0.192 \\
+test\_7\_03\_06\_status\_charging & \textcolor{green}{Pass} & 0.041 \\
+test\_7\_03\_07\_meter\_values & \textcolor{green}{Pass} & 1.005 \\
+test\_7\_03\_08\_authorize\_invalid\_stop & \textcolor{green}{Pass} & 0.121 \\
+test\_7\_03\_09\_stop\_transaction & \textcolor{green}{Pass} & 0.215 \\
+test\_7\_03\_10\_status\_finishing & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_03\_11\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+\multicolumn{3}{l}{\textbf{7.4 Emergency Stop}} \\ \midrule
+test\_7\_04\_01\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_04\_02\_status\_preparing & \textcolor{green}{Pass} & 0.138 \\
+test\_7\_04\_03\_remote\_start & \textcolor{green}{Pass} & 0.452 \\
+test\_7\_04\_04\_start\_transaction & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_04\_05\_status\_charging & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_04\_06\_meter\_values & \textcolor{green}{Pass} & 1.004 \\
+test\_7\_04\_07\_stop\_emergency & \textcolor{green}{Pass} & 0.131 \\
+test\_7\_04\_08\_status\_faulted & \textcolor{green}{Pass} & 0.088 \\
+test\_7\_04\_09\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_04\_10\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+\multicolumn{3}{l}{\textbf{7.5 Open Door}} \\ \midrule
+test\_7\_05\_01\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_05\_02\_status\_faulted\_door & \textcolor{green}{Pass} & 0.218 \\
+test\_7\_05\_03\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+\multicolumn{3}{l}{\textbf{7.6 Power Loss (Single)}} \\ \midrule
+test\_7\_06\_01\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_06\_02\_status\_preparing & \textcolor{green}{Pass} & 0.228 \\
+test\_7\_06\_03\_remote\_start & \textcolor{green}{Pass} & 0.453 \\
+test\_7\_06\_04\_start\_transaction & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_06\_05\_status\_charging & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_06\_06\_meter\_values & \textcolor{green}{Pass} & 1.004 \\
+test\_7\_06\_07\_stop\_power\_loss & \textcolor{green}{Pass} & 0.122 \\
+test\_7\_06\_08\_boot\_notification & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_06\_09\_status\_preparing & \textcolor{green}{Pass} & 0.123 \\
+test\_7\_06\_10\_status\_available & \textcolor{green}{Pass} & 0.000 \\
+\multicolumn{3}{l}{\textbf{7.7 Local List (Offline)}} \\ \midrule
+test\_7\_07\_01\_send\_local\_list & \textcolor{green}{Pass} & 0.139 \\
+test\_7\_07\_02\_disconnect & \textcolor{green}{Pass} & 1.003 \\
+test\_7\_07\_03\_start\_transaction & \textcolor{green}{Pass} & 1.003 \\
+test\_7\_07\_04\_stop\_transaction & \textcolor{green}{Pass} & 1.005 \\
+test\_7\_07\_05\_reconnect & \textcolor{green}{Pass} & 1.001 \\
+test\_7\_07\_06\_send\_start & \textcolor{green}{Pass} & 0.000 \\
+test\_7\_07\_07\_send\_stop & \textcolor{green}{Pass} & 0.000 \\
+\bottomrule
+\end{longtable}
+
+\section{Global Execution Log}
+\begin{lstlisting}
+============================= test session starts ==============================
+platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/rus/development/MEA-V2G
+collected 54 items
+
+tests/api/test_mea_section7.py INFO:EVSE_Sim:Starting EVSE Simulation...
+INFO:EVSE_Sim:Connecting to wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001
+INFO:EVSE_Sim:Connected to CSMS!
+INFO:EVSE_Sim:Command processing loop started.
+INFO:ocpp:rddQC4000001: send [2,"b60a4ade-b771-4d9a-89d1-067f61bfd433","BootNotification",{"chargePointModel":"MEA-V2G-01","chargePointVendor":"KMUTNB"}]
+INFO:ocpp:rddQC4000001: receive message [3,"b60a4ade-b771-4d9a-89d1-067f61bfd433",{"currentTime":"2026-01-11T02:49:59Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] RAW RECV: [3,"b60a4ade-b771-4d9a-89d1-067f61bfd433",{"currentTime":"2026-01-11T02:49:59Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+INFO:ocpp_16_interface:Connected to central system.
+INFO:ocpp:rddQC4000001: send [2,"947346f9-3358-4593-9b50-c40ed88564b1","StatusNotification",{"connectorId":0,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:20Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"947346f9-3358-4593-9b50-c40ed88564b1",{}]
+
+[EVSE] RAW RECV: [3,"947346f9-3358-4593-9b50-c40ed88564b1",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:ocpp:rddQC4000001: send [2,"e4980da8-5321-439e-bce9-e177b47da3b3","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:20Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"e4980da8-5321-439e-bce9-e177b47da3b3",{}]
+
+[EVSE] RAW RECV: [3,"e4980da8-5321-439e-bce9-e177b47da3b3",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:ocpp:rddQC4000001: send [2,"e630e04e-922b-40dd-a214-d7ce2e97c8e2","Heartbeat",{}]
+INFO:ocpp:rddQC4000001: receive message [3,"e630e04e-922b-40dd-a214-d7ce2e97c8e2",{"currentTime":"2026-01-11T02:49:59Z"}]
+
+[EVSE] RAW RECV: [3,"e630e04e-922b-40dd-a214-d7ce2e97c8e2",{"currentTime":"2026-01-11T02:49:59Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T02:49:59Z)
+
+--- 7.1.1 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 0)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"827eb2fe-4127-4bd6-856b-ea389ae31629","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:21Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"827eb2fe-4127-4bd6-856b-ea389ae31629",{}]
+
+--- 7.1.2 Remote Start (Rejected/Accepted) ---
+
+[EVSE] RAW RECV: [3,"827eb2fe-4127-4bd6-856b-ea389ae31629",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:ocpp:rddQC4000001: receive message [2,"38ae0083ee9811f0af2b0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RAW RECV: [2,"38ae0083ee9811f0af2b0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+INFO:ocpp_16_interface:Received RemoteStartTransaction for id_tag: RFID_SIM
+WARNING:ocpp_16_interface:RemoteStart rejected: Connector 1 is Unplugged (Available)
+
+[EVSE] Sending RemoteStartTransaction Response (Rejected)
+INFO:ocpp:rddQC4000001: send [3,"38ae0083ee9811f0af2b0242c0a8300e",{"status":"Rejected"}]
+DEBUG: Checking buffer for 'RemoteStartTransaction Response (Rejected)' (Size: 6)
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Rejected)
+.
+--- 7.2.1 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 16)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"81a2f67c-4a5e-424b-927a-6dcd388e3438","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:21Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"81a2f67c-4a5e-424b-927a-6dcd388e3438",{}]
+
+--- 7.2.2 Status Preparing ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 15)
+
+[EVSE] RAW RECV: [3,"81a2f67c-4a5e-424b-927a-6dcd388e3438",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Preparing'}
+INFO:ocpp:rddQC4000001: send [2,"d3acb23e-a18a-47d3-8453-83f382534621","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-11T02:49:21Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"d3acb23e-a18a-47d3-8453-83f382534621",{}]
+
+[EVSE] RAW RECV: [3,"d3acb23e-a18a-47d3-8453-83f382534621",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+.INFO:ocpp:rddQC4000001: receive message [2,"38f8c0ebee9811f0a4a70242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+--- 7.2.3 Remote Start 1 (Accepted) ---
+
+[EVSE] RAW RECV: [2,"38f8c0ebee9811f0a4a70242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+INFO:ocpp_16_interface:Received RemoteStartTransaction for id_tag: RFID_SIM
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"38f8c0ebee9811f0a4a70242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: send [2,"9c637c18-8859-464d-aaba-0a6d041bf569","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-11T02:49:22Z"}]
+INFO:ocpp:rddQC4000001: receive message [3,"9c637c18-8859-464d-aaba-0a6d041bf569",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7466"}]
+
+[EVSE] RAW RECV: [3,"9c637c18-8859-464d-aaba-0a6d041bf569",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7466"}]
+ERROR:ocpp_16_interface:StartTransaction Warning (likely type mismatch): TypeConstraintViolationError: Payload for Action is syntactically correct but at least one of the fields violates data type constraints (e.g. somestring: 12),  {'cause': "'7466' is not of type 'integer'", 'ocpp_message': <CallResult - unique_id=9c637c18-8859-464d-aaba-0a6d041bf569, action=StartTransaction, payload={'idTagInfo': {'expiryDate': '2031-01-30T12:00:44Z', 'parentIdTag': 'pid2025', 'status': 'ConcurrentTx'}, 'transactionId': '7466'}>}
+INFO:ocpp_16_interface:Recovered Transaction ID 7466 (Status: ConcurrentTx) via REGEX.
+INFO:ocpp_16_interface:Transaction started on 1: 7466
+WARNING:ocpp_16_interface:Transaction 7466 is concurrent. Assuming active.
+INFO:ocpp:rddQC4000001: send [2,"b79cc4ba-5c13-4414-b3d6-87a35cc6e387","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-11T02:49:22Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+DEBUG: Checking buffer for 'RemoteStartTransaction Response (Accepted)' (Size: 18)
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
+.INFO:ocpp:rddQC4000001: receive message [3,"b79cc4ba-5c13-4414-b3d6-87a35cc6e387",{}]
+
+--- 7.2.4 Remote Start 2 (Rejected) ---
+
+[EVSE] RAW RECV: [3,"b79cc4ba-5c13-4414-b3d6-87a35cc6e387",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: RemoteStart 2 API Response: 200 {"status":"Bad Request","code":400,"messages":"The connector status is Charging.","server-time":"2026-01-11T02:50:00Z","result":{}}
+NOTE: The second Remote Start is denied by the API itself.
+WARNING: concurrent RemoteStart accepted by API (200 OK) but no packet sent to EVSE. CSMS likely blocked it.
+.
+--- 7.2.5 Start Transaction (Conn 1) ---
+DEBUG: Checking buffer for 'Transaction started on 1' (Size: 20)
+DEBUG: Found in queue: Transaction started on 1: 7466
+.
+--- 7.2.6 Status Charging ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Charging)' (Size: 21)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"6e512fa7-8d5d-4644-b37d-b74528447a8a","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T02:49:24Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7466}]
+INFO:ocpp:rddQC4000001: receive message [3,"6e512fa7-8d5d-4644-b37d-b74528447a8a",{}]
+
+--- 7.2.7 Meter Values ---
+
+[EVSE] RAW RECV: [3,"6e512fa7-8d5d-4644-b37d-b74528447a8a",{}]
+.INFO:ocpp:rddQC4000001: receive message [2,"3b3e17fbee9811f09ae50242c0a8300e","RemoteStopTransaction",{"transactionId":7466}]
+
+--- 7.2.8 Remote Stop ---
+
+[EVSE] RAW RECV: [2,"3b3e17fbee9811f09ae50242c0a8300e","RemoteStopTransaction",{"transactionId":7466}]
+INFO:ocpp_16_interface:Received RemoteStopTransaction for transaction_id: 7466
+
+[EVSE] Sending RemoteStopTransaction Response (Accepted)
+INFO:ocpp:rddQC4000001: send [2,"a45efe65-0446-45cb-98e4-1bbca132c766","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-11T02:49:25Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: send [3,"3b3e17fbee9811f09ae50242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: receive message [3,"a45efe65-0446-45cb-98e4-1bbca132c766",{}]
+
+[EVSE] RAW RECV: [3,"a45efe65-0446-45cb-98e4-1bbca132c766",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+INFO:ocpp:rddQC4000001: send [2,"c79d23e8-74d5-4215-b4b5-1c7acb2fbd87","StopTransaction",{"meterStop":100,"timestamp":"2026-01-11T02:49:25Z","transactionId":7466,"reason":"Remote"}]
+INFO:ocpp:rddQC4000001: receive message [3,"c79d23e8-74d5-4215-b4b5-1c7acb2fbd87",{}]
+
+[EVSE] RAW RECV: [3,"c79d23e8-74d5-4215-b4b5-1c7acb2fbd87",{}]
+INFO:ocpp_16_interface:Transaction stopped on 1: 7466
+INFO:ocpp:rddQC4000001: send [2,"ea51a64a-57c7-4406-b640-2868490be64b","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:26Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"ea51a64a-57c7-4406-b640-2868490be64b",{}]
+
+[EVSE] RAW RECV: [3,"ea51a64a-57c7-4406-b640-2868490be64b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Checking buffer for 'RemoteStopTransaction Response (Accepted)' (Size: 22)
+DEBUG: Found in queue: [EVSE] Sending RemoteStopTransaction Response (Accepted)
+.
+--- 7.2.9 Stop Transaction ---
+DEBUG: Checking buffer for 'Transaction stopped' (Size: 24)
+DEBUG: Found in queue: Transaction stopped on 1: 7466
+.
+--- 7.2.10 Status Finishing ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Finishing)' (Size: 27)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+.
+--- 7.2.11 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 26)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.
+--- 7.3.1 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 25)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"31cd8d68-6822-4722-bf2c-3485dee9081d","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:26Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"31cd8d68-6822-4722-bf2c-3485dee9081d",{}]
+
+--- 7.3.2 Status Preparing ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 24)
+
+[EVSE] RAW RECV: [3,"31cd8d68-6822-4722-bf2c-3485dee9081d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Preparing'}
+INFO:ocpp:rddQC4000001: send [2,"8c1a9bfc-deeb-4850-a456-ab2e4cca9279","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-11T02:49:26Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"8c1a9bfc-deeb-4850-a456-ab2e4cca9279",{}]
+
+[EVSE] RAW RECV: [3,"8c1a9bfc-deeb-4850-a456-ab2e4cca9279",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+.INFO:EVSE_Sim:Processing Command: AUTHORIZE with args: {'id_tag': 'INVALID_TAG'}
+INFO:ocpp:rddQC4000001: send [2,"b4f68723-a4d3-41ae-a8bf-8eec2720ed02","Authorize",{"idTag":"INVALID_TAG"}]
+INFO:ocpp:rddQC4000001: receive message [3,"b4f68723-a4d3-41ae-a8bf-8eec2720ed02",{"idTagInfo":{"status":"Invalid"}}]
+
+--- 7.3.3 Authorize Invalid ---
+DEBUG: Checking buffer for 'Authorize ACKNOWLEDGED (Invalid)' (Size: 29)
+
+[EVSE] RAW RECV: [3,"b4f68723-a4d3-41ae-a8bf-8eec2720ed02",{"idTagInfo":{"status":"Invalid"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Invalid)
+DEBUG: Found in queue: [EVSE] Authorize ACKNOWLEDGED (Invalid)
+.INFO:EVSE_Sim:Processing Command: AUTHORIZE with args: {'id_tag': 'RFID_SIM'}
+INFO:ocpp:rddQC4000001: send [2,"0e7843ed-4d61-4be8-b327-d64648507693","Authorize",{"idTag":"RFID_SIM"}]
+INFO:ocpp:rddQC4000001: receive message [3,"0e7843ed-4d61-4be8-b327-d64648507693",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+--- 7.3.4 Authorize Valid ---
+DEBUG: Checking buffer for 'Authorize ACKNOWLEDGED (Accepted)' (Size: 30)
+
+[EVSE] RAW RECV: [3,"0e7843ed-4d61-4be8-b327-d64648507693",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+DEBUG: Found in queue: [EVSE] Authorize ACKNOWLEDGED (Accepted)
+.INFO:EVSE_Sim:Processing Command: START_TRANSACTION with args: {'connector_id': 1, 'id_tag': 'RFID_SIM'}
+INFO:ocpp:rddQC4000001: send [2,"278262ba-8bb6-472a-be2d-38fac5e926d0","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-11T02:49:26Z"}]
+INFO:ocpp:rddQC4000001: receive message [3,"278262ba-8bb6-472a-be2d-38fac5e926d0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7467}]
+
+--- 7.3.5 Start Transaction ---
+DEBUG: Checking buffer for 'Transaction started on 1' (Size: 31)
+
+[EVSE] RAW RECV: [3,"278262ba-8bb6-472a-be2d-38fac5e926d0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7467}]
+INFO:ocpp_16_interface:Transaction started on 1: 7467
+DEBUG: Found in queue: Transaction started on 1: 7467
+.INFO:ocpp:rddQC4000001: send [2,"d0102046-275a-47bb-ae69-2fdcc4860b92","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-11T02:49:26Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"d0102046-275a-47bb-ae69-2fdcc4860b92",{}]
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Charging)' (Size: 32)
+
+[EVSE] RAW RECV: [3,"d0102046-275a-47bb-ae69-2fdcc4860b92",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+.ERROR:ocpp_16_interface:Error in MeterValues loop: 'Ocpp16Interface' object has no attribute 'configuration'
+INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"2da1e828-a18f-460c-86ab-b0e11fd9a830","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T02:49:26Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7467}]
+INFO:ocpp:rddQC4000001: receive message [3,"2da1e828-a18f-460c-86ab-b0e11fd9a830",{}]
+
+[EVSE] RAW RECV: [3,"2da1e828-a18f-460c-86ab-b0e11fd9a830",{}]
+.INFO:EVSE_Sim:Processing Command: AUTHORIZE with args: {'id_tag': 'INVALID_TAG'}
+INFO:ocpp:rddQC4000001: send [2,"692a6dd7-1979-4eb6-97eb-c09ea2c79580","Authorize",{"idTag":"INVALID_TAG"}]
+INFO:ocpp:rddQC4000001: receive message [3,"692a6dd7-1979-4eb6-97eb-c09ea2c79580",{"idTagInfo":{"status":"Invalid"}}]
+
+--- 7.3.8 Authorize Invalid (Stop) ---
+DEBUG: Checking buffer for 'Authorize ACKNOWLEDGED (Invalid)' (Size: 33)
+
+[EVSE] RAW RECV: [3,"692a6dd7-1979-4eb6-97eb-c09ea2c79580",{"idTagInfo":{"status":"Invalid"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Invalid)
+DEBUG: Found in queue: [EVSE] Authorize ACKNOWLEDGED (Invalid)
+.INFO:EVSE_Sim:Processing Command: STOP_TRANSACTION with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"f781b883-dc2e-4c8a-9dad-5f873c40c8ff","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-11T02:49:28Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"f781b883-dc2e-4c8a-9dad-5f873c40c8ff",{}]
+
+--- 7.3.9 Stop Transaction ---
+DEBUG: Checking buffer for 'Transaction stopped' (Size: 35)
+
+[EVSE] RAW RECV: [3,"f781b883-dc2e-4c8a-9dad-5f873c40c8ff",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+INFO:ocpp:rddQC4000001: send [2,"c31739be-52d2-4486-888f-586858b273b3","StopTransaction",{"meterStop":100,"timestamp":"2026-01-11T02:49:28Z","transactionId":7467}]
+INFO:ocpp:rddQC4000001: receive message [3,"c31739be-52d2-4486-888f-586858b273b3",{}]
+
+[EVSE] RAW RECV: [3,"c31739be-52d2-4486-888f-586858b273b3",{}]
+INFO:ocpp_16_interface:Transaction stopped on 1: 7467
+DEBUG: Found in queue: Transaction stopped on 1: 7467
+.DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Finishing)' (Size: 38)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+.DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 37)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.
+--- 7.4.1 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 36)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.INFO:ocpp:rddQC4000001: send [2,"81c72c80-f97f-4f1f-b0ef-b80bbfd6e57e","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:28Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"81c72c80-f97f-4f1f-b0ef-b80bbfd6e57e",{}]
+
+--- 7.4.2 Status Preparing ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 35)
+
+[EVSE] RAW RECV: [3,"81c72c80-f97f-4f1f-b0ef-b80bbfd6e57e",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"a53e02c4-9a6d-4926-bfdf-0d75aab49b91","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:28Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"a53e02c4-9a6d-4926-bfdf-0d75aab49b91",{}]
+
+[EVSE] RAW RECV: [3,"a53e02c4-9a6d-4926-bfdf-0d75aab49b91",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Preparing'}
+INFO:ocpp:rddQC4000001: send [2,"cf95374f-fe76-4219-b852-2a8b2d980872","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-11T02:49:28Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"cf95374f-fe76-4219-b852-2a8b2d980872",{}]
+
+[EVSE] RAW RECV: [3,"cf95374f-fe76-4219-b852-2a8b2d980872",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+.INFO:ocpp:rddQC4000001: receive message [2,"3cced05aee9811f09ee10242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+--- 7.4.3 Remote Start (Accepted) ---
+
+[EVSE] RAW RECV: [2,"3cced05aee9811f09ee10242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+INFO:ocpp_16_interface:Received RemoteStartTransaction for id_tag: RFID_SIM
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"3cced05aee9811f09ee10242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: send [2,"36d62da6-2805-42c6-9e3a-831750a9f45c","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-11T02:49:28Z"}]
+INFO:ocpp:rddQC4000001: receive message [3,"36d62da6-2805-42c6-9e3a-831750a9f45c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7468}]
+
+[EVSE] RAW RECV: [3,"36d62da6-2805-42c6-9e3a-831750a9f45c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7468}]
+INFO:ocpp_16_interface:Transaction started on 1: 7468
+INFO:ocpp:rddQC4000001: send [2,"bb7d0b22-6150-40b7-a40e-7a69c6cddbb3","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-11T02:49:28Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"bb7d0b22-6150-40b7-a40e-7a69c6cddbb3",{}]
+
+[EVSE] RAW RECV: [3,"bb7d0b22-6150-40b7-a40e-7a69c6cddbb3",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+ERROR:ocpp_16_interface:Error in MeterValues loop: 'Ocpp16Interface' object has no attribute 'configuration'
+DEBUG: Checking buffer for 'RemoteStartTransaction Response (Accepted)' (Size: 40)
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
+.
+--- 7.4.4 Start Transaction ---
+DEBUG: Checking buffer for 'Transaction started on 1' (Size: 42)
+DEBUG: Found in queue: Transaction started on 1: 7468
+.
+--- 7.4.5 Status Charging ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Charging)' (Size: 43)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"c002a07f-1317-44e8-8c38-6af89ab60679","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T02:49:28Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7468}]
+INFO:ocpp:rddQC4000001: receive message [3,"c002a07f-1317-44e8-8c38-6af89ab60679",{}]
+
+--- 7.4.6 Meter Values ---
+
+[EVSE] RAW RECV: [3,"c002a07f-1317-44e8-8c38-6af89ab60679",{}]
+.INFO:EVSE_Sim:Processing Command: STOP_TRANSACTION with args: {'connector_id': 1, 'reason': 'EmergencyStop'}
+INFO:ocpp:rddQC4000001: send [2,"90e51ed4-b74e-433e-9a32-e78e188f7647","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-11T02:49:29Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"90e51ed4-b74e-433e-9a32-e78e188f7647",{}]
+
+--- 7.4.7 Stop Transaction (Emergency) ---
+DEBUG: Checking buffer for 'Transaction stopped' (Size: 44)
+
+[EVSE] RAW RECV: [3,"90e51ed4-b74e-433e-9a32-e78e188f7647",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+INFO:ocpp:rddQC4000001: send [2,"ddfcf2d6-19b6-4e56-8bb2-20a86875b39c","StopTransaction",{"meterStop":100,"timestamp":"2026-01-11T02:49:29Z","transactionId":7468,"reason":"EmergencyStop"}]
+INFO:ocpp:rddQC4000001: receive message [3,"ddfcf2d6-19b6-4e56-8bb2-20a86875b39c",{}]
+
+[EVSE] RAW RECV: [3,"ddfcf2d6-19b6-4e56-8bb2-20a86875b39c",{}]
+INFO:ocpp_16_interface:Transaction stopped on 1: 7468
+DEBUG: Found in queue: Transaction stopped on 1: 7468
+.INFO:ocpp:rddQC4000001: send [2,"a66415e4-5a55-4b66-bdb8-b487b9eba8bf","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:29Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"a66415e4-5a55-4b66-bdb8-b487b9eba8bf",{}]
+
+--- 7.4.8 Status Faulted (EmergencyStop) ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Faulted)' (Size: 48)
+
+[EVSE] RAW RECV: [3,"a66415e4-5a55-4b66-bdb8-b487b9eba8bf",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Faulted', 'info': 'EmergencyStop'}
+INFO:ocpp:rddQC4000001: send [2,"8d45cf3d-d5d3-4e1d-9e89-ac62c95ab5fd","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Faulted","timestamp":"2026-01-11T02:49:29Z","info":"EmergencyStop","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"8d45cf3d-d5d3-4e1d-9e89-ac62c95ab5fd",{}]
+
+[EVSE] RAW RECV: [3,"8d45cf3d-d5d3-4e1d-9e89-ac62c95ab5fd",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+.
+--- 7.4.9 Status Available (Reset) ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 51)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.
+--- 7.4.10 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 50)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.
+--- 7.5.1 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 49)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"d3635147-f2ab-4996-be81-51f5fdd3108f","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:30Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"d3635147-f2ab-4996-be81-51f5fdd3108f",{}]
+
+--- 7.5.2 Status Faulted (DoorOpen) ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Faulted)' (Size: 48)
+
+[EVSE] RAW RECV: [3,"d3635147-f2ab-4996-be81-51f5fdd3108f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"4cd973a8-460b-437a-b95b-d19f1abbb367","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:30Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"4cd973a8-460b-437a-b95b-d19f1abbb367",{}]
+
+[EVSE] RAW RECV: [3,"4cd973a8-460b-437a-b95b-d19f1abbb367",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Faulted', 'info': 'DoorOpen'}
+INFO:ocpp:rddQC4000001: send [2,"6e648e1b-c994-43dc-a5ca-544a8e51686f","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Faulted","timestamp":"2026-01-11T02:49:30Z","info":"DoorOpen","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"6e648e1b-c994-43dc-a5ca-544a8e51686f",{}]
+
+[EVSE] RAW RECV: [3,"6e648e1b-c994-43dc-a5ca-544a8e51686f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+.
+--- 7.5.3 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 53)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.
+--- 7.6.1 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 52)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"b71197ac-ce47-4ec0-b2fd-56a9233880c0","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:30Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"b71197ac-ce47-4ec0-b2fd-56a9233880c0",{}]
+
+--- 7.6.2 Status Preparing ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 51)
+
+[EVSE] RAW RECV: [3,"b71197ac-ce47-4ec0-b2fd-56a9233880c0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"4adc0171-67fe-4b38-b051-0b2407b3806a","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:30Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"4adc0171-67fe-4b38-b051-0b2407b3806a",{}]
+
+[EVSE] RAW RECV: [3,"4adc0171-67fe-4b38-b051-0b2407b3806a",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Preparing'}
+INFO:ocpp:rddQC4000001: send [2,"6aac7b14-2ca0-40c0-aaa2-b7dee2f1843c","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-11T02:49:30Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"6aac7b14-2ca0-40c0-aaa2-b7dee2f1843c",{}]
+
+[EVSE] RAW RECV: [3,"6aac7b14-2ca0-40c0-aaa2-b7dee2f1843c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+.INFO:ocpp:rddQC4000001: receive message [2,"3e144513ee9811f0a4bf0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+--- 7.6.3 Remote Start (Accepted) ---
+
+[EVSE] RAW RECV: [2,"3e144513ee9811f0a4bf0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+INFO:ocpp_16_interface:Received RemoteStartTransaction for id_tag: RFID_SIM
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"3e144513ee9811f0a4bf0242c0a8300e",{"status":"Accepted"}]
+INFO:ocpp:rddQC4000001: send [2,"ff1e71eb-19b0-4cb9-9d24-ccce886908f2","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-11T02:49:30Z"}]
+INFO:ocpp:rddQC4000001: receive message [3,"ff1e71eb-19b0-4cb9-9d24-ccce886908f2",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7469}]
+
+[EVSE] RAW RECV: [3,"ff1e71eb-19b0-4cb9-9d24-ccce886908f2",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7469}]
+INFO:ocpp_16_interface:Transaction started on 1: 7469
+INFO:ocpp:rddQC4000001: send [2,"ad5c2b1a-dda6-4eb0-92ed-5ab0c17eaa1d","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-11T02:49:30Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"ad5c2b1a-dda6-4eb0-92ed-5ab0c17eaa1d",{}]
+
+[EVSE] RAW RECV: [3,"ad5c2b1a-dda6-4eb0-92ed-5ab0c17eaa1d",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+ERROR:ocpp_16_interface:Error in MeterValues loop: 'Ocpp16Interface' object has no attribute 'configuration'
+DEBUG: Checking buffer for 'RemoteStartTransaction Response (Accepted)' (Size: 56)
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
+.
+--- 7.6.4 Start Transaction ---
+DEBUG: Checking buffer for 'Transaction started on 1' (Size: 58)
+DEBUG: Found in queue: Transaction started on 1: 7469
+.
+--- 7.6.5 Status Charging ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Charging)' (Size: 59)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+INFO:ocpp:rddQC4000001: send [2,"9162ee79-c98c-4826-b74f-54a5aa289500","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-11T02:49:30Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7469}]
+INFO:ocpp:rddQC4000001: receive message [3,"9162ee79-c98c-4826-b74f-54a5aa289500",{}]
+
+--- 7.6.6 Meter Values ---
+
+[EVSE] RAW RECV: [3,"9162ee79-c98c-4826-b74f-54a5aa289500",{}]
+.INFO:EVSE_Sim:Processing Command: STOP_TRANSACTION with args: {'connector_id': 1, 'reason': 'PowerLoss'}
+INFO:ocpp:rddQC4000001: send [2,"8c0985e1-0cad-472e-b31d-88892777e600","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-11T02:49:31Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"8c0985e1-0cad-472e-b31d-88892777e600",{}]
+
+--- 7.6.7 Stop Transaction (PowerLoss) ---
+DEBUG: Checking buffer for 'Transaction stopped' (Size: 60)
+
+[EVSE] RAW RECV: [3,"8c0985e1-0cad-472e-b31d-88892777e600",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+INFO:ocpp:rddQC4000001: send [2,"c2d59f19-de5d-41a1-b276-78ae84b04cc7","StopTransaction",{"meterStop":100,"timestamp":"2026-01-11T02:49:31Z","transactionId":7469,"reason":"PowerLoss"}]
+INFO:ocpp:rddQC4000001: receive message [3,"c2d59f19-de5d-41a1-b276-78ae84b04cc7",{}]
+
+[EVSE] RAW RECV: [3,"c2d59f19-de5d-41a1-b276-78ae84b04cc7",{}]
+INFO:ocpp_16_interface:Transaction stopped on 1: 7469
+DEBUG: Found in queue: Transaction stopped on 1: 7469
+.
+--- 7.6.8 BootNotification (Reboot) ---
+DEBUG: Checking buffer for 'BootNotification ACCEPTED' (Size: 64)
+DEBUG: Found in buffer: [EVSE] BootNotification ACCEPTED
+.INFO:ocpp:rddQC4000001: send [2,"80d54bc4-83ff-442e-a1f3-291ad65e4366","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:32Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"80d54bc4-83ff-442e-a1f3-291ad65e4366",{}]
+
+--- 7.6.9 Status Preparing ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Preparing)' (Size: 63)
+
+[EVSE] RAW RECV: [3,"80d54bc4-83ff-442e-a1f3-291ad65e4366",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: BOOT with args: {}
+INFO:ocpp:rddQC4000001: send [2,"9f7e9ab4-86b8-4fa4-86e9-699cee517f1a","BootNotification",{"chargePointModel":"MEA-V2G-01","chargePointVendor":"KMUTNB"}]
+INFO:ocpp:rddQC4000001: receive message [3,"9f7e9ab4-86b8-4fa4-86e9-699cee517f1a",{"currentTime":"2026-01-11T02:50:10Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] RAW RECV: [3,"9f7e9ab4-86b8-4fa4-86e9-699cee517f1a",{"currentTime":"2026-01-11T02:50:10Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+INFO:ocpp_16_interface:Connected to central system.
+INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Preparing'}
+INFO:ocpp:rddQC4000001: send [2,"c9ef8f46-9bc2-456b-8bb3-715afcebb738","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-11T02:49:32Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"c9ef8f46-9bc2-456b-8bb3-715afcebb738",{}]
+
+[EVSE] RAW RECV: [3,"c9ef8f46-9bc2-456b-8bb3-715afcebb738",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+.
+--- 7.6.10 Status Available ---
+DEBUG: Checking buffer for 'StatusNotification ACKNOWLEDGED (Available)' (Size: 68)
+DEBUG: Found in buffer: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available'}
+INFO:ocpp:rddQC4000001: send [2,"ed8b0881-2cd4-478b-8d83-84d96177cf3f","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:32Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"ed8b0881-2cd4-478b-8d83-84d96177cf3f",{}]
+
+--- 7.7.1 Send Local List (Simulated) ---
+DEBUG: Checking buffer for 'SendLocalList (ver=1, type=Full, len=1)' (Size: 67)
+
+[EVSE] RAW RECV: [3,"ed8b0881-2cd4-478b-8d83-84d96177cf3f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+INFO:EVSE_Sim:Processing Command: INJECT_MSG with args: {'msg': '[2, "uuid-locallist", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [{"idTag": "RFID_SIM", "idTagInfo": {"status": "Accepted"}}], "updateType": "Full"}]'}
+INFO:EVSE_Sim:Injecting CSMS Message: [2, "uuid-locallist", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [{"idTag": "RFID_SIM", "idTagInfo": {"status": "Accepted"}}], "updateType": "Full"}]
+
+[EVSE] RAW RECV: [2, "uuid-locallist", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [{"idTag": "RFID_SIM", "idTagInfo": {"status": "Accepted"}}], "updateType": "Full"}]
+
+[EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=1)
+INFO:ocpp_16_interface:[EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=1)
+DEBUG: Found in queue: [EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=1)
+.INFO:ocpp:rddQC4000001: send [3,"uuid-locallist",{"status":"Accepted"}]
+INFO:EVSE_Sim:Processing Command: OFFLINE with args: {}
+
+--- 7.7.2 Disconnect LAN ---
+[EVSE] Went OFFLINE
+.INFO:EVSE_Sim:Processing Command: START_TRANSACTION with args: {'connector_id': 1, 'id_tag': 'RFID_SIM'}
+
+--- 7.7.3 Start Transaction (Offline) ---
+[EVSE] OFFLINE: Buffering StartTransaction(connector_id=1, id_tag='RFID_SIM', meter_start=0, timestamp='2026-01-11T02:49:33Z', reservation_id=None)
+INFO:ocpp_16_interface:Transaction started on 1: 1
+[EVSE] OFFLINE: Buffering StatusNotification(connector_id=1, error_code='NoError', status=<ChargePointStatus.charging: 'Charging'>, timestamp='2026-01-11T02:49:33Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+ERROR:ocpp_16_interface:Error in MeterValues loop: 'Ocpp16Interface' object has no attribute 'configuration'
+.INFO:EVSE_Sim:Processing Command: STOP_TRANSACTION with args: {'connector_id': 1}
+
+--- 7.7.4 Stop Transaction (Local) ---
+[EVSE] OFFLINE: Buffering StatusNotification(connector_id=1, error_code='NoError', status='Finishing', timestamp='2026-01-11T02:49:34Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+[EVSE] OFFLINE: Buffering StopTransaction(meter_stop=100, timestamp='2026-01-11T02:49:34Z', transaction_id=1, reason=None, id_tag=None, transaction_data=None)
+INFO:ocpp_16_interface:Transaction stopped on 1: 1
+[EVSE] OFFLINE: Buffering StatusNotification(connector_id=1, error_code='NoError', status='Available', timestamp='2026-01-11T02:49:34Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+.INFO:EVSE_Sim:Processing Command: RECONNECT with args: {}
+
+--- 7.7.5 Reconnect LAN ---
+[EVSE] Went ONLINE. Flushing 5 messages...
+[EVSE] FLUSHING: StartTransaction(connector_id=1, id_tag='RFID_SIM', meter_start=0, timestamp='2026-01-11T02:49:33Z', reservation_id=None)
+INFO:ocpp:rddQC4000001: send [2,"3852e537-7ddd-40cc-86e4-54bbd8b9df0a","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-11T02:49:33Z"}]
+INFO:ocpp:rddQC4000001: receive message [3,"3852e537-7ddd-40cc-86e4-54bbd8b9df0a",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7470}]
+
+[EVSE] RAW RECV: [3,"3852e537-7ddd-40cc-86e4-54bbd8b9df0a",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7470}]
+[EVSE] FLUSHING: StatusNotification(connector_id=1, error_code='NoError', status=<ChargePointStatus.charging: 'Charging'>, timestamp='2026-01-11T02:49:33Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+INFO:ocpp:rddQC4000001: send [2,"1fb2c68d-8894-4909-80a8-1cd0b5848ccc","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-11T02:49:33Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"1fb2c68d-8894-4909-80a8-1cd0b5848ccc",{}]
+
+[EVSE] RAW RECV: [3,"1fb2c68d-8894-4909-80a8-1cd0b5848ccc",{}]
+[EVSE] FLUSHING: StatusNotification(connector_id=1, error_code='NoError', status='Finishing', timestamp='2026-01-11T02:49:34Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+INFO:ocpp:rddQC4000001: send [2,"ecd509a4-5a36-457a-b57e-3ff0655281a1","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-11T02:49:34Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"ecd509a4-5a36-457a-b57e-3ff0655281a1",{}]
+
+[EVSE] RAW RECV: [3,"ecd509a4-5a36-457a-b57e-3ff0655281a1",{}]
+[EVSE] FLUSHING: StopTransaction(meter_stop=100, timestamp='2026-01-11T02:49:34Z', transaction_id=1, reason=None, id_tag=None, transaction_data=None)
+INFO:ocpp:rddQC4000001: send [2,"787622d1-bf7f-4ef2-b1f3-3f7c70fa1b1f","StopTransaction",{"meterStop":100,"timestamp":"2026-01-11T02:49:34Z","transactionId":1}]
+INFO:ocpp:rddQC4000001: receive message [3,"787622d1-bf7f-4ef2-b1f3-3f7c70fa1b1f",{}]
+
+[EVSE] RAW RECV: [3,"787622d1-bf7f-4ef2-b1f3-3f7c70fa1b1f",{}]
+[EVSE] FLUSHING: StatusNotification(connector_id=1, error_code='NoError', status='Available', timestamp='2026-01-11T02:49:34Z', info=None, vendor_id='KMUTNB', vendor_error_code='')
+INFO:ocpp:rddQC4000001: send [2,"311a16a3-a755-4c9f-bf7f-23fa0ae120e5","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-11T02:49:34Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"311a16a3-a755-4c9f-bf7f-23fa0ae120e5",{}]
+
+[EVSE] RAW RECV: [3,"311a16a3-a755-4c9f-bf7f-23fa0ae120e5",{}]
+.
+--- 7.7.6 Send Buffered Start ---
+DEBUG: Checking buffer for 'Transaction started on 1' (Size: 70)
+DEBUG: Found in queue: Transaction started on 1: 1
+.
+--- 7.7.7 Send Buffered Stop ---
+DEBUG: Checking buffer for 'Transaction stopped' (Size: 70)
+DEBUG: Found in queue: Transaction stopped on 1: 1
+.
+
+- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section7.xml -
+============================= 54 passed in 17.00s ==============================
+
+\end{lstlisting}
+
+\end{document}

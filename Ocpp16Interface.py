@@ -47,6 +47,22 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         self.reservations = {} 
         # Meter Values Tasks (Connector ID -> Task)
         self._meter_value_tasks = {}
+        # Connector Status Tracking
+        self.connector_status = {}
+        # Offline Mode
+        self.is_offline = False
+        self.is_offline = False
+        self.offline_buffer = []
+        # Configuration Store
+        self.configuration = {
+             'MEAV2G': 'true', 
+             'MeterValueSampleInterval': '5', 
+             'HeartbeatInterval': '600',
+             'LocalAuthorizeOffline': 'false', # Default false for compliance? Or true? 
+             # Section 9.3 changes it to false. Default probably true for robustness or false for security?
+             # MEA specs usually default false?
+             'Power.Active.Import': '0' # For 9.4 test
+        }
         
     async def route_message(self, raw_msg):
         # Log raw message for debugging purposes
@@ -60,6 +76,74 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         # User wants "log the ocpp message". So I SHOULD put it in queue!
         PACKET_QUEUE.put(f"[EVSE] RAW RECV: {raw_msg}")
         await super().route_message(raw_msg)
+        
+    async def call(self, payload, suppress=False):
+        """
+        Override call to support Offline buffering.
+        """
+        if self.is_offline:
+            print(f"[EVSE] OFFLINE: Buffering {payload}", flush=True)
+            self.offline_buffer.append(payload)
+            
+            # Construct Mock Response
+            # We need to return a CallResult compatible object or Payload.
+            # ocpp library returns the Payload object (e.g. StartTransactionConf) directly if unpacked?
+            # No, self.call returns the response payload INSTANCE.
+            
+            action_name = payload.__class__.__name__.replace('Payload', '')
+             # Map request to response class?
+            # Actually, we can return a Dummy object with necessary attributes.
+            # Most checks just look for 'status' or 'idTagInfo'.
+            
+            simulated_response = call_result.StartTransaction(
+                    transaction_id=1,
+                    id_tag_info={'status': 'Accepted', 'expiryDate': datetime.now(timezone.utc).isoformat(), 'parentIdTag': 'OFFLINE'}
+                ) if action_name == 'StartTransaction' else None
+            
+            if not simulated_response:
+                 # Generic response with status Accepted if possible
+                 try:
+                     # Try to see if we can instantiate Conf class
+                     # This is hard generic. 
+                     # For 7.7 tests we need: StartTx -> Conf, StopTx -> Conf.
+                     if action_name == 'StopTransaction':
+                         simulated_response = call_result.StopTransaction(
+                             id_tag_info={'status': 'Accepted'}
+                         )
+                 except:
+                     pass
+            
+            if not simulated_response:
+                 # Fallback for StatusNotification etc. (returns empty payload)
+                simulated_response = call_result.StatusNotification() if action_name == 'StatusNotification' else None
+
+            # If still None, just return object
+            if not simulated_response:
+                class DummyResp:
+                     pass
+                simulated_response = DummyResp()
+            
+            return simulated_response
+
+        return await super().call(payload, suppress)
+
+    def go_offline(self):
+        self.is_offline = True
+        print("[EVSE] Went OFFLINE", flush=True)
+
+    async def go_online(self):
+        self.is_offline = False
+        print(f"[EVSE] Went ONLINE. Flushing {len(self.offline_buffer)} messages...", flush=True)
+        while self.offline_buffer:
+            msg = self.offline_buffer.pop(0)
+            print(f"[EVSE] FLUSHING: {msg}", flush=True)
+            try:
+                await super().call(msg)
+                # Small delay to keep order
+                await asyncio.sleep(0.1)
+            except Exception as e:
+                LOGGER.error(f"Error flushing offline message: {e}")
+
         
         # Configuration Store
         self.configuration = {
@@ -86,6 +170,8 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             self.charger.start()
             # Start Heartbeat Loop
             asyncio.create_task(self._heartbeat_loop())
+            # Start Reservation GC Loop
+            asyncio.create_task(self._reservation_loop())
         else:
             LOGGER.warning("BootNotification rejected!")
         return response 
@@ -99,6 +185,44 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             pass
         except Exception as e:
             LOGGER.error(f"Error in Heartbeat loop: {e}") 
+
+    async def _reservation_loop(self):
+        """Background task to check for expired reservations."""
+        try:
+            while True:
+                await asyncio.sleep(1) # Check every second
+                
+                now = datetime.now(timezone.utc)
+                to_remove = []
+                
+                for connector_id, res in self.reservations.items():
+                    expiry_str = res.get('expiryDate')
+                    if expiry_str:
+                        # Parse expiry date (Handle Z for UTC)
+                        try:
+                            if expiry_str.endswith('Z'):
+                                expiry_str = expiry_str[:-1] + '+00:00'
+                            expiry_dt = datetime.fromisoformat(expiry_str)
+                            if expiry_dt.tzinfo is None:
+                                expiry_dt = expiry_dt.replace(tzinfo=timezone.utc)
+                            
+                            if now > expiry_dt:
+                                print(f"[EVSE] Reservation {res['reservationId']} expired at {expiry_str}. Current: {now}")
+                                to_remove.append(connector_id)
+                        except ValueError as e:
+                            LOGGER.error(f"Error parsing expiry date {expiry_str}: {e}")
+                
+                for connector_id in to_remove:
+                    LOGGER.info(f"Removing expired reservation for connector {connector_id}")
+                    if connector_id in self.reservations:
+                        del self.reservations[connector_id]
+                        # Send Status Available
+                        await self.send_status_notification(connector_id, ChargePointStatus.available)
+
+        except asyncio.CancelledError:
+            pass
+        except Exception as e:
+            LOGGER.error(f"Error in Reservation loop: {e}") 
 
     async def send_heartbeat(self):
         request = call.Heartbeat()
@@ -120,6 +244,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
              payload['info'] = info
              
         request = call.StatusNotification(**payload)
+    
+        # Update local state
+        self.connector_status[connector_id] = status
+    
         response = await self.call(request)
         msg = f"[EVSE] StatusNotification ACKNOWLEDGED ({status})"
         print(f"\n{msg}", flush=True)
@@ -166,70 +294,62 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         
         try:
             response = await self.call(request)
-        except Exception as e:
-            # MEA CSMS returns transactionId as string "123", violating OCPP spec (int).
-            # The ocpp lib raises TypeConstraintViolationError.
-            # We can try to recover the response from the exception if available, or just log and ignore.
-            LOGGER.error(f"StartTransaction Warning (likely type mismatch): {e}")
-            # Attempt to recover if it's just a type error (MEA sends string ID)
-            if hasattr(e, 'ocpp_message') and hasattr(e.ocpp_message, 'payload'):
-                p = e.ocpp_message.payload
-                if 'transactionId' in p and 'idTagInfo' in p:
-                     try:
-                         tid = int(p['transactionId'])
-                         status = p['idTagInfo'].get('status')
-                         LOGGER.info(f"Recovered Transaction ID {tid} (Status: {status}) from invalid payload.")
-                         
-                         if status == AuthorizationStatus.accepted or status == 'ConcurrentTx':
-                             self.transactions[connector_id] = tid
-                             if status == AuthorizationStatus.accepted:
-                                 self.charger.start()
-                                 self._meter_value_tasks[connector_id] = asyncio.create_task(self._meter_values_loop(connector_id, tid))
-                             elif status == 'ConcurrentTx':
-                                 LOGGER.warning(f"Transaction {tid} is concurrent. Assuming active.")
-                                 # We treat it as active so we can stop it later
-                                 self.transactions[connector_id] = tid
-                         return
-                     except ValueError:
-                         pass
-            
-            # Fallback: Regex on string representation (because it shows up in logs)
-            import re
-            match = re.search(r"'transactionId':\s*'(\d+)'", str(e))
-            if match:
-                 try:
-                     tid = int(match.group(1))
-                     # Check for status in string too
-                     status = 'Accepted' # Default assumption
-                     if 'ConcurrentTx' in str(e):
-                         status = 'ConcurrentTx'
-                     
-                     LOGGER.info(f"Recovered Transaction ID {tid} (Status: {status}) via REGEX.")
-                     self.transactions[connector_id] = tid
-                     if status == 'Accepted' or status == 'ConcurrentTx':
-                         if status == 'Accepted':
-                             self.charger.start()
-                             self._meter_value_tasks[connector_id] = asyncio.create_task(self._meter_values_loop(connector_id, tid))
-                     return
-                 except:
-                     pass
-            return
+            # Response is valid
+            if response.id_tag_info['status'] == AuthorizationStatus.accepted:
+                 LOGGER.info("Transaction Accepted")
+                 self.transactions[connector_id] = response.transaction_id
+                 msg_tx = f"Transaction started on {connector_id}: {response.transaction_id}"
+                 LOGGER.info(msg_tx)
+                 PACKET_QUEUE.put(msg_tx)
+                 
+                 self.charger.start()
+                 # Send StatusNotification (Charging)
+                 await self.send_status_notification(connector_id, ChargePointStatus.charging)
+                 self._meter_value_tasks[connector_id] = asyncio.create_task(self._meter_values_loop(connector_id, response.transaction_id))
+            else:
+                 LOGGER.warning(f"Transaction Rejected: {response.id_tag_info['status']}")
 
-        # Note: If we caught exception above, we returned. Use 'response' only if valid.
-        
-        if response.id_tag_info['status'] == AuthorizationStatus.accepted:
-            transaction_id = response.transaction_id
-            self.transactions[connector_id] = transaction_id
-            LOGGER.info(f"Transaction started on {connector_id}: {transaction_id}")
-            self.charger.start()
-            
-            # Send StatusNotification (Charging)
-            await self.send_status_notification(connector_id, ChargePointStatus.charging)
-            
-            # Start MeterValues Loop
-            self._meter_value_tasks[connector_id] = asyncio.create_task(self._meter_values_loop(connector_id, transaction_id))
-        else:
-            LOGGER.warning(f"StartTransaction rejected: {response.id_tag_info['status']}")
+        except (TypeConstraintViolationError, FormatViolationError, Exception) as e:
+             LOGGER.warning(f"StartTransaction Warning (likely type mismatch or structure): {e}")
+             
+             # Recovery Logic
+             import re
+             # Extract transactionId and status from string representation of the exception/message
+             match = re.search(r"'transactionId':\s*'?(-?\d+|[a-zA-Z0-9_\-]+)'?", str(e))
+             
+             status = 'Accepted' # Default
+             if "'status': 'Invalid'" in str(e): status = "Invalid"
+             if "'status': 'ConcurrentTx'" in str(e): status = "ConcurrentTx"
+             
+             if match:
+                  tid_str = match.group(1)
+                  # If ID is -1 and status Invalid, it is Rejected
+                  if tid_str == '-1' and status == 'Invalid':
+                       LOGGER.warning("Transaction Rejected by CSMS (Invalid Tag).")
+                       return
+                  
+                  try:
+                      tid = int(tid_str)
+                  except:
+                      tid = tid_str
+                  
+                  if status == 'Invalid':
+                       LOGGER.warning(f"Transaction Rejected (Invalid) with ID {tid}")
+                       return
+
+                  LOGGER.info(f"Recovered Transaction ID {tid} (Status: {status}) via REGEX.")
+                  self.transactions[connector_id] = tid
+                  
+                  msg_tx = f"Transaction started on {connector_id}: {tid}"
+                  LOGGER.info(msg_tx)
+                  PACKET_QUEUE.put(msg_tx)
+                  
+                  if status == 'Accepted' or status == 'ConcurrentTx':
+                      self.charger.start()
+                      await self.send_status_notification(connector_id, ChargePointStatus.charging)
+                      self._meter_value_tasks[connector_id] = asyncio.create_task(self._meter_values_loop(connector_id, tid))
+             else:
+                  LOGGER.error("Could not recover Transaction ID from exception.")
 
     async def stop_transaction(self, connector_id=1, reason=None):
         """
@@ -263,7 +383,9 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         )
         
         await self.call(request)
-        LOGGER.info(f"Transaction stopped on {connector_id}: {transaction_id}")
+        msg_stop = f"Transaction stopped on {connector_id}: {transaction_id}"
+        LOGGER.info(msg_stop)
+        PACKET_QUEUE.put(msg_stop)
         
         self.transactions.pop(connector_id, None)
         
@@ -328,6 +450,17 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
         target_connector = connector_id or 1
         
+        # Check 1: Connector Unplugged (Available) -> Reject (MEA Requirement)
+        current_status = self.connector_status.get(target_connector, ChargePointStatus.available)
+        if current_status == ChargePointStatus.available:
+             LOGGER.warning(f"RemoteStart rejected: Connector {target_connector} is Unplugged (Available)")
+             
+             msg_resp = f"[EVSE] Sending RemoteStartTransaction Response (Rejected)"
+             print(f"\n{msg_resp}", flush=True)
+             PACKET_QUEUE.put(msg_resp)
+             
+             return call_result.RemoteStartTransaction(status=RemoteStartStopStatus.rejected)
+
         if target_connector in self.transactions:
              return call_result.RemoteStartTransaction(status=RemoteStartStopStatus.rejected)
 
@@ -341,35 +474,38 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         return call_result.RemoteStartTransaction(status=RemoteStartStopStatus.accepted)
 
     @on(Action.remote_stop_transaction)
-    async def on_remote_stop_transaction(self, transaction_id, **kwargs):
-        payload = {"transactionId": transaction_id}
-        payload.update(kwargs)
-        msg = f"[EVSE] RECV Packet: RemoteStopTransaction\nPayload: {json.dumps(payload, indent=2)}"
-        print(f"\n{msg}", flush=True)
-        PACKET_QUEUE.put(msg)
+    async def on_remote_stop_transaction(self, transaction_id):
         LOGGER.info(f"Received RemoteStopTransaction for transaction_id: {transaction_id}")
         
+        # Stop transaction locally?
+        # Find connector
         target_connector = None
-        for cid, tid in self.transactions.items():
+        for conn_id, tid in self.transactions.items():
             if tid == transaction_id:
-                target_connector = cid
+                target_connector = conn_id
                 break
         
-        if target_connector is None:
-             # Ghost transaction (sim restarted but server kept state). 
-             # Force ACCEPT and send StopTransaction for Connector 1 to clear server state.
-             LOGGER.warning(f"Unknown transaction {transaction_id}, forcing stop on Connector 1 to clear CSMS state.")
-             target_connector = 1
-             # We manually inject it so stop_transaction works
-             self.transactions[target_connector] = transaction_id
+        if target_connector:
+             asyncio.create_task(self.stop_transaction(target_connector, reason="Remote"))
+             
+             msg_resp = f"[EVSE] Sending RemoteStopTransaction Response (Accepted)"
+             print(f"\n{msg_resp}", flush=True)
+             PACKET_QUEUE.put(msg_resp)
+             return call_result.RemoteStopTransaction(status=RemoteStartStopStatus.accepted)
+        else:
+             LOGGER.warning(f"RemoteStop failed: Transaction {transaction_id} not found.")
+             msg_resp = f"[EVSE] Sending RemoteStopTransaction Response (Rejected)"
+             print(f"\n{msg_resp}", flush=True)
+             PACKET_QUEUE.put(msg_resp)
+             return call_result.RemoteStopTransaction(status=RemoteStartStopStatus.rejected)
 
-        asyncio.create_task(self.stop_transaction(connector_id=target_connector, reason="Remote"))
-        
-        msg_resp = f"[EVSE] Sending RemoteStopTransaction Response (Accepted)"
-        print(f"\n{msg_resp}", flush=True)
-        PACKET_QUEUE.put(msg_resp)
-        
-        return call_result.RemoteStopTransaction(status=RemoteStartStopStatus.accepted)
+    @on(Action.send_local_list)
+    async def on_send_local_list(self, list_version, local_authorization_list, update_type):
+        msg = f"[EVSE] RECV Packet: SendLocalList (ver={list_version}, type={update_type}, len={len(local_authorization_list)})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
+        LOGGER.info(msg)
+        return call_result.SendLocalList(status=UpdateStatus.accepted)
 
     @on(Action.change_configuration)
     async def on_change_configuration(self, key, value, **kwargs):
@@ -581,16 +717,6 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         print(f"\n{msg_resp}", flush=True)
         PACKET_QUEUE.put(msg_resp)
         return call_result.SetChargingProfile(status=ChargingProfileStatus.accepted)
-
-    @on(Action.clear_cache)
-    async def on_clear_cache(self, **kwargs):
-        LOGGER.info("Received ClearCache")
-        return call_result.ClearCache(status=ClearCacheStatus.accepted)
-
-    @on(Action.send_local_list)
-    async def on_send_local_list(self, list_version, local_authorization_list, update_type, **kwargs):
-        LOGGER.info("Received SendLocalList")
-        return call_result.SendLocalList(status=UpdateStatus.accepted)
 
     @on(Action.get_local_list_version)
     async def on_get_local_list_version(self, **kwargs):

@@ -40,7 +40,14 @@ class EvseSimulator:
         time.sleep(2)
         
     def stop(self):
-        pass
+        LOGGER.info("Stopping EVSE Simulation...")
+        self.stop_event.set()
+        # Create task to close CP connection
+        if self.cp:
+            asyncio.run_coroutine_threadsafe(self.cp._connection.close(), self.loop)
+        
+        # self.thread.join(timeout=2) # blocking join might hang if loop is stuck
+
 
     def _run_loop(self):
         asyncio.set_event_loop(self.loop)
@@ -99,6 +106,19 @@ class EvseSimulator:
 
                 elif command == 'HEARTBEAT':
                      await self.cp.send_heartbeat()
+
+                elif command == 'OFFLINE':
+                     self.cp.go_offline()
+
+                elif command == 'RECONNECT':
+                     asyncio.create_task(self.cp.go_online())
+
+                elif command == 'INJECT_MSG':
+                     # args: msg (string)
+                     msg = args.get('msg')
+                     if msg:
+                         LOGGER.info(f"Injecting CSMS Message: {msg}")
+                         await self.cp.route_message(msg)
 
             except Exception as e:
                 LOGGER.error(f"Error processing command: {e}")

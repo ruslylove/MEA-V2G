@@ -25,6 +25,12 @@ class Charger(ChargerInterface):
         self.ev_target_current = 0
         self.stopped = True
 
+    def is_charging(self):
+        """
+        Returns True if the charger is currently active (not stopped).
+        """
+        return not self.stopped
+
     def _calcEvsePresentVoltage(self):
         """
         Calculates the present voltage at the current point in time, based on the given delta_u and
