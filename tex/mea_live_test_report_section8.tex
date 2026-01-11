@@ -1,0 +1,1676 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{pdfpages} % Added for including external PDFs
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    showstringspaces=false
+}
+
+\title{MEA OCPP Live Test}
+\author{Automated Test Suite}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary}
+\begin{itemize}
+    \item \textbf{Total Tests:} 50
+    \item \textbf{Passed:} 50
+    \item \textbf{Failed:} 0
+    \item \textbf{Errors:} 0
+    \item \textbf{Skipped:} 0
+    \item \textbf{Total Duration:} 31.961 seconds
+\end{itemize}
+
+\section{Detailed Results}
+\subsection{Dual Connector Concurrent Remote Start}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+8.1.1 & test\_8\_01\_01\_status\_available & \textcolor{green}{Pass} & 2.009 \\
+8.1.2 & test\_8\_01\_02\_status\_preparing & \textcolor{green}{Pass} & 0.204 \\
+8.1.3 & test\_8\_01\_03\_remote\_start\_1 & \textcolor{green}{Pass} & 0.105 \\
+8.1.4 & test\_8\_01\_04\_remote\_start\_2 & \textcolor{green}{Pass} & 0.102 \\
+8.1.5 & test\_8\_01\_05\_start\_transaction\_1 & \textcolor{green}{Pass} & 0.001 \\
+8.1.6 & test\_8\_01\_06\_status\_charging\_1 & \textcolor{green}{Pass} & 0.103 \\
+8.1.7 & test\_8\_01\_07\_start\_transaction\_2 & \textcolor{green}{Pass} & 0.101 \\
+8.1.8 & test\_8\_01\_08\_status\_charging\_2 & \textcolor{green}{Pass} & 0.001 \\
+8.1.9 & test\_8\_01\_09\_metervalues\_1 & \textcolor{green}{Pass} & 4.930 \\
+8.1.10 & test\_8\_01\_10\_metervalues\_2 & \textcolor{green}{Pass} & 0.209 \\
+8.1.11 & test\_8\_01\_11\_remote\_stop\_1 & \textcolor{green}{Pass} & 0.208 \\
+8.1.12 & test\_8\_01\_12\_stop\_transaction\_1 & \textcolor{green}{Pass} & 0.000 \\
+8.1.13 & test\_8\_01\_13\_status\_finishing\_1 & \textcolor{green}{Pass} & 0.000 \\
+8.1.14 & test\_8\_01\_14\_status\_available\_1 & \textcolor{green}{Pass} & 0.000 \\
+8.1.15 & test\_8\_01\_15\_remote\_stop\_2 & \textcolor{green}{Pass} & 0.210 \\
+8.1.16 & test\_8\_01\_16\_stop\_transaction\_2 & \textcolor{green}{Pass} & 0.001 \\
+8.1.17 & test\_8\_01\_17\_status\_finishing\_2 & \textcolor{green}{Pass} & 0.001 \\
+8.1.18 & test\_8\_01\_18\_status\_available\_2 & \textcolor{green}{Pass} & 0.001 \\
+\bottomrule
+\end{longtable}
+\subsection{Dual Connector Shared Emergency Stop}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+8.2.1 & test\_8\_02\_01\_status\_available & \textcolor{green}{Pass} & 1.003 \\
+8.2.2 & test\_8\_02\_02\_status\_preparing\_1 & \textcolor{green}{Pass} & 0.001 \\
+8.2.3 & test\_8\_02\_03\_remote\_start\_1 & \textcolor{green}{Pass} & 0.001 \\
+8.2.4 & test\_8\_02\_04\_start\_transaction\_1 & \textcolor{green}{Pass} & 0.209 \\
+8.2.5 & test\_8\_02\_05\_status\_charging\_1 & \textcolor{green}{Pass} & 0.103 \\
+8.2.6 & test\_8\_02\_06\_metervalues\_1 & \textcolor{green}{Pass} & 5.027 \\
+8.2.7 & test\_8\_02\_07\_status\_preparing\_2 & \textcolor{green}{Pass} & 0.001 \\
+8.2.8 & test\_8\_02\_08\_remote\_start\_2 & \textcolor{green}{Pass} & 0.001 \\
+8.2.9 & test\_8\_02\_09\_start\_transaction\_2 & \textcolor{green}{Pass} & 0.310 \\
+8.2.10 & test\_8\_02\_10\_status\_charging\_2 & \textcolor{green}{Pass} & 0.102 \\
+8.2.11 & test\_8\_02\_11\_metervalues\_2 & \textcolor{green}{Pass} & 4.618 \\
+8.2.12 & test\_8\_02\_12\_stop\_conn\_1 & \textcolor{green}{Pass} & 0.202 \\
+8.2.13 & test\_8\_02\_13\_stop\_conn\_2 & \textcolor{green}{Pass} & 0.210 \\
+8.2.14 & test\_8\_02\_14\_status\_faulted & \textcolor{green}{Pass} & 0.102 \\
+8.2.15 & test\_8\_02\_15\_status\_faulted\_unplug & \textcolor{green}{Pass} & 0.000 \\
+8.2.16 & test\_8\_02\_16\_status\_available & \textcolor{green}{Pass} & 0.001 \\
+\bottomrule
+\end{longtable}
+\subsection{Dual Connector Power Loss}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+8.3.1 & test\_8\_03\_01\_status\_available & \textcolor{green}{Pass} & 1.001 \\
+8.3.2 & test\_8\_03\_02\_status\_preparing\_1 & \textcolor{green}{Pass} & 0.001 \\
+8.3.3 & test\_8\_03\_03\_remote\_start\_1 & \textcolor{green}{Pass} & 0.000 \\
+8.3.4 & test\_8\_03\_04\_start\_transaction\_1 & \textcolor{green}{Pass} & 0.209 \\
+8.3.5 & test\_8\_03\_05\_status\_charging\_1 & \textcolor{green}{Pass} & 0.104 \\
+8.3.6 & test\_8\_03\_06\_metervalues\_1 & \textcolor{green}{Pass} & 5.042 \\
+8.3.7 & test\_8\_03\_07\_status\_preparing\_2 & \textcolor{green}{Pass} & 0.001 \\
+8.3.8 & test\_8\_03\_08\_remote\_start\_2 & \textcolor{green}{Pass} & 0.000 \\
+8.3.9 & test\_8\_03\_09\_start\_transaction\_2 & \textcolor{green}{Pass} & 0.205 \\
+8.3.10 & test\_8\_03\_10\_status\_charging\_2 & \textcolor{green}{Pass} & 0.106 \\
+8.3.11 & test\_8\_03\_11\_metervalues\_2 & \textcolor{green}{Pass} & 4.732 \\
+8.3.12 & test\_8\_03\_12\_power\_loss\_stop\_1 & \textcolor{green}{Pass} & 0.205 \\
+8.3.13 & test\_8\_03\_13\_power\_loss\_stop\_2 & \textcolor{green}{Pass} & 0.210 \\
+8.3.14 & test\_8\_03\_14\_reboot & \textcolor{green}{Pass} & 0.000 \\
+8.3.15 & test\_8\_03\_15\_status\_preparing\_both & \textcolor{green}{Pass} & 0.000 \\
+8.3.16 & test\_8\_03\_16\_status\_available\_both & \textcolor{green}{Pass} & 0.001 \\
+\bottomrule
+\end{longtable}
+\section{Individual Test Case Logs}\subsection*{test\_8\_01\_01\_status\_available}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"28058fef-c36a-4f66-864a-e88c9a7ec5d5",{"currentTime":"2026-01-11T09:37:15Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"05c15d99-6f9a-4ee5-8575-c1592bf6d9dc",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"c29b3c31-0120-4071-a2f9-c5e755f988b0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"0b18c8a1-3a4f-4323-a8c6-c260e9688517",{"currentTime":"2026-01-11T09:37:15Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:15Z)
+
+--- 8.1.1 Status Available (Unplug) ---
+DEBUG: Found in queue: [EVSE] Connected to CSMS!
+DEBUG: Buffering unmatched: [EVSE] Connected to CSMS!
+DEBUG: Found in queue: [EVSE] Sending BootNotification...
+DEBUG: Buffering unmatched: [EVSE] Sending BootNotification...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"28058fef-c36a-4f66-864a-e88c9a7ec5d5",{"currentTime":"2026-01-11T09:37:15Z","interval":3600,"status":"Accepted"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"28058fef-c36a-4f66-864a-e88c9a7ec5d5",{"currentTime":"2026-01-11T09:37:15Z","interval":3600,"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] BootNotification ACCEPTED
+DEBUG: Buffering unmatched: [EVSE] BootNotification ACCEPTED
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"05c15d99-6f9a-4ee5-8575-c1592bf6d9dc",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"05c15d99-6f9a-4ee5-8575-c1592bf6d9dc",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+\end{lstlisting}
+\subsection*{test\_8\_01\_02\_status\_preparing}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.2 Status Preparing (Plug Both) ---
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c29b3c31-0120-4071-a2f9-c5e755f988b0",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c29b3c31-0120-4071-a2f9-c5e755f988b0",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] Sending Heartbeat...
+DEBUG: Buffering unmatched: [EVSE] Sending Heartbeat...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"0b18c8a1-3a4f-4323-a8c6-c260e9688517",{"currentTime":"2026-01-11T09:37:15Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"0b18c8a1-3a4f-4323-a8c6-c260e9688517",{"currentTime":"2026-01-11T09:37:15Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:15Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:15Z)
+
+[EVSE] RAW RECV: [3,"7dcb693d-0e49-4531-b63e-98118249db44",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"9776288c-bbe9-4886-a322-64d6fdad2ab7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"f7b99c8a-ee0f-4f46-a5bf-536645c893b4",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"7dcb693d-0e49-4531-b63e-98118249db44",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"7dcb693d-0e49-4531-b63e-98118249db44",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"9776288c-bbe9-4886-a322-64d6fdad2ab7",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"9776288c-bbe9-4886-a322-64d6fdad2ab7",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"f7b99c8a-ee0f-4f46-a5bf-536645c893b4",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"f7b99c8a-ee0f-4f46-a5bf-536645c893b4",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+\end{lstlisting}
+\subsection*{test\_8\_01\_03\_remote\_start\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.3 Remote Start Connector 1 ---
+
+[EVSE] RAW RECV: [3,"60bd0b40-a16a-463e-9568-25ca8393293e",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [2, "uuid-rs-1", "RemoteStartTransaction", {"connectorId": 1, "idTag": "RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"10ce8486-d81f-428c-8eca-ba913d572dea",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"60bd0b40-a16a-463e-9568-25ca8393293e",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"60bd0b40-a16a-463e-9568-25ca8393293e",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-rs-1", "RemoteStartTransaction", {"connectorId": 1, "idTag": "RFID_SIM"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-rs-1", "RemoteStartTransaction", {"connectorId": 1, "idTag": "RFID_SIM"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
+\end{lstlisting}
+\subsection*{test\_8\_01\_04\_remote\_start\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.4 Remote Start Connector 2 ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"10ce8486-d81f-428c-8eca-ba913d572dea",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"10ce8486-d81f-428c-8eca-ba913d572dea",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [2, "uuid-rs-2", "RemoteStartTransaction", {"connectorId": 2, "idTag": "RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 2
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"1e2f1cb7-6de0-4a68-9711-f89eefafd4df",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7580}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-rs-2", "RemoteStartTransaction", {"connectorId": 2, "idTag": "RFID_SIM"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-rs-2", "RemoteStartTransaction", {"connectorId": 2, "idTag": "RFID_SIM"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 2
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 2
+}
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
+\end{lstlisting}
+\subsection*{test\_8\_01\_05\_start\_transaction\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.5 Start Transaction Connector 1 ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"1e2f1cb7-6de0-4a68-9711-f89eefafd4df",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7580}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"1e2f1cb7-6de0-4a68-9711-f89eefafd4df",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7580}]
+DEBUG: Found in queue: Transaction started on 1: 7580
+\end{lstlisting}
+\subsection*{test\_8\_01\_06\_status\_charging\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.6 Status Charging Connector 1 ---
+
+[EVSE] RAW RECV: [3,"d98416b3-c5c0-4ac1-99c5-cea8f6ce35f1",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"1339c64c-35c7-4ee4-97b5-2a2c7f8a03e2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"d98416b3-c5c0-4ac1-99c5-cea8f6ce35f1",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"d98416b3-c5c0-4ac1-99c5-cea8f6ce35f1",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"1339c64c-35c7-4ee4-97b5-2a2c7f8a03e2",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"1339c64c-35c7-4ee4-97b5-2a2c7f8a03e2",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_8\_01\_07\_start\_transaction\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.7 Start Transaction Connector 2 ---
+
+[EVSE] RAW RECV: [3,"915769d4-f6c2-48a4-a570-e71430dc26d0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7581}]
+
+[EVSE] RAW RECV: [3,"f90538ee-5b91-4f13-bb4d-31bc38a9134f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"915769d4-f6c2-48a4-a570-e71430dc26d0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7581}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"915769d4-f6c2-48a4-a570-e71430dc26d0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7581}]
+DEBUG: Found in queue: Transaction started on 2: 7581
+\end{lstlisting}
+\subsection*{test\_8\_01\_08\_status\_charging\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.8 Status Charging Connector 2 ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"f90538ee-5b91-4f13-bb4d-31bc38a9134f",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"f90538ee-5b91-4f13-bb4d-31bc38a9134f",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_8\_01\_09\_metervalues\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.9 MeterValues Connector 1 ---
+
+[EVSE] RAW RECV: [3,"abd5ff15-742d-4b1a-a360-283092983c4e",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"abd5ff15-742d-4b1a-a360-283092983c4e",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"abd5ff15-742d-4b1a-a360-283092983c4e",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+\end{lstlisting}
+\subsection*{test\_8\_01\_10\_metervalues\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.10 MeterValues Connector 2 ---
+
+[EVSE] RAW RECV: [3,"694a8e2e-1953-45c3-9f4f-0ea7ecad2359",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"694a8e2e-1953-45c3-9f4f-0ea7ecad2359",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"694a8e2e-1953-45c3-9f4f-0ea7ecad2359",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+\end{lstlisting}
+\subsection*{test\_8\_01\_11\_remote\_stop\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.11 Remote Stop Connector 1 ---
+
+[EVSE] RAW RECV: [3,"33a17563-e38c-4694-8418-9dea9125a62a",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"33a17563-e38c-4694-8418-9dea9125a62a",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"33a17563-e38c-4694-8418-9dea9125a62a",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"9e2559ec-f382-411d-b066-6ef642c4dcc0",{}]
+
+[EVSE] RAW RECV: [3,"d005fec1-4f31-466f-8161-32380535dd6b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"9e2559ec-f382-411d-b066-6ef642c4dcc0",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"9e2559ec-f382-411d-b066-6ef642c4dcc0",{}]
+DEBUG: Found in queue: Transaction stopped on 1: 7580
+\end{lstlisting}
+\subsection*{test\_8\_01\_12\_stop\_transaction\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\end{lstlisting}
+\subsection*{test\_8\_01\_13\_status\_finishing\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.13 Status Finishing 1 ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in BUFFER
+\end{lstlisting}
+\subsection*{test\_8\_01\_14\_status\_available\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.14 Status Available 1 ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
+\end{lstlisting}
+\subsection*{test\_8\_01\_15\_remote\_stop\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.15 Stop Connector 2 ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"d005fec1-4f31-466f-8161-32380535dd6b",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"d005fec1-4f31-466f-8161-32380535dd6b",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"19674344-464c-4aa9-8564-0ce678e9b2f0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"1c91c241-2041-4092-95b5-e5cdbb1d6270",{}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"19674344-464c-4aa9-8564-0ce678e9b2f0",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"19674344-464c-4aa9-8564-0ce678e9b2f0",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"1c91c241-2041-4092-95b5-e5cdbb1d6270",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"1c91c241-2041-4092-95b5-e5cdbb1d6270",{}]
+DEBUG: Found in queue: Transaction stopped on 2: 7581
+\end{lstlisting}
+\subsection*{test\_8\_01\_16\_stop\_transaction\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\end{lstlisting}
+\subsection*{test\_8\_01\_17\_status\_finishing\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in BUFFER
+\end{lstlisting}
+\subsection*{test\_8\_01\_18\_status\_available\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.18 Status Available 2 ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
+\end{lstlisting}
+\subsection*{test\_8\_02\_01\_status\_available}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.1 Status Available ---
+
+[EVSE] RAW RECV: [3,"2a3f6585-e32a-4200-8c8f-a3f089d18688",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"4363ea6c-3b9a-407c-88a8-9ff4bfb7ca31",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"780d5277-8718-4143-b62d-45122819fae9",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+\end{lstlisting}
+\subsection*{test\_8\_02\_02\_status\_preparing\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.2 Status Preparing (Conn 1) ---
+\end{lstlisting}
+\subsection*{test\_8\_02\_03\_remote\_start\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.3 Remote Start (Conn 1) ---
+\end{lstlisting}
+\subsection*{test\_8\_02\_04\_start\_transaction\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.4 Start Transaction (Conn 1) ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2a3f6585-e32a-4200-8c8f-a3f089d18688",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2a3f6585-e32a-4200-8c8f-a3f089d18688",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"4363ea6c-3b9a-407c-88a8-9ff4bfb7ca31",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"4363ea6c-3b9a-407c-88a8-9ff4bfb7ca31",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"780d5277-8718-4143-b62d-45122819fae9",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"780d5277-8718-4143-b62d-45122819fae9",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"5ef1fe9c-25f8-487f-992c-f3e69d50289c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"dabc6b93-3661-4ff2-bd45-dcf4c8a158b6",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"5ef1fe9c-25f8-487f-992c-f3e69d50289c",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"5ef1fe9c-25f8-487f-992c-f3e69d50289c",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"dabc6b93-3661-4ff2-bd45-dcf4c8a158b6",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"dabc6b93-3661-4ff2-bd45-dcf4c8a158b6",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"358c39c0-72ce-4893-997b-027f7ace282f",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7582}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"358c39c0-72ce-4893-997b-027f7ace282f",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7582}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"358c39c0-72ce-4893-997b-027f7ace282f",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7582}]
+DEBUG: Found in queue: Transaction started on 1: 7582
+\end{lstlisting}
+\subsection*{test\_8\_02\_05\_status\_charging\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.5 Status Charging (Conn 1) ---
+
+[EVSE] RAW RECV: [3,"41039c9d-b426-49cf-9a64-116c9dd094fd",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"41039c9d-b426-49cf-9a64-116c9dd094fd",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"41039c9d-b426-49cf-9a64-116c9dd094fd",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_8\_02\_06\_metervalues\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.6 MeterValues (Conn 1) ---
+
+[EVSE] RAW RECV: [3,"a2c96732-3c4d-422c-8cf2-ff1e9ca6a5ef",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"a2c96732-3c4d-422c-8cf2-ff1e9ca6a5ef",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"a2c96732-3c4d-422c-8cf2-ff1e9ca6a5ef",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+\end{lstlisting}
+\subsection*{test\_8\_02\_07\_status\_preparing\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.7 Status Preparing (Conn 2) ---
+\end{lstlisting}
+\subsection*{test\_8\_02\_08\_remote\_start\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.8 Remote Start (Conn 2) ---
+\end{lstlisting}
+\subsection*{test\_8\_02\_09\_start\_transaction\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.9 Start Transaction (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"ef96c25b-17f9-4d44-b0a0-3cae8866e257",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"9da910a1-03b3-4b81-a5d6-86ffc925b4f2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ef96c25b-17f9-4d44-b0a0-3cae8866e257",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ef96c25b-17f9-4d44-b0a0-3cae8866e257",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"9da910a1-03b3-4b81-a5d6-86ffc925b4f2",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"9da910a1-03b3-4b81-a5d6-86ffc925b4f2",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"cb4dca1b-60fa-4d1f-8d5e-b52e27c62f17",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7583}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"cb4dca1b-60fa-4d1f-8d5e-b52e27c62f17",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7583}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"cb4dca1b-60fa-4d1f-8d5e-b52e27c62f17",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7583}]
+DEBUG: Found in queue: Transaction started on 2: 7583
+\end{lstlisting}
+\subsection*{test\_8\_02\_10\_status\_charging\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.10 Status Charging (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"22ab388f-f0a2-4ddd-843a-efa9fc8ac9a8",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"22ab388f-f0a2-4ddd-843a-efa9fc8ac9a8",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"22ab388f-f0a2-4ddd-843a-efa9fc8ac9a8",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_8\_02\_11\_metervalues\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.11 MeterValues (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"67b1edfb-b63d-4369-8b3a-f39146f9e793",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"67b1edfb-b63d-4369-8b3a-f39146f9e793",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"67b1edfb-b63d-4369-8b3a-f39146f9e793",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+\end{lstlisting}
+\subsection*{test\_8\_02\_12\_stop\_conn\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.12 Stop Transaction (Conn 1 - Emergency) ---
+
+[EVSE] RAW RECV: [3,"29daf243-8f70-4789-9683-ff31a1684182",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"29daf243-8f70-4789-9683-ff31a1684182",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"29daf243-8f70-4789-9683-ff31a1684182",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"7a76e9ea-22ed-4db8-8f9d-347831a10798",{}]
+
+[EVSE] RAW RECV: [3,"3566a144-9d0a-4def-9362-6b7bf74ac1aa",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"7a76e9ea-22ed-4db8-8f9d-347831a10798",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"7a76e9ea-22ed-4db8-8f9d-347831a10798",{}]
+DEBUG: Found in queue: Transaction stopped on 1: 7582
+\end{lstlisting}
+\subsection*{test\_8\_02\_13\_stop\_conn\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.13 Stop Transaction (Conn 2 - Emergency) ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"3566a144-9d0a-4def-9362-6b7bf74ac1aa",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"3566a144-9d0a-4def-9362-6b7bf74ac1aa",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e985f991-61b9-4114-bee7-9dfbed4fe532",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"e985f991-61b9-4114-bee7-9dfbed4fe532",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"e985f991-61b9-4114-bee7-9dfbed4fe532",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"05565c0e-7abc-4614-ba85-114a4543b546",{}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"05565c0e-7abc-4614-ba85-114a4543b546",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"05565c0e-7abc-4614-ba85-114a4543b546",{}]
+DEBUG: Found in queue: Transaction stopped on 2: 7583
+\end{lstlisting}
+\subsection*{test\_8\_02\_14\_status\_faulted}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.14 Status Faulted (Shared) ---
+
+[EVSE] RAW RECV: [3,"2c80fc98-8271-4a37-99ab-e0729bb30d03",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e38a25d4-6e41-4f01-8f7e-fcb0c2e3d59b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+
+[EVSE] RAW RECV: [3,"d5dd1d0c-0139-4a74-882a-6067acf73335",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2c80fc98-8271-4a37-99ab-e0729bb30d03",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2c80fc98-8271-4a37-99ab-e0729bb30d03",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"e38a25d4-6e41-4f01-8f7e-fcb0c2e3d59b",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"e38a25d4-6e41-4f01-8f7e-fcb0c2e3d59b",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+\end{lstlisting}
+\subsection*{test\_8\_02\_15\_status\_faulted\_unplug}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.15 Status Faulted (Unplug) ---
+\end{lstlisting}
+\subsection*{test\_8\_02\_16\_status\_available}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.16 Status Available (Release) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
+\end{lstlisting}
+\subsection*{test\_8\_03\_01\_status\_available}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.1 Status Available ---
+
+[EVSE] RAW RECV: [3,"bd7bb048-21cc-4925-bd7e-c38a0b119b1c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e7136b08-a5af-4f7c-ba58-4cd9a25a35bd",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"3c88c346-d714-4b46-a741-3633437f19e2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"55d82d9a-cf28-45d9-9bd7-aa8d855f645a",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+\end{lstlisting}
+\subsection*{test\_8\_03\_02\_status\_preparing\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.2 Status Preparing (Conn 1) ---
+\end{lstlisting}
+\subsection*{test\_8\_03\_03\_remote\_start\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\end{lstlisting}
+\subsection*{test\_8\_03\_04\_start\_transaction\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.4 Start Transaction (Conn 1) ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"d5dd1d0c-0139-4a74-882a-6067acf73335",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"d5dd1d0c-0139-4a74-882a-6067acf73335",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"bd7bb048-21cc-4925-bd7e-c38a0b119b1c",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"bd7bb048-21cc-4925-bd7e-c38a0b119b1c",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"e7136b08-a5af-4f7c-ba58-4cd9a25a35bd",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"e7136b08-a5af-4f7c-ba58-4cd9a25a35bd",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"3c88c346-d714-4b46-a741-3633437f19e2",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"3c88c346-d714-4b46-a741-3633437f19e2",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"55d82d9a-cf28-45d9-9bd7-aa8d855f645a",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"55d82d9a-cf28-45d9-9bd7-aa8d855f645a",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"8e6bd5e3-942f-4ddc-9c9a-c120163f8b70",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"8e6bd5e3-942f-4ddc-9c9a-c120163f8b70",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"8e6bd5e3-942f-4ddc-9c9a-c120163f8b70",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"3d336f5c-4153-4184-93d1-4ef7d87ad631",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"6beebd81-0f5e-4508-bb15-5e6e47a39e4c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7584}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"3d336f5c-4153-4184-93d1-4ef7d87ad631",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"3d336f5c-4153-4184-93d1-4ef7d87ad631",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"6beebd81-0f5e-4508-bb15-5e6e47a39e4c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7584}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"6beebd81-0f5e-4508-bb15-5e6e47a39e4c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7584}]
+DEBUG: Found in queue: Transaction started on 1: 7584
+\end{lstlisting}
+\subsection*{test\_8\_03\_05\_status\_charging\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.5 Status Charging (Conn 1) ---
+
+[EVSE] RAW RECV: [3,"be3859a3-0007-46ed-9aba-1f686af3303e",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"be3859a3-0007-46ed-9aba-1f686af3303e",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"be3859a3-0007-46ed-9aba-1f686af3303e",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_8\_03\_06\_metervalues\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"7f43cc36-182d-4b27-bbfe-d6db64c27e15",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"7f43cc36-182d-4b27-bbfe-d6db64c27e15",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"7f43cc36-182d-4b27-bbfe-d6db64c27e15",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+\end{lstlisting}
+\subsection*{test\_8\_03\_07\_status\_preparing\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.7 Status Preparing (Conn 2) ---
+\end{lstlisting}
+\subsection*{test\_8\_03\_08\_remote\_start\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\end{lstlisting}
+\subsection*{test\_8\_03\_09\_start\_transaction\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.9 Start Transaction (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"6110db44-3683-4db5-93ed-a80729e60068",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"6110db44-3683-4db5-93ed-a80729e60068",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"6110db44-3683-4db5-93ed-a80729e60068",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"304fbc72-3f3b-4570-b580-7fae7987813f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"af54a30d-5070-41a8-a387-c5d912d3dfd1",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7585}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"304fbc72-3f3b-4570-b580-7fae7987813f",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"304fbc72-3f3b-4570-b580-7fae7987813f",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"af54a30d-5070-41a8-a387-c5d912d3dfd1",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7585}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"af54a30d-5070-41a8-a387-c5d912d3dfd1",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7585}]
+DEBUG: Found in queue: Transaction started on 2: 7585
+\end{lstlisting}
+\subsection*{test\_8\_03\_10\_status\_charging\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.10 Status Charging (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"ed8ed167-1928-4713-9353-6f00cbbb7094",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ed8ed167-1928-4713-9353-6f00cbbb7094",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ed8ed167-1928-4713-9353-6f00cbbb7094",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+\end{lstlisting}
+\subsection*{test\_8\_03\_11\_metervalues\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"ad07a2c9-c06b-4b57-81c6-3e4b55732b8b",{"currentTime":"2026-01-11T09:37:45Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:45Z)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ad07a2c9-c06b-4b57-81c6-3e4b55732b8b",{"currentTime":"2026-01-11T09:37:45Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ad07a2c9-c06b-4b57-81c6-3e4b55732b8b",{"currentTime":"2026-01-11T09:37:45Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:45Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:45Z)
+
+[EVSE] RAW RECV: [3,"04bedf70-c216-43e0-a6a9-11eb16b79e4a",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"04bedf70-c216-43e0-a6a9-11eb16b79e4a",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"04bedf70-c216-43e0-a6a9-11eb16b79e4a",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+\end{lstlisting}
+\subsection*{test\_8\_03\_12\_power\_loss\_stop\_1}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.12 Stop Transaction (Conn 1 - PowerLoss) ---
+
+[EVSE] RAW RECV: [3,"79d533c4-35bb-45f9-8232-0391532a5ac2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"79d533c4-35bb-45f9-8232-0391532a5ac2",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"79d533c4-35bb-45f9-8232-0391532a5ac2",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"df923b2c-a0e8-4be9-ac43-0df9893f2fa4",{}]
+
+[EVSE] RAW RECV: [3,"c6ac99bb-8eeb-4413-8f26-08b0f61a989f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"df923b2c-a0e8-4be9-ac43-0df9893f2fa4",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"df923b2c-a0e8-4be9-ac43-0df9893f2fa4",{}]
+DEBUG: Found in queue: Transaction stopped on 1: 7584
+\end{lstlisting}
+\subsection*{test\_8\_03\_13\_power\_loss\_stop\_2}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.13 Stop Transaction (Conn 2 - PowerLoss) ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c6ac99bb-8eeb-4413-8f26-08b0f61a989f",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c6ac99bb-8eeb-4413-8f26-08b0f61a989f",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"f4e01e96-fde4-461f-93f2-260ddfd8d685",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"f4e01e96-fde4-461f-93f2-260ddfd8d685",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"f4e01e96-fde4-461f-93f2-260ddfd8d685",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Buffering unmatched: [EVSE] MeterValues ACKNOWLEDGED
+
+[EVSE] RAW RECV: [3,"e1e9ff79-63af-4bc4-8b6f-bac1c6cc3a16",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"c8cd0857-985d-44ff-a6cb-cd5dd20eafc3",{}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"e1e9ff79-63af-4bc4-8b6f-bac1c6cc3a16",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"e1e9ff79-63af-4bc4-8b6f-bac1c6cc3a16",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c8cd0857-985d-44ff-a6cb-cd5dd20eafc3",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c8cd0857-985d-44ff-a6cb-cd5dd20eafc3",{}]
+DEBUG: Found in queue: Transaction stopped on 2: 7585
+\end{lstlisting}
+\subsection*{test\_8\_03\_14\_reboot}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.14 Recovery (Boot) ---
+DEBUG: Found 'BootNotification ACCEPTED' in BUFFER
+\end{lstlisting}
+\subsection*{test\_8\_03\_15\_status\_preparing\_both}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.15 Restore Status (Preparing) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Preparing)' in BUFFER
+\end{lstlisting}
+\subsection*{test\_8\_03\_16\_status\_available\_both}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.16 Restore Status (Available) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
+\end{lstlisting}
+
+\section{Global Execution Log}
+\begin{lstlisting}
+--- Test Case: test_8_01_01_status_available ---
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"28058fef-c36a-4f66-864a-e88c9a7ec5d5",{"currentTime":"2026-01-11T09:37:15Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"05c15d99-6f9a-4ee5-8575-c1592bf6d9dc",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"c29b3c31-0120-4071-a2f9-c5e755f988b0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"0b18c8a1-3a4f-4323-a8c6-c260e9688517",{"currentTime":"2026-01-11T09:37:15Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:15Z)
+
+--- 8.1.1 Status Available (Unplug) ---
+DEBUG: Found in queue: [EVSE] Connected to CSMS!
+DEBUG: Buffering unmatched: [EVSE] Connected to CSMS!
+DEBUG: Found in queue: [EVSE] Sending BootNotification...
+DEBUG: Buffering unmatched: [EVSE] Sending BootNotification...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"28058fef-c36a-4f66-864a-e88c9a7ec5d5",{"currentTime":"2026-01-11T09:37:15Z","interval":3600,"status":"Accepted"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"28058fef-c36a-4f66-864a-e88c9a7ec5d5",{"currentTime":"2026-01-11T09:37:15Z","interval":3600,"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] BootNotification ACCEPTED
+DEBUG: Buffering unmatched: [EVSE] BootNotification ACCEPTED
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"05c15d99-6f9a-4ee5-8575-c1592bf6d9dc",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"05c15d99-6f9a-4ee5-8575-c1592bf6d9dc",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+--- Test Case: test_8_01_02_status_preparing ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.2 Status Preparing (Plug Both) ---
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c29b3c31-0120-4071-a2f9-c5e755f988b0",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c29b3c31-0120-4071-a2f9-c5e755f988b0",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] Sending Heartbeat...
+DEBUG: Buffering unmatched: [EVSE] Sending Heartbeat...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"0b18c8a1-3a4f-4323-a8c6-c260e9688517",{"currentTime":"2026-01-11T09:37:15Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"0b18c8a1-3a4f-4323-a8c6-c260e9688517",{"currentTime":"2026-01-11T09:37:15Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:15Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:15Z)
+
+[EVSE] RAW RECV: [3,"7dcb693d-0e49-4531-b63e-98118249db44",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"9776288c-bbe9-4886-a322-64d6fdad2ab7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"f7b99c8a-ee0f-4f46-a5bf-536645c893b4",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"7dcb693d-0e49-4531-b63e-98118249db44",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"7dcb693d-0e49-4531-b63e-98118249db44",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"9776288c-bbe9-4886-a322-64d6fdad2ab7",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"9776288c-bbe9-4886-a322-64d6fdad2ab7",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"f7b99c8a-ee0f-4f46-a5bf-536645c893b4",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"f7b99c8a-ee0f-4f46-a5bf-536645c893b4",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+--- Test Case: test_8_01_03_remote_start_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.3 Remote Start Connector 1 ---
+
+[EVSE] RAW RECV: [3,"60bd0b40-a16a-463e-9568-25ca8393293e",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [2, "uuid-rs-1", "RemoteStartTransaction", {"connectorId": 1, "idTag": "RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"10ce8486-d81f-428c-8eca-ba913d572dea",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"60bd0b40-a16a-463e-9568-25ca8393293e",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"60bd0b40-a16a-463e-9568-25ca8393293e",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-rs-1", "RemoteStartTransaction", {"connectorId": 1, "idTag": "RFID_SIM"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-rs-1", "RemoteStartTransaction", {"connectorId": 1, "idTag": "RFID_SIM"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+--- Test Case: test_8_01_04_remote_start_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.4 Remote Start Connector 2 ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"10ce8486-d81f-428c-8eca-ba913d572dea",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"10ce8486-d81f-428c-8eca-ba913d572dea",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [2, "uuid-rs-2", "RemoteStartTransaction", {"connectorId": 2, "idTag": "RFID_SIM"}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 2
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"1e2f1cb7-6de0-4a68-9711-f89eefafd4df",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7580}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-rs-2", "RemoteStartTransaction", {"connectorId": 2, "idTag": "RFID_SIM"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-rs-2", "RemoteStartTransaction", {"connectorId": 2, "idTag": "RFID_SIM"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 2
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 2
+}
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+--- Test Case: test_8_01_05_start_transaction_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.5 Start Transaction Connector 1 ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"1e2f1cb7-6de0-4a68-9711-f89eefafd4df",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7580}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"1e2f1cb7-6de0-4a68-9711-f89eefafd4df",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7580}]
+DEBUG: Found in queue: Transaction started on 1: 7580
+
+--- Test Case: test_8_01_06_status_charging_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.6 Status Charging Connector 1 ---
+
+[EVSE] RAW RECV: [3,"d98416b3-c5c0-4ac1-99c5-cea8f6ce35f1",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"1339c64c-35c7-4ee4-97b5-2a2c7f8a03e2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"d98416b3-c5c0-4ac1-99c5-cea8f6ce35f1",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"d98416b3-c5c0-4ac1-99c5-cea8f6ce35f1",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"1339c64c-35c7-4ee4-97b5-2a2c7f8a03e2",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"1339c64c-35c7-4ee4-97b5-2a2c7f8a03e2",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+--- Test Case: test_8_01_07_start_transaction_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.7 Start Transaction Connector 2 ---
+
+[EVSE] RAW RECV: [3,"915769d4-f6c2-48a4-a570-e71430dc26d0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7581}]
+
+[EVSE] RAW RECV: [3,"f90538ee-5b91-4f13-bb4d-31bc38a9134f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"915769d4-f6c2-48a4-a570-e71430dc26d0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7581}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"915769d4-f6c2-48a4-a570-e71430dc26d0",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7581}]
+DEBUG: Found in queue: Transaction started on 2: 7581
+
+--- Test Case: test_8_01_08_status_charging_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.8 Status Charging Connector 2 ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"f90538ee-5b91-4f13-bb4d-31bc38a9134f",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"f90538ee-5b91-4f13-bb4d-31bc38a9134f",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+--- Test Case: test_8_01_09_metervalues_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.9 MeterValues Connector 1 ---
+
+[EVSE] RAW RECV: [3,"abd5ff15-742d-4b1a-a360-283092983c4e",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"abd5ff15-742d-4b1a-a360-283092983c4e",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"abd5ff15-742d-4b1a-a360-283092983c4e",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+
+--- Test Case: test_8_01_10_metervalues_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.10 MeterValues Connector 2 ---
+
+[EVSE] RAW RECV: [3,"694a8e2e-1953-45c3-9f4f-0ea7ecad2359",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"694a8e2e-1953-45c3-9f4f-0ea7ecad2359",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"694a8e2e-1953-45c3-9f4f-0ea7ecad2359",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+
+--- Test Case: test_8_01_11_remote_stop_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.11 Remote Stop Connector 1 ---
+
+[EVSE] RAW RECV: [3,"33a17563-e38c-4694-8418-9dea9125a62a",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"33a17563-e38c-4694-8418-9dea9125a62a",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"33a17563-e38c-4694-8418-9dea9125a62a",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"9e2559ec-f382-411d-b066-6ef642c4dcc0",{}]
+
+[EVSE] RAW RECV: [3,"d005fec1-4f31-466f-8161-32380535dd6b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"9e2559ec-f382-411d-b066-6ef642c4dcc0",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"9e2559ec-f382-411d-b066-6ef642c4dcc0",{}]
+DEBUG: Found in queue: Transaction stopped on 1: 7580
+
+--- Test Case: test_8_01_12_stop_transaction_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- Test Case: test_8_01_13_status_finishing_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.13 Status Finishing 1 ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in BUFFER
+
+--- Test Case: test_8_01_14_status_available_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.14 Status Available 1 ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
+
+--- Test Case: test_8_01_15_remote_stop_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.15 Stop Connector 2 ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"d005fec1-4f31-466f-8161-32380535dd6b",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"d005fec1-4f31-466f-8161-32380535dd6b",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"19674344-464c-4aa9-8564-0ce678e9b2f0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"1c91c241-2041-4092-95b5-e5cdbb1d6270",{}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"19674344-464c-4aa9-8564-0ce678e9b2f0",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"19674344-464c-4aa9-8564-0ce678e9b2f0",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"1c91c241-2041-4092-95b5-e5cdbb1d6270",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"1c91c241-2041-4092-95b5-e5cdbb1d6270",{}]
+DEBUG: Found in queue: Transaction stopped on 2: 7581
+
+--- Test Case: test_8_01_16_stop_transaction_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- Test Case: test_8_01_17_status_finishing_2 ---
+--------------------------------- Captured Out ---------------------------------
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Finishing)' in BUFFER
+
+--- Test Case: test_8_01_18_status_available_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.1.18 Status Available 2 ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
+
+--- Test Case: test_8_02_01_status_available ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.1 Status Available ---
+
+[EVSE] RAW RECV: [3,"2a3f6585-e32a-4200-8c8f-a3f089d18688",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"4363ea6c-3b9a-407c-88a8-9ff4bfb7ca31",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"780d5277-8718-4143-b62d-45122819fae9",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+--- Test Case: test_8_02_02_status_preparing_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.2 Status Preparing (Conn 1) ---
+
+--- Test Case: test_8_02_03_remote_start_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.3 Remote Start (Conn 1) ---
+
+--- Test Case: test_8_02_04_start_transaction_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.4 Start Transaction (Conn 1) ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2a3f6585-e32a-4200-8c8f-a3f089d18688",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2a3f6585-e32a-4200-8c8f-a3f089d18688",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"4363ea6c-3b9a-407c-88a8-9ff4bfb7ca31",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"4363ea6c-3b9a-407c-88a8-9ff4bfb7ca31",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"780d5277-8718-4143-b62d-45122819fae9",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"780d5277-8718-4143-b62d-45122819fae9",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"5ef1fe9c-25f8-487f-992c-f3e69d50289c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"dabc6b93-3661-4ff2-bd45-dcf4c8a158b6",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"5ef1fe9c-25f8-487f-992c-f3e69d50289c",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"5ef1fe9c-25f8-487f-992c-f3e69d50289c",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"dabc6b93-3661-4ff2-bd45-dcf4c8a158b6",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"dabc6b93-3661-4ff2-bd45-dcf4c8a158b6",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"358c39c0-72ce-4893-997b-027f7ace282f",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7582}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"358c39c0-72ce-4893-997b-027f7ace282f",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7582}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"358c39c0-72ce-4893-997b-027f7ace282f",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7582}]
+DEBUG: Found in queue: Transaction started on 1: 7582
+
+--- Test Case: test_8_02_05_status_charging_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.5 Status Charging (Conn 1) ---
+
+[EVSE] RAW RECV: [3,"41039c9d-b426-49cf-9a64-116c9dd094fd",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"41039c9d-b426-49cf-9a64-116c9dd094fd",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"41039c9d-b426-49cf-9a64-116c9dd094fd",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+--- Test Case: test_8_02_06_metervalues_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.6 MeterValues (Conn 1) ---
+
+[EVSE] RAW RECV: [3,"a2c96732-3c4d-422c-8cf2-ff1e9ca6a5ef",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"a2c96732-3c4d-422c-8cf2-ff1e9ca6a5ef",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"a2c96732-3c4d-422c-8cf2-ff1e9ca6a5ef",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+
+--- Test Case: test_8_02_07_status_preparing_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.7 Status Preparing (Conn 2) ---
+
+--- Test Case: test_8_02_08_remote_start_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.8 Remote Start (Conn 2) ---
+
+--- Test Case: test_8_02_09_start_transaction_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.9 Start Transaction (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"ef96c25b-17f9-4d44-b0a0-3cae8866e257",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"9da910a1-03b3-4b81-a5d6-86ffc925b4f2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ef96c25b-17f9-4d44-b0a0-3cae8866e257",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ef96c25b-17f9-4d44-b0a0-3cae8866e257",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"9da910a1-03b3-4b81-a5d6-86ffc925b4f2",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"9da910a1-03b3-4b81-a5d6-86ffc925b4f2",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"cb4dca1b-60fa-4d1f-8d5e-b52e27c62f17",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7583}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"cb4dca1b-60fa-4d1f-8d5e-b52e27c62f17",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7583}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"cb4dca1b-60fa-4d1f-8d5e-b52e27c62f17",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7583}]
+DEBUG: Found in queue: Transaction started on 2: 7583
+
+--- Test Case: test_8_02_10_status_charging_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.10 Status Charging (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"22ab388f-f0a2-4ddd-843a-efa9fc8ac9a8",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"22ab388f-f0a2-4ddd-843a-efa9fc8ac9a8",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"22ab388f-f0a2-4ddd-843a-efa9fc8ac9a8",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+--- Test Case: test_8_02_11_metervalues_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.11 MeterValues (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"67b1edfb-b63d-4369-8b3a-f39146f9e793",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"67b1edfb-b63d-4369-8b3a-f39146f9e793",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"67b1edfb-b63d-4369-8b3a-f39146f9e793",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+
+--- Test Case: test_8_02_12_stop_conn_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.12 Stop Transaction (Conn 1 - Emergency) ---
+
+[EVSE] RAW RECV: [3,"29daf243-8f70-4789-9683-ff31a1684182",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"29daf243-8f70-4789-9683-ff31a1684182",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"29daf243-8f70-4789-9683-ff31a1684182",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"7a76e9ea-22ed-4db8-8f9d-347831a10798",{}]
+
+[EVSE] RAW RECV: [3,"3566a144-9d0a-4def-9362-6b7bf74ac1aa",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"7a76e9ea-22ed-4db8-8f9d-347831a10798",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"7a76e9ea-22ed-4db8-8f9d-347831a10798",{}]
+DEBUG: Found in queue: Transaction stopped on 1: 7582
+
+--- Test Case: test_8_02_13_stop_conn_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.13 Stop Transaction (Conn 2 - Emergency) ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"3566a144-9d0a-4def-9362-6b7bf74ac1aa",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"3566a144-9d0a-4def-9362-6b7bf74ac1aa",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e985f991-61b9-4114-bee7-9dfbed4fe532",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"e985f991-61b9-4114-bee7-9dfbed4fe532",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"e985f991-61b9-4114-bee7-9dfbed4fe532",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"05565c0e-7abc-4614-ba85-114a4543b546",{}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"05565c0e-7abc-4614-ba85-114a4543b546",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"05565c0e-7abc-4614-ba85-114a4543b546",{}]
+DEBUG: Found in queue: Transaction stopped on 2: 7583
+
+--- Test Case: test_8_02_14_status_faulted ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.14 Status Faulted (Shared) ---
+
+[EVSE] RAW RECV: [3,"2c80fc98-8271-4a37-99ab-e0729bb30d03",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e38a25d4-6e41-4f01-8f7e-fcb0c2e3d59b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+
+[EVSE] RAW RECV: [3,"d5dd1d0c-0139-4a74-882a-6067acf73335",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2c80fc98-8271-4a37-99ab-e0729bb30d03",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2c80fc98-8271-4a37-99ab-e0729bb30d03",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"e38a25d4-6e41-4f01-8f7e-fcb0c2e3d59b",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"e38a25d4-6e41-4f01-8f7e-fcb0c2e3d59b",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+
+--- Test Case: test_8_02_15_status_faulted_unplug ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.15 Status Faulted (Unplug) ---
+
+--- Test Case: test_8_02_16_status_available ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.2.16 Status Available (Release) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
+
+--- Test Case: test_8_03_01_status_available ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.1 Status Available ---
+
+[EVSE] RAW RECV: [3,"bd7bb048-21cc-4925-bd7e-c38a0b119b1c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e7136b08-a5af-4f7c-ba58-4cd9a25a35bd",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"3c88c346-d714-4b46-a741-3633437f19e2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"55d82d9a-cf28-45d9-9bd7-aa8d855f645a",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+--- Test Case: test_8_03_02_status_preparing_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.2 Status Preparing (Conn 1) ---
+
+--- Test Case: test_8_03_03_remote_start_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- Test Case: test_8_03_04_start_transaction_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.4 Start Transaction (Conn 1) ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"d5dd1d0c-0139-4a74-882a-6067acf73335",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"d5dd1d0c-0139-4a74-882a-6067acf73335",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Faulted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"bd7bb048-21cc-4925-bd7e-c38a0b119b1c",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"bd7bb048-21cc-4925-bd7e-c38a0b119b1c",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"e7136b08-a5af-4f7c-ba58-4cd9a25a35bd",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"e7136b08-a5af-4f7c-ba58-4cd9a25a35bd",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"3c88c346-d714-4b46-a741-3633437f19e2",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"3c88c346-d714-4b46-a741-3633437f19e2",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"55d82d9a-cf28-45d9-9bd7-aa8d855f645a",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"55d82d9a-cf28-45d9-9bd7-aa8d855f645a",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"8e6bd5e3-942f-4ddc-9c9a-c120163f8b70",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"8e6bd5e3-942f-4ddc-9c9a-c120163f8b70",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"8e6bd5e3-942f-4ddc-9c9a-c120163f8b70",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"3d336f5c-4153-4184-93d1-4ef7d87ad631",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"6beebd81-0f5e-4508-bb15-5e6e47a39e4c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7584}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"3d336f5c-4153-4184-93d1-4ef7d87ad631",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"3d336f5c-4153-4184-93d1-4ef7d87ad631",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"6beebd81-0f5e-4508-bb15-5e6e47a39e4c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7584}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"6beebd81-0f5e-4508-bb15-5e6e47a39e4c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7584}]
+DEBUG: Found in queue: Transaction started on 1: 7584
+
+--- Test Case: test_8_03_05_status_charging_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.5 Status Charging (Conn 1) ---
+
+[EVSE] RAW RECV: [3,"be3859a3-0007-46ed-9aba-1f686af3303e",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"be3859a3-0007-46ed-9aba-1f686af3303e",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"be3859a3-0007-46ed-9aba-1f686af3303e",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+--- Test Case: test_8_03_06_metervalues_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"7f43cc36-182d-4b27-bbfe-d6db64c27e15",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"7f43cc36-182d-4b27-bbfe-d6db64c27e15",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"7f43cc36-182d-4b27-bbfe-d6db64c27e15",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+
+--- Test Case: test_8_03_07_status_preparing_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.7 Status Preparing (Conn 2) ---
+
+--- Test Case: test_8_03_08_remote_start_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- Test Case: test_8_03_09_start_transaction_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.9 Start Transaction (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"6110db44-3683-4db5-93ed-a80729e60068",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"6110db44-3683-4db5-93ed-a80729e60068",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"6110db44-3683-4db5-93ed-a80729e60068",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"304fbc72-3f3b-4570-b580-7fae7987813f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [3,"af54a30d-5070-41a8-a387-c5d912d3dfd1",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7585}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"304fbc72-3f3b-4570-b580-7fae7987813f",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"304fbc72-3f3b-4570-b580-7fae7987813f",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"af54a30d-5070-41a8-a387-c5d912d3dfd1",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7585}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"af54a30d-5070-41a8-a387-c5d912d3dfd1",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7585}]
+DEBUG: Found in queue: Transaction started on 2: 7585
+
+--- Test Case: test_8_03_10_status_charging_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.10 Status Charging (Conn 2) ---
+
+[EVSE] RAW RECV: [3,"ed8ed167-1928-4713-9353-6f00cbbb7094",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ed8ed167-1928-4713-9353-6f00cbbb7094",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ed8ed167-1928-4713-9353-6f00cbbb7094",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+--- Test Case: test_8_03_11_metervalues_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"ad07a2c9-c06b-4b57-81c6-3e4b55732b8b",{"currentTime":"2026-01-11T09:37:45Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:45Z)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ad07a2c9-c06b-4b57-81c6-3e4b55732b8b",{"currentTime":"2026-01-11T09:37:45Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ad07a2c9-c06b-4b57-81c6-3e4b55732b8b",{"currentTime":"2026-01-11T09:37:45Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:45Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:37:45Z)
+
+[EVSE] RAW RECV: [3,"04bedf70-c216-43e0-a6a9-11eb16b79e4a",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"04bedf70-c216-43e0-a6a9-11eb16b79e4a",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"04bedf70-c216-43e0-a6a9-11eb16b79e4a",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+
+--- Test Case: test_8_03_12_power_loss_stop_1 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.12 Stop Transaction (Conn 1 - PowerLoss) ---
+
+[EVSE] RAW RECV: [3,"79d533c4-35bb-45f9-8232-0391532a5ac2",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"79d533c4-35bb-45f9-8232-0391532a5ac2",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"79d533c4-35bb-45f9-8232-0391532a5ac2",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"df923b2c-a0e8-4be9-ac43-0df9893f2fa4",{}]
+
+[EVSE] RAW RECV: [3,"c6ac99bb-8eeb-4413-8f26-08b0f61a989f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"df923b2c-a0e8-4be9-ac43-0df9893f2fa4",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"df923b2c-a0e8-4be9-ac43-0df9893f2fa4",{}]
+DEBUG: Found in queue: Transaction stopped on 1: 7584
+
+--- Test Case: test_8_03_13_power_loss_stop_2 ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.13 Stop Transaction (Conn 2 - PowerLoss) ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c6ac99bb-8eeb-4413-8f26-08b0f61a989f",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c6ac99bb-8eeb-4413-8f26-08b0f61a989f",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"f4e01e96-fde4-461f-93f2-260ddfd8d685",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"f4e01e96-fde4-461f-93f2-260ddfd8d685",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"f4e01e96-fde4-461f-93f2-260ddfd8d685",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Buffering unmatched: [EVSE] MeterValues ACKNOWLEDGED
+
+[EVSE] RAW RECV: [3,"e1e9ff79-63af-4bc4-8b6f-bac1c6cc3a16",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"c8cd0857-985d-44ff-a6cb-cd5dd20eafc3",{}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"e1e9ff79-63af-4bc4-8b6f-bac1c6cc3a16",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"e1e9ff79-63af-4bc4-8b6f-bac1c6cc3a16",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c8cd0857-985d-44ff-a6cb-cd5dd20eafc3",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c8cd0857-985d-44ff-a6cb-cd5dd20eafc3",{}]
+DEBUG: Found in queue: Transaction stopped on 2: 7585
+
+--- Test Case: test_8_03_14_reboot ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.14 Recovery (Boot) ---
+DEBUG: Found 'BootNotification ACCEPTED' in BUFFER
+
+--- Test Case: test_8_03_15_status_preparing_both ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.15 Restore Status (Preparing) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Preparing)' in BUFFER
+
+--- Test Case: test_8_03_16_status_available_both ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 8.3.16 Restore Status (Available) ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Available)' in BUFFER
+
+\end{lstlisting}
+
+\end{document}

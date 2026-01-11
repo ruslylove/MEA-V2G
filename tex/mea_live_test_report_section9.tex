@@ -1,0 +1,280 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{pdfpages} % Added for including external PDFs
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    showstringspaces=false
+}
+
+\title{MEA OCPP Live Test}
+\author{Automated Test Suite}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary}
+\begin{itemize}
+    \item \textbf{Total Tests:} 6
+    \item \textbf{Passed:} 6
+    \item \textbf{Failed:} 0
+    \item \textbf{Errors:} 0
+    \item \textbf{Skipped:} 0
+    \item \textbf{Total Duration:} 2.678 seconds
+\end{itemize}
+
+\section{Detailed Results}
+\subsection{MEA Specific Configuration}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+9.1 & test\_9\_01\_meav2g\_config & \textcolor{green}{Pass} & 0.104 \\
+\bottomrule
+\end{longtable}
+\subsection{Meter Value Sample Interval}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+9.2 & test\_9\_02\_meter\_sample & \textcolor{green}{Pass} & 0.106 \\
+\bottomrule
+\end{longtable}
+\subsection{Local Authorize Offline}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+9.3 & test\_9\_03\_local\_auth & \textcolor{green}{Pass} & 0.103 \\
+\bottomrule
+\end{longtable}
+\subsection{Power Demand Verification}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+9.4.1 & test\_9\_04\_01\_power\_neg5k & \textcolor{green}{Pass} & 0.104 \\
+9.4.2 & test\_9\_04\_02\_power\_2k & \textcolor{green}{Pass} & 0.104 \\
+9.4.3 & test\_9\_04\_03\_power\_0 & \textcolor{green}{Pass} & 0.107 \\
+\bottomrule
+\end{longtable}
+\section{Individual Test Case Logs}\subsection*{test\_9\_01\_meav2g\_config}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration MEAV2G=true ---
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] Sending Heartbeat...
+DEBUG: Buffering unmatched: [EVSE] Sending Heartbeat...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
+
+[EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+\end{lstlisting}
+\subsection*{test\_9\_02\_meter\_sample}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration MeterValueSampleInterval=10 ---
+
+[EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+\end{lstlisting}
+\subsection*{test\_9\_03\_local\_auth}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration LocalAuthorizeOffline=false ---
+
+[EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+\end{lstlisting}
+\subsection*{test\_9\_04\_01\_power\_neg5k}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration Power.Active.Import=-5000 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+\end{lstlisting}
+\subsection*{test\_9\_04\_02\_power\_2k}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration Power.Active.Import=2000 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+\end{lstlisting}
+\subsection*{test\_9\_04\_03\_power\_0}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration Power.Active.Import=0 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+\end{lstlisting}
+
+\section{Global Execution Log}
+\begin{lstlisting}
+============================= test session starts ==============================
+platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/rus/development/MEA-V2G
+collected 7 items
+
+tests/api/test_mea_section9.py .......                                   [100%]
+
+- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section9.xml -
+============================== 7 passed in 2.68s ===============================
+\end{lstlisting}
+
+\end{document}

@@ -1,0 +1,284 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{pdfpages} % Added for including external PDFs
+\geometry{a4paper, margin=1in}
+
+\lstset{
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    showstringspaces=false
+}
+
+\title{MEA OCPP Live Test}
+\author{Automated Test Suite}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary}
+\begin{itemize}
+    \item \textbf{Total Tests:} 2
+    \item \textbf{Passed:} 2
+    \item \textbf{Failed:} 0
+    \item \textbf{Errors:} 0
+    \item \textbf{Skipped:} 0
+    \item \textbf{Total Duration:} 43.018 seconds
+\end{itemize}
+
+\section{Detailed Results}
+\subsection{Performance Verification}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+11.1 & test\_11\_01\_reconnect\_time & \textcolor{green}{Pass} & 2.007 \\
+11.2 & test\_11\_02\_average\_performance & \textcolor{green}{Pass} & 40.942 \\
+\bottomrule
+\end{longtable}
+\section{Individual Test Case Logs}\subsection*{test\_11\_01\_reconnect\_time}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"41696f35-0306-491d-a92e-42800ce366e7",{"currentTime":"2026-01-11T09:02:04Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"6801c1fa-0cdc-47c0-a20e-5d7179090ad0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"998d0e53-5f11-432c-9fae-39b8a1fd3064",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"35abaf52-63c3-47cd-a6fd-52b50f5b43f4",{"currentTime":"2026-01-11T09:02:04Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:04Z)
+
+--- 11.1 Reconnect Time ---
+DEBUG: Triggering Disconnect...
+DEBUG: Reconnect took 0.00 seconds
+Reconnection Time: 0.00s
+\end{lstlisting}
+\subsection*{test\_11\_02\_average\_performance}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- 11.2 Average Performance ---
+Iteration 1/5...
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"59d02534-47c3-4858-9a8c-7437195f7ef4",{"currentTime":"2026-01-11T09:02:17Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Reconnect took 11.25 seconds
+Iteration 2/5...
+
+[EVSE] RAW RECV: [3,"cb31735e-2015-4aa8-b160-35b176accce3",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"83e6358c-13a4-47da-be80-4db05b2efd9b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"7775e17a-f376-40ba-81bb-283a9251b876",{"currentTime":"2026-01-11T09:02:17Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:17Z)
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"d9694630-1b07-497c-99a3-e4030aaf4b0e",{"currentTime":"2026-01-11T09:02:24Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Reconnect took 6.15 seconds
+Iteration 3/5...
+
+[EVSE] RAW RECV: [3,"aed6453f-e2ff-4ac8-88e5-91bbdf4aaefe",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e61b7a52-3111-4d23-938f-646c45f7d722",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e67da1c2-8708-41b2-9a6b-329748f02284",{"currentTime":"2026-01-11T09:02:25Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:25Z)
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"8bfdbe71-4cbe-46f5-828d-f7557527c084",{"currentTime":"2026-01-11T09:02:32Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"526b6810-98d8-44ec-9bd6-30692e750045",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"5d1aa7b4-876d-43c9-8086-a04e2110de0c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Reconnect took 6.24 seconds
+Iteration 4/5...
+
+[EVSE] RAW RECV: [3,"a96b7c1c-197c-4953-abb2-52f6aff91109",{"currentTime":"2026-01-11T09:02:32Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:32Z)
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"84162747-d081-4519-a737-e1bd7f5f68ee",{"currentTime":"2026-01-11T09:02:39Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Reconnect took 6.15 seconds
+Iteration 5/5...
+
+[EVSE] RAW RECV: [3,"0129ada2-0dac-44b0-86f7-bc7ffeabaf45",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"519d508b-6bc4-4401-ad42-a2acae053409",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"68906a73-b69f-4760-a683-618c3bdc9b5f",{"currentTime":"2026-01-11T09:02:39Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:39Z)
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"3ec21fa7-0aa8-412d-9459-a321766436d9",{"currentTime":"2026-01-11T09:02:46Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Reconnect took 6.13 seconds
+Average Reconnection Time (5 runs): 7.19s
+Min: 6.13s, Max: 11.25s
+\end{lstlisting}
+
+\section{Global Execution Log}
+\begin{lstlisting}
+--- Test Case: test_11_01_reconnect_time ---
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"41696f35-0306-491d-a92e-42800ce366e7",{"currentTime":"2026-01-11T09:02:04Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"6801c1fa-0cdc-47c0-a20e-5d7179090ad0",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"998d0e53-5f11-432c-9fae-39b8a1fd3064",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"35abaf52-63c3-47cd-a6fd-52b50f5b43f4",{"currentTime":"2026-01-11T09:02:04Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:04Z)
+
+--- 11.1 Reconnect Time ---
+DEBUG: Triggering Disconnect...
+DEBUG: Reconnect took 0.00 seconds
+Reconnection Time: 0.00s
+
+--- Test Case: test_11_02_average_performance ---
+--------------------------------- Captured Out ---------------------------------
+
+--- 11.2 Average Performance ---
+Iteration 1/5...
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"59d02534-47c3-4858-9a8c-7437195f7ef4",{"currentTime":"2026-01-11T09:02:17Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Reconnect took 11.25 seconds
+Iteration 2/5...
+
+[EVSE] RAW RECV: [3,"cb31735e-2015-4aa8-b160-35b176accce3",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"83e6358c-13a4-47da-be80-4db05b2efd9b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"7775e17a-f376-40ba-81bb-283a9251b876",{"currentTime":"2026-01-11T09:02:17Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:17Z)
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"d9694630-1b07-497c-99a3-e4030aaf4b0e",{"currentTime":"2026-01-11T09:02:24Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Reconnect took 6.15 seconds
+Iteration 3/5...
+
+[EVSE] RAW RECV: [3,"aed6453f-e2ff-4ac8-88e5-91bbdf4aaefe",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e61b7a52-3111-4d23-938f-646c45f7d722",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"e67da1c2-8708-41b2-9a6b-329748f02284",{"currentTime":"2026-01-11T09:02:25Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:25Z)
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"8bfdbe71-4cbe-46f5-828d-f7557527c084",{"currentTime":"2026-01-11T09:02:32Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"526b6810-98d8-44ec-9bd6-30692e750045",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"5d1aa7b4-876d-43c9-8086-a04e2110de0c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Reconnect took 6.24 seconds
+Iteration 4/5...
+
+[EVSE] RAW RECV: [3,"a96b7c1c-197c-4953-abb2-52f6aff91109",{"currentTime":"2026-01-11T09:02:32Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:32Z)
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"84162747-d081-4519-a737-e1bd7f5f68ee",{"currentTime":"2026-01-11T09:02:39Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Reconnect took 6.15 seconds
+Iteration 5/5...
+
+[EVSE] RAW RECV: [3,"0129ada2-0dac-44b0-86f7-bc7ffeabaf45",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"519d508b-6bc4-4401-ad42-a2acae053409",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"68906a73-b69f-4760-a683-618c3bdc9b5f",{"currentTime":"2026-01-11T09:02:39Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:02:39Z)
+DEBUG: Triggering Disconnect...
+
+[EVSE] RAW RECV: [3,"3ec21fa7-0aa8-412d-9459-a321766436d9",{"currentTime":"2026-01-11T09:02:46Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Reconnect took 6.13 seconds
+Average Reconnection Time (5 runs): 7.19s
+Min: 6.13s, Max: 11.25s
+
+\end{lstlisting}
+
+\end{document}

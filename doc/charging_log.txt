@@ -1,0 +1,389 @@
+debian@beaglebone:/var/lib/cloud9/Dr.Ruslee/MEA-V2G$ sudo -E .venv/bin/python3 Application.py eth -i eth0 -m c4:93:00:48:AC:F0 -r EVSE --auto
+Welcome to Codico Whitebeet EVSE reference implementation
+Initiating framing interface
+WARNING: Could not retrieve the OS's nameserver !
+iface: ETH, name: eth0, mac: c4:93:00:48:AC:F0
+WHITE-beet-EI firmware version: V02_01_00
+Connected to CAN interface: socketcan/can2
+[RELAY] Setup ok: P8_17 as OUTPUT, active_high=True
+[RELAY] OFF
+
+//////////////////////////////
+[CP] Control Pilot states + PWM quick meaning
+//////////////////////////////
+A: +12V (no EV) | B: +9V (plugged) | C: +6V (ready) | D: +3V (vent) | E/F: fault
+PWM duty cycle: mainly encodes allowed current (AC).
+In many PLC/ISO15118 stacks, ~5% duty can indicate 'digital comm / PLC'.
+
+//////////////////////////////
+[SLAC] HomePlug GreenPHY matching phases
+//////////////////////////////
+1) EVSE starts SLAC and matching window
+2) EV sends CM_SLAC_PARM.REQ -> EVSE replies CM_SLAC_PARM.CNF
+3) EV sends CM_START_ATTEN_CHAR.IND (several)
+4) EVSE sends CM_MNBC_SOUND.IND (many) and EV reports attenuation
+5) NMK (network key) set -> matched -> IP link ready
+
+//////////////////////////////
+[ISO 15118] Typical high-level message flow (after SLAC)
+//////////////////////////////
+SDP -> TCP/TLS -> EXI messages
+SessionSetup -> ServiceDiscovery -> Payment/Authorization
+ChargeParameterDiscovery -> CableCheck -> PreCharge
+PowerDelivery + CurrentDemand loop (EV target V/I, EVSE present V/I)
+StopCharging -> WeldingDetection -> SessionStop
+Set the CP mode to EVSE
+Set the CP duty cycle to 100%
+Start the CP service
+Start SLAC in EVSE mode
+[CP] State = A (no EV plugged, ~+12V)
+Wait until an EV connects
+EV connected
+[CP] State = B (EV plugged, ~+9V)
+
+//////////////////////////////
+[SLAC] Start Matching (EVSE)
+//////////////////////////////
+Start SLAC matching
+Set duty cycle to 5%
+
+//////////////////////////////
+[SLAC] MATCHED ✅  -> ISO15118 can start
+//////////////////////////////
+SLAC matching successful
+
+//////////////////////////////
+[ISO15118] Start SECC (EVSE) stack
+//////////////////////////////
+Set V2G mode to EVSE
+
+//////////////////////////////
+EVSE -> EV : EVSE Configuration (0x60)
+//////////////////////////////
+protocols: [0, 1]
+payment_methods: [0]
+energy_transfer_modes: [0, 1, 2, 3]
+evse_id_ISO: DE*A23*E45B*78C
+evse_id_DIN: +49*123*456*789
+
+//////////////////////////////
+EVSE -> EV : Initial DC Charging Parameters (0x62)
+//////////////////////////////
+isolation_level: 0
+min_voltage: 0
+min_current: 0
+max_voltage: 450
+max_current: 10
+max_power: 25000
+peak_current_ripple: 0
+status: 0
+Start V2G
+
+//////////////////////////////
+"Session started (0x80)"
+//////////////////////////////
+Protocol: 1
+Session ID: ab611458c0aa0f1b
+EVCC ID: 020000000005
+
+//////////////////////////////
+"Payment selected (0x81)"
+//////////////////////////////
+Selected payment method: 0
+
+//////////////////////////////
+"Request Authorization (0x82)"
+//////////////////////////////
+54999
+Vehicle was authorized automatically via --auto flag!
+
+//////////////////////////////
+"Energy transfer mode selected (0x83)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : EV ChargeParameterDiscovery
+//////////////////////////////
+Maximum voltage: 500
+Maximum current: 50
+Maximum power: 25000
+Energy Capacity: 100
+Full SoC: 99
+Bulk SoC: 80
+Ready: yes
+Error code: 0
+SoC: 0
+Selected energy transfer mode: 1
+
+//////////////////////////////
+"Request Schedules (0x84)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : SchedulesRequested (0x84)
+//////////////////////////////
+max_entries: 5
+Max entries: 5
+Set the schedule: {'code': 0, 'schedule_tuples': [{'schedule_tuple_id': 1, 'schedules': [{'start': 0, 'interval': 0, 'power': 25000}, {'start': 1800, 'interval': 0, 'power': 18750}, {'start': 3600, 'interval': 82800, 'power': 12500}]}]}
+
+//////////////////////////////
+EVSE -> EV : SetSchedules (EVSE offers) (0x6C)
+//////////////////////////////
+schedule: {'code': 0, 'schedule_tuples': [{'schedule_tuple_id': 1, 'schedules': [{'start': 0, 'interval': 0, 'power': 25000}, {'start': 1800, 'interval': 0, 'power': 18750}, {'start': 3600, 'interval': 82800, 'power': 12500}]}]}
+
+//////////////////////////////
+"DC Charge Parameters Changed (0x63)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : CurrentDemand / DC params (0x63)
+//////////////////////////////
+EV maximum current: 50A
+EV maximum voltage: 500V
+EV maximum power: 25000W
+EV ready: True
+Error code: 0
+SOC: 0%
+EV target voltage: 0V
+EV target current: 0A
+Charging complete: 0
+
+//////////////////////////////
+EVSE -> EV : UpdateDcChargingParameters (0x63)
+//////////////////////////////
+isolation_level: 0
+present_voltage: 100
+present_current: 0
+max_voltage: 450
+max_current: 10
+max_power: 25000
+status: 0
+
+//////////////////////////////
+"Request Cable Check Status (0x87)"
+//////////////////////////////
+
+//////////////////////////////
+EVSE -> EV : CableCheckFinished
+//////////////////////////////
+finished: True
+
+//////////////////////////////
+"DC Charge Parameters Changed (0x63)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : CurrentDemand / DC params (0x63)
+//////////////////////////////
+EV maximum current: 50A
+EV maximum voltage: 500V
+EV maximum power: 25000W
+EV ready: True
+Error code: 0
+SOC: 0%
+EV target voltage: 312V
+EV target current: 1A
+Charging complete: 0
+
+//////////////////////////////
+EVSE -> EV : UpdateDcChargingParameters (0x63)
+//////////////////////////////
+isolation_level: 0
+present_voltage: 311
+present_current: 0
+max_voltage: 450
+max_current: 10
+max_power: 25000
+status: 0
+
+//////////////////////////////
+"Pre Charge Started (0x88)"
+//////////////////////////////
+[RELAY] ON
+
+//////////////////////////////
+"DC Charge Parameters Changed (0x63)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : CurrentDemand / DC params (0x63)
+//////////////////////////////
+EV maximum current: 50A
+EV maximum voltage: 500V
+EV maximum power: 25000W
+EV ready: True
+Error code: 0
+SOC: 0%
+EV target voltage: 312V
+EV target current: 1A
+Charging complete: 0
+Bulk charging complete: False
+
+//////////////////////////////
+EVSE -> EV : UpdateDcChargingParameters (0x63)
+//////////////////////////////
+isolation_level: 0
+present_voltage: 311
+present_current: 0
+max_voltage: 450
+max_current: 10
+max_power: 25000
+status: 0
+
+//////////////////////////////
+"Start Charging Requested (0x89)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : StartChargingRequested (0x88)
+//////////////////////////////
+Schedule tuple ID: 1
+Charging profiles: []
+[RELAY] ON
+
+//////////////////////////////
+EVSE -> EV : StartCharging (0x6E)
+//////////////////////////////
+ok: True
+
+//////////////////////////////
+"DC Charge Parameters Changed (0x63)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : CurrentDemand / DC params (0x63)
+//////////////////////////////
+EV maximum current: 50A
+EV maximum voltage: 500V
+EV maximum power: 25000W
+EV ready: True
+Error code: 0
+SOC: 30%
+EV target voltage: 400V
+EV target current: 6A
+Charging complete: 0
+Bulk charging complete: False
+Remaining time to full SOC: 300s
+Remaining time to bulk SOC: 180s
+
+//////////////////////////////
+EVSE -> EV : UpdateDcChargingParameters (0x63)
+//////////////////////////////
+isolation_level: 0
+present_voltage: 399
+present_current: 5
+max_voltage: 450
+max_current: 10
+max_power: 25000
+status: 0
+
+//////////////////////////////
+"DC Charge Parameters Changed (0x63)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : CurrentDemand / DC params (0x63)
+//////////////////////////////
+EV maximum current: 50A
+EV maximum voltage: 500V
+EV maximum power: 25000W
+EV ready: True
+Error code: 0
+SOC: 30%
+EV target voltage: 400V
+EV target current: 0A
+Charging complete: 0
+Bulk charging complete: False
+Remaining time to full SOC: 300s
+Remaining time to bulk SOC: 180s
+
+//////////////////////////////
+EVSE -> EV : UpdateDcChargingParameters (0x63)
+//////////////////////////////
+isolation_level: 0
+present_voltage: 399
+present_current: 0
+max_voltage: 450
+max_current: 10
+max_power: 25000
+status: 0
+
+//////////////////////////////
+"DC Charge Parameters Changed (0x63)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : CurrentDemand / DC params (0x63)
+//////////////////////////////
+EV maximum current: 50A
+EV maximum voltage: 500V
+EV maximum power: 25000W
+EV ready: True
+Error code: 0
+SOC: 10%
+EV target voltage: 400V
+EV target current: 0A
+Charging complete: 0
+Bulk charging complete: False
+Remaining time to full SOC: 300s
+Remaining time to bulk SOC: 180s
+
+//////////////////////////////
+EVSE -> EV : UpdateDcChargingParameters (0x63)
+//////////////////////////////
+isolation_level: 0
+present_voltage: 399
+present_current: 0
+max_voltage: 450
+max_current: 10
+max_power: 25000
+status: 0
+
+//////////////////////////////
+"DC Charge Parameters Changed (0x63)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : CurrentDemand / DC params (0x63)
+//////////////////////////////
+EV maximum current: 50A
+EV maximum voltage: 500V
+EV maximum power: 25000W
+EV ready: True
+Error code: 0
+SOC: 10%
+EV target voltage: 0V
+EV target current: 0A
+Charging complete: 0
+Bulk charging complete: False
+Remaining time to full SOC: 300s
+Remaining time to bulk SOC: 180s
+
+//////////////////////////////
+EVSE -> EV : UpdateDcChargingParameters (0x63)
+//////////////////////////////
+isolation_level: 0
+present_voltage: 399
+present_current: 0
+max_voltage: 450
+max_current: 10
+max_power: 25000
+status: 0
+
+//////////////////////////////
+"Request Stop Charging (0x8A)"
+//////////////////////////////
+
+//////////////////////////////
+EV -> EVSE : StopChargingRequested (0x8A)
+//////////////////////////////
+timeout_ms: 4541
+renegotiation: False
+Timeout: 4541
+Timeout: no
+[RELAY] OFF
+
+//////////////////////////////
+EVSE -> EV : StopCharging (0x6F)
+//////////////////////////////
+ok

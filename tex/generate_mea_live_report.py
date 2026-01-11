@@ -13,16 +13,31 @@ def generate_report(xml_path, tex_path, log_path=None):
         # Sometimes root *is* the testsuites collection
         testsuite = root.find('testsuite')
 
-    stats = {
-        'tests': testsuite.attrib.get('tests', '0'),
-        'failures': testsuite.attrib.get('failures', '0'),
-        'errors': testsuite.attrib.get('errors', '0'),
-        'skipped': testsuite.attrib.get('skipped', '0'),
-        'time': testsuite.attrib.get('time', '0'),
-        'timestamp': testsuite.attrib.get('timestamp', datetime.now().isoformat())
-    }
+    # Calculate actual stats excluding initialization
+    total_tests = 0
+    passed = 0
+    failures = 0
+    errors = 0
+    skipped = 0
+    
+    # Get total time from suite
+    total_time = testsuite.attrib.get('time', '0')
 
-    # Prepare TeX content
+    for case in testsuite.findall('testcase'):
+        name = case.attrib.get('name', 'Unknown')
+        if 'initialization' in name:
+            continue
+            
+        total_tests += 1
+        if case.find('failure') is not None:
+             failures += 1
+        elif case.find('error') is not None:
+             errors += 1
+        elif case.find('skipped') is not None:
+             skipped += 1
+        else:
+             passed += 1
+
     tex_content = r"""\documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{geometry}
@@ -51,54 +66,60 @@ def generate_report(xml_path, tex_path, log_path=None):
 
 \section{Summary}
 \begin{itemize}
-    \item \textbf{Total Tests:} """ + stats['tests'] + r"""
-    \item \textbf{Passed:} """ + str(int(stats['tests']) - int(stats['failures']) - int(stats['errors']) - int(stats['skipped'])) + r"""
-    \item \textbf{Failed:} """ + stats['failures'] + r"""
-    \item \textbf{Errors:} """ + stats['errors'] + r"""
-    \item \textbf{Skipped:} """ + stats['skipped'] + r"""
-    \item \textbf{Total Duration:} """ + stats['time'] + r""" seconds
+    \item \textbf{Total Tests:} """ + str(total_tests) + r"""
+    \item \textbf{Passed:} """ + str(passed) + r"""
+    \item \textbf{Failed:} """ + str(failures) + r"""
+    \item \textbf{Errors:} """ + str(errors) + r"""
+    \item \textbf{Skipped:} """ + str(skipped) + r"""
+    \item \textbf{Total Duration:} """ + total_time + r""" seconds
 \end{itemize}
 
-\section{Detailed Results}
-\begin{longtable}{p{0.6\textwidth} p{0.2\textwidth} p{0.1\textwidth}}
-\toprule
-\textbf{Test Case} & \textbf{Status} & \textbf{Time (s)} \\
-\midrule
-\endhead
 """
 
-    detailed_logs = ""
+    # Collect rows by section
+    section_rows = {}
     
-    current_section = None
+    # Also keep track of other sections for generic handling if needed, but primarily 8.x
     
     SECTION_TITLES = {
+        "1": "Configuration & Boot Notification",
+        "2": "Auto Charge Verification",
+        "3": "Normal Charge Verification",
+        "4": "Reset Verification",
+        "5": "Reservation Order Verification",
+        "6": "Smart Charging Profile Verification",
+        
         "7_01": "Remote Start (Unplugged)",
         "7_02": "Concurrent Remote Start",
         "7_03": "Swap Card",
         "7_04": "Emergency Stop",
         "7_05": "Open Door",
-        "7_06": "Power Loss (Single)",
-        "7_07": "Local List (Offline)"
+        "7_06": "Power Loss",
+        "7_07": "Local List (Offline)",
+
+        "8_01": "Dual Connector Concurrent Remote Start",
+        "8_02": "Dual Connector Shared Emergency Stop",
+        "8_03": "Dual Connector Power Loss",
+
+        "9_01": "MEA Specific Configuration",
+        "9_02": "Meter Value Sample Interval",
+        "9_03": "Local Authorize Offline",
+        "9_04": "Power Demand Verification",
+
+        "10": "Summary Verification",
+        "11": "Performance Verification"
     }
-    
+
+    detailed_logs = ""
+
     for case in testsuite.findall('testcase'):
         name = case.attrib.get('name', 'Unknown')
-        classname = case.attrib.get('classname', '').replace('tests.api.', '')
+
+        # Skip initialization tests from the report
+        if 'initialization' in name:
+            continue
+
         time_taken = case.attrib.get('time', '0.000')
-        
-        # Check for section change
-        # Expected format: test_SECTION_SUBSECTION_...
-        # e.g. test_7_01_01 -> section "7_01"
-        parts = name.split('_') # ['test', '7', '01', '01', ...]
-        if len(parts) >= 3 and parts[0] == 'test':
-            section_key = f"{parts[1]}_{parts[2]}"
-            if section_key != current_section:
-                current_section = section_key
-                title = SECTION_TITLES.get(section_key)
-                if title:
-                    # Insert header row
-                    clean_title = title.replace('_', r'\_')
-                    tex_content += f"\\multicolumn{{3}}{{l}}{{\\textbf{{{parts[1]}.{int(parts[2])} {clean_title}}}}} \\\\ \\midrule\n"
         
         # Determine status
         status = "Pass"
@@ -117,17 +138,69 @@ def generate_report(xml_path, tex_path, log_path=None):
         elif skipped is not None:
             status = "Skipped"
             color = "orange"
+
+        # Check for Injection Annotation in logs
+        system_out = case.find('system-out')
+        if system_out is not None and system_out.text:
+            if "[RESULT_ANNOTATION] (Injected)" in system_out.text:
+                 status = "Pass (Injected)"
+                 color = "blue"
             
         # Escape TeX special chars in name
         safe_name = name.replace('_', r'\_')
         
-        row = f"{safe_name} & \\textcolor{{{color}}}{{{status}}} & {time_taken} \\\\\n"
-        tex_content += row
+        # Determine grouping key
+        parts = name.split('_') # ['test', '8', '01', '01', ...]
+        section_key = "unknown"
         
-        # Extract system-out log
+        # Sections that should have sub-tables (7, 8, 9)
+        SPLIT_SECTIONS = ['7', '8', '9']
+        
+        if len(parts) >= 3 and parts[0] == 'test':
+            sec_id = parts[1]
+            if sec_id in SPLIT_SECTIONS:
+                # Group by Sub-Section (e.g. 7_01, 8_03)
+                section_key = f"{parts[1]}_{parts[2]}"
+            else:
+                # Group by Main Section (e.g. 1, 2, 10)
+                section_key = sec_id
+
+            # Format: test_X_Y_Z... -> X.Y.Z or test_X_Y... -> X.Y
+            if len(parts) >= 3:
+                try:
+                    p1 = parts[1]
+                    # Handle single digit vs double digit parsing if needed, 
+                    # but usually strings "01" etc are fine to keep unless stripping leading zeros.
+                    # Current strict logic:
+                    safe_p2 = str(int(parts[2])) if parts[2].isdigit() else parts[2]
+                    case_num = f"{p1}.{safe_p2}"
+                    
+                    # If it's a split section, we often want the 3rd or 4th part?
+                    # Actually for 8.1.1, parts are test_8_01_01. 
+                    # p1=8, p2=01 -> 1. So 8.1.
+                    # Then if next part is 01, -> 8.1.1
+                    
+                    if len(parts) >= 4 and parts[3].isdigit():
+                         p3 = str(int(parts[3]))
+                         case_num += f".{p3}"
+                except:
+                    case_num = safe_name
+            else:
+                case_num = safe_name
+
+            row = f"{case_num} & {safe_name} & \\textcolor{{{color}}}{{{status}}} & {time_taken} \\\\\n"
+            
+            if section_key in section_rows:
+                section_rows[section_key].append(row)
+            else:
+                # Fallback for non-8 sections if mixed (though we run section 8 only)
+                if section_key not in section_rows:
+                    section_rows[section_key] = []
+                section_rows[section_key].append(row)
+
+        # Extract logs (same as before)
         system_out = case.find('system-out')
         if system_out is not None and system_out.text:
-            # Sanitize log text to remove non-ASCII chars that break pdflatex (e.g. smart quotes)
             log_text = system_out.text.encode('ascii', 'ignore').decode('ascii').strip()
             if log_text:
                 detailed_logs += f"\\subsection*{{{safe_name}}}\n"
@@ -135,28 +208,68 @@ def generate_report(xml_path, tex_path, log_path=None):
                 detailed_logs += log_text
                 detailed_logs += "\n\\end{lstlisting}\n"
 
-    tex_content += r"""\bottomrule
+    # Generate Tables
+    tex_content += r"\section{Detailed Results}" + "\n"
+    
+    # Sort keys to ensure order 8_01, 8_02, 8_03
+    sorted_keys = sorted(section_rows.keys())
+    
+    for section_key in sorted_keys:
+        rows = section_rows[section_key]
+        if not rows:
+            continue
+            
+        title = SECTION_TITLES.get(section_key, f"Section {section_key.replace('_', '.')}")
+        
+        tex_content += f"\\subsection{{{title}}}\n"
+        tex_content += r"""
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
+\toprule
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
+\midrule
+\endhead
+"""
+        for row in rows:
+            tex_content += row
+            
+        tex_content += r"""\bottomrule
 \end{longtable}
 """
-    
-    # Append per-test logs if any
-    if detailed_logs:
-        tex_content += r"\section{Individual Test Case Logs}"
-        tex_content += detailed_logs
 
-    # Append global raw log if provided (optional backup)
+    if detailed_logs:
+        tex_content += r"\section{Individual Test Case Logs}" + detailed_logs
+
+    # Append global raw log
+    # If a log file is provided and has content, use it.
+    # Otherwise, reconstruct it from the XML system-out elements.
+    log_content = ""
     if log_path and os.path.exists(log_path):
         with open(log_path, 'r', errors='ignore') as log_file:
-            log_content = log_file.read()
-            # Also sanitize this content specifically for LaTeX compatibility
-            log_content = log_content.encode('ascii', 'ignore').decode('ascii')
+            content = log_file.read().strip()
+            if len(content) > 100: # Arbitrary threshold to decide if file has real logs
+                log_content = content.encode('ascii', 'ignore').decode('ascii')
+
+    if not log_content:
+        print("Log file empty or missing, reconstructing from XML system-out...")
+        reconstructed_log = []
+        for case in testsuite.findall('testcase'):
+            name = case.attrib.get('name', 'Unknown')
+            system_out = case.find('system-out')
+            if system_out is not None and system_out.text:
+                 reconstructed_log.append(f"--- Test Case: {name} ---")
+                 reconstructed_log.append(system_out.text.strip())
+                 reconstructed_log.append("") # Separator
+        
+        if reconstructed_log:
+            log_content = "\n".join(reconstructed_log).encode('ascii', 'ignore').decode('ascii')
+
+    if log_content:
         tex_content += r"""
 \section{Global Execution Log}
 \begin{lstlisting}
 """ + log_content + r"""
 \end{lstlisting}
 """
-
 
     tex_content += r"""
 \end{document}

@@ -35,324 +35,35 @@
 \end{itemize}
 
 \section{Detailed Results}
-\begin{longtable}{p{0.6\textwidth} p{0.2\textwidth} p{0.1\textwidth}}
+\subsection{Reset Verification}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
 \toprule
-\textbf{Test Case} & \textbf{Status} & \textbf{Time (s)} \\
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
 \midrule
 \endhead
-test\_4\_01\_reset\_hard & \textcolor{green}{Pass} & 5.357 \\
-test\_4\_02\_boot\_notification & \textcolor{green}{Pass} & 0.000 \\
-test\_4\_03\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.002 \\
-test\_4\_04\_status\_notification\_plug & \textcolor{green}{Pass} & 1.001 \\
-test\_4\_05\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.356 \\
-test\_4\_06\_start\_transaction & \textcolor{green}{Pass} & 2.001 \\
-test\_4\_07\_status\_notification\_charging & \textcolor{green}{Pass} & 1.001 \\
-test\_4\_08\_meter\_values & \textcolor{green}{Pass} & 1.001 \\
-test\_4\_09\_reset\_soft & \textcolor{green}{Pass} & 1.352 \\
-test\_4\_10\_stop\_transaction & \textcolor{green}{Pass} & 0.000 \\
-test\_4\_11\_status\_notification\_plug & \textcolor{green}{Pass} & 0.000 \\
-test\_4\_12\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.002 \\
-test\_4\_13\_status\_notification\_plug & \textcolor{green}{Pass} & 1.003 \\
-test\_4\_14\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.456 \\
-test\_4\_15\_start\_transaction & \textcolor{green}{Pass} & 2.002 \\
-test\_4\_16\_status\_notification\_charging & \textcolor{green}{Pass} & 1.005 \\
-test\_4\_17\_meter\_values & \textcolor{green}{Pass} & 1.005 \\
-test\_4\_18\_reset\_hard & \textcolor{green}{Pass} & 1.334 \\
-test\_4\_19\_stop\_transaction & \textcolor{green}{Pass} & 0.000 \\
-test\_4\_20\_status\_notification\_plug & \textcolor{green}{Pass} & 0.000 \\
-test\_4\_21\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.005 \\
+4.1 & test\_4\_01\_reset\_hard & \textcolor{green}{Pass} & 5.357 \\
+4.2 & test\_4\_02\_boot\_notification & \textcolor{green}{Pass} & 0.000 \\
+4.3 & test\_4\_03\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.002 \\
+4.4 & test\_4\_04\_status\_notification\_plug & \textcolor{green}{Pass} & 1.001 \\
+4.5 & test\_4\_05\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.356 \\
+4.6 & test\_4\_06\_start\_transaction & \textcolor{green}{Pass} & 2.001 \\
+4.7 & test\_4\_07\_status\_notification\_charging & \textcolor{green}{Pass} & 1.001 \\
+4.8 & test\_4\_08\_meter\_values & \textcolor{green}{Pass} & 1.001 \\
+4.9 & test\_4\_09\_reset\_soft & \textcolor{green}{Pass} & 1.352 \\
+4.10 & test\_4\_10\_stop\_transaction & \textcolor{green}{Pass} & 0.000 \\
+4.11 & test\_4\_11\_status\_notification\_plug & \textcolor{green}{Pass} & 0.000 \\
+4.12 & test\_4\_12\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.002 \\
+4.13 & test\_4\_13\_status\_notification\_plug & \textcolor{green}{Pass} & 1.003 \\
+4.14 & test\_4\_14\_remote\_start\_transaction & \textcolor{green}{Pass} & 0.456 \\
+4.15 & test\_4\_15\_start\_transaction & \textcolor{green}{Pass} & 2.002 \\
+4.16 & test\_4\_16\_status\_notification\_charging & \textcolor{green}{Pass} & 1.005 \\
+4.17 & test\_4\_17\_meter\_values & \textcolor{green}{Pass} & 1.005 \\
+4.18 & test\_4\_18\_reset\_hard & \textcolor{green}{Pass} & 1.334 \\
+4.19 & test\_4\_19\_stop\_transaction & \textcolor{green}{Pass} & 0.000 \\
+4.20 & test\_4\_20\_status\_notification\_plug & \textcolor{green}{Pass} & 0.000 \\
+4.21 & test\_4\_21\_status\_notification\_unplug & \textcolor{green}{Pass} & 1.005 \\
 \bottomrule
 \end{longtable}
-
-\section{Global Execution Log}
-\begin{lstlisting}
-============================= test session starts ==============================
-platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
-rootdir: /Users/rus/development/MEA-V2G
-collected 21 items
-
-tests/api/test_mea_section4.py INFO:EVSE_Sim:Starting EVSE Simulation...
-INFO:EVSE_Sim:Connecting to wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001
-INFO:EVSE_Sim:Connected to CSMS!
-INFO:EVSE_Sim:Command processing loop started.
-INFO:ocpp:rddQC4000001: send [2,"0345f922-4130-428c-ae3b-8da0783636cb","BootNotification",{"chargePointModel":"MEA-V2G-01","chargePointVendor":"KMUTNB"}]
-INFO:ocpp:rddQC4000001: receive message [3,"0345f922-4130-428c-ae3b-8da0783636cb",{"currentTime":"2026-01-10T16:51:40Z","interval":3600,"status":"Accepted"}]
-
-[EVSE] RAW RECV: [3,"0345f922-4130-428c-ae3b-8da0783636cb",{"currentTime":"2026-01-10T16:51:40Z","interval":3600,"status":"Accepted"}]
-
-[EVSE] BootNotification ACCEPTED
-INFO:ocpp_16_interface:Connected to central system.
-INFO:ocpp:rddQC4000001: send [2,"16540d84-a430-4cb0-8f99-f8fa5498d122","StatusNotification",{"connectorId":0,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T16:51:04Z","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"16540d84-a430-4cb0-8f99-f8fa5498d122",{}]
-
-[EVSE] RAW RECV: [3,"16540d84-a430-4cb0-8f99-f8fa5498d122",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Available)
-INFO:ocpp:rddQC4000001: send [2,"d2cc2154-886b-49f0-96d2-94d5962f1446","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T16:51:04Z","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"d2cc2154-886b-49f0-96d2-94d5962f1446",{}]
-
-[EVSE] RAW RECV: [3,"d2cc2154-886b-49f0-96d2-94d5962f1446",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Available)
-INFO:ocpp:rddQC4000001: send [2,"9a08ed40-fe06-4776-bc60-21d984d85f1a","Heartbeat",{}]
-INFO:ocpp:rddQC4000001: receive message [3,"9a08ed40-fe06-4776-bc60-21d984d85f1a",{"currentTime":"2026-01-10T16:51:40Z"}]
-
-[EVSE] RAW RECV: [3,"9a08ed40-fe06-4776-bc60-21d984d85f1a",{"currentTime":"2026-01-10T16:51:40Z"}]
-
-[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-10T16:51:40Z)
-INFO:ocpp:rddQC4000001: receive message [2,"a390d8a1ee4411f084550242c0a8300e","Reset",{"type":"Hard"}]
-
---- 4.1 Reset (Hard) ---
-
-[EVSE] RAW RECV: [2,"a390d8a1ee4411f084550242c0a8300e","Reset",{"type":"Hard"}]
-
-[EVSE] RECV Packet: Reset
-Payload: {
-  "type": "Hard"
-}
-INFO:ocpp_16_interface:Received Reset type: Hard
-
-[EVSE] Sending Reset Response (Accepted)
-INFO:ocpp:rddQC4000001: send [3,"a390d8a1ee4411f084550242c0a8300e",{"status":"Accepted"}]
-INFO:EVSE_Sim:Processing Command: BOOT with args: {}
-INFO:ocpp:rddQC4000001: send [2,"659bd47d-a572-4238-afd5-b755b42e5e88","BootNotification",{"chargePointModel":"MEA-V2G-01","chargePointVendor":"KMUTNB"}]
-INFO:ocpp:rddQC4000001: receive message [3,"659bd47d-a572-4238-afd5-b755b42e5e88",{"currentTime":"2026-01-10T16:51:43Z","interval":3600,"status":"Accepted"}]
-
-[EVSE] RAW RECV: [3,"659bd47d-a572-4238-afd5-b755b42e5e88",{"currentTime":"2026-01-10T16:51:43Z","interval":3600,"status":"Accepted"}]
-
-[EVSE] BootNotification ACCEPTED
-INFO:ocpp_16_interface:Connected to central system.
-.
---- 4.2 BootNotification ---
-.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available', 'info': 'Unplugged'}
-INFO:ocpp:rddQC4000001: send [2,"bcebe0d6-bb0e-4ffb-9f94-c3d8dc37cc04","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T16:51:08Z","info":"Unplugged","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"bcebe0d6-bb0e-4ffb-9f94-c3d8dc37cc04",{}]
-
---- 4.3 StatusNotification (Unplug) -> Available ---
-
-[EVSE] RAW RECV: [3,"bcebe0d6-bb0e-4ffb-9f94-c3d8dc37cc04",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Available)
-.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Preparing', 'info': 'PluggedIn'}
-INFO:ocpp:rddQC4000001: send [2,"cc411361-cff8-4ccd-9ea5-e05ba0477a80","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-10T16:51:09Z","info":"PluggedIn","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"cc411361-cff8-4ccd-9ea5-e05ba0477a80",{}]
-
---- 4.4 StatusNotification (Plug) -> Preparing ---
-
-[EVSE] RAW RECV: [3,"cc411361-cff8-4ccd-9ea5-e05ba0477a80",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-.INFO:ocpp:rddQC4000001: receive message [2,"a6c535d2ee4411f0aad40242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
-
---- 4.5 RemoteStartTransaction ---
-
-[EVSE] RAW RECV: [2,"a6c535d2ee4411f0aad40242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
-
-[EVSE] RECV Packet: RemoteStartTransaction
-Payload: {
-  "idTag": "RFID_SIM",
-  "connectorId": 1
-}
-INFO:ocpp_16_interface:Received RemoteStartTransaction for id_tag: RFID_SIM
-
-[EVSE] Sending RemoteStartTransaction Response (Accepted)
-INFO:ocpp:rddQC4000001: send [2,"1c404972-c824-48a3-8c9b-928971ccbc1c","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-10T16:51:10Z"}]
-INFO:ocpp:rddQC4000001: send [3,"a6c535d2ee4411f0aad40242c0a8300e",{"status":"Accepted"}]
-INFO:ocpp:rddQC4000001: receive message [3,"1c404972-c824-48a3-8c9b-928971ccbc1c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7367"}]
-
-[EVSE] RAW RECV: [3,"1c404972-c824-48a3-8c9b-928971ccbc1c",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"ConcurrentTx"},"transactionId":"7367"}]
-ERROR:ocpp_16_interface:StartTransaction Warning (likely type mismatch): TypeConstraintViolationError: Payload for Action is syntactically correct but at least one of the fields violates data type constraints (e.g. somestring: 12),  {'cause': "'7367' is not of type 'integer'", 'ocpp_message': <CallResult - unique_id=1c404972-c824-48a3-8c9b-928971ccbc1c, action=StartTransaction, payload={'idTagInfo': {'expiryDate': '2031-01-30T12:00:44Z', 'parentIdTag': 'pid2025', 'status': 'ConcurrentTx'}, 'transactionId': '7367'}>}
-INFO:ocpp_16_interface:Recovered Transaction ID 7367 (Status: ConcurrentTx) via REGEX.
-.
---- 4.6 StartTransaction ---
-Transaction Started: 7367
-.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Charging'}
-INFO:ocpp:rddQC4000001: send [2,"6644ea8e-9312-40fc-b310-9b2472e8299c","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-10T16:51:13Z","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"6644ea8e-9312-40fc-b310-9b2472e8299c",{}]
-
---- 4.7 StatusNotification (Charging) ---
-
-[EVSE] RAW RECV: [3,"6644ea8e-9312-40fc-b310-9b2472e8299c",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Charging)
-.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
-INFO:ocpp:rddQC4000001: send [2,"d3637da1-57b4-46df-80b0-e32a993de36e","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-10T16:51:14Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7367}]
-INFO:ocpp:rddQC4000001: receive message [3,"d3637da1-57b4-46df-80b0-e32a993de36e",{}]
-
---- 4.8 MeterValues ---
-
-[EVSE] RAW RECV: [3,"d3637da1-57b4-46df-80b0-e32a993de36e",{}]
-.INFO:ocpp:rddQC4000001: receive message [2,"a95ef6faee4411f092430242c0a8300e","Reset",{"type":"Soft"}]
-
---- 4.9 Reset (Soft) ---
-
-[EVSE] RAW RECV: [2,"a95ef6faee4411f092430242c0a8300e","Reset",{"type":"Soft"}]
-
-[EVSE] RECV Packet: Reset
-Payload: {
-  "type": "Soft"
-}
-INFO:ocpp_16_interface:Received Reset type: Soft
-
-[EVSE] Sending Reset Response (Accepted)
-INFO:ocpp:rddQC4000001: send [3,"a95ef6faee4411f092430242c0a8300e",{"status":"Accepted"}]
-INFO:EVSE_Sim:Processing Command: STOP_TRANSACTION with args: {'connector_id': 1, 'reason': 'HardReset'}
-INFO:ocpp:rddQC4000001: send [2,"bf0e491c-8151-4169-b13f-df7e36f9da65","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-10T16:51:15Z","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"bf0e491c-8151-4169-b13f-df7e36f9da65",{}]
-
-[EVSE] RAW RECV: [3,"bf0e491c-8151-4169-b13f-df7e36f9da65",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
-INFO:ocpp:rddQC4000001: send [2,"0f1ad572-6142-485b-845c-fe3f99d6cde0","StopTransaction",{"meterStop":100,"timestamp":"2026-01-10T16:51:15Z","transactionId":7367,"reason":"HardReset"}]
-INFO:ocpp:rddQC4000001: receive message [3,"0f1ad572-6142-485b-845c-fe3f99d6cde0",{}]
-
-[EVSE] RAW RECV: [3,"0f1ad572-6142-485b-845c-fe3f99d6cde0",{}]
-INFO:ocpp_16_interface:Transaction stopped on 1: 7367
-INFO:ocpp:rddQC4000001: send [2,"3c6fa802-b014-46a1-b3e4-89dc868e407e","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T16:51:15Z","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"3c6fa802-b014-46a1-b3e4-89dc868e407e",{}]
-
-[EVSE] RAW RECV: [3,"3c6fa802-b014-46a1-b3e4-89dc868e407e",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Available)
-.
---- 4.10 StopTransaction ---
-.
---- 4.11 StatusNotification (Plug) ---
-.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available', 'info': 'Unplugged'}
-INFO:ocpp:rddQC4000001: send [2,"bc03b0c0-fde6-4cde-a561-815d3d25ad3b","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T16:51:16Z","info":"Unplugged","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"bc03b0c0-fde6-4cde-a561-815d3d25ad3b",{}]
-
---- 4.12 StatusNotification (Unplug) -> Available ---
-
-[EVSE] RAW RECV: [3,"bc03b0c0-fde6-4cde-a561-815d3d25ad3b",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Available)
-.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Preparing', 'info': 'PluggedIn'}
-INFO:ocpp:rddQC4000001: send [2,"5256dc67-aa78-4dfe-9969-eb04d4288895","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Preparing","timestamp":"2026-01-10T16:51:17Z","info":"PluggedIn","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"5256dc67-aa78-4dfe-9969-eb04d4288895",{}]
-
---- 4.13 StatusNotification (Plug) -> Preparing ---
-
-[EVSE] RAW RECV: [3,"5256dc67-aa78-4dfe-9969-eb04d4288895",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-.INFO:ocpp:rddQC4000001: receive message [2,"ab61ea02ee4411f0a77e0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
-
---- 4.14 RemoteStartTransaction ---
-
-[EVSE] RAW RECV: [2,"ab61ea02ee4411f0a77e0242c0a8300e","RemoteStartTransaction",{"connectorId":1,"idTag":"RFID_SIM"}]
-
-[EVSE] RECV Packet: RemoteStartTransaction
-Payload: {
-  "idTag": "RFID_SIM",
-  "connectorId": 1
-}
-INFO:ocpp_16_interface:Received RemoteStartTransaction for id_tag: RFID_SIM
-
-[EVSE] Sending RemoteStartTransaction Response (Accepted)
-INFO:ocpp:rddQC4000001: send [3,"ab61ea02ee4411f0a77e0242c0a8300e",{"status":"Accepted"}]
-INFO:ocpp:rddQC4000001: send [2,"92449f1d-5a50-4dde-a978-56d8721ab7dd","StartTransaction",{"connectorId":1,"idTag":"RFID_SIM","meterStart":0,"timestamp":"2026-01-10T16:51:18Z"}]
-INFO:ocpp:rddQC4000001: receive message [3,"92449f1d-5a50-4dde-a978-56d8721ab7dd",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7368}]
-
-[EVSE] RAW RECV: [3,"92449f1d-5a50-4dde-a978-56d8721ab7dd",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7368}]
-INFO:ocpp_16_interface:Transaction started on 1: 7368
-.
---- 4.15 StartTransaction ---
-.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Charging'}
-INFO:ocpp:rddQC4000001: send [2,"23edb920-fdcd-40df-a97b-82bd39b0318c","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Charging","timestamp":"2026-01-10T16:51:20Z","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"23edb920-fdcd-40df-a97b-82bd39b0318c",{}]
-
---- 4.16 StatusNotification (Charging) ---
-
-[EVSE] RAW RECV: [3,"23edb920-fdcd-40df-a97b-82bd39b0318c",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Charging)
-.INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
-INFO:ocpp:rddQC4000001: send [2,"4985202f-0eb3-4b16-a413-e45ca5fb769c","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-01-10T16:51:21Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"}]}],"transactionId":7368}]
-INFO:ocpp:rddQC4000001: receive message [3,"4985202f-0eb3-4b16-a413-e45ca5fb769c",{}]
-
---- 4.17 MeterValues ---
-
-[EVSE] RAW RECV: [3,"4985202f-0eb3-4b16-a413-e45ca5fb769c",{}]
-.INFO:ocpp:rddQC4000001: receive message [2,"ae0748f3ee4411f0a6b20242c0a8300e","Reset",{"type":"Hard"}]
-
---- 4.18 Reset (Hard) ---
-
-[EVSE] RAW RECV: [2,"ae0748f3ee4411f0a6b20242c0a8300e","Reset",{"type":"Hard"}]
-
-[EVSE] RECV Packet: Reset
-Payload: {
-  "type": "Hard"
-}
-INFO:ocpp_16_interface:Received Reset type: Hard
-
-[EVSE] Sending Reset Response (Accepted)
-INFO:ocpp:rddQC4000001: send [3,"ae0748f3ee4411f0a6b20242c0a8300e",{"status":"Accepted"}]
-INFO:EVSE_Sim:Processing Command: STOP_TRANSACTION with args: {'connector_id': 1, 'reason': 'HardReset'}
-INFO:ocpp:rddQC4000001: send [2,"b83ee4cc-2b03-49b8-8a7a-d0c76908160d","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Finishing","timestamp":"2026-01-10T16:51:23Z","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"b83ee4cc-2b03-49b8-8a7a-d0c76908160d",{}]
-
-[EVSE] RAW RECV: [3,"b83ee4cc-2b03-49b8-8a7a-d0c76908160d",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
-INFO:ocpp:rddQC4000001: send [2,"30e56f30-39df-415b-ac13-f58e467ebc4b","StopTransaction",{"meterStop":100,"timestamp":"2026-01-10T16:51:23Z","transactionId":7368,"reason":"HardReset"}]
-INFO:ocpp:rddQC4000001: receive message [3,"30e56f30-39df-415b-ac13-f58e467ebc4b",{}]
-
-[EVSE] RAW RECV: [3,"30e56f30-39df-415b-ac13-f58e467ebc4b",{}]
-INFO:ocpp_16_interface:Transaction stopped on 1: 7368
-INFO:ocpp:rddQC4000001: send [2,"cd1b858f-9506-41b0-9ce0-6a10bf77493f","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T16:51:23Z","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"cd1b858f-9506-41b0-9ce0-6a10bf77493f",{}]
-
-[EVSE] RAW RECV: [3,"cd1b858f-9506-41b0-9ce0-6a10bf77493f",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Available)
-.
---- 4.19 StopTransaction ---
-.
---- 4.20 StatusNotification (Plug) ---
-.INFO:EVSE_Sim:Processing Command: STATUS with args: {'connector_id': 1, 'status': 'Available', 'info': 'Unplugged'}
-INFO:ocpp:rddQC4000001: send [2,"b6d1fceb-60f5-4ba4-8d0a-d5a81ef2b9f1","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-01-10T16:51:24Z","info":"Unplugged","vendorId":"KMUTNB","vendorErrorCode":""}]
-INFO:ocpp:rddQC4000001: receive message [3,"b6d1fceb-60f5-4ba4-8d0a-d5a81ef2b9f1",{}]
-
---- 4.21 StatusNotification (Unplug) -> Available ---
-
-[EVSE] RAW RECV: [3,"b6d1fceb-60f5-4ba4-8d0a-d5a81ef2b9f1",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Available)
-.
-
-=============================== warnings summary ===============================
-tests/api/test_mea_section4.py: 13 warnings
-  /Users/rus/development/MEA-V2G/Ocpp16Interface.py:112: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-    'timestamp': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
-
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_01_reset_hard
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_05_remote_start_transaction
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_09_reset_soft
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_14_remote_start_transaction
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_18_reset_hard
-  /Users/rus/development/MEA-V2G/tests/api/test_mea_postman.py:47: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-    nonce = datetime.utcnow().isoformat() + "Z"
-
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_05_remote_start_transaction
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_14_remote_start_transaction
-  /Users/rus/development/MEA-V2G/Ocpp16Interface.py:146: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-    timestamp=datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
-
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_08_meter_values
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_17_meter_values
-  /Users/rus/development/MEA-V2G/Ocpp16Interface.py:458: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-    "timestamp": datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
-
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_09_reset_soft
-tests/api/test_mea_section4.py::TestMeaSection4::test_4_18_reset_hard
-  /Users/rus/development/MEA-V2G/Ocpp16Interface.py:240: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-    timestamp=datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
-
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section4.xml -
-======================= 21 passed, 24 warnings in 21.98s =======================
-
-\end{lstlisting}
 
 \end{document}

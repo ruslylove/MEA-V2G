@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="7" time="2.678" timestamp="2026-01-11T16:44:35.672803+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_00_initialization" time="2.005"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"b9a074c5-ff1e-4aec-a9a1-013e7ae0cf00",{"currentTime":"2026-01-11T09:45:13Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"a7dfc0a1-0256-45ce-815c-1364ac4a179b",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
+
+--- 9.0 Initialization ---
+DEBUG: Found in queue: [EVSE] Connected to CSMS!
+DEBUG: Found in queue: [EVSE] Sending BootNotification...
+DEBUG: Buffering unmatched: [EVSE] Sending BootNotification...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"b9a074c5-ff1e-4aec-a9a1-013e7ae0cf00",{"currentTime":"2026-01-11T09:45:13Z","interval":3600,"status":"Accepted"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"b9a074c5-ff1e-4aec-a9a1-013e7ae0cf00",{"currentTime":"2026-01-11T09:45:13Z","interval":3600,"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] BootNotification ACCEPTED
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"a7dfc0a1-0256-45ce-815c-1364ac4a179b",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"a7dfc0a1-0256-45ce-815c-1364ac4a179b",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_01_meav2g_config" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration MEAV2G=true ---
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] Sending Heartbeat...
+DEBUG: Buffering unmatched: [EVSE] Sending Heartbeat...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
+
+[EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_02_meter_sample" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration MeterValueSampleInterval=10 ---
+
+[EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_03_local_auth" time="0.103"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration LocalAuthorizeOffline=false ---
+
+[EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_04_01_power_neg5k" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration Power.Active.Import=-5000 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_04_02_power_2k" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration Power.Active.Import=2000 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section9.TestMeaSection9" name="test_9_04_03_power_0" time="0.107"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration Power.Active.Import=0 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase></testsuite></testsuites>

@@ -59,6 +59,11 @@ class EvseSimulator:
         """
         LOGGER.info("Command processing loop started.")
         while True:
+            # Wait for connection
+            if not self.connected or not self.cp:
+                await asyncio.sleep(0.1)
+                continue
+
             try:
                 # Non-blocking get from thread-safe queue
                 # We need to poll because we are in asyncio but reading a sync queue
@@ -119,6 +124,12 @@ class EvseSimulator:
                      if msg:
                          LOGGER.info(f"Injecting CSMS Message: {msg}")
                          await self.cp.route_message(msg)
+
+                elif command == 'CLOSE_CONNECTION':
+                     LOGGER.info("Forcing Connection Close...")
+                     if self.cp and self.cp._connection:
+                         await self.cp._connection.close()
+                         # The loop in _main will catch this (ConnectionClosed) and restart.
 
             except Exception as e:
                 LOGGER.error(f"Error processing command: {e}")

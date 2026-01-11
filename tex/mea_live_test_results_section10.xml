@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="24" time="4.470" timestamp="2026-01-11T16:43:22.442193+07:00" hostname="Ruslees-iMac.local"><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_00_initialization" time="2.008"><system-out>--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"2a773ee9-dc99-4db7-b71e-076e3a284179",{"currentTime":"2026-01-11T09:44:00Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"f066f390-7b77-419d-9486-8fb4577444b5",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"565f8c95-d36b-4858-8d71-d04a47d518b5",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"42c6f5c2-3e01-49a1-9041-73079e2ac04b",{"currentTime":"2026-01-11T09:44:00Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:00Z)
+
+--- 10.0 Initialization ---
+DEBUG: Found in queue: [EVSE] Connected to CSMS!
+DEBUG: Found in queue: [EVSE] Sending BootNotification...
+DEBUG: Buffering unmatched: [EVSE] Sending BootNotification...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2a773ee9-dc99-4db7-b71e-076e3a284179",{"currentTime":"2026-01-11T09:44:00Z","interval":3600,"status":"Accepted"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2a773ee9-dc99-4db7-b71e-076e3a284179",{"currentTime":"2026-01-11T09:44:00Z","interval":3600,"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] BootNotification ACCEPTED
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"f066f390-7b77-419d-9486-8fb4577444b5",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"f066f390-7b77-419d-9486-8fb4577444b5",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_01_authorize" time="0.208"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.1 Authorize ---
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"565f8c95-d36b-4858-8d71-d04a47d518b5",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"565f8c95-d36b-4858-8d71-d04a47d518b5",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] Sending Heartbeat...
+DEBUG: Buffering unmatched: [EVSE] Sending Heartbeat...
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"42c6f5c2-3e01-49a1-9041-73079e2ac04b",{"currentTime":"2026-01-11T09:44:00Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"42c6f5c2-3e01-49a1-9041-73079e2ac04b",{"currentTime":"2026-01-11T09:44:00Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:00Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:00Z)
+
+[EVSE] RAW RECV: [3,"c9e2150f-976b-43d9-a5eb-890d4d418990",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+
+[EVSE] Authorize ACKNOWLEDGED (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c9e2150f-976b-43d9-a5eb-890d4d418990",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c9e2150f-976b-43d9-a5eb-890d4d418990",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+DEBUG: Found in queue: [EVSE] Authorize ACKNOWLEDGED (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_02_boot_notification" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.2 BootNotification ---
+
+[EVSE] RAW RECV: [3,"af563e60-875b-4764-a6fd-5412e7f8dea5",{"currentTime":"2026-01-11T09:44:01Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"af563e60-875b-4764-a6fd-5412e7f8dea5",{"currentTime":"2026-01-11T09:44:01Z","interval":3600,"status":"Accepted"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"af563e60-875b-4764-a6fd-5412e7f8dea5",{"currentTime":"2026-01-11T09:44:01Z","interval":3600,"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] BootNotification ACCEPTED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_03_data_transfer" time="0.102"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.3 DataTransfer ---
+
+[EVSE] RAW RECV: [2, "uuid-DataTransfer", "DataTransfer", {"vendorId": "MEA", "messageId": "Test"}]
+
+[EVSE] RECV Packet: DataTransfer (MEA, Test)
+
+[EVSE] Sending DataTransfer Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-DataTransfer", "DataTransfer", {"vendorId": "MEA", "messageId": "Test"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-DataTransfer", "DataTransfer", {"vendorId": "MEA", "messageId": "Test"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: DataTransfer (MEA, Test)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: DataTransfer (MEA, Test)
+DEBUG: Found in queue: [EVSE] Sending DataTransfer Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_04_heartbeat" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.4 Heartbeat ---
+DEBUG: Found 'Heartbeat ACKNOWLEDGED' in BUFFER
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_05_meter_values" time="0.209"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.5 MeterValues ---
+
+[EVSE] RAW RECV: [3,"fc3dfe60-bc7d-4622-a067-44801c81564f",{"currentTime":"2026-01-11T09:44:01Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:01Z)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"fc3dfe60-bc7d-4622-a067-44801c81564f",{"currentTime":"2026-01-11T09:44:01Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"fc3dfe60-bc7d-4622-a067-44801c81564f",{"currentTime":"2026-01-11T09:44:01Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:01Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:44:01Z)
+
+[EVSE] RAW RECV: [3,"9f372c00-4cd0-4643-9b36-30333d6dee0b",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"9f372c00-4cd0-4643-9b36-30333d6dee0b",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"9f372c00-4cd0-4643-9b36-30333d6dee0b",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_06_remote_start" time="0.209"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.6 RemoteStartTransaction ---
+
+[EVSE] RAW RECV: [3,"028bd4c0-5176-4451-8e1d-ec7a04cf1f98",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"028bd4c0-5176-4451-8e1d-ec7a04cf1f98",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"028bd4c0-5176-4451-8e1d-ec7a04cf1f98",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [2, "uuid-RemoteStartTransaction", "RemoteStartTransaction", {"idTag": "RFID_SIM", "connectorId": 1}]
+
+[EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+[EVSE] RAW RECV: [3,"c578153f-a89d-46c6-b721-fef04b26defe",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-RemoteStartTransaction", "RemoteStartTransaction", {"idTag": "RFID_SIM", "connectorId": 1}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-RemoteStartTransaction", "RemoteStartTransaction", {"idTag": "RFID_SIM", "connectorId": 1}]
+DEBUG: Found in queue: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: RemoteStartTransaction
+Payload: {
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Found in queue: [EVSE] Sending RemoteStartTransaction Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_07_remote_stop" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.7 RemoteStopTransaction ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"c578153f-a89d-46c6-b721-fef04b26defe",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"c578153f-a89d-46c6-b721-fef04b26defe",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Preparing)
+
+[EVSE] RAW RECV: [2, "uuid-RemoteStopTransaction", "RemoteStopTransaction", {"transactionId": 1}]
+
+[EVSE] Sending RemoteStopTransaction Response (Rejected)
+
+[EVSE] RAW RECV: [3,"ad61cf22-53f8-41d6-ae6a-856945749d04",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7586}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-RemoteStopTransaction", "RemoteStopTransaction", {"transactionId": 1}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-RemoteStopTransaction", "RemoteStopTransaction", {"transactionId": 1}]
+DEBUG: Found in queue: [EVSE] Sending RemoteStopTransaction Response (Rejected)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_08_reset" time="0.102"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.8 Reset ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ad61cf22-53f8-41d6-ae6a-856945749d04",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7586}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ad61cf22-53f8-41d6-ae6a-856945749d04",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"},"transactionId":7586}]
+DEBUG: Found in queue: Transaction started on 1: 7586
+DEBUG: Buffering unmatched: Transaction started on 1: 7586
+
+[EVSE] RAW RECV: [3,"60c0742e-96b1-485d-b610-48c3c36b87b7",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Charging)
+
+[EVSE] RAW RECV: [2, "uuid-Reset", "Reset", {"type": "Hard"}]
+
+[EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+
+[EVSE] Sending Reset Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"60c0742e-96b1-485d-b610-48c3c36b87b7",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"60c0742e-96b1-485d-b610-48c3c36b87b7",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Charging)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Reset", "Reset", {"type": "Hard"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Reset", "Reset", {"type": "Hard"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: Reset
+Payload: {
+  "type": "Hard"
+}
+DEBUG: Found in queue: [EVSE] Sending Reset Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_09_start_transaction" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.9 StartTransaction ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED (Preparing)' in BUFFER
+DEBUG: Found 'Transaction started on 1' in BUFFER
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_10_status_notification" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.10 StatusNotification ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED' in BUFFER
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_11_stop_transaction" time="0.208"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.11 StopTransaction ---
+[Sim] Charging already in progress for StartTransaction request
+
+[EVSE] RAW RECV: [3,"62299c9c-4a1b-4ae2-8266-cc08c6805c28",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"62299c9c-4a1b-4ae2-8266-cc08c6805c28",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"62299c9c-4a1b-4ae2-8266-cc08c6805c28",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"a7d5f2aa-69c2-46f2-a5ea-f41677dedd3c",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+
+[EVSE] RAW RECV: [3,"a3053a9d-1071-4ca2-8005-b64fe168d777",{}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"a7d5f2aa-69c2-46f2-a5ea-f41677dedd3c",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"a7d5f2aa-69c2-46f2-a5ea-f41677dedd3c",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Finishing)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"a3053a9d-1071-4ca2-8005-b64fe168d777",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"a3053a9d-1071-4ca2-8005-b64fe168d777",{}]
+DEBUG: Found in queue: Transaction stopped on 1: 7586
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_12_reserve_now" time="0.103"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.12 ReserveNow ---
+
+[EVSE] RAW RECV: [3,"be0d6d3b-0eb1-4720-b6ed-6a53292b5e71",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [2, "uuid-ReserveNow", "ReserveNow", {"reservationId": 1, "connectorId": 1, "idTag": "RFID_SIM", "expiryDate": "2026-01-11T09:43:25.754899Z"}]
+
+[EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1,
+  "expiryDate": "2026-01-11T09:43:25.754899Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+
+[EVSE] Sending ReserveNow Response (Accepted)
+
+[EVSE] RAW RECV: [3,"851996fe-349a-474c-8061-65ddbad840ca",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"be0d6d3b-0eb1-4720-b6ed-6a53292b5e71",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"be0d6d3b-0eb1-4720-b6ed-6a53292b5e71",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-ReserveNow", "ReserveNow", {"reservationId": 1, "connectorId": 1, "idTag": "RFID_SIM", "expiryDate": "2026-01-11T09:43:25.754899Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-ReserveNow", "ReserveNow", {"reservationId": 1, "connectorId": 1, "idTag": "RFID_SIM", "expiryDate": "2026-01-11T09:43:25.754899Z"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1,
+  "expiryDate": "2026-01-11T09:43:25.754899Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ReserveNow
+Payload: {
+  "reservationId": 1,
+  "expiryDate": "2026-01-11T09:43:25.754899Z",
+  "idTag": "RFID_SIM",
+  "connectorId": 1
+}
+DEBUG: Found in queue: [EVSE] Sending ReserveNow Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_13_cancel_reservation" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.13 CancelReservation ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"851996fe-349a-474c-8061-65ddbad840ca",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"851996fe-349a-474c-8061-65ddbad840ca",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Reserved)
+
+[EVSE] RAW RECV: [2, "uuid-CancelReservation", "CancelReservation", {"reservationId": 1}]
+
+[EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1
+}
+
+[EVSE] Sending CancelReservation Response (Accepted)
+
+[EVSE] RAW RECV: [3,"6e75d118-3908-4053-8df8-f65cfd22f272",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-CancelReservation", "CancelReservation", {"reservationId": 1}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-CancelReservation", "CancelReservation", {"reservationId": 1}]
+DEBUG: Found in queue: [EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: CancelReservation
+Payload: {
+  "reservationId": 1
+}
+DEBUG: Found in queue: [EVSE] Sending CancelReservation Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_14_set_charging_profile" time="0.105"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.14 SetChargingProfile ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"6e75d118-3908-4053-8df8-f65cfd22f272",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"6e75d118-3908-4053-8df8-f65cfd22f272",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [2, "uuid-SetChargingProfile", "SetChargingProfile", {"connectorId": 1, "csChargingProfiles": {"chargingProfileId": 1, "stackLevel": 0, "chargingProfilePurpose": "TxDefaultProfile", "chargingProfileKind": "Absolute", "chargingSchedule": {"chargingRateUnit": "A", "chargingSchedulePeriod": [{"startPeriod": 0, "limit": 32}]}}}]
+
+[EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 1,
+    "stack_level": 0,
+    "charging_profile_purpose": "TxDefaultProfile",
+    "charging_profile_kind": "Absolute",
+    "charging_schedule": {
+      "charging_rate_unit": "A",
+      "charging_schedule_period": [
+        {
+          "start_period": 0,
+          "limit": 32
+        }
+      ]
+    }
+  }
+}
+
+[EVSE] Sending SetChargingProfile Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-SetChargingProfile", "SetChargingProfile", {"connectorId": 1, "csChargingProfiles": {"chargingProfileId": 1, "stackLevel": 0, "chargingProfilePurpose": "TxDefaultProfile", "chargingProfileKind": "Absolute", "chargingSchedule": {"chargingRateUnit": "A", "chargingSchedulePeriod": [{"startPeriod": 0, "limit": 32}]}}}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-SetChargingProfile", "SetChargingProfile", {"connectorId": 1, "csChargingProfiles": {"chargingProfileId": 1, "stackLevel": 0, "chargingProfilePurpose": "TxDefaultProfile", "chargingProfileKind": "Absolute", "chargingSchedule": {"chargingRateUnit": "A", "chargingSchedulePeriod": [{"startPeriod": 0, "limit": 32}]}}}]
+DEBUG: Found in queue: [EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 1,
+    "stack_level": 0,
+    "charging_profile_purpose": "TxDefaultProfile",
+    "charging_profile_kind": "Absolute",
+    "charging_schedule": {
+      "charging_rate_unit": "A",
+      "charging_schedule_period": [
+        {
+          "start_period": 0,
+          "limit": 32
+        }
+      ]
+    }
+  }
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: SetChargingProfile
+Payload: {
+  "connectorId": 1,
+  "csChargingProfiles": {
+    "charging_profile_id": 1,
+    "stack_level": 0,
+    "charging_profile_purpose": "TxDefaultProfile",
+    "charging_profile_kind": "Absolute",
+    "charging_schedule": {
+      "charging_rate_unit": "A",
+      "charging_schedule_period": [
+        {
+          "start_period": 0,
+          "limit": 32
+        }
+      ]
+    }
+  }
+}
+DEBUG: Found in queue: [EVSE] Sending SetChargingProfile Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_15_trigger_message" time="0.001"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.15 TriggerMessage ---
+DEBUG: Found 'StatusNotification ACKNOWLEDGED' in BUFFER
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_16_get_configuration" time="0.103"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.16 GetConfiguration ---
+
+[EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "StatusNotification"}]
+
+[EVSE] RECV Packet: TriggerMessage (StatusNotification)
+
+[EVSE] Sending TriggerMessage Response (Accepted)
+
+[EVSE] RAW RECV: [2, "uuid-GetConfiguration", "GetConfiguration", {"key": ["HeartbeatInterval"]}]
+
+[EVSE] RECV Packet: GetConfiguration
+Payload: {
+  "keys": null,
+  "key": [
+    "HeartbeatInterval"
+  ]
+}
+
+[EVSE] Sending GetConfiguration Response (Count: 5)
+
+[EVSE] RAW RECV: [3,"bf440acd-2353-414b-9757-8f04ad69b00a",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "StatusNotification"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "StatusNotification"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: TriggerMessage (StatusNotification)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: TriggerMessage (StatusNotification)
+DEBUG: Found in queue: [EVSE] Sending TriggerMessage Response (Accepted)
+DEBUG: Buffering unmatched: [EVSE] Sending TriggerMessage Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-GetConfiguration", "GetConfiguration", {"key": ["HeartbeatInterval"]}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-GetConfiguration", "GetConfiguration", {"key": ["HeartbeatInterval"]}]
+DEBUG: Found in queue: [EVSE] RECV Packet: GetConfiguration
+Payload: {
+  "keys": null,
+  "key": [
+    "HeartbeatInterval"
+  ]
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: GetConfiguration
+Payload: {
+  "keys": null,
+  "key": [
+    "HeartbeatInterval"
+  ]
+}
+DEBUG: Found in queue: [EVSE] Sending GetConfiguration Response (Count: 5)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_17_change_configuration" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.17 ChangeConfiguration ---
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"bf440acd-2353-414b-9757-8f04ad69b00a",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"bf440acd-2353-414b-9757-8f04ad69b00a",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [2, "uuid-ChangeConfiguration", "ChangeConfiguration", {"key": "HeartbeatInterval", "value": "600"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "HeartbeatInterval",
+  "value": "600"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-ChangeConfiguration", "ChangeConfiguration", {"key": "HeartbeatInterval", "value": "600"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-ChangeConfiguration", "ChangeConfiguration", {"key": "HeartbeatInterval", "value": "600"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "HeartbeatInterval",
+  "value": "600"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "HeartbeatInterval",
+  "value": "600"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_18_change_availability" time="0.102"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.18 ChangeAvailability ---
+
+[EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Inoperative"}]
+
+[EVSE] RECV Packet: ChangeAvailability (Inoperative for 1)
+
+[EVSE] Sending ChangeAvailability Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Inoperative"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Inoperative"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeAvailability (Inoperative for 1)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeAvailability (Inoperative for 1)
+DEBUG: Found in queue: [EVSE] Sending ChangeAvailability Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_19_get_diagnostics" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.19 GetDiagnostics ---
+
+[EVSE] RAW RECV: [2, "uuid-GetDiagnostics", "GetDiagnostics", {"location": "ftp://example.com"}]
+
+[EVSE] RECV Packet: GetDiagnostics (ftp://example.com)
+
+[EVSE] Sending GetDiagnostics Response (fileName: diagnostics.log)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-GetDiagnostics", "GetDiagnostics", {"location": "ftp://example.com"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-GetDiagnostics", "GetDiagnostics", {"location": "ftp://example.com"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: GetDiagnostics (ftp://example.com)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: GetDiagnostics (ftp://example.com)
+DEBUG: Found in queue: [EVSE] Sending GetDiagnostics Response (fileName: diagnostics.log)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_20_update_firmware" time="0.105"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.20 UpdateFirmware ---
+
+[EVSE] RAW RECV: [2, "uuid-UpdateFirmware", "UpdateFirmware", {"location": "ftp://example.com", "retrieveDate": "2026-01-11T09:43:26.491593Z"}]
+
+[EVSE] RECV Packet: UpdateFirmware (ftp://example.com)
+
+[EVSE] Sending UpdateFirmware Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-UpdateFirmware", "UpdateFirmware", {"location": "ftp://example.com", "retrieveDate": "2026-01-11T09:43:26.491593Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-UpdateFirmware", "UpdateFirmware", {"location": "ftp://example.com", "retrieveDate": "2026-01-11T09:43:26.491593Z"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: UpdateFirmware (ftp://example.com)
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: UpdateFirmware (ftp://example.com)
+DEBUG: Found in queue: [EVSE] Sending UpdateFirmware Response (Accepted)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_21_send_local_list" time="0.104"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.21 SendLocalList ---
+
+[EVSE] RAW RECV: [2, "uuid-SendLocalList", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [], "updateType": "Full"}]
+
+[EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=0)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-SendLocalList", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [], "updateType": "Full"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-SendLocalList", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [], "updateType": "Full"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=0)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_22_get_local_list_version" time="0.106"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.22 GetLocalListVersion ---
+
+[EVSE] RAW RECV: [2, "uuid-GetLocalListVersion", "GetLocalListVersion", {}]
+
+[EVSE] RECV Packet: GetLocalListVersion
+
+[EVSE] Sending GetLocalListVersion Response (Version: 1)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-GetLocalListVersion", "GetLocalListVersion", {}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-GetLocalListVersion", "GetLocalListVersion", {}]
+DEBUG: Found in queue: [EVSE] RECV Packet: GetLocalListVersion
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: GetLocalListVersion
+DEBUG: Found in queue: [EVSE] Sending GetLocalListVersion Response (Version: 1)
+
+</system-out></testcase><testcase classname="tests.api.test_mea_section10.TestMeaSection10" name="test_10_23_clear_cache" time="0.102"><system-out>--------------------------------- Captured Out ---------------------------------
+
+--- 10.23 ClearCache ---
+
+[EVSE] RAW RECV: [2, "uuid-ClearCache", "ClearCache", {}]
+
+[EVSE] RECV Packet: ClearCache
+
+[EVSE] Sending ClearCache Response (Accepted)
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-ClearCache", "ClearCache", {}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-ClearCache", "ClearCache", {}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ClearCache
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ClearCache
+DEBUG: Found in queue: [EVSE] Sending ClearCache Response (Accepted)
+
+</system-out></testcase></testsuite></testsuites>

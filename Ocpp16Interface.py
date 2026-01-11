@@ -152,8 +152,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             'MeterValueSampleInterval': '60',
             'LocalAuthorizeOffline': 'False',
             'UnlockConnectorOnEVSideDisconnect': 'False',
-            'AutoCharge': 'False', # Custom Key
-            'MEA_V2G_PowerDemand': '0' # Custom Key
+            'AutoCharge': 'False',
+            'MEA_V2G_PowerDemand': '0',
+            'MEAV2G': 'true',
+            'Power.Active.Import': '0'
         }
 
     async def send_boot_notification(self, model="MEA-V2G-01", vendor="KMUTNB"):
@@ -289,6 +291,9 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             # Consume reservation
             del self.reservations[connector_id]
             LOGGER.info(f"Consuming Reservation {request_payload['reservation_id']} for transaction.")
+
+        # Send StatusNotification (Preparing) - MEA Requirement
+        await self.send_status_notification(connector_id, ChargePointStatus.preparing)
 
         request = call.StartTransaction(**request_payload)
         
@@ -431,6 +436,9 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                 )
                 
                 await self.call(request)
+                msg_mv = f"[EVSE] MeterValues ACKNOWLEDGED"
+                print(f"\n{msg_mv}", flush=True)
+                PACKET_QUEUE.put(msg_mv)
                 
         except asyncio.CancelledError:
             pass
@@ -541,6 +549,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         else:
              # Allow unknown keys? Usually Rejected or NotSupported, but for mock flexible
              self.configuration[key] = value # Accept everything for now
+             
+             msg_resp = f"[EVSE] Sending ChangeConfiguration Response (Accepted)"
+             print(f"\n{msg_resp}", flush=True)
+             PACKET_QUEUE.put(msg_resp)
+             
              return call_result.ChangeConfiguration(status=ConfigurationStatus.accepted)
         
     @on(Action.get_configuration)
@@ -580,6 +593,9 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
     @on(Action.trigger_message)
     async def on_trigger_message(self, requested_message, **kwargs):
+        msg = f"[EVSE] RECV Packet: TriggerMessage ({requested_message})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received TriggerMessage for {requested_message}")
         
         if requested_message == "BootNotification":
@@ -589,11 +605,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         elif requested_message == "Heartbeat":
              asyncio.create_task(self.send_heartbeat())
         elif requested_message == "MeterValues":
-             # For MeterValues, we might need to send one immediately. 
-             # Reusing the loop logic or creating a one-off.
-             # Let's create a one-off for now to satisfy the test.
              asyncio.create_task(self.send_meter_values_one_off())
 
+        msg_resp = f"[EVSE] Sending TriggerMessage Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.TriggerMessage(status=ConfigurationStatus.accepted)
 
     async def send_meter_values_one_off(self):
@@ -617,20 +633,44 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             }]
         )
         await self.call(request)
+        msg_mv = f"[EVSE] MeterValues ACKNOWLEDGED"
+        print(f"\n{msg_mv}", flush=True)
+        PACKET_QUEUE.put(msg_mv)
 
     @on(Action.unlock_connector)
     async def on_unlock_connector(self, connector_id, **kwargs):
+        msg = f"[EVSE] RECV Packet: UnlockConnector ({connector_id})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received UnlockConnector for {connector_id}")
+        
+        msg_resp = f"[EVSE] Sending UnlockConnector Response (Unlocked)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.UnlockConnector(status=UnlockStatus.unlocked)
 
     @on(Action.get_diagnostics)
     async def on_get_diagnostics(self, location, **kwargs):
+        msg = f"[EVSE] RECV Packet: GetDiagnostics ({location})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received GetDiagnostics for {location}")
+        
+        msg_resp = f"[EVSE] Sending GetDiagnostics Response (fileName: diagnostics.log)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.GetDiagnostics(file_name="diagnostics.log")
 
     @on(Action.update_firmware)
     async def on_update_firmware(self, location, **kwargs):
+        msg = f"[EVSE] RECV Packet: UpdateFirmware ({location})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received UpdateFirmware from {location}")
+        
+        msg_resp = f"[EVSE] Sending UpdateFirmware Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.UpdateFirmware()
 
     @on(Action.reset)
@@ -720,15 +760,48 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
     @on(Action.get_local_list_version)
     async def on_get_local_list_version(self, **kwargs):
+        msg = f"[EVSE] RECV Packet: GetLocalListVersion"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
         LOGGER.info("Received GetLocalListVersion")
+        
+        msg_resp = f"[EVSE] Sending GetLocalListVersion Response (Version: 1)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.GetLocalListVersion(list_version=1)
 
     @on(Action.change_availability)
     async def on_change_availability(self, connector_id, type, **kwargs):
-        LOGGER.info(f"Received ChangeAvailability {type} for {connector_id}")
+        msg = f"[EVSE] RECV Packet: ChangeAvailability ({type} for {connector_id})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
+        LOGGER.info(msg)
+        
+        msg_resp = f"[EVSE] Sending ChangeAvailability Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.ChangeAvailability(status=AvailabilityStatus.accepted)
 
     @on(Action.data_transfer)
     async def on_data_transfer(self, vendor_id, message_id=None, data=None, **kwargs):
-        LOGGER.info(f"Received DataTransfer: {vendor_id}, {message_id}, {data}")
+        msg = f"[EVSE] RECV Packet: DataTransfer ({vendor_id}, {message_id})"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
+        LOGGER.info(msg)
+        
+        msg_resp = f"[EVSE] Sending DataTransfer Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
         return call_result.DataTransfer(status=DataTransferStatus.accepted, data="Pong")
+
+    @on(Action.clear_cache)
+    async def on_clear_cache(self, **kwargs):
+        msg = f"[EVSE] RECV Packet: ClearCache"
+        print(f"\n{msg}", flush=True)
+        PACKET_QUEUE.put(msg)
+        LOGGER.info(msg)
+        
+        msg_resp = f"[EVSE] Sending ClearCache Response (Accepted)"
+        print(f"\n{msg_resp}", flush=True)
+        PACKET_QUEUE.put(msg_resp)
+        return call_result.ClearCache(status=ClearCacheStatus.accepted)

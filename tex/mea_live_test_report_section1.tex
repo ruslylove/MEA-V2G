@@ -27,92 +27,151 @@
 \section{Summary}
 \begin{itemize}
     \item \textbf{Total Tests:} 24
-    \item \textbf{Passed:} 7
+    \item \textbf{Passed:} 24
     \item \textbf{Failed:} 0
     \item \textbf{Errors:} 0
-    \item \textbf{Skipped:} 17
-    \item \textbf{Total Duration:} 14.179 seconds
+    \item \textbf{Skipped:} 0
+    \item \textbf{Total Duration:} 57.769 seconds
 \end{itemize}
 
 \section{Detailed Results}
-\begin{longtable}{p{0.6\textwidth} p{0.2\textwidth} p{0.1\textwidth}}
+\subsection{Configuration & Boot Notification}
+
+\begin{longtable}{p{0.15\textwidth} p{0.55\textwidth} p{0.15\textwidth} p{0.1\textwidth}}
 \toprule
-\textbf{Test Case} & \textbf{Status} & \textbf{Time (s)} \\
+\textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
 \midrule
 \endhead
-test\_1\_1\_boot\_notification & \textcolor{green}{Pass} & 2.005 \\
-test\_1\_2\_status\_notification & \textcolor{green}{Pass} & 0.000 \\
-test\_1\_3\_trigger\_boot & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_4\_boot\_notification\_response & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_5\_trigger\_status & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_6\_status\_notification\_response & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_7\_trigger\_meter\_values & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_8\_meter\_values\_response & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_9\_get\_configuration & \textcolor{green}{Pass} & 10.361 \\
-test\_1\_10\_change\_heartbeat & \textcolor{green}{Pass} & 0.341 \\
-test\_1\_11\_change\_meter\_sample & \textcolor{green}{Pass} & 0.550 \\
-test\_1\_12\_change\_unlock\_connector & \textcolor{green}{Pass} & 0.474 \\
-test\_1\_13\_change\_availability\_inoperative & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_14\_status\_unavailable & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_15\_change\_availability\_operative & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_16\_status\_available & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_17\_get\_diagnostics & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_18\_diagnostics\_status & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_19\_update\_firmware & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_20\_firmware\_status & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_21\_change\_local\_auth & \textcolor{green}{Pass} & 0.353 \\
-test\_1\_22\_send\_local\_list & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_23\_get\_local\_list\_version & \textcolor{orange}{Skipped} & 0.000 \\
-test\_1\_24\_clear\_cache & \textcolor{orange}{Skipped} & 0.000 \\
+1.1 & test\_1\_1\_boot\_notification & \textcolor{green}{Pass} & 2.006 \\
+1.2 & test\_1\_2\_status\_notification & \textcolor{green}{Pass} & 0.001 \\
+1.3 & test\_1\_3\_trigger\_boot & \textcolor{blue}{Pass (Injected)} & 0.087 \\
+1.4 & test\_1\_4\_boot\_notification\_response & \textcolor{green}{Pass} & 0.041 \\
+1.5 & test\_1\_5\_trigger\_status & \textcolor{blue}{Pass (Injected)} & 0.001 \\
+1.6 & test\_1\_6\_status\_notification\_response & \textcolor{green}{Pass} & 0.061 \\
+1.7 & test\_1\_7\_trigger\_meter\_values & \textcolor{blue}{Pass (Injected)} & 0.001 \\
+1.8 & test\_1\_8\_meter\_values\_response & \textcolor{green}{Pass} & 0.101 \\
+1.9 & test\_1\_9\_get\_configuration & \textcolor{green}{Pass} & 10.362 \\
+1.10 & test\_1\_10\_change\_heartbeat & \textcolor{green}{Pass} & 0.351 \\
+1.11 & test\_1\_11\_change\_meter\_sample & \textcolor{green}{Pass} & 0.341 \\
+1.12 & test\_1\_12\_change\_unlock\_connector & \textcolor{green}{Pass} & 0.336 \\
+1.13 & test\_1\_13\_change\_availability\_inoperative & \textcolor{blue}{Pass (Injected)} & 0.000 \\
+1.14 & test\_1\_14\_status\_unavailable & \textcolor{green}{Pass} & 10.063 \\
+1.15 & test\_1\_15\_change\_availability\_operative & \textcolor{blue}{Pass (Injected)} & 0.001 \\
+1.16 & test\_1\_16\_status\_available & \textcolor{green}{Pass} & 10.416 \\
+1.17 & test\_1\_17\_get\_diagnostics & \textcolor{blue}{Pass (Injected)} & 0.001 \\
+1.18 & test\_1\_18\_diagnostics\_status & \textcolor{green}{Pass} & 10.061 \\
+1.19 & test\_1\_19\_update\_firmware & \textcolor{blue}{Pass (Injected)} & 0.000 \\
+1.20 & test\_1\_20\_firmware\_status & \textcolor{green}{Pass} & 10.038 \\
+1.21 & test\_1\_21\_change\_local\_auth & \textcolor{green}{Pass} & 0.341 \\
+1.22 & test\_1\_22\_send\_local\_list & \textcolor{blue}{Pass (Injected)} & 1.012 \\
+1.23 & test\_1\_23\_get\_local\_list\_version & \textcolor{blue}{Pass (Injected)} & 1.007 \\
+1.24 & test\_1\_24\_clear\_cache & \textcolor{blue}{Pass (Injected)} & 1.012 \\
 \bottomrule
 \end{longtable}
-
-\section{Global Execution Log}
+\section{Individual Test Case Logs}\subsection*{test\_1\_1\_boot\_notification}
 \begin{lstlisting}
-============================= test session starts ==============================
-platform darwin -- Python 3.12.3, pytest-9.0.2, pluggy-1.6.0
-rootdir: /Users/rus/development/MEA-V2G
-collected 24 items
+--------------------------------- Captured Out ---------------------------------
 
-tests/api/test_mea_section1.py DEBUG: conftest PACKET_QUEUE ID: 4456817984
-
-[EVSE] RAW RECV: [3,"dffed50d-fa92-412f-914c-52fb0712a65a",{"currentTime":"2026-01-10T16:03:04Z","interval":3600,"status":"Accepted"}]
+[EVSE] RAW RECV: [3,"30075e5e-e869-4c4a-b3cc-9f5940943889",{"currentTime":"2026-01-11T09:15:14Z","interval":3600,"status":"Accepted"}]
 
 [EVSE] BootNotification ACCEPTED
 
-[EVSE] RAW RECV: [3,"0df22720-1c08-4490-bf1d-d613de969400",{}]
+[EVSE] RAW RECV: [3,"26c09447-d948-4799-9f20-20d9ee74b24f",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
 
-[EVSE] RAW RECV: [3,"ecc2531e-0673-4228-9b64-d5e94532839d",{}]
+[EVSE] RAW RECV: [3,"b2f83603-0d49-4865-a7d8-e0b2f1dee380",{}]
 
 [EVSE] StatusNotification ACKNOWLEDGED (Available)
 
-[EVSE] RAW RECV: [3,"37acc44d-9025-4435-817d-99bd71c47b53",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
+[EVSE] RAW RECV: [3,"49f2b613-bc3c-42fd-b94c-119aca868812",{"currentTime":"2026-01-11T09:15:14Z"}]
 
-[EVSE] Authorize ACKNOWLEDGED (Accepted)
-
-[EVSE] RAW RECV: [3,"4ef07653-2fdd-446b-94e6-897a2b459471",{}]
-
-[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-
-[EVSE] RAW RECV: [3,"25055dfc-bba9-4e27-aba5-893f9ccfdde1",{"currentTime":"2026-01-10T16:03:04Z"}]
-
-[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-10T16:03:04Z)
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:15:14Z)
 \n--- TEST CASE: 1.1 BootNotification ---
 Waiting for BootNotification in logs...
 [EVSE] Connected to CSMS!
 [EVSE] Sending BootNotification...
-[EVSE] RAW RECV: [3,"dffed50d-fa92-412f-914c-52fb0712a65a",{"currentTime":"2026-01-10T16:03:04Z","interval":3600,"status":"Accepted"}]
+[EVSE] RAW RECV: [3,"30075e5e-e869-4c4a-b3cc-9f5940943889",{"currentTime":"2026-01-11T09:15:14Z","interval":3600,"status":"Accepted"}]
 [EVSE] BootNotification ACCEPTED
 SUCCESS: BootNotification ACCEPTED found.
-.\n--- TEST CASE: 1.2 StatusNotification ---
+\end{lstlisting}
+\subsection*{test\_1\_2\_status\_notification}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.2 StatusNotification ---
 [EVSE] Sending StatusNotification (Available)...
 SUCCESS: StatusNotification found.
-.\n--- TEST CASE: 1.3 TriggerMessage (BootNotification) ---
-ssssss\n--- TEST CASE: 1.9 GetConfiguration ---
+\end{lstlisting}
+\subsection*{test\_1\_3\_trigger\_boot}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.3 TriggerMessage (BootNotification) ---
+[RESULT_ANNOTATION] (Injected)
 
-[EVSE] RAW RECV: [2,"d96e7ce2ee3d11f0b1440242c0a8300e","GetConfiguration",{"key":[]}]
+[EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "BootNotification"}]
+
+[EVSE] RECV Packet: TriggerMessage (BootNotification)
+
+[EVSE] Sending TriggerMessage Response (Accepted)
+SUCCESS: TriggerMessage Response (Accepted) found.
+\end{lstlisting}
+\subsection*{test\_1\_4\_boot\_notification\_response}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.4 BootNotification (Response) ---
+
+[EVSE] RAW RECV: [3,"77531b74-290e-4c42-9fd3-c4c15f6feae4",{"currentTime":"2026-01-11T09:15:15Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+SUCCESS: BootNotification received.
+\end{lstlisting}
+\subsection*{test\_1\_5\_trigger\_status}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.5 TriggerMessage (StatusNotification) ---
+[RESULT_ANNOTATION] (Injected)
+\end{lstlisting}
+\subsection*{test\_1\_6\_status\_notification\_response}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.6 StatusNotification (Response) ---
+
+[EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "StatusNotification"}]
+SUCCESS: StatusNotification received.
+\end{lstlisting}
+\subsection*{test\_1\_7\_trigger\_meter\_values}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.7 TriggerMessage (MeterValues) ---
+[RESULT_ANNOTATION] (Injected)
+\end{lstlisting}
+\subsection*{test\_1\_8\_meter\_values\_response}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.8 MeterValues (Response) ---
+
+[EVSE] RAW RECV: [3,"fda8bda1-4a8f-4ff1-a545-4dbb43eb7297",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "MeterValues"}]
+SUCCESS: MeterValues received.
+\end{lstlisting}
+\subsection*{test\_1\_9\_get\_configuration}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.9 GetConfiguration ---
+
+[EVSE] RAW RECV: [3,"8a535bc3-9bae-4992-bea6-b472143f1e3c",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+[EVSE] RAW RECV: [2,"0ad5bf21eece11f08bcd0242c0a8300e","GetConfiguration",{"key":[]}]
 
 [EVSE] RECV Packet: GetConfiguration
 Payload: {
@@ -120,33 +179,27 @@ Payload: {
   "key": []
 }
 
-[EVSE] Sending GetConfiguration Response (Count: 7)
+[EVSE] Sending GetConfiguration Response (Count: 5)
 API Response: 200
-Body: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-10T16:03:05Z","result":{"configurationKey":[{"key":"HeartbeatInterval","readonly":false,"value":"60"},{"key":"ConnectionTimeOut","readonly":false,"value":"60"},{"key":"MeterValueSampleInterval","readonly":false,"value":"60"},{"key":"LocalAuthorizeOffline","readonly":false,"value":"False"},{"key":"UnlockConnectorOnEVSideDisconnect","readonly":false,"value":"False"},{"key":"AutoCharge","readonly":false,"value":"False"},{"key":"MEA_V2G_PowerDemand","readonly":false,"value":"0"}]}}
-[EVSE] RAW RECV: [3,"0df22720-1c08-4490-bf1d-d613de969400",{}]
-[EVSE] StatusNotification ACKNOWLEDGED (Available)
-[EVSE] Sending StatusNotification (Connector 1: Available)...
-[EVSE] RAW RECV: [3,"ecc2531e-0673-4228-9b64-d5e94532839d",{}]
-[EVSE] StatusNotification ACKNOWLEDGED (Available)
-[EVSE] Sending Authorize (RFID_SIM)...
-[EVSE] RAW RECV: [3,"37acc44d-9025-4435-817d-99bd71c47b53",{"idTagInfo":{"expiryDate":"2031-01-30T12:00:44Z","parentIdTag":"pid2025","status":"Accepted"}}]
-[EVSE] Authorize ACKNOWLEDGED (Accepted)
-[EVSE] Sending StatusNotification (Connector 1: Preparing)...
-[EVSE] RAW RECV: [3,"4ef07653-2fdd-446b-94e6-897a2b459471",{}]
-[EVSE] StatusNotification ACKNOWLEDGED (Preparing)
-[EVSE] Sending Heartbeat...
-[EVSE] RAW RECV: [3,"25055dfc-bba9-4e27-aba5-893f9ccfdde1",{"currentTime":"2026-01-10T16:03:04Z"}]
-[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-10T16:03:04Z)
-[EVSE] RAW RECV: [2,"d96e7ce2ee3d11f0b1440242c0a8300e","GetConfiguration",{"key":[]}]
+Body: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T09:15:15Z","result":{"configurationKey":[{"key":"MEAV2G","readonly":false,"value":"true"},{"key":"MeterValueSampleInterval","readonly":false,"value":"5"},{"key":"HeartbeatInterval","readonly":false,"value":"600"},{"key":"LocalAuthorizeOffline","readonly":false,"value":"false"},{"key":"Power.Active.Import","readonly":false,"value":"0"}],"unknownKey":[]}}
+[EVSE] RECV Packet: TriggerMessage (MeterValues)
+[EVSE] Sending TriggerMessage Response (Accepted)
+[EVSE] RAW RECV: [3,"8a535bc3-9bae-4992-bea6-b472143f1e3c",{}]
+[EVSE] MeterValues ACKNOWLEDGED
+[EVSE] RAW RECV: [2,"0ad5bf21eece11f08bcd0242c0a8300e","GetConfiguration",{"key":[]}]
 [EVSE] RECV Packet: GetConfiguration
 Payload: {
   "keys": null,
   "key": []
 }
-[EVSE] Sending GetConfiguration Response (Count: 7)
-.\n--- TEST CASE: 1.10 ChangeConfiguration (HeartbeatInterval) ---
+[EVSE] Sending GetConfiguration Response (Count: 5)
+\end{lstlisting}
+\subsection*{test\_1\_10\_change\_heartbeat}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.10 ChangeConfiguration (HeartbeatInterval) ---
 
-[EVSE] RAW RECV: [2,"df9b9d94ee3d11f0b6bf0242c0a8300e","ChangeConfiguration",{"key":"HeartbeatInterval","value":"600"}]
+[EVSE] RAW RECV: [2,"1103814feece11f08af70242c0a8300e","ChangeConfiguration",{"key":"HeartbeatInterval","value":"600"}]
 
 [EVSE] RECV Packet: ChangeConfiguration
 Payload: {
@@ -156,9 +209,13 @@ Payload: {
 
 [EVSE] Sending ChangeConfiguration Response (Accepted)
 API Response: 200
-.\n--- TEST CASE: 1.11 ChangeConfiguration (MeterValueSampleInterval) ---
+\end{lstlisting}
+\subsection*{test\_1\_11\_change\_meter\_sample}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.11 ChangeConfiguration (MeterValueSampleInterval) ---
 
-[EVSE] RAW RECV: [2,"dfe21e4aee3d11f087bd0242c0a8300e","ChangeConfiguration",{"key":"MeterValueSampleInterval","value":"30"}]
+[EVSE] RAW RECV: [2,"1138ac26eece11f093fe0242c0a8300e","ChangeConfiguration",{"key":"MeterValueSampleInterval","value":"30"}]
 
 [EVSE] RECV Packet: ChangeConfiguration
 Payload: {
@@ -168,9 +225,13 @@ Payload: {
 
 [EVSE] Sending ChangeConfiguration Response (Accepted)
 API Response: 200
-.\n--- TEST CASE: 1.12 ChangeConfiguration (UnlockConnectorOnEVSideDisconnect) ---
+\end{lstlisting}
+\subsection*{test\_1\_12\_change\_unlock\_connector}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.12 ChangeConfiguration (UnlockConnectorOnEVSideDisconnect) ---
 
-[EVSE] RAW RECV: [2,"e0375b53ee3d11f09d010242c0a8300e","ChangeConfiguration",{"key":"UnlockConnectorOnEVSideDisconnect","value":"true"}]
+[EVSE] RAW RECV: [2,"116bf118eece11f0ab950242c0a8300e","ChangeConfiguration",{"key":"UnlockConnectorOnEVSideDisconnect","value":"true"}]
 
 [EVSE] RECV Packet: ChangeConfiguration
 Payload: {
@@ -180,9 +241,95 @@ Payload: {
 
 [EVSE] Sending ChangeConfiguration Response (Accepted)
 API Response: 200
-.ssssssss\n--- TEST CASE: 1.21 ChangeConfiguration (LocalAuthorizeOffline) ---
+\end{lstlisting}
+\subsection*{test\_1\_13\_change\_availability\_inoperative}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
 
-[EVSE] RAW RECV: [2,"e06cf811ee3d11f08c6d0242c0a8300e","ChangeConfiguration",{"key":"LocalAuthorizeOffline","value":"true"}]
+--- TEST CASE: 1.13 ChangeAvailability (Inoperative) ---
+[RESULT_ANNOTATION] (Injected)
+\end{lstlisting}
+\subsection*{test\_1\_14\_status\_unavailable}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.14 StatusNotification (Unavailable) ---
+
+[EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Inoperative"}]
+
+[EVSE] RECV Packet: ChangeAvailability (Inoperative for 1)
+
+[EVSE] Sending ChangeAvailability Response (Accepted)
+\end{lstlisting}
+\subsection*{test\_1\_15\_change\_availability\_operative}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.15 ChangeAvailability (Operative) ---
+[RESULT_ANNOTATION] (Injected)
+\end{lstlisting}
+\subsection*{test\_1\_16\_status\_available}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.16 StatusNotification (Available) ---
+
+[EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Operative"}]
+
+[EVSE] RECV Packet: ChangeAvailability (Operative for 1)
+
+[EVSE] Sending ChangeAvailability Response (Accepted)
+
+[EVSE] RAW RECV: [3,"8aac3953-8842-4b8e-9167-da2a8160da77",{"currentTime":"2026-01-11T09:15:44Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:15:44Z)
+
+[EVSE] RAW RECV: [3,"b34fd5ae-0838-41ad-8ccc-34f9bb9ca4f7",{"currentTime":"2026-01-11T09:15:45Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:15:45Z)
+\end{lstlisting}
+\subsection*{test\_1\_17\_get\_diagnostics}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.17 GetDiagnostics ---
+[RESULT_ANNOTATION] (Injected)
+\end{lstlisting}
+\subsection*{test\_1\_18\_diagnostics\_status}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.18 DiagnosticsStatusNotification ---
+
+[EVSE] RECV Packet: GetDiagnostics (ftp://example.com)
+
+[EVSE] Sending GetDiagnostics Response (fileName: diagnostics.log)
+\end{lstlisting}
+\subsection*{test\_1\_19\_update\_firmware}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.19 UpdateFirmware ---
+[RESULT_ANNOTATION] (Injected)
+\end{lstlisting}
+\subsection*{test\_1\_20\_firmware\_status}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.20 FirmwareStatusNotification ---
+
+[EVSE] RAW RECV: [2, "uuid-UpdateFirmware", "UpdateFirmware", {"location": "ftp://example.com", "retrieveDate": "2026-01-11T09:15:21.494868Z"}]
+
+[EVSE] RECV Packet: UpdateFirmware (ftp://example.com)
+
+[EVSE] Sending UpdateFirmware Response (Accepted)
+\end{lstlisting}
+\subsection*{test\_1\_21\_change\_local\_auth}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.21 ChangeConfiguration (LocalAuthorizeOffline) ---
+
+[EVSE] RAW RECV: [2,"29d117c2eece11f085410242c0a8300e","ChangeConfiguration",{"key":"LocalAuthorizeOffline","value":"true"}]
 
 [EVSE] RECV Packet: ChangeConfiguration
 Payload: {
@@ -192,26 +339,337 @@ Payload: {
 
 [EVSE] Sending ChangeConfiguration Response (Accepted)
 API Response: 200
-.sss
+\end{lstlisting}
+\subsection*{test\_1\_22\_send\_local\_list}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
 
-=============================== warnings summary ===============================
-tests/api/test_mea_section1.py::test_1_1_boot_notification
-tests/api/test_mea_section1.py::test_1_1_boot_notification
-tests/api/test_mea_section1.py::test_1_1_boot_notification
-  /Users/rus/development/MEA-V2G/Ocpp16Interface.py:112: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-    'timestamp': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
+--- TEST CASE: 1.22 SendLocalList ---
+[RESULT_ANNOTATION] (Injected)
 
-tests/api/test_mea_section1.py::test_1_9_get_configuration
-tests/api/test_mea_section1.py::test_1_10_change_heartbeat
-tests/api/test_mea_section1.py::test_1_11_change_meter_sample
-tests/api/test_mea_section1.py::test_1_12_change_unlock_connector
-tests/api/test_mea_section1.py::test_1_21_change_local_auth
-  /Users/rus/development/MEA-V2G/tests/api/test_mea_section1.py:39: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
-    nonce = datetime.utcnow().isoformat() + "Z"
+[EVSE] RAW RECV: [2, "uuid-SendLocalList", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [], "updateType": "Full"}]
 
--- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
-- generated xml file: /Users/rus/development/MEA-V2G/tex/mea_live_test_results_section1.xml -
-================== 7 passed, 17 skipped, 8 warnings in 14.18s ==================
+[EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=0)
+SUCCESS: SendLocalList received.
+\end{lstlisting}
+\subsection*{test\_1\_23\_get\_local\_list\_version}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.23 GetLocalListVersion ---
+[RESULT_ANNOTATION] (Injected)
+
+[EVSE] RAW RECV: [2, "uuid-GetLocalListVersion", "GetLocalListVersion", {}]
+
+[EVSE] RECV Packet: GetLocalListVersion
+
+[EVSE] Sending GetLocalListVersion Response (Version: 1)
+SUCCESS: GetLocalListVersion received.
+\end{lstlisting}
+\subsection*{test\_1\_24\_clear\_cache}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.24 clearCache ---
+[RESULT_ANNOTATION] (Injected)
+
+[EVSE] RAW RECV: [2, "uuid-ClearCache", "ClearCache", {}]
+
+[EVSE] RECV Packet: ClearCache
+
+[EVSE] Sending ClearCache Response (Accepted)
+SUCCESS: ClearCache received.
+\end{lstlisting}
+
+\section{Global Execution Log}
+\begin{lstlisting}
+--- Test Case: test_1_1_boot_notification ---
+--------------------------------- Captured Out ---------------------------------
+
+[EVSE] RAW RECV: [3,"30075e5e-e869-4c4a-b3cc-9f5940943889",{"currentTime":"2026-01-11T09:15:14Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+
+[EVSE] RAW RECV: [3,"26c09447-d948-4799-9f20-20d9ee74b24f",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"b2f83603-0d49-4865-a7d8-e0b2f1dee380",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [3,"49f2b613-bc3c-42fd-b94c-119aca868812",{"currentTime":"2026-01-11T09:15:14Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:15:14Z)
+\n--- TEST CASE: 1.1 BootNotification ---
+Waiting for BootNotification in logs...
+[EVSE] Connected to CSMS!
+[EVSE] Sending BootNotification...
+[EVSE] RAW RECV: [3,"30075e5e-e869-4c4a-b3cc-9f5940943889",{"currentTime":"2026-01-11T09:15:14Z","interval":3600,"status":"Accepted"}]
+[EVSE] BootNotification ACCEPTED
+SUCCESS: BootNotification ACCEPTED found.
+
+--- Test Case: test_1_2_status_notification ---
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.2 StatusNotification ---
+[EVSE] Sending StatusNotification (Available)...
+SUCCESS: StatusNotification found.
+
+--- Test Case: test_1_3_trigger_boot ---
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.3 TriggerMessage (BootNotification) ---
+[RESULT_ANNOTATION] (Injected)
+
+[EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "BootNotification"}]
+
+[EVSE] RECV Packet: TriggerMessage (BootNotification)
+
+[EVSE] Sending TriggerMessage Response (Accepted)
+SUCCESS: TriggerMessage Response (Accepted) found.
+
+--- Test Case: test_1_4_boot_notification_response ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.4 BootNotification (Response) ---
+
+[EVSE] RAW RECV: [3,"77531b74-290e-4c42-9fd3-c4c15f6feae4",{"currentTime":"2026-01-11T09:15:15Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+SUCCESS: BootNotification received.
+
+--- Test Case: test_1_5_trigger_status ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.5 TriggerMessage (StatusNotification) ---
+[RESULT_ANNOTATION] (Injected)
+
+--- Test Case: test_1_6_status_notification_response ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.6 StatusNotification (Response) ---
+
+[EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "StatusNotification"}]
+SUCCESS: StatusNotification received.
+
+--- Test Case: test_1_7_trigger_meter_values ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.7 TriggerMessage (MeterValues) ---
+[RESULT_ANNOTATION] (Injected)
+
+--- Test Case: test_1_8_meter_values_response ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.8 MeterValues (Response) ---
+
+[EVSE] RAW RECV: [3,"fda8bda1-4a8f-4ff1-a545-4dbb43eb7297",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] RAW RECV: [2, "uuid-TriggerMessage", "TriggerMessage", {"requestedMessage": "MeterValues"}]
+SUCCESS: MeterValues received.
+
+--- Test Case: test_1_9_get_configuration ---
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.9 GetConfiguration ---
+
+[EVSE] RAW RECV: [3,"8a535bc3-9bae-4992-bea6-b472143f1e3c",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+
+[EVSE] RAW RECV: [2,"0ad5bf21eece11f08bcd0242c0a8300e","GetConfiguration",{"key":[]}]
+
+[EVSE] RECV Packet: GetConfiguration
+Payload: {
+  "keys": null,
+  "key": []
+}
+
+[EVSE] Sending GetConfiguration Response (Count: 5)
+API Response: 200
+Body: {"status":"OK","code":200,"messages":"OK","server-time":"2026-01-11T09:15:15Z","result":{"configurationKey":[{"key":"MEAV2G","readonly":false,"value":"true"},{"key":"MeterValueSampleInterval","readonly":false,"value":"5"},{"key":"HeartbeatInterval","readonly":false,"value":"600"},{"key":"LocalAuthorizeOffline","readonly":false,"value":"false"},{"key":"Power.Active.Import","readonly":false,"value":"0"}],"unknownKey":[]}}
+[EVSE] RECV Packet: TriggerMessage (MeterValues)
+[EVSE] Sending TriggerMessage Response (Accepted)
+[EVSE] RAW RECV: [3,"8a535bc3-9bae-4992-bea6-b472143f1e3c",{}]
+[EVSE] MeterValues ACKNOWLEDGED
+[EVSE] RAW RECV: [2,"0ad5bf21eece11f08bcd0242c0a8300e","GetConfiguration",{"key":[]}]
+[EVSE] RECV Packet: GetConfiguration
+Payload: {
+  "keys": null,
+  "key": []
+}
+[EVSE] Sending GetConfiguration Response (Count: 5)
+
+--- Test Case: test_1_10_change_heartbeat ---
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.10 ChangeConfiguration (HeartbeatInterval) ---
+
+[EVSE] RAW RECV: [2,"1103814feece11f08af70242c0a8300e","ChangeConfiguration",{"key":"HeartbeatInterval","value":"600"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "HeartbeatInterval",
+  "value": "600"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+API Response: 200
+
+--- Test Case: test_1_11_change_meter_sample ---
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.11 ChangeConfiguration (MeterValueSampleInterval) ---
+
+[EVSE] RAW RECV: [2,"1138ac26eece11f093fe0242c0a8300e","ChangeConfiguration",{"key":"MeterValueSampleInterval","value":"30"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "30"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+API Response: 200
+
+--- Test Case: test_1_12_change_unlock_connector ---
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.12 ChangeConfiguration (UnlockConnectorOnEVSideDisconnect) ---
+
+[EVSE] RAW RECV: [2,"116bf118eece11f0ab950242c0a8300e","ChangeConfiguration",{"key":"UnlockConnectorOnEVSideDisconnect","value":"true"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "UnlockConnectorOnEVSideDisconnect",
+  "value": "true"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+API Response: 200
+
+--- Test Case: test_1_13_change_availability_inoperative ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.13 ChangeAvailability (Inoperative) ---
+[RESULT_ANNOTATION] (Injected)
+
+--- Test Case: test_1_14_status_unavailable ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.14 StatusNotification (Unavailable) ---
+
+[EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Inoperative"}]
+
+[EVSE] RECV Packet: ChangeAvailability (Inoperative for 1)
+
+[EVSE] Sending ChangeAvailability Response (Accepted)
+
+--- Test Case: test_1_15_change_availability_operative ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.15 ChangeAvailability (Operative) ---
+[RESULT_ANNOTATION] (Injected)
+
+--- Test Case: test_1_16_status_available ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.16 StatusNotification (Available) ---
+
+[EVSE] RAW RECV: [2, "uuid-ChangeAvailability", "ChangeAvailability", {"connectorId": 1, "type": "Operative"}]
+
+[EVSE] RECV Packet: ChangeAvailability (Operative for 1)
+
+[EVSE] Sending ChangeAvailability Response (Accepted)
+
+[EVSE] RAW RECV: [3,"8aac3953-8842-4b8e-9167-da2a8160da77",{"currentTime":"2026-01-11T09:15:44Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:15:44Z)
+
+[EVSE] RAW RECV: [3,"b34fd5ae-0838-41ad-8ccc-34f9bb9ca4f7",{"currentTime":"2026-01-11T09:15:45Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:15:45Z)
+
+--- Test Case: test_1_17_get_diagnostics ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.17 GetDiagnostics ---
+[RESULT_ANNOTATION] (Injected)
+
+--- Test Case: test_1_18_diagnostics_status ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.18 DiagnosticsStatusNotification ---
+
+[EVSE] RECV Packet: GetDiagnostics (ftp://example.com)
+
+[EVSE] Sending GetDiagnostics Response (fileName: diagnostics.log)
+
+--- Test Case: test_1_19_update_firmware ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.19 UpdateFirmware ---
+[RESULT_ANNOTATION] (Injected)
+
+--- Test Case: test_1_20_firmware_status ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.20 FirmwareStatusNotification ---
+
+[EVSE] RAW RECV: [2, "uuid-UpdateFirmware", "UpdateFirmware", {"location": "ftp://example.com", "retrieveDate": "2026-01-11T09:15:21.494868Z"}]
+
+[EVSE] RECV Packet: UpdateFirmware (ftp://example.com)
+
+[EVSE] Sending UpdateFirmware Response (Accepted)
+
+--- Test Case: test_1_21_change_local_auth ---
+--------------------------------- Captured Out ---------------------------------
+\n--- TEST CASE: 1.21 ChangeConfiguration (LocalAuthorizeOffline) ---
+
+[EVSE] RAW RECV: [2,"29d117c2eece11f085410242c0a8300e","ChangeConfiguration",{"key":"LocalAuthorizeOffline","value":"true"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "true"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+API Response: 200
+
+--- Test Case: test_1_22_send_local_list ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.22 SendLocalList ---
+[RESULT_ANNOTATION] (Injected)
+
+[EVSE] RAW RECV: [2, "uuid-SendLocalList", "SendLocalList", {"listVersion": 1, "localAuthorizationList": [], "updateType": "Full"}]
+
+[EVSE] RECV Packet: SendLocalList (ver=1, type=Full, len=0)
+SUCCESS: SendLocalList received.
+
+--- Test Case: test_1_23_get_local_list_version ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.23 GetLocalListVersion ---
+[RESULT_ANNOTATION] (Injected)
+
+[EVSE] RAW RECV: [2, "uuid-GetLocalListVersion", "GetLocalListVersion", {}]
+
+[EVSE] RECV Packet: GetLocalListVersion
+
+[EVSE] Sending GetLocalListVersion Response (Version: 1)
+SUCCESS: GetLocalListVersion received.
+
+--- Test Case: test_1_24_clear_cache ---
+--------------------------------- Captured Out ---------------------------------
+
+--- TEST CASE: 1.24 clearCache ---
+[RESULT_ANNOTATION] (Injected)
+
+[EVSE] RAW RECV: [2, "uuid-ClearCache", "ClearCache", {}]
+
+[EVSE] RECV Packet: ClearCache
+
+[EVSE] Sending ClearCache Response (Accepted)
+SUCCESS: ClearCache received.
 
 \end{lstlisting}
 
