@@ -30,14 +30,20 @@
     \node[draw, fill=white] at (0, -7.6) {Simulated Power Loss};
     \node[draw, fill=white] at (0, -8.5) {Reboot...};
 
-    % 7.6.8 Recovery
+    % 7.6.8 Recovery & 7.6.7 Stop
     \begin{umlcall}[op=7.6.8: BootNotification, type=synchron, return=Accepted, dt=17]{EVSE}{CSMS}
     \end{umlcall}
     
-    \begin{umlcall}[op=7.6.9: StopTransaction(Reason:PowerLoss), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
+    \begin{umlcall}[op=7.6.7: StopTransaction(Reason:PowerLoss), type=synchron, return=Accepted, dt=4]{EVSE}{CSMS}
     \end{umlcall}
 
-    \begin{umlcall}[op=7.6.10: StatusNotification(Available), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \begin{umlcall}[op=7.6.9: StatusNotification(Finishing), type=synchron, return=Conf, dt=4]{EVSE}{CSMS}
+    \end{umlcall}
+
+    % Unplug
+    \node[draw, fill=white] at (0, -12.3) {Unplug Cable};
+
+    \begin{umlcall}[op=7.6.10: StatusNotification(Available), type=synchron, return=Conf, dt=10]{EVSE}{CSMS}
     \end{umlcall}
 
   \end{umlseqdiag}
