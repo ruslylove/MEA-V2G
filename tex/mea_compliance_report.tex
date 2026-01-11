@@ -11,7 +11,7 @@
 \usepackage{listings}
 \usepackage[hidelinks]{hyperref}
 
-\title{\textbf{MEA Compliance Test Report}}
+\title{\textbf{MEA Compliance Test Report (Mock CSMS)}}
 \author{MEA OCPP Certification}
 \date{\today}
 
@@ -21,8 +21,33 @@
 \rhead{Page \thepage}
 
 \begin{document}
-
 \maketitle
+
+\section*{Test Execution Summary}
+\renewcommand{\arraystretch}{1.5}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|c|c|c|c|}
+\hline
+\rowcolor{blue!10}
+\textbf{Section} & \textbf{Description} & \textbf{Tests} & \textbf{Pass} & \textbf{Fail} & \textbf{Duration (s)} \\ \hline
+1 & Configuration & 24 & 24 & 0 & 57.84 \\ \hline
+2 & Authorization & 21 & 21 & 0 & 20.37 \\ \hline
+3 & Normal Operation & 19 & 19 & 0 & 24.11 \\ \hline
+4 & Reset & 21 & 21 & 0 & 22.20 \\ \hline
+5 & Reservations & 19 & 19 & 0 & 17.95 \\ \hline
+6 & Smart Charging & 26 & 26 & 0 & 17.15 \\ \hline
+7 & Abnormal Situations & 54 & 54 & 0 & 16.56 \\ \hline
+8 & Dual Connector & 50 & 50 & 0 & 27.23 \\ \hline
+9 & MEA Configuration & 7 & 7 & 0 & 2.68 \\ \hline
+10 & Extended Features & 24 & 24 & 0 & 4.47 \\ \hline
+11 & Other & 2 & 2 & 0 & 43.15 \\ \hline
+\rowcolor{gray!20}
+\textbf{Total} & & \textbf{267} & \textbf{267} & \textbf{0} & \textbf{253.70} \\ \hline
+\end{tabular}
+\end{table}
+
+\newpage
 
 \section*{MEA OCPP 1.6 Compliance Verification Matrix}
 
