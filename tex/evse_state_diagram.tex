@@ -8,8 +8,11 @@
   \tikzstyle{whitebeet}=[fill=gray!20, draw=black, text=black]
 
   \node[initial, state, whitebeet] (init) at (-3, 0) {Init};
-  \node[state, whitebeet] (Wait) [below of=init] {Wait};
-  \node[state, whitebeet] (SLAC) [below of=Wait] {SLAC};
+  \node[state, whitebeet] (Wait) [below=1.5cm of init] {Wait};
+  \node[state] (Dormant) [left of=Wait, xshift=-2cm, yshift=1cm] {Reserved};
+  \node[state] (Unavailable) [left of=Wait, xshift=-2cm, yshift=-1cm] {Unavail.};
+  
+  \node[state, whitebeet] (SLAC) [below=2cm of Wait] {SLAC};
   \node[state, whitebeet] (Session) [below of=SLAC] {Session};
   \node[state] (Auth) [right of=Session, xshift=4cm] {Authoriz.};
   \node[state, whitebeet] (Param) [right of=SLAC, xshift=4cm] {Params};
@@ -17,11 +20,11 @@
   \node[state] (Pre) [above of=Cable] {PreCharge};
   \node[state] (Charge) [left of=Cable] {Charge};
   \node[state, accepting] (Stop) [below of=Charge] {Stop};
-  \node[state, fill=red!20] (Fault) [left of=Charge,xshift=-0.2cm] {Faulted};
+  \node[state, fill=red!20] (Fault) [left of=Charge,xshift=-0.3cm,yshift=0.5cm] {Faulted};
 
   \path[->] 
     (init) edge node {} (Wait)
-    (Wait) edge node[swap] {Connected} (SLAC)
+    (Wait) edge node[swap,near end] {Connected} (SLAC)
     (SLAC) edge node[swap] {Matched} (Session)
     (Session) edge node {} (Auth)
     (Auth) edge node {} (Param)
@@ -32,7 +35,13 @@
     (Charge) edge [loop above] node {Loop} (Charge)
     (Charge) edge [bend right] node[swap] {Error} (Fault)
     (Stop) edge [bend left] node[swap,midway] {Unplugged} (Wait)
-    (Fault) edge [bend right] node[swap] {Reset} (init);
+    (Fault) edge [bend right] node[swap] {Reset} (init)
+    
+    (Wait) edge [] node[swap, above] {Reserve} (Dormant)
+    (Dormant) edge [bend left] node[above,align=left, font=\footnotesize,midway] {Timeout/Cancel/Auth} (Wait)
+    
+    (Wait) edge [bend left] node[below] {Op.=False} (Unavailable)
+    (Unavailable) edge [] node[above] {Op.=True} (Wait);
 
 \end{tikzpicture}
 
