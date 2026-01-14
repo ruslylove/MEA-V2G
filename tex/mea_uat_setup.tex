@@ -1,0 +1,60 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usetikzlibrary{shapes.geometric, shapes.symbols, arrows, positioning, fit, calc, backgrounds}
+
+\begin{document}
+
+\begin{tikzpicture}[
+    node distance=2.0cm,
+    block/.style={rectangle, draw, fill=blue!10, text width=7em, text centered, rounded corners, minimum height=3em},
+    device/.style={rectangle, draw, fill=green!10, text width=7em, text centered, rounded corners, minimum height=3em},
+    user/.style={circle, draw, fill=orange!20, inner sep=0pt, minimum size=1.5cm, text centered},
+    cloud_node/.style={cloud, draw, fill=gray!10, aspect=2, minimum width=3cm, minimum height=1.5cm, text centered},
+    container/.style={draw, rectangle, dashed, inner sep=1.2em, fill=gray!5, rounded corners},
+    line/.style={draw, -latex', thick},
+    power/.style={draw, -latex', ultra thick, color=orange},
+    comms/.style={draw, <->, dashed, thick, color=blue},
+    rfid/.style={draw, -latex', dotted, thick, color=purple}
+]
+
+    % Components
+    \node [device] (ev) {Real EV\\(BYD/Tesla)};
+    \node [block, right=4cm of ev] (charger) {Charger};
+    \node [block, below=1.0cm of charger, font=\footnotesize] (rfid) {RFID Reader};
+    
+    \node [user, below=1.5cm of rfid] (user) {User};
+    \node [device, right=1.0cm of user, fill=yellow!10] (app) {Mobile App};
+    
+    \node [cloud_node, right=6cm of charger] (csms) {MEA CSMS\\(Backend)};
+
+    % Grouping
+    \begin{scope}[on background layer]
+        \node [container, fit=(ev) (charger) (rfid) (user) (app),  inner sep=20pt] (site) {};
+        \node [below, font=\bfseries, yshift=-5pt] at (site.south) {On-Site (UAT Environment)};
+    \end{scope}
+
+    % Connections
+    
+    % Power & PLC
+    % Power & PLC
+    \path [power] ([yshift=5pt]charger.west) -- node [midway, above] {Power (Type 2)} ([yshift=5pt]ev.east);
+    \path [comms] ([yshift=-5pt]charger.west) -- node [midway, below] {PLC (ISO 15118)} ([yshift=-5pt]ev.east);
+    
+    % Auth
+    \path [rfid] (user) -- node [right, midway] {Tap Card} (rfid);
+    \path [rfid] (rfid) -- (charger);
+    
+    % App Control
+    \path [line] (user) -- (app);
+    \path [comms] (app) -| node [near start, above] {API / 4G} (csms);
+    
+    % Charger Network
+    \path [comms] (charger) -- node [midway, above] {OCPP 1.6 / 4G} (csms);
+
+    % Annotations for Safety/Thermal
+    % Shift labels to avoid clutter
+    \node [draw=red, thick, rectangle, dashed, fit=(charger) (ev) (rfid), inner sep=15pt, label={[red, font=\bfseries]below:Thermal Safety Monitoring}] {};
+    \node [draw=blue, thick, rectangle, dotted, fit=(charger) (csms), inner sep=12pt, label={[blue, font=\bfseries]below:Network Stability Check}] {};
+
+\end{tikzpicture}
+
+\end{document}
