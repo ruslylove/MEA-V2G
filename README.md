@@ -70,6 +70,13 @@ When SLAC was succefully performed the EVSE and the EV are in same network and t
 
 During the initial high-level communication, the EV and EVSE negotiate several key parameters to establish a charging session. These are configured in `Evse.py` and are fundamental to the ISO 15118 standard.
 
+#### Offline Mode & Resumption
+
+The EVSE can operate without a connection to a Central System (CSMS).
+*   **Buffering**: Transaction start/stop events are recorded locally when no OCPP connection is active.
+*   **Resumption**: Once the OCPP connection is established, the EVSE automatically flushes all buffered sessions to the CSMS to ensure data consistency.
+*   **Non-Interactive Auth**: In headless or offline environments, the system can automatically authorize sessions (e.g., as 'OFFLINE_GUEST') to prevent blocking on user input.
+
 #### Protocol Number
 
 This number identifies the specific version of the communication standard (like ISO 15118-2 or DIN SPEC 70121) that the EV and EVSE will use.
@@ -81,7 +88,8 @@ This number identifies the specific version of the communication standard (like 
 
 This defines how the charging session will be authorized and paid for. The two main methods are:
 
-*   `0`: **External Identification Means (EIM):** This requires a manual authorization step "external" to the core communication. This can be tapping an RFID card, using a mobile app, or, in the case of this project, **typing 'yes' in the console**. The default configuration for this project uses EIM.
+*   `0`: **External Identification Means (EIM):** This requires a manual authorization step "external" to the core communication. This can be tapping an RFID card, using a mobile app, or, in the case of this project, **typing 'yes' in the console**.
+    *   **Automation**: If no terminal is available (e.g., running as a service) or the system is offline, it can automatically authorize the session to ensure continuity of service.
 *   `1`: **Plug & Charge (PnC):** This is a secure, automated method where the EV uses an installed digital certificate to identify and authorize itself with the EVSE. No manual user interaction is needed.
 
 #### Energy Transfer Mode

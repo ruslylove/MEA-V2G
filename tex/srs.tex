@@ -137,12 +137,12 @@ The high-level state machine corresponds to the standard OCPP connector statuses
 The key states include:
 \begin{description}
     \item[Available] The connector is ready for use.
-    \item[Preparing] An EV is connected, or authorization is in progress.
+    \item[Preparing] An EV is connected AND authorization (local or remote) has been provided.
     \item[Charging] Energy transfer is active.
     \item[SuspendedEV] Charging is paused by the EV.
     \item[SuspendedEVSE] Charging is paused by the charger (e.g., smart charging limit).
-    \item[Finishing] The session is ending, and the connector is pending removal.
-    \item[Faulted] A critical error has occurred.
+    \item[Finishing] The session is ending, and the connector is pending removal. If a change to \texttt{Unavailable} is pending, it occurs after this transition.
+    \item[Faulted] A critical error has occurred. Supports recovery to \texttt{Available} via \texttt{Reset}.
 \end{description}
 
 \subsection{Low-Level State Machine (ISO 15118 Perspective)}
@@ -683,6 +683,14 @@ The system shall implement OCPP client features for the selected version (1.6, 2
     \item Support configuration/variable management (\texttt{ChangeConfiguration} for 1.6, \texttt{SetVariables} for 2.0.1+).
 \end{itemize}
 
+\subsection{FR-05: Offline Mode and Resumption}
+The system shall support operation without a persistent connection to the CSMS.
+\begin{itemize}
+    \item \textbf{Transaction Queuing}: The EVSE shall record all Start/Stop transaction events locally while the \texttt{ocpp\_worker} is unavailable.
+    \item \textbf{Automatic Resumption}: Upon restoration of the connection, the EVSE shall automatically flush all queued transactions to the CSMS in chronological order.
+    \item \textbf{Local Authorization}: The system shall allow sessions to proceed via a local authorization policy (e.g., Guest access) if offline and configured to do so.
+\end{itemize}
+
 \section{Communication Flow}
 
 
@@ -783,19 +791,25 @@ Charging $\rightarrow$ SuspendedEVSE & EVSE limits power & CurrentDemandRes (Max
 \hline
 SuspendedEVSE $\rightarrow$ Charging & EVSE lifts limit & CurrentDemandRes (MaxCurrent$>$0A) & StatusNotification(Charging) \\
 \hline
+\multicolumn{4}{|l|}{\textit{Note: Direct transitions between SuspendedEV and SuspendedEVSE are inhibited to ensure path traceability.}} \\
+\hline
 Suspended $\rightarrow$ Finishing & Stop during pause & SessionStopReq & TransactionEvent(Ended), StatusNotification(Finishing) \\
 \hline
-\multicolumn{4}{|l|}{\textit{Reservation \& Availability}} \\
+\multicolumn{4}{|l|}{\textit{Reservation, Availability \& Recovery}} \\
 \hline
-Available $\rightarrow$ Reserved & N/A & N/A & ReserveNowReq, StatusNotification(Reserved) \\
+Available $\rightarrow$ Reserved & CSMS Request & N/A & ReserveNowReq, StatusNotification(Reserved) \\
 \hline
 Reserved $\rightarrow$ Preparing & Plug In + Auth & SessionSetupReq & StatusNotification(Preparing) \\
 \hline
 Reserved $\rightarrow$ Available & Timeout / Cancel & N/A & CancelReservationReq, StatusNotification(Available) \\
 \hline
-Available $\rightarrow$ Unavailable & Operator Command & N/A & ChangeAvailabilityReq, StatusNotification(Unavailable) \\
+Available $\rightleftarrows$ Unavailable & Operator Command & N/A & ChangeAvailabilityReq, StatusNotification(Unavailable/Available) \\
 \hline
-Unavailable $\rightarrow$ Available & Operator Command & N/A & ChangeAvailabilityReq, StatusNotification(Available) \\
+Finishing $\rightarrow$ Unavailable & Scheduled Change & N/A & StatusNotification(Unavailable) \\
+\hline
+Faulted $\rightarrow$ Available & Reset Command & N/A & ResetReq, StatusNotification(Available) \\
+\hline
+Faulted $\rightarrow$ Unavailable & Inoperative Command & N/A & ChangeAvailabilityReq, StatusNotification(Unavailable) \\
 \hline
 \multicolumn{4}{|l|}{\textit{Exception Layout}} \\
 \hline

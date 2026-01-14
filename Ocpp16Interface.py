@@ -74,6 +74,8 @@ class Ocpp16Interface(Ocpp16ChargePoint):
              # MEA specs usually default false?
              'Power.Active.Import': '0' # For 9.4 test
         }
+        # Local Authorization List
+        self.local_auth_list = {} # idTag -> idTagInfo
         
     async def route_message(self, raw_msg):
         # Log raw message for debugging purposes
@@ -632,11 +634,38 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
     @on(Action.send_local_list)
     async def on_send_local_list(self, list_version, local_authorization_list, update_type):
-        msg = f"[EVSE] RECV Packet: SendLocalList (ver={list_version}, type={update_type}, len={len(local_authorization_list)})"
+        msg = f"[OCPP] Received Local List update (v{list_version}, {update_type}). Length: {len(local_authorization_list)}"
         print(f"\n{msg}", flush=True)
         PACKET_QUEUE.put(msg)
-        LOGGER.info(msg)
+        
+        if update_type == "Full":
+            self.local_auth_list = {}
+            
+        if local_authorization_list:
+            for entry in local_authorization_list:
+                id_tag = entry.get('idTag')
+                id_tag_info = entry.get('idTagInfo')
+                if id_tag and id_tag_info:
+                    self.local_auth_list[id_tag] = id_tag_info
+                    
         return call_result.SendLocalList(status=UpdateStatus.accepted)
+
+    def is_authorized(self, id_tag):
+        """
+        Helper to check if an id_tag is authorized, potentially via local list if offline.
+        """
+        # 1. Check offline mode and LocalAuthorizeOffline setting
+        config_local_auth = self.configuration.get('LocalAuthorizeOffline', 'false').lower() == 'true'
+        
+        if self.is_offline and config_local_auth:
+            if id_tag in self.local_auth_list:
+                info = self.local_auth_list[id_tag]
+                status = info.get('status')
+                if status == 'Accepted':
+                    return True
+            return False
+        
+        return None
 
     @on(Action.change_configuration)
     async def on_change_configuration(self, key, value, **kwargs):
@@ -808,6 +837,8 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         print(f"\n{msg}", flush=True)
         PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received Reset type: {type}")
+        if self.evse:
+            self.evse.reset()
         msg_resp = f"[EVSE] Sending Reset Response (Accepted)"
         print(f"\n{msg_resp}", flush=True)
         PACKET_QUEUE.put(msg_resp)
@@ -905,29 +936,38 @@ class Ocpp16Interface(Ocpp16ChargePoint):
 
     @on(Action.change_availability)
     async def on_change_availability(self, connector_id, type, **kwargs):
-        msg = f"[EVSE] RECV Packet: ChangeAvailability ({type} for {connector_id})"
+        msg = f"[OCPP] Received ChangeAvailability ({type} for {connector_id})"
         print(f"\n{msg}", flush=True)
         PACKET_QUEUE.put(msg)
-        LOGGER.info(msg)
-
-        status = AvailabilityStatus.accepted
-        if type == "Inoperative":
-             if self.evse:
-                  self.evse.set_status("Unavailable")
-             else:
-                  asyncio.create_task(self.send_status_notification(connector_id, ChargePointStatus.unavailable))
-        elif type == "Operative":
-             if self.evse:
-                  # If we were Faulted, maybe check if we can go Available?
-                  # Simplified: Go Available
-                  self.evse.set_status("Available")
-             else:
-                  asyncio.create_task(self.send_status_notification(connector_id, ChargePointStatus.available))
         
-        msg_resp = f"[EVSE] Sending ChangeAvailability Response (Accepted)"
+        status = AvailabilityStatus.accepted
+        
+        if self.evse:
+            current_state = self.evse.state
+            if type == "Inoperative":
+                if current_state in ["Available", "Faulted"]:
+                    # Immediate change
+                    self.evse.set_status("Unavailable")
+                    status = AvailabilityStatus.accepted
+                else:
+                    # Busy state, schedule it
+                    self.evse.schedule_availability("Inoperative")
+                    status = AvailabilityStatus.scheduled
+            elif type == "Operative":
+                # Always accept Operative and clear pending
+                self.evse.pending_availability = None
+                self.evse.set_status("Available")
+                status = AvailabilityStatus.accepted
+        else:
+            # Fallback if no EVSE object
+            status = AvailabilityStatus.accepted
+            cp_status = ChargePointStatus.unavailable if type == "Inoperative" else ChargePointStatus.available
+            asyncio.create_task(self.send_status_notification(connector_id, cp_status))
+
+        msg_resp = f"[EVSE] Sending ChangeAvailability Response ({status})"
         print(f"\n{msg_resp}", flush=True)
         PACKET_QUEUE.put(msg_resp)
-        return call_result.ChangeAvailability(status=AvailabilityStatus.accepted)
+        return call_result.ChangeAvailability(status=status)
 
     @on(Action.data_transfer)
     async def on_data_transfer(self, vendor_id, message_id=None, data=None, **kwargs):
