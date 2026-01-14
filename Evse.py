@@ -50,7 +50,6 @@ class Evse():
         """
 
         print("Set the CP mode to EVSE")
-        self.set_status("Available")
         self.whitebeet.controlPilotSetMode(1)
         print("Set the CP duty cycle to 100%")
         self.whitebeet.controlPilotSetDutyCycle(100)
@@ -59,6 +58,7 @@ class Evse():
         print("Start SLAC in EVSE mode")
         self.whitebeet.slacStart(1)
         time.sleep(2)
+        self.set_status("Available")
 
     def _waitEvConnected(self, timeout):
         """
@@ -169,98 +169,100 @@ class Evse():
         time.sleep(0.1)
         print("Start V2G")
         self.whitebeet.v2gEvseStartListen()
-        while True:
-            if self.charging:
-                # Continuously update the charger's simulated output
-                self.charger.getEvsePresentVoltage()
-                self.charger.getEvsePresentCurrent()
+        try:
+            while True:
+                if self.charging:
+                    # Continuously update the charger's simulated output
+                    self.charger.getEvsePresentVoltage()
+                    self.charger.getEvsePresentCurrent()
 
-                id, data = self.whitebeet.v2gEvseReceiveRequestSilent()
+                    id, data = self.whitebeet.v2gEvseReceiveRequestSilent()
 
-                charging_parameters = {
-                    'isolation_level': 0,
-                    'present_voltage': int(self.charger.getEvsePresentVoltage()),
-                    'present_current': int(self.charger.getEvsePresentCurrent()),
-                    'max_voltage': int(self.charger.getEvseMaxVoltage()),
-                    'max_current': int(self.charger.getEvseMaxCurrent()),
-                    'max_power': int(self.charger.getEvseMaxPower()),
-                    'status': 0,
-                }
+                    charging_parameters = {
+                        'isolation_level': 0,
+                        'present_voltage': int(self.charger.getEvsePresentVoltage()),
+                        'present_current': int(self.charger.getEvsePresentCurrent()),
+                        'max_voltage': int(self.charger.getEvseMaxVoltage()),
+                        'max_current': int(self.charger.getEvseMaxCurrent()),
+                        'max_power': int(self.charger.getEvseMaxPower()),
+                        'status': 0,
+                    }
 
-                try:
-                    self.whitebeet.v2gEvseUpdateDcChargingParameters(charging_parameters)
-                except Warning as e:
-                    print("Warning: {}".format(e))
-                except ConnectionError as e:
-                    print("ConnectionError: {}".format(e))
-            else:
-                id, data = self.whitebeet.v2gEvseReceiveRequest()
-            
-            # Check Timeouts
-            if self.state in ["SuspendedEV", "SuspendedEVSE"]:
-                if time.time() - self.state_timer > self.SUSPENDED_TIMEOUT:
-                     print(f"Timeout checking in state {self.state}. Stopping session.")
-                     if self.ocpp_worker:
-                         self.ocpp_worker.send_stop_transaction_threadsafe(1, reason="TimeLimitReached")
-                     try:
-                         self.whitebeet.v2gEvseStopCharging()
-                     except:
-                         pass
-                     self.set_status("Finishing")
-                     break
-            
-            # Check Reservation Expiry
-            if self.state == "Reserved" and self.reservation_expiry_time:
-                 if time.time() > self.reservation_expiry_time:
-                      print("Reservation expired locally. Returning to Available.")
-                      self.set_status("Available")
-                      # Clean up OcppInterface reservation? 
-                      # Ideally OcppInterface should also govern this, but local strict check is good.
-                      # Sync back if needed, but StatusNotification "Available" should trigger backend to clear it.
+                    try:
+                        self.whitebeet.v2gEvseUpdateDcChargingParameters(charging_parameters)
+                    except Warning as e:
+                        print("Warning: {}".format(e))
+                    except ConnectionError as e:
+                        print("ConnectionError: {}".format(e))
+                else:
+                    id, data = self.whitebeet.v2gEvseReceiveRequest()
+                
+                # Check Timeouts
+                if self.state in ["SuspendedEV", "SuspendedEVSE"]:
+                    if time.time() - self.state_timer > self.SUSPENDED_TIMEOUT:
+                        print(f"Timeout checking in state {self.state}. Stopping session.")
+                        if self.ocpp_worker:
+                            self.ocpp_worker.send_stop_transaction_threadsafe(1, reason="TimeLimitReached")
+                        try:
+                            self.whitebeet.v2gEvseStopCharging()
+                        except:
+                            pass
+                        self.set_status("Finishing")
+                        break
+                
+                # Check Reservation Expiry
+                if self.state == "Reserved" and self.reservation_expiry_time:
+                    if time.time() > self.reservation_expiry_time:
+                        print("Reservation expired locally. Returning to Available.")
+                        self.set_status("Available")
+                        # Clean up OcppInterface reservation? 
+                        # Ideally OcppInterface should also govern this, but local strict check is good.
+                        # Sync back if needed, but StatusNotification "Available" should trigger backend to clear it.
 
-            if id == None or data == None:
-                pass
-            elif id == 0x80:
-                self._handleSessionStarted(data)
-            elif id == 0x81:
-                self._handlePaymentSelected(data)
-            elif id == 0x82:
-                self._handleRequestAuthorization(data)
-            elif id == 0x83:
-                self._handleEnergyTransferModeSelected(data)
-            elif id == 0x84:
-                self._handleRequestSchedules(data)
-            elif id == 0x85:
-                self._handleDCChargeParametersChanged(data)
-            elif id == 0x86:
-                self._handleACChargeParametersChanged(data)
-            elif id == 0x87:
-                self._handleRequestCableCheck(data)
-            elif id == 0x88:
-                self._handlePreChargeStarted(data)
-            elif id == 0x89:
-                self._handleRequestStartCharging(data)
-            elif id == 0x8A:
-                self._handleRequestStopCharging(data)
-            elif id == 0x8B:
-                self._handleWeldingDetectionStarted(data)
-            elif id == 0x8C:
-                self._handleSessionStopped(data)
-                break
-            elif id == 0x8D:
-                pass
-            elif id == 0x8E:
-                self._handleSessionError(data)
-            elif id == 0x8F:
-                self._handleCertificateInstallationRequested(data)
-            elif id == 0x90:
-                self._handleCertificateUpdateRequested(data)
-            elif id == 0x91:
-                self._handleMeteringReceiptStatus(data)
-            else:
-                print("Message ID not supported: {:02x}".format(id))
-                break
-        self.whitebeet.v2gEvseStopListen()
+                if id == None or data == None:
+                    pass
+                elif id == 0x80:
+                    self._handleSessionStarted(data)
+                elif id == 0x81:
+                    self._handlePaymentSelected(data)
+                elif id == 0x82:
+                    self._handleRequestAuthorization(data)
+                elif id == 0x83:
+                    self._handleEnergyTransferModeSelected(data)
+                elif id == 0x84:
+                    self._handleRequestSchedules(data)
+                elif id == 0x85:
+                    self._handleDCChargeParametersChanged(data)
+                elif id == 0x86:
+                    self._handleACChargeParametersChanged(data)
+                elif id == 0x87:
+                    self._handleRequestCableCheck(data)
+                elif id == 0x88:
+                    self._handlePreChargeStarted(data)
+                elif id == 0x89:
+                    self._handleRequestStartCharging(data)
+                elif id == 0x8A:
+                    self._handleRequestStopCharging(data)
+                elif id == 0x8B:
+                    self._handleWeldingDetectionStarted(data)
+                elif id == 0x8C:
+                    self._handleSessionStopped(data)
+                    break
+                elif id == 0x8D:
+                    pass
+                elif id == 0x8E:
+                    self._handleSessionError(data)
+                elif id == 0x8F:
+                    self._handleCertificateInstallationRequested(data)
+                elif id == 0x90:
+                    self._handleCertificateUpdateRequested(data)
+                elif id == 0x91:
+                    self._handleMeteringReceiptStatus(data)
+                else:
+                    print("Message ID not supported: {:02x}".format(id))
+                    break
+        finally:
+            self.whitebeet.v2gEvseStopListen()
 
     def _handleSessionStarted(self, data):
         """
@@ -862,11 +864,22 @@ class Evse():
         """
         This will handle a complete charging session of the EVSE.
         """
-        self._initialize()
-        if self._waitEvConnected(None):
-            self._handleEvConnected()
-            # Loop finished (unplugged or session ended) - return to Available logic handled in next loop iteration or explicit
-            print("Session sequence finished, returning to Available...")
-            self.set_status("Available")
-        else:
+        try:
+            self._initialize()
+            if self._waitEvConnected(None):
+                if not self._handleEvConnected():
+                    # Handle failures inside _handleEvConnected (like SLAC failure)
+                    if self.state not in ["Faulted", "Unavailable"]:
+                        print("SLAC/Network setup failed. Returning to Available.")
+                        self.set_status("Available")
+                else:
+                    print("Session sequence finished, returning to Available...")
+                    # Only return to Available if we are not already in a terminal state like Faulted
+                    if self.state not in ["Faulted", "Unavailable"]:
+                        self.set_status("Available")
+            else:
+                return False
+        except Exception as e:
+            print(f"Critical error in EVSE loop: {e}")
+            self.set_status("Faulted", error_code="InternalError")
             return False

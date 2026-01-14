@@ -370,3 +370,20 @@ EV
 ```bash
 sudo .venv/bin/python3 Application.py eth -i enx00e09909a99b -r EV -c ev.json
 ```
+
+### MEA Sandbox Example
+
+To run the EVSE with the MEA Sandbox OCPP configuration:
+
+**Parameters:**
+- **Charge Point ID (CP_ID):** `rddQCxxxxxxx`
+- **CSMS WebSocket URL:** `wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQCxxxxxxx`
+- **CSMS API Base URL:** `https://ocppapi.measandbox.com/EV`
+
+**Command:**
+```bash
+sudo .venv/bin/python3 Application.py eth -i eth0 -r EVSE \
+  --ocpp-id "rddQCxxxxxxx" \
+  --ocpp-url "wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQCxxxxxxx" \
+  --ocpp-version 1.6
+```

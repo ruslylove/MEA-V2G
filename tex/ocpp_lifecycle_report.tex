@@ -1,0 +1,69 @@
+\documentclass[10pt, a4paper, landscape]{article}
+\usepackage[left=1cm, right=1cm, top=2cm, bottom=2cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{lscape}
+\usepackage{verbatim}
+\usepackage{fancyvrb}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+
+\title{\textbf{MEA Live Test Suite Report}}
+\author{MEA OCPP Certification (Automated)}
+\date{\today}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MEA Compliance Test Report - Live Suite}
+\rhead{Page \thepage}
+
+\begin{document}
+
+\maketitle
+
+\section*{MEA Live Test Execution Results}
+
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{|p{6cm}|p{2.5cm}|p{10cm}|c|}
+\hline
+\rowcolor{gray!30}
+\textbf{Test Case} & \textbf{Direction} & \textbf{Log Preview / Proof} & \textbf{Result} \\
+\hline
+\endfirsthead
+
+\hline
+\hline
+\rowcolor{gray!30}
+\textbf{Test Case} & \textbf{Direction} & \textbf{Log Preview / Proof} & \textbf{Result} \\
+\hline
+\endhead
+
+\hline
+\endfoot
+test\_evse\_full\_lifecycle\_live & CS <-> CSMS & \texttt{\scriptsize INFO:ocpp:rddQC4000001: receive message [3,"5bdc7252-b970-4014-b5ea-bbd456b32bfb",\{\}]} \newline \texttt{\scriptsize } \newline \texttt{\scriptsize --- Phase 1: Available ---} \newline \texttt{\scriptsize } \newline \texttt{\scriptsize [EVSE] RAW RECV: [3,"5bdc7252-b970-4014-b5ea-bbd456b32bfb",\{\}]} \newline \texttt{\scriptsize } \newline \texttt{\scriptsize [EVSE] StatusNotification ACKNOWLEDGED (Available)} \newline \texttt{\scriptsize INFO:ocpp:rddQC4000001: send [2,"605a5f2e-517b-4132-bbc5-79864350741e","StatusNotification",\{"co...} & \textcolor{green}{PASSED} \\
+\hline
+
+\end{longtable}
+\newpage
+\appendix
+\section{Raw Test Logs}
+\label{sec:raw_logs}
+\normalsize
+\lstinputlisting[
+    breaklines=true,
+    basicstyle=\small\ttfamily,
+    columns=fullflexible,
+    keepspaces=true,
+    breakatwhitespace=false,
+    frame=single,
+    rulecolor=\color{gray!30},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt
+]{ocpp_lifecycle.log}
+
+\end{document}

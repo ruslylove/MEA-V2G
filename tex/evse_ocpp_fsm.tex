@@ -41,13 +41,22 @@
     (SuspendedEVSE) edge [bend right] node {Timeout} (Finishing)
     
     (Finishing) edge [bend left, mainloop] node {Unplugged} (Available)
-    (Finishing) edge [bend left=80, dashed] node [left] {Unplugged + Scheduled} (Unavailable)
+    (Finishing) edge [bend left=90, dashed] node [above] {Unplugged + Scheduled} (Unavailable)
     
     % Fault transitions
     (Preparing) edge [bend left] node {Error} (Faulted)
     (Charging) edge [bend left] node {Error} (Faulted)
     (Faulted) edge [bend left] node[swap] {Reset} (Available)
     (Faulted) edge [bend left] node[swap] {Inoperative} (Unavailable);
+    
+  % Notation Legend
+  \node[anchor=north west, draw, fill=gray!5, font=\footnotesize, inner sep=5pt] at ($(Unavailable.south west) + (-1,-5.8)$) {
+    \begin{tabular}{ll}
+      \textbf{Notation} & \textbf{Description} \\
+      $T$ & Target current (from EV) \\
+      $L$ & Limit current (from CSMS/EVSE)
+    \end{tabular}
+  };
 
 \end{tikzpicture}
 
