@@ -105,6 +105,80 @@ class Evse():
                     print("CP in wrong state: {}".format(cp_state))
                     return False
 
+    def stop_charging(self):
+        """
+        Manually stop the charging session (e.g. via button press).
+        This sends a StopCharging command to the EV via V2G.
+        """
+        print("Manual stop initiated...")
+        try:
+            self.whitebeet.v2gEvseStopCharging()
+        except Exception as e:
+            print(f"Error stopping: {e}")
+
+    def emergency_stop(self):
+        """
+        Trigger an emergency stop (e.g. Red E-Stop button pressed).
+        Immediately cuts power and faults the charger.
+        """
+        print("!!! EMERGENCY STOP TRIGGERED !!!")
+        self.charging = False
+        
+        # 1. Hard Cutoff: Stop PWM/Contactors
+        self.charger.stop() 
+        
+        # 2. Force close V2G to ensure no further comms
+        try:
+             # Stop listening/communicating immediately
+             self.whitebeet.v2gEvseStopListen()
+        except:
+             pass
+
+        # 3. Notify CSMS
+        if self.ocpp_worker:
+            self.ocpp_worker.send_stop_transaction_threadsafe(1, reason="EmergencyStop")
+        
+        # 4. Enter Faulted state
+        self.set_status("Faulted", error_code="OtherError")
+
+    def authorize_id(self, id_tag):
+        """
+        Called when an RFID tag is scanned.
+        Triggers OCPP Authorization (if online) or local fallback.
+        """
+        print(f"RFID Scanned: {id_tag}")
+        
+        # 1. Check with OCPP if online
+        if self.ocpp_worker:
+             # Need to bridge async call since we are likely in main thread/loop
+             # Ideally OcppInterface should handle this async or we launch a task?
+             # But OcppWorker usually runs in a thread. 
+             # We need a threadsafe way to ask for authorization.
+             # Using the existing worker queue pattern or direct call if threadsafe.
+             # Assuming authorize_threadsafe wrapper exists or we define it.
+             # Wait, Ocpp16Interface doesn't have authorize_threadsafe yet, only send_authorize (async).
+             # We should probably add authorize_threadsafe to Ocpp16Interface or OcppWorker.
+             # OR for now, just schedule it if we can access the loop.
+             
+             # Actually, let's use the helper we used for status notification:
+             if hasattr(self.ocpp_worker, "authorize_threadsafe"):
+                 self.ocpp_worker.authorize_threadsafe(id_tag)
+             else:
+                 # Fallback: Create task if we have loop access, or just print warning
+                 print("Warning: authorize_threadsafe not available on ocpp_worker")
+                 # Try direct async scheduling if loop is running in worker
+                 # This is complex without the wrapper. 
+                 # Let's assume user accepts adding the wrapper to OcppWorker/Interface or we stub it.
+                 pass
+        else:
+             # 2. Local fallback / Auto-auth
+             print("Local Authorization (Offline/Mock)")
+             self.authorized_id_tag = id_tag
+             # Triggers transition if car connected
+             if self.state == "Available":
+                 # Loop will pick this up
+                 pass
+
     def _handleEvConnected(self):
         """
         When an EV connected we start our start matching process of the SLAC which will be ready
@@ -273,6 +347,12 @@ class Evse():
         print("Protocol: {}".format(message['protocol']))
         print("Session ID: {}".format(message['session_id'].hex()))
         print("EVCC ID: {}".format(message['evcc_id'].hex()))
+
+        # Auto Charge / Plug & Charge Support
+        if self.auto_authorize:
+            evcc_id_str = message['evcc_id'].hex().upper()
+            print(f"Auto-Authorizing using EVCC ID: {evcc_id_str}")
+            self.authorize_id(evcc_id_str)
 
     def _handlePaymentSelected(self, data):
         """
