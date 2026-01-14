@@ -44,9 +44,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
     # Configurable flags
     LOG_SEND_PACKETS = False
 
-    def __init__(self, id, connection, charger=None):
+    def __init__(self, id, connection, charger=None, evse=None):
         super().__init__(id, connection, response_timeout=20)
         self.charger = charger
+        self.evse = evse
         self.heartbeat_interval = 60 # Default
         # Transaction Management (Connector ID -> Transaction ID)
         self.transactions = {} 
@@ -228,7 +229,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
     async def _heartbeat_loop(self):
         try:
             while True:
-                await asyncio.sleep(30)
+                interval = int(self.configuration.get('HeartbeatInterval', 60))
+                if interval <= 0:
+                    interval = 60
+                await asyncio.sleep(interval)
                 await self.send_heartbeat()
         except asyncio.CancelledError:
             pass
@@ -266,7 +270,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                     if connector_id in self.reservations:
                         del self.reservations[connector_id]
                         # Send Status Available
-                        await self.send_status_notification(connector_id, ChargePointStatus.available)
+                        if self.evse:
+                             self.evse.set_status("Available")
+                        else:
+                             await self.send_status_notification(connector_id, ChargePointStatus.available)
 
         except asyncio.CancelledError:
             pass
@@ -577,7 +584,19 @@ class Ocpp16Interface(Ocpp16ChargePoint):
              return call_result.RemoteStartTransaction(status=RemoteStartStopStatus.rejected)
 
         # Trigger internal start transaction logic in background to not block response
-        asyncio.create_task(self.start_transaction(target_connector, id_tag))
+        if self.evse:
+             print(f"[OCPP] Delegate RemoteStart to EVSE Logic for {id_tag}")
+             self.evse.ocpp_authorize(id_tag)
+             # We rely on EVSE to trigger the actual StartTransaction packet when session is ready
+             # But if EVSE is not in loop (e.g. pre-check), we might miss it?
+             # Actually, if we just authorize, the EVSE loop (handleRequestAuthorization) picks it up.
+             # Does Evse loop run if no car is plugged?
+             # Evse loop waits for EV connection.
+             # If RemoteStart comes BEFORE plugin, we set authorized_id_tag.
+             # Then user plugs in. Evse checks auth. Uses it. Starts Tx. Correct.
+             pass
+        else:
+             asyncio.create_task(self.start_transaction(target_connector, id_tag))
         
         msg_resp = f"[EVSE] Sending RemoteStartTransaction Response (Accepted)"
         print(f"\n{msg_resp}", flush=True)
@@ -815,8 +834,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             "expiryDate": expiry_date
         }
         
-        # Send Status Reserved (Background task to avoid deadlock)
-        asyncio.create_task(self.send_status_notification(connector_id, ChargePointStatus.reserved))
+        # Sync state with Evse
+        if self.evse:
+             self.evse.set_status("Reserved", expiry_date=expiry_date)
+        else:
+             asyncio.create_task(self.send_status_notification(connector_id, ChargePointStatus.reserved))
         
         msg_resp = f"[EVSE] Sending ReserveNow Response (Accepted)"
         print(f"\n{msg_resp}", flush=True)
@@ -841,8 +863,11 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                 break
         
         if target_conn:
-             # Send Status Available (Background task to avoid deadlock)
-             asyncio.create_task(self.send_status_notification(target_conn, ChargePointStatus.available))
+             # Sync state with Evse
+             if self.evse:
+                  self.evse.set_status("Available")
+             else:
+                  asyncio.create_task(self.send_status_notification(target_conn, ChargePointStatus.available))
         
         msg_resp = f"[EVSE] Sending CancelReservation Response (Accepted)"
         print(f"\n{msg_resp}", flush=True)
@@ -884,6 +909,20 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         print(f"\n{msg}", flush=True)
         PACKET_QUEUE.put(msg)
         LOGGER.info(msg)
+
+        status = AvailabilityStatus.accepted
+        if type == "Inoperative":
+             if self.evse:
+                  self.evse.set_status("Unavailable")
+             else:
+                  asyncio.create_task(self.send_status_notification(connector_id, ChargePointStatus.unavailable))
+        elif type == "Operative":
+             if self.evse:
+                  # If we were Faulted, maybe check if we can go Available?
+                  # Simplified: Go Available
+                  self.evse.set_status("Available")
+             else:
+                  asyncio.create_task(self.send_status_notification(connector_id, ChargePointStatus.available))
         
         msg_resp = f"[EVSE] Sending ChangeAvailability Response (Accepted)"
         print(f"\n{msg_resp}", flush=True)

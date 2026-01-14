@@ -12,7 +12,13 @@ class Evse():
         self.evse_config = None
         self.auto_authorize = auto_authorize
         self.charging = False
+        self.state = "Unavailable" # Initial state
+        self.state_timer = 0
+        self.SUSPENDED_TIMEOUT = 300 # 5 minutes
         self.api_server = None
+        self.ocpp_worker = None
+        self.authorized_id_tag = None
+        self.reservation_expiry_time = None
 
         if api_port:
             self.api_server = ApiServer(self, port=api_port)
@@ -41,6 +47,7 @@ class Evse():
         """
 
         print("Set the CP mode to EVSE")
+        self.set_status("Available")
         self.whitebeet.controlPilotSetMode(1)
         print("Set the CP duty cycle to 100%")
         self.whitebeet.controlPilotSetDutyCycle(100)
@@ -57,10 +64,15 @@ class Evse():
         """
         timestamp_start = time.time()
         cp_state = self.whitebeet.controlPilotGetState()
-        if cp_state == 1:
-            print("EV already connected")
-            return True
-        elif cp_state > 1:
+                elif cp_state == 1:
+                    print("EV already connected")
+                    # If we booted up and car is connected, we might assume preparing?
+                    # Or stay unavailable until ocpp boot?
+                    # For now, if we are unavailable logic, we don't switch.
+                    if self.state in ["Available", "Reserved"]:
+                        self.set_status("Preparing")
+                    return True
+                elif cp_state > 1:
             print("CP in wrong state: {}".format(cp_state))
             return False
         else:
@@ -73,6 +85,11 @@ class Evse():
                     time.sleep(0.1)
                 elif cp_state == 1:
                     print("EV connected")
+                    # Only transition if logically allowed
+                    if self.state in ["Available", "Reserved"]:
+                        self.set_status("Preparing")
+                    else:
+                        print(f"EV Connected but state is {self.state}, not transitioning to Preparing.")
                     return True
                 else:
                     print("CP in wrong state: {}".format(cp_state))
@@ -168,6 +185,28 @@ class Evse():
                     print("ConnectionError: {}".format(e))
             else:
                 id, data = self.whitebeet.v2gEvseReceiveRequest()
+            
+            # Check Timeouts
+            if self.state in ["SuspendedEV", "SuspendedEVSE"]:
+                if time.time() - self.state_timer > self.SUSPENDED_TIMEOUT:
+                     print(f"Timeout checking in state {self.state}. Stopping session.")
+                     if self.ocpp_worker:
+                         self.ocpp_worker.send_stop_transaction_threadsafe(1, reason="TimeLimitReached")
+                     try:
+                         self.whitebeet.v2gEvseStopCharging()
+                     except:
+                         pass
+                     self.set_status("Finishing")
+                     break
+            
+            # Check Reservation Expiry
+            if self.state == "Reserved" and self.reservation_expiry_time:
+                 if time.time() > self.reservation_expiry_time:
+                      print("Reservation expired locally. Returning to Available.")
+                      self.set_status("Available")
+                      # Clean up OcppInterface reservation? 
+                      # Ideally OcppInterface should also govern this, but local strict check is good.
+                      # Sync back if needed, but StatusNotification "Available" should trigger backend to clear it.
 
             if id == None or data == None:
                 pass
@@ -255,6 +294,29 @@ class Evse():
                 print("ConnectionError: {}".format(e))
             return
 
+        if self.authorized_id_tag:
+            print(f"Vehicle was authorized via OCPP: {self.authorized_id_tag}")
+            try:
+                self.whitebeet.v2gEvseSetAuthorizationStatus(True)
+                # Initiate StartTransaction
+                if self.ocpp_worker:
+                    self.ocpp_worker.send_start_transaction_threadsafe(1, self.authorized_id_tag)
+            except Warning as e:
+                print("Warning: {}".format(e))
+            except ConnectionError as e:
+                print("ConnectionError: {}".format(e))
+            return
+
+        # Check if RESERVED for a different tag
+        if self.state == "Reserved":
+             # We should check if idTag matches logic in 1.6
+             # But here we don't have the tag from AuthorizationReq yet? 
+             # Wait, AuthorizationStatusRequested gives us no tag in ISO 15118 PnC usually, 
+             # but for EIM we might get it? 
+             # Whitebeet msg doesn't seem to pass tag here easily in this parse?
+             # Assuming we rely on backend/OCPP to reject if not matching.
+             pass
+
         timeout = int(message['timeout'] / 1000) - 1
         # Promt for authorization status
         auth_str = input("Authorize the vehicle? Type \"yes\" or \"no\" in the next {}s: ".format(timeout))
@@ -263,6 +325,8 @@ class Evse():
         print(f"Vehicle was {'authorized' if authorized else 'NOT authorized'} by user!")
         try:
             self.whitebeet.v2gEvseSetAuthorizationStatus(authorized)
+            if authorized and self.ocpp_worker:
+                 self.ocpp_worker.send_start_transaction_threadsafe(1, "RFID_TAG_LOCAL")
         except (Warning, ConnectionError) as e:
             print(f"{type(e).__name__}: {e}")
 
@@ -272,6 +336,7 @@ class Evse():
         """
         print("\"Energy transfer mode selected\" received")
         self.charging = True
+        self.set_status("Charging")
         message = self.whitebeet.v2gEvseParseEnergyTransferModeSelected(data)
 
         if 'departure_time' in message:        
@@ -376,6 +441,22 @@ class Evse():
             print("Remaining time to full SOC: {}s".format(message['remaining_time_to_full_soc']))
         if 'remaining_time_to_bulk_soc' in message:
             print("Remaining time to bulk SOC: {}s".format(message['remaining_time_to_bulk_soc']))
+        
+        # Check for Suspended states
+        # SuspendedEV: EV is connected but not drawing current (target_current = 0)
+        # SuspendedEVSE: EVSE is preventing charge (max_current = 0) - though we usually set that.
+        
+        target_current = message.get('target_current', 0)
+        # We need to track if we were charging.
+        
+        if self.state == "Charging" and target_current == 0:
+             self.set_status("SuspendedEV")
+        elif self.state == "SuspendedEV" and target_current > 0:
+             self.set_status("Charging")
+        
+        # Note: SuspendedEVSE logic depends on our local limits. 
+        # If we set limit to 0 (Smart Charging), we should transition.
+        # But here we are reacting to EV param changes.
     
         charging_parameters = {
             'isolation_level': 0,
@@ -489,7 +570,11 @@ class Evse():
         Handle the SessionStopped notification
         """
         self.charging = False
+        self.authorized_id_tag = None # Reset Auth
         print("\"Session stopped\" received")
+        if self.ocpp_worker:
+            self.ocpp_worker.send_stop_transaction_threadsafe(1, reason="Local")
+        self.set_status("Finishing")
         message = self.whitebeet.v2gEvseParseSessionStopped(data)
         print('Closure type: {}'.format(message['closure_type']))
         self.charger.stop()
@@ -500,6 +585,11 @@ class Evse():
         """
         print("\"Session Error\" received")
         self.charging = False
+        self.authorized_id_tag = None
+        if self.ocpp_worker:
+            self.ocpp_worker.send_stop_transaction_threadsafe(1, reason="Error")
+        self.set_status("Faulted", error_code="OtherError")
+            
         message = self.whitebeet.v2gEvseParseSessionError(data)
         self.charger.stop()
 
@@ -643,12 +733,48 @@ class Evse():
             self.schedule = schedule
             return True
 
+    def set_ocpp_worker(self, worker):
+        self.ocpp_worker = worker
+
+    def set_status(self, status, error_code="NoError", expiry_date=None):
+        """
+        Updates the internal state and notifies OCPP CSMS if connected.
+        """
+        if self.state != status:
+            print(f"State transition: {self.state} -> {status}")
+            self.state = status
+            self.state_timer = time.time()
+            if status == "Reserved" and expiry_date:
+                from datetime import datetime
+                # Convert ISO string to timestamp or store object
+                # Start simplified: assuming expiry_date is iso string
+                try:
+                    if expiry_date.endswith('Z'): expiry_date = expiry_date[:-1] + '+00:00'
+                    dt = datetime.fromisoformat(expiry_date)
+                    self.reservation_expiry_time = dt.timestamp()
+                    print(f"Reservation set until {dt}")
+                except Exception as e:
+                    print(f"Error parsing expiry: {e}")
+                    self.reservation_expiry_time = None
+            else:
+                self.reservation_expiry_time = None
+
+            if self.ocpp_worker:
+                self.ocpp_worker.send_status_notification_threadsafe(1, status, error_code)
+
+    def ocpp_authorize(self, id_tag):
+        self.authorized_id_tag = id_tag
+        print(f"EVSE Authorized by OCPP: {id_tag}")
+
     def loop(self):
         """
         This will handle a complete charging session of the EVSE.
         """
         self._initialize()
         if self._waitEvConnected(None):
-            return self._handleEvConnected()
+            self._handleEvConnected()
+            # Loop finished (unplugged or session ended) - return to Available logic handled in next loop iteration or explicit
+            print("Session sequence finished, returning to Available...")
+            self.set_status("Available")
         else:
             return False

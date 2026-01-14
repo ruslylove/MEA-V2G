@@ -1123,7 +1123,14 @@ To verify connectivity and basic message exchange with the live MEA server, exec
 \begin{verbatim}
 python3 tests/system/test_mea_live.py
 \end{verbatim}
-This script performs a real-time handshake, sending a \texttt{BootNotification} and \texttt{StatusNotification}, and logs the server's response.
+This script performs a real-time handshake, sending a \texttt{BootNotification} and \texttt{StatusNotification}, and logs the server's response. The structure of this test script and its helper classes is illustrated in Figure \ref{fig:mealiveclassdiagram}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\textwidth]{mea_live_class_diagram.pdf}
+    \caption{Class Diagram for Live Sandbox Test Script (test\_mea\_live.py)}
+    \label{fig:mealiveclassdiagram}
+\end{figure}
 
 \paragraph{Comprehensive API Validation}
 For full validation of the MEA Sandbox capabilities (including Remote Start/Stop, Reservations, and Smart Charging), the project employs a dedicated API test suite. This suite simulates an EVSE and verifies the correct handling of commands sent from the Sandbox API.

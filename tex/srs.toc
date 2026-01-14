@@ -92,48 +92,48 @@
 \contentsline {paragraph}{API Authorization (Test Client $\to $ EVSE)}{35}{subsection.6.1.2}%
 \contentsline {subsubsection}{Test Execution Instructions}{36}{subsection.6.1.2}%
 \contentsline {paragraph}{Basic Connectivity}{36}{subsection.6.1.2}%
-\contentsline {paragraph}{Comprehensive API Validation}{36}{subsection.6.1.2}%
+\contentsline {paragraph}{Comprehensive API Validation}{36}{figure.6.1}%
 \contentsline {subsection}{\numberline {6.1.3}Tier 3: On-Site Acceptance Testing}{36}{subsection.6.1.3}%
-\contentsline {section}{\numberline {6.2}OCPP 1.6 V2G Workaround (Special Test Case)}{36}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Custom Configuration Key: MEA\_V2G\_PowerDemand}{36}{subsection.6.2.1}%
+\contentsline {section}{\numberline {6.2}OCPP 1.6 V2G Workaround (Special Test Case)}{37}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Custom Configuration Key: MEA\_V2G\_PowerDemand}{37}{subsection.6.2.1}%
 \contentsline {section}{\numberline {6.3}MEA OCPP 1.6 Compliance Verification}{37}{section.6.3}%
 \contentsline {subsection}{\numberline {6.3.1}MEA OCPP Compliance Verification Flows}{42}{subsection.6.3.1}%
 \contentsline {subsubsection}{1. Configuration Verification}{42}{subsection.6.3.1}%
-\contentsline {subsubsection}{2. Auto Charge Verification}{43}{figure.6.2}%
-\contentsline {subsubsection}{3. Normal Operation Verification}{45}{figure.6.4}%
-\contentsline {subsubsection}{4. Reset Verification}{47}{figure.6.6}%
-\contentsline {subsubsection}{5. Reservation Verification}{49}{figure.6.8}%
-\contentsline {subsubsection}{6. Charging Profile Verification}{51}{figure.6.10}%
-\contentsline {subsubsection}{7. Abnormal Operation Verification}{53}{figure.6.12}%
-\contentsline {paragraph}{7.1 Remote Start (Unplugged)}{53}{figure.6.12}%
-\contentsline {paragraph}{7.2 Concurrent Remote Start}{54}{figure.6.13}%
-\contentsline {paragraph}{7.3 Swap Card}{55}{figure.6.14}%
-\contentsline {paragraph}{7.4 Emergency Stop}{57}{figure.6.15}%
-\contentsline {paragraph}{7.5 Open Door}{57}{figure.6.16}%
-\contentsline {paragraph}{7.6 Power Loss}{58}{figure.6.17}%
-\contentsline {paragraph}{7.7 Local List (Offline)}{59}{figure.6.18}%
-\contentsline {subsubsection}{8. Dual Connector Verification}{60}{figure.6.19}%
-\contentsline {paragraph}{8.1 Dual Concurrent}{60}{figure.6.19}%
-\contentsline {paragraph}{8.2 Dual Emergency}{62}{figure.6.21}%
-\contentsline {paragraph}{8.3 Dual Power Loss}{64}{figure.6.23}%
-\contentsline {subsubsection}{9. MEA Specific Configuration}{66}{figure.6.25}%
-\contentsline {paragraph}{9.1-9.3 General Configuration}{66}{figure.6.25}%
-\contentsline {paragraph}{9.4 Power Demand Verification}{66}{figure.6.26}%
-\contentsline {subsubsection}{10. Summary Verification}{67}{figure.6.27}%
-\contentsline {subsubsection}{11. Other Verification}{69}{figure.6.29}%
-\contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{70}{section.6.4}%
-\contentsline {section}{\numberline {6.5}MEA API Test Report}{75}{section.6.5}%
-\contentsline {subsection}{\numberline {6.5.1}Report Content}{75}{subsection.6.5.1}%
-\contentsline {subsection}{\numberline {6.5.2}Generated Artifacts}{75}{subsection.6.5.2}%
-\contentsline {chapter}{\numberline {7}Reference Documents}{76}{chapter.7}%
-\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{77}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Overview}{77}{section.A.1}%
-\contentsline {section}{\numberline {A.2}Core Message Reference}{77}{section.A.2}%
-\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{79}{appendix.B}%
-\contentsline {section}{\numberline {B.1}System \& Configuration}{79}{section.B.1}%
-\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{79}{section.B.2}%
-\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{79}{section.B.3}%
-\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{79}{section.B.4}%
-\contentsline {subsection}{\numberline {B.4.1}Configuration}{80}{subsection.B.4.1}%
-\contentsline {subsection}{\numberline {B.4.2}Session Control}{80}{subsection.B.4.2}%
-\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{80}{subsection.B.4.3}%
+\contentsline {subsubsection}{2. Auto Charge Verification}{44}{figure.6.3}%
+\contentsline {subsubsection}{3. Normal Operation Verification}{46}{figure.6.5}%
+\contentsline {subsubsection}{4. Reset Verification}{48}{figure.6.7}%
+\contentsline {subsubsection}{5. Reservation Verification}{50}{figure.6.9}%
+\contentsline {subsubsection}{6. Charging Profile Verification}{52}{figure.6.11}%
+\contentsline {subsubsection}{7. Abnormal Operation Verification}{54}{figure.6.13}%
+\contentsline {paragraph}{7.1 Remote Start (Unplugged)}{54}{figure.6.13}%
+\contentsline {paragraph}{7.2 Concurrent Remote Start}{55}{figure.6.14}%
+\contentsline {paragraph}{7.3 Swap Card}{56}{figure.6.15}%
+\contentsline {paragraph}{7.4 Emergency Stop}{58}{figure.6.16}%
+\contentsline {paragraph}{7.5 Open Door}{58}{figure.6.17}%
+\contentsline {paragraph}{7.6 Power Loss}{59}{figure.6.18}%
+\contentsline {paragraph}{7.7 Local List (Offline)}{60}{figure.6.19}%
+\contentsline {subsubsection}{8. Dual Connector Verification}{61}{figure.6.20}%
+\contentsline {paragraph}{8.1 Dual Concurrent}{61}{figure.6.20}%
+\contentsline {paragraph}{8.2 Dual Emergency}{63}{figure.6.22}%
+\contentsline {paragraph}{8.3 Dual Power Loss}{65}{figure.6.24}%
+\contentsline {subsubsection}{9. MEA Specific Configuration}{67}{figure.6.26}%
+\contentsline {paragraph}{9.1-9.3 General Configuration}{67}{figure.6.26}%
+\contentsline {paragraph}{9.4 Power Demand Verification}{67}{figure.6.27}%
+\contentsline {subsubsection}{10. Summary Verification}{68}{figure.6.28}%
+\contentsline {subsubsection}{11. Other Verification}{70}{figure.6.30}%
+\contentsline {section}{\numberline {6.4}MEA Compliance Test Results}{71}{section.6.4}%
+\contentsline {section}{\numberline {6.5}MEA API Test Report}{76}{section.6.5}%
+\contentsline {subsection}{\numberline {6.5.1}Report Content}{76}{subsection.6.5.1}%
+\contentsline {subsection}{\numberline {6.5.2}Generated Artifacts}{76}{subsection.6.5.2}%
+\contentsline {chapter}{\numberline {7}Reference Documents}{77}{chapter.7}%
+\contentsline {chapter}{\numberline {A}OCPP 2.0.1 Protocol Details}{78}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Overview}{78}{section.A.1}%
+\contentsline {section}{\numberline {A.2}Core Message Reference}{78}{section.A.2}%
+\contentsline {chapter}{\numberline {B}Whitebeet Interface Reference}{80}{appendix.B}%
+\contentsline {section}{\numberline {B.1}System \& Configuration}{80}{section.B.1}%
+\contentsline {section}{\numberline {B.2}Control Pilot (CP)}{80}{section.B.2}%
+\contentsline {section}{\numberline {B.3}SLAC (GreenPHY)}{80}{section.B.3}%
+\contentsline {section}{\numberline {B.4}V2G Session Management (EVSE)}{80}{section.B.4}%
+\contentsline {subsection}{\numberline {B.4.1}Configuration}{81}{subsection.B.4.1}%
+\contentsline {subsection}{\numberline {B.4.2}Session Control}{81}{subsection.B.4.2}%
+\contentsline {subsection}{\numberline {B.4.3}Notifications \& Parsing}{81}{subsection.B.4.3}%

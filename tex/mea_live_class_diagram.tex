@@ -1,0 +1,68 @@
+\documentclass[border=10pt]{standalone}
+\usepackage{tikz}
+\usepackage{tikz-uml}
+
+\begin{document}
+\begin{tikzpicture}
+    % MeaApi Class
+    \umlclass[x=0, y=0]{MeaApi}{
+        + username : str \\
+        + pwd\_remote\_start : str \\
+        + pwd\_default : str
+    }{
+        + \_\_init\_\_() \\
+        + \_post(path, payload, password) \\
+        + remote\_start(cp\_id, connector\_id, card\_id) \\
+        + remote\_stop(cp\_id, transaction\_id) \\
+        + reserve(cp\_id, connector, duration, card\_id) \\
+        + cancel\_reservation(cp\_id, reservation\_id) \\
+        + change\_configuration(cp\_id, key, value) \\
+        + get\_configuration(cp\_id, key) \\
+        + reset(cp\_id, type) \\
+        + set\_charging\_profile(cp\_id, connector\_id, profile) \\
+        + trigger\_message(cp\_id, message, connector\_id) \\
+        + unlock\_connector(cp\_id, connector\_id)
+    }
+
+    % MockCharger Class
+    \umlclass[x=10, y=0]{MockCharger}{
+        + stopped : bool
+    }{
+        + \_\_init\_\_() \\
+        + stop() \\
+        + start() \\
+        + start\_session() \\
+        + getEvsePresentVoltage() : float \\
+        + getEvsePresentCurrent() : float
+    }
+
+    % External Classes (Simplified)
+    \umlclass[x=10, y=7]{Ocpp16Interface}{
+        + cp\_id : str \\
+        + ws : WebSocket \\
+        + charger : MockCharger
+    }{
+        + start() \\
+        + send\_boot\_notification() \\
+        + send\_status\_notification()
+    }
+
+    % Main Script Logic representation - logic simulation
+    \node[draw, fill=yellow!10, text width=7cm, align=left, drop shadow] (script) at (0, 9) {
+        \textbf{test\_mea\_live.py (main)} \\
+        1. Connects to MEA Sandbox via WebSocket \\
+        2. Instantiates \texttt{Ocpp16Interface} \\
+        3. Instantiates \texttt{MeaApi} \\
+        4. Runs sequential verification tests
+    };
+
+    % Associations
+    % Use manual draw for script to avoid confusion with uml classes
+    \draw[->, dashed, thick] (script) -- (MeaApi) node[midway, left] {uses};
+    \draw[->, dashed, thick] (script) -- (Ocpp16Interface) node[midway, above] {instantiates};
+    
+    % Use umluniassoc for classes
+    \umluniassoc[arg1=controls, mult1=1]{Ocpp16Interface}{MockCharger}
+
+\end{tikzpicture}
+\end{document}
