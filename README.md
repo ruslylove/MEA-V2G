@@ -52,7 +52,7 @@ Actual WHITE-beet SW updates for EVSE abd EV are available at **CODICO PLC docum
 
 ## FEATURES
 
-The main feature of this implementation is the parsing of the protocol used to communicate with the WHITE-beet. Other features are the WHITE-beet class which answers the parameter requests of the WHITE-beet and the charger class which simulates the voltage and current based on the given parameters during initialization and on the parameters received by the EV during the charging process.
+The main feature of this implementation is the parsing of the protocol used to communicate with the WHITE-beet. Other features are the WHITE-beet class which answers the parameter requests of the WHITE-beet and the ChargerSim class which simulates the voltage and current based on the given parameters during initialization and on the parameters received by the EV during the charging process.
 
 ### Control Pilot
 

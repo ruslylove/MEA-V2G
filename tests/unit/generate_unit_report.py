@@ -1,5 +1,6 @@
 import re
 import os
+import sys
 
 # Configuration
 LOG_FILE = "tests/unit/unit_test_output.log"
@@ -138,54 +139,76 @@ def parse_logs():
     # tests/unit/test_evse_states.py::TestEvseStates::test_initial_state PASSED
     # or sometimes on multiple lines if -v is used (which we did)
     test_start_pattern = re.compile(r"^tests/unit/test_evse_states.py::TestEvseStates::(\w+)")
-    result_pattern = re.compile(r"^(PASSED|FAILED|ERROR|SKIPPED)$")
+    # Match outcome at the end OR before progress indicators like [ 4%]
+    result_pattern = re.compile(r".*\s(PASSED|FAILED|ERROR|SKIPPED)(\s+\[.*\])?$")
+    
+    # Store results in a dictionary
+    test_results = {} # name -> result
+    test_logs = {}    # name -> list of log lines
 
+    # Phase 1: Scan for test results
     for line in log_lines:
         line = line.strip()
-        
         match = test_start_pattern.match(line)
         if match:
-            # If we had a previous test, finalize it
-            if current_test:
-                rows.append({
-                    "name": current_test,
-                    "logs": test_logs[:12], # Keep preview
-                    "result": last_result if 'last_result' in locals() else "Unknown"
-                })
-            
-            current_test = match.group(1)
-            test_logs = []
-            
-            rem = line.split()
-            if len(rem) > 1 and result_pattern.match(rem[-1]):
-                last_result = rem[-1]
+            test_name = match.group(1)
+            # Check for result on the same line
+            res_match = result_pattern.match(line)
+            if res_match:
+                test_results[test_name] = res_match.group(1)
             else:
-                last_result = "Pending"
+                test_results[test_name] = "Pending"
+    
+    # Phase 2: Scan for captured logs in "PASSES" or "FAILURES" sections
+    # Header format: __________________ TestEvseStates.test_initial_state __________________
+    header_pattern = re.compile(r"^_+ \w+\.(test_\w+) _+$")
+    current_log_test = None
+    
+    capturing = False
+    for line in log_lines:
+        sline = line.strip()
+        
+        # Check for start of captured output section
+        if "=== PASSES ===" in line or "=== FAILURES ===" in line or "=== ERRORS ===" in line:
+            capturing = True
             continue
             
-        if current_test:
-            if result_pattern.match(line):
-                last_result = line
-            else:
-                # Capture transition logs and other EVSE outputs
-                # Exclude purely empty lines or pytest noise if possible
-                if line and not line.startswith("test_") and "::" not in line and "plugins:" not in line:
-                     test_logs.append(line)
+        if not capturing:
+            continue
+            
+        # Check for test header
+        match = header_pattern.match(sline)
+        if match:
+            current_log_test = match.group(1)
+            if current_log_test not in test_logs:
+                test_logs[current_log_test] = []
+            continue
+            
+        # Stop capturing if we hit another section or end
+        if sline.startswith("=======") and "summary" in sline:
+            capturing = False
+            current_log_test = None
+            continue
+            
+        if current_log_test:
+            # Skip "Captured stdout call" divider
+            if "Captured stdout" in sline or "Captured stderr" in sline:
+               continue
+            if sline:
+               test_logs[current_log_test].append(sline)
 
-    # Finalize last test
-    if current_test:
+    # Combine results
+    for name, result in test_results.items():
         rows.append({
-            "name": current_test,
-            "logs": test_logs[:12],
-            "result": last_result
+            "name": name,
+            "logs": test_logs.get(name, [])[:12],
+            "result": result
         })
         
     # Enrich with Test IDs from source file
     test_ids = parse_test_ids()
     for row in rows:
         row["id"] = test_ids.get(row["name"], "-")
-        # Try to sort numerically if possible for display?
-        pass
         
     # Sort rows by ID logic
     def get_sort_key(r):
@@ -226,7 +249,7 @@ def generate_tex(rows):
         clean_logs = []
         for l in row["logs"]:
             # Escape LaTeX
-            l = l.replace("_", r"\_").replace("{", r"\{").replace("}", r"\}").replace("$", r"\$").replace("&", r"\&").replace("%", r"\%")
+            l = l.replace("\\", r"\textbackslash{}").replace("_", r"\_").replace("{", r"\{").replace("}", r"\}").replace("$", r"\$").replace("&", r"\&").replace("%", r"\%").replace("#", r"\#")
             if len(l) > 110: l = l[:107] + "..."
             clean_logs.append(f"\\texttt{{\\scriptsize {l}}}")
         
@@ -249,15 +272,67 @@ def generate_tex(rows):
         f.write(content)
     print(f"Generated LaTeX report at {OUTPUT_TEX}")
 
+def ensure_logs_exist():
+    # If log file doesn't exist, try to generate it
+    # Always regenerate to ensure we have the latest format (-rP)
+    # if not os.path.exists(LOG_FILE) or os.path.getsize(LOG_FILE) == 0:
+    if True: 
+        print(f"Running pytest to generate logs...")
+        print(f"Using python: {sys.executable}")
+        # Run pytest and capture stdout to LOG_FILE
+        # Using subprocess to run pytest
+        import subprocess
+        try:
+            # We use tee or just redirection. simpler to just run and redirect
+            # Note: pytest output goes to stderr/stdout. 
+            # We want to run: sys.executable -m pytest -v -rP tests/unit/test_evse_states.py > tests/unit/unit_test_output.log
+            # But capturing it in python:
+            cmd = [sys.executable, "-m", "pytest", "-v", "-rP", "tests/unit/test_evse_states.py"]
+            print(f"Running command: {cmd}")
+            
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                check=False
+            )
+            
+            print(f"Return code: {result.returncode}")
+            print(f"Stdout len: {len(result.stdout)}")
+            print(f"Stderr len: {len(result.stderr)}")
+            
+            # Combine stdout and stderr
+            output = result.stdout + "\n" + result.stderr
+            
+            with open(LOG_FILE, "w") as f:
+                f.write(output)
+
+            # if len(result.stderr) > 0:
+            #    print(f"Stderr output:\n{result.stderr[:200]}...")
+
+        except Exception as e:
+            print(f"Failed to run pytest: {e}")
+
+    # Also make sure it is in the tex directory for the latex report
+    # The latex file expects unit_test_output.log in the same directory usually, 
+    # or we should copy it to where the latex build happens.
+    # The latex header says: \lstinputlisting[...]{unit_test_output.log}
+    # It assumes it is in the same dir as the .tex file (tex/) or in the search path.
+    # Let's copy it to tex/unit_test_output.log
+    
+    target_log = os.path.join(os.path.dirname(OUTPUT_TEX), "unit_test_output.log")
+    if os.path.exists(LOG_FILE) and os.path.getsize(LOG_FILE) > 0:
+        import shutil
+        shutil.copy(LOG_FILE, target_log)
+        print(f"Copied log to {target_log}")
+    else:
+        print(f"Warning: Could not create {target_log} because source is missing or empty.")
+
 def main():
+    ensure_logs_exist()
     rows = parse_logs()
     if not rows:
         print("No tests found in log.")
-        # Debug printing
-        if os.path.exists(LOG_FILE):
-             print("Log file content preview:")
-             with open(LOG_FILE) as f:
-                 print(f.read()[:500])
         return
     generate_tex(rows)
 

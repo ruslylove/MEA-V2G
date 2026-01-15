@@ -4,7 +4,7 @@ from ocpp.v201 import ChargePoint as Ocpp201ChargePoint
 from ocpp.v201 import call, call_result
 from ocpp.v201.enums import Action, RegistrationStatus, AuthorizationStatus
 from ocpp.routing import on
-from Charger import Charger
+from ChargerSim import ChargerSim
 
 # NOTE: Currently mapping to 2.0.1 classes as 2.1 is an extension/draft and library support might be limited or identical for basic features.
 # If ocpp.v21 becomes available, this should be updated.
@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger('ocpp_21_interface')
 
 class Ocpp21Interface(Ocpp201ChargePoint):
-    def __init__(self, id, connection, charger: Charger):
+    def __init__(self, id, connection, charger: ChargerSim):
          super().__init__(id, connection)
          self.charger = charger
          self.transaction_id = None

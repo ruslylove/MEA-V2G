@@ -55,11 +55,35 @@ class TestEvseStates(unittest.TestCase):
     def test_transition_to_preparing(self):
         """Test 3: _waitEvConnected transitions to Preparing if authorized"""
         self.evse.state = "Available"
-        self.evse.authorized_id_tag = "RFID_TAG"
         
-        # Mock CP state = 1 (Connected)
+        # Configure OCPP worker to verify auth immediately (Simulate backend response)
+        # When authorize_threadsafe is called, we call evse.ocpp_authorize back
+        def mock_authorize(id_tag):
+            self.evse.ocpp_authorize(id_tag)
+            
+        self.evse.ocpp_worker.authorize_threadsafe.side_effect = mock_authorize
+        
+        # Mock RFID Reader
+        self.evse.rfid_reader.start(self.evse.authorize_id)
+        
+        # Mock CP state = 1 (Connected) BEFORE scan if we want immediate transition logic in authorize_id to fire?
+        # NO, authorize_id logic: if connected -> Preparing.
+        # But _waitEvConnected logic: checks state.
+        # Let's set CP state to 1 now so authorize_id sees it?
+        # Or let _waitEvConnected handle it?
+        # If authorize_id transitions to Preparing, then _waitEvConnected just sees Preparing?
+        # Expectation: _waitEvConnected transitions to Preparing if authorized.
+        # The test originally expected _waitEvConnected to do the transition.
+        # But authorize_id ALSO does it if connected.
+        # Let's align:
+        # Set CP=1. 
         self.evse.whitebeet.controlPilotGetState.return_value = 1
         
+        # Scan
+        self.evse.rfid_reader.simulate_scan("RFID_TAG")
+        
+        # Now authorized_id_tag shoud be set.
+        # Call waitEvConnected
         self.evse._waitEvConnected(timeout=1)
         
         self.assertEqual(self.evse.state, "Preparing")

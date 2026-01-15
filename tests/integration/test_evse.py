@@ -24,7 +24,8 @@ sys.modules['FramingInterface'] = mock_framing_module
 
 from Evse import Evse
 from Whitebeet import Whitebeet
-from Charger import Charger
+from ChargerSim import ChargerSim
+from RFIDSim import RFIDSim
 
 class TestEvseIntegration(unittest.TestCase):
     def setUp(self):
@@ -56,6 +57,7 @@ class TestEvseIntegration(unittest.TestCase):
     def test_initialization(self):
         self.assertIsNotNone(self.evse.whitebeet)
         self.assertIsNotNone(self.evse.charger)
+        self.assertIsNotNone(self.evse.rfid_reader)
         self.assertFalse(self.evse.charging)
 
     def test_ev_connection_flow(self):
@@ -81,6 +83,34 @@ class TestEvseIntegration(unittest.TestCase):
         
         self.evse._handleNetworkEstablished.assert_called_once()
         self.evse.whitebeet.slacStartMatching.assert_called_once()
+        
+    def test_rfid_integration(self):
+        # Test that RFID Reader is started and triggers authorize_id
+        
+        # Mock RFID Reader
+        self.evse.rfid_reader = MagicMock()
+        
+        # Run initialize
+        self.evse._initialize()
+        
+        # Check start was called with authorize_id
+        self.evse.rfid_reader.start.assert_called_once_with(self.evse.authorize_id)
+        
+        # Check that calling authorize_id works (unit test of Evse.authorize_id is partially covered here or in unit tests)
+        # But here we verify the connection.
+        
+        # Simulate manually calling the callback passed to start
+        # Capture the callback
+        # start(callback)
+        # args = self.evse.rfid_reader.start.call_args[0]
+        # callback = args[0]
+        # callback("TAG123")
+        # See if authorize_id logic runs (it prints) or mock authorize_id
+        
+        self.evse.authorize_id = MagicMock()
+        # Re-run init to bind the mock
+        self.evse._initialize()
+        self.evse.rfid_reader.start.assert_called_with(self.evse.authorize_id)
 
     def test_handle_network_established_charging_loop(self):
         # Test the loop inside _handleNetworkEstablished

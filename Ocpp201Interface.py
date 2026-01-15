@@ -4,13 +4,13 @@ from ocpp.v201 import ChargePoint as Ocpp201ChargePoint
 from ocpp.v201 import call, call_result
 from ocpp.v201.enums import Action, RegistrationStatus, AuthorizationStatus, TransactionEventType, ChargingState
 from ocpp.routing import on
-from Charger import Charger
+from ChargerSim import ChargerSim
 
 logging.basicConfig(level=logging.INFO)
 LOGGER = logging.getLogger('ocpp_interface')
 
 class Ocpp201Interface(Ocpp201ChargePoint):
-    def __init__(self, id, connection, charger: Charger):
+    def __init__(self, id, connection, charger: ChargerSim):
         super().__init__(id, connection)
         self.charger = charger
         self.transaction_id = None

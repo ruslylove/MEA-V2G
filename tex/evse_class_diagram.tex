@@ -1,0 +1,139 @@
+\documentclass[tikz, border=10pt]{standalone}
+\usepackage{tikz-uml}
+\usetikzlibrary{positioning, arrows}
+\tikzstyle{tikzuml bidirectional association style}=[angle 45-angle 45]
+
+\begin{document}
+
+\begin{tikzpicture}
+
+  % Evse (Center Top)
+  \umlclass[x=0, y=8, width=12em]{Evse}{
+    - whitebeet : Whitebeet \\
+    - charger : ChargerSim \\
+    - rfid\_reader : RFIDSim \\
+    - ocpp\_worker : OcppWorker \\
+    - api\_server : ApiServer \\
+    - state : str \\
+    - authorized\_id\_tag : str
+  }{
+    + \_\_init\_\_(iftype, iface, mac) \\
+    + \_initialize() \\
+    + \_handleEvConnected() \\
+    + \_handleNetworkEstablished() \\
+    + \_handleSessionStarted(data) \\
+    + \_handleEnergyTransferModeSelected(data) \\
+    + \_handleDCChargeParametersChanged(data) \\
+    + authorize\_id(id\_tag) \\
+    + stop\_charging() \\
+    + emergency\_stop()
+  }
+
+  % LEFT FLANK
+  % Whitebeet
+  \umlclass[x=-16, y=8, width=10em]{Whitebeet}{
+    - framing : FramingInterface
+  }{
+    + \_\_init\_\_(iftype, iface, mac) \\
+    + controlPilotSetMode(mode) \\
+    + controlPilotStart() \\
+    + slacStartMatching() \\
+    + v2gEvseStartListen() \\
+    + v2gEvseReceiveRequest() \\
+    + v2gEvseSetConfiguration(config) \\
+    + v2gEvseSetDcChargingParameters(params) \\
+    + v2gEvseStartCharging() \\
+    + v2gEvseStopCharging()
+  }
+
+  % RIGHT FLANK
+  % OcppWorker
+  \umlclass[x=16, y=8, width=12em]{OcppWorker}{
+    - cp : Ocpp16Interface \\
+    - evse : Evse
+  }{
+    + send\_start\_transaction\_threadsafe(connector\_id, id\_tag) \\
+    + send\_stop\_transaction\_threadsafe(connector\_id, reason) \\
+    + authorize\_threadsafe(id\_tag)
+  }
+  
+  % Ocpp16Interface (Below OcppWorker)
+  \umlclass[x=16, y=0, width=14em]{Ocpp16Interface}{
+     - transactions : dict \\
+     - reservations : dict
+  }{
+     + send\_boot\_notification() \\
+     + send\_heartbeat() \\
+     + send\_status\_notification() \\
+     + send\_authorize(id\_tag) \\
+     + start\_transaction(cid, tag) \\
+     + stop\_transaction(cid, reason)
+  }
+
+  % BELOW EVSE
+  % Charger (Left-ish below)
+  \umlclass[x=-5, y=0, width=8em]{ChargerSim}{
+    + maxPower : float \\
+    + maxCurrent : float
+  }{
+    + start() \\
+    + stop() \\
+    + getEvsePresentVoltage() \\
+    + getEvsePresentCurrent() \\
+    + setEvMaxCurrent(current)
+  }
+  
+  % RFID Sim (Right-ish below)
+  \umlclass[x=5, y=0, width=10em]{RFIDSim}{
+  }{
+    + start(callback) \\
+    + stop() \\
+    + simulate\_scan(id\_tag)
+  }
+
+  % Charger Interface (Below Charger)
+  \umlclass[x=-5, y=-7, type=interface, width=8em]{ChargerInterface}{
+  }{
+    + start() \\
+    + stop() \\
+    + setEvseMaxCurrent(value) \\
+    + getEvsePresentVoltage()
+  }
+
+  % RFID Interface (Below RFID Sim)
+  \umlclass[x=5, y=-6, type=interface, width=10em]{RFIDReaderInterface}{
+  }{
+    + start(callback) \\
+    + stop()
+  }
+
+
+  % Relationships
+  
+  % Evse -> Whitebeet (Left)
+  % Label 'whitebeet' near Whitebeet (destination)
+  \umlcompo[geometry=--, arg2=whitebeet, pos2=0.8, align2=above, anchor1=west, anchor2=east]{Evse}{Whitebeet}
+  
+  % Evse <-> OcppWorker (Right)
+  % 'evse' near Evse (arg1), 'ocpp_worker' near OcppWorker (arg2)
+  \umlbiassoc[geometry=--, arg1=evse, pos1=0.2, align1=above, arg2=ocpp\_worker, pos2=0.8, align2=above, anchor1=east, anchor2=west]{Evse}{OcppWorker}
+
+  % Evse -> Charger (Below Left)
+  % 'charger' near Charger
+  \umlcompo[geometry=--, arg2=charger, pos2=0.8, align2=left, anchor1=south west, anchor2=north]{Evse}{ChargerSim}
+
+  % Evse -> RFIDSim (Below Right)
+  % 'rfid_reader' near RFIDSim
+  \umlcompo[geometry=--, arg2=rfid\_reader, pos2=0.8, align2=right, anchor1=south east, anchor2=north]{Evse}{RFIDSim}
+  
+  % Ocpp Worker Composition
+  % 'cp' near Ocpp16Interface
+  \umlcompo[geometry=--, arg2=cp, pos2=0.8, align2=left]{OcppWorker}{Ocpp16Interface}
+
+  % Implementations
+  \umlimpl{ChargerSim}{ChargerInterface}
+  \umlimpl{RFIDSim}{RFIDReaderInterface}
+
+\end{tikzpicture}
+
+\end{document}

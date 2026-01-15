@@ -1,14 +1,16 @@
 import time
 import sys
 from Whitebeet import *
-from Charger import *
+from ChargerSim import *
+from RFIDSim import RFIDSim
 from api_server import ApiServer
 
 class Evse():
     def __init__(self, iftype, iface, mac, auto_authorize=False, api_port=None):
         self.whitebeet = Whitebeet(iftype, iface, mac)
         print(f"WHITE-beet-EI firmware version: {self.whitebeet.version}")
-        self.charger = Charger()
+        self.charger = ChargerSim()
+        self.rfid_reader = RFIDSim()
         self.schedule = None
         self.evse_config = None
         self.auto_authorize = auto_authorize
@@ -33,12 +35,16 @@ class Evse():
     def __exit__(self, exc_type, exc_value, traceback):
         if self.api_server:
             self.api_server.shutdown()
+        if hasattr(self, "rfid_reader"):
+            self.rfid_reader.stop()
         if hasattr(self, "whitebeet"):
             del self.whitebeet
 
     def __del__(self):
         if self.api_server:
             self.api_server.shutdown()
+        if hasattr(self, "rfid_reader"):
+           self.rfid_reader.stop()
         if hasattr(self, "whitebeet"):
             del self.whitebeet
 
@@ -58,6 +64,7 @@ class Evse():
         print("Start SLAC in EVSE mode")
         self.whitebeet.slacStart(1)
         time.sleep(2)
+        self.rfid_reader.start(self.authorize_id)
         self.set_status("Available")
 
     def _waitEvConnected(self, timeout):

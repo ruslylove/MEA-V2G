@@ -414,21 +414,21 @@ The \texttt{EV} class is the central controller for the client side. It orchestr
 The \texttt{EVSE} class is the central controller for the station side. It manages the server-side logic and power delivery authorization.
 \begin{itemize}
     \item \textbf{State Machine}: Implements the ISO 15118 server flow, including Service Discovery and Plug \& Charge authorization.
-    \item \textbf{Hardware Aggregation}: Owning instance of \texttt{Whitebeet} (for comms) and \texttt{Charger} (for power delivery simulation).
+    \item \textbf{Hardware Aggregation}: Owning instance of \texttt{Whitebeet} (for comms) and \texttt{ChargerSim} (for power delivery simulation).
     \item \textbf{Scheduling}: Manages SASchedules based on configuration.
 \end{itemize}
 
 \subsection{OCPP Component}
 The system integrates an OCPP 2.0.1 client to enable remote management.
 \begin{itemize}
-    \item \textbf{OcppInterface}: Adapts the \texttt{ocpp} library's \texttt{ChargePoint} class to the MEA-V2G architecture. It maps OCPP commands (e.g., \texttt{RequestStartTransaction}) to local \texttt{Charger} actions.
+    \item \textbf{OcppInterface}: Adapts the \texttt{ocpp} library's \texttt{ChargePoint} class to the MEA-V2G architecture. It maps OCPP commands (e.g., \texttt{RequestStartTransaction}) to local \texttt{ChargerSim} actions.
     \item \textbf{OcppWorker}: A dedicated thread that manages the \texttt{asyncio} event loop and WebSocket connection to the CSMS, ensuring non-blocking operation alongside the main application loop.
 \end{itemize}
 
 
 
 \section{Charger Component}
-The \texttt{Charger} class performs a physical simulation of the power electronics, ensuring realistic behavior during the charging session. Its key functions include:
+The \texttt{ChargerSim} class performs a physical simulation of the power electronics, ensuring realistic behavior during the charging session. Its key functions include:
 \begin{itemize}
     \item \textbf{Output Ramping}: Instead of instantaneous jumps, the charger simulates the physical "slewing" of voltage and current over time. It uses defined $\Delta U$ and $\Delta I$ rates to ramp the output toward the target setpoint.
     \item \textbf{Limit Enforcement}: It strictly enforces hard safety limits for the system (e.g., \texttt{evse\_max\_current}, \texttt{evse\_max\_power}), protecting the modeled hardware.
@@ -436,7 +436,7 @@ The \texttt{Charger} class performs a physical simulation of the power electroni
     \item \textbf{Fault Detection}: The class includes methods like \texttt{isVoltageLimitExceeded()} and \texttt{isPowerLimitExceeded()} to trigger immediate session termination if operating conditions are violated.
 \end{itemize}
 
-The \texttt{Charger} class implements the \texttt{ChargerInterface} abstract base class. This design pattern allows the simulation module to be easily swapped with a real hardware driver, such as the \texttt{CanCharger} class, which communicates with physical power electronics via CAN bus using the \texttt{python-can} library, while maintaining a consistent API for the \texttt{EVSE} logic.
+The \texttt{ChargerSim} class implements the \texttt{ChargerInterface} abstract base class. This design pattern allows the simulation module to be easily swapped with a real hardware driver, such as the \texttt{CanCharger} class, which communicates with physical power electronics via CAN bus using the \texttt{python-can} library, while maintaining a consistent API for the \texttt{EVSE} logic.
 
 \subsection{Implementing a Custom Charger}
 To integrate specific power electronics hardware, developers must create a subclass of \texttt{ChargerInterface}. This ensures the \texttt{EVSE} logic remains decoupled from the physical layer.
@@ -475,7 +475,7 @@ The EVSE state machine relies on accurate feedback to perform safety checks (e.g
 \subsubsection{Configuration Accessors}
 The interface includes getters and setters for electrical limits (e.g., \texttt{setEvseMaxCurrent}, \texttt{getEvseMaxPower}).
 \begin{itemize}
-    \item For a \textbf{Simulation} (like \texttt{Charger.py}), these methods simply store and retrieve variables to emulate different hardware capabilities.
+    \item For a \textbf{Simulation} (like \texttt{ChargerSim.py}), these methods simply store and retrieve variables to emulate different hardware capabilities.
     \item For \textbf{Physical Hardware}, the setters (e.g., `setEvseMaxCurrent`) should theoretically configure the hardware's internal safety latches if supported. The getters must return the valid limits to be advertised to the EV during the \textit{Charge Parameter Discovery} phase.
 \end{itemize}
 
@@ -582,7 +582,7 @@ The default charging profile is a time-dependent power curve that simulates a de
 \end{itemize}
 
 \subsection{Physics Simulation Parameters}
-To simulate realistic hardware behavior, the \texttt{Charger} class uses specific delta parameters to ramp voltage and current rather than applying instantaneous steps:
+To simulate realistic hardware behavior, the \texttt{ChargerSim} class uses specific delta parameters to ramp voltage and current rather than applying instantaneous steps:
 \begin{itemize}
     \item \textbf{Delta Voltage}: 0.5 V per tick.
     \item \textbf{Delta Current}: 0.05 A per tick.
@@ -605,7 +605,7 @@ Evse.py & Implements the Charging Station (server) logic, managing service disco
 \hline
 Whitebeet.py & The Hardware Abstraction Layer (HAL). Handles low-level communication with the Codico Whitebeet module. \\
 \hline
-Charger.py & A physics simulation class for the EVSE's power electronics. Simulates voltage/current ramping and enforces safety limits. \\
+ChargerSim.py & A physics simulation class for the EVSE's power electronics. Simulates voltage/current ramping and enforces safety limits. \\
 \hline
 ChargerInterface.py & An abstract base class defining the standard API for charger implementations, enabling pluggable drivers (Simulation vs. CAN). \\
 \hline
@@ -930,7 +930,7 @@ The project employs a tiered automated testing strategy using the Python `unitte
 \subsection{Unit Testing}
 Unit tests isolate specific classes and methods, mocking out external dependencies like hardware interfaces and network libraries.
 \begin{description}
-    \item[\texttt{tests/unit/test\_charger.py}] Verifies the \texttt{Charger} physics simulation.
+    \item[\texttt{tests/unit/test\_charger.py}] Verifies the \texttt{ChargerSim} physics simulation.
     \begin{itemize}
         \item Validates voltage and current ramping logic ($dV/dt$, $dI/dt$).
         \item Ensures safety limits (Max Voltage/Current/Power) are enforced.
@@ -956,7 +956,7 @@ Integration tests focus on the interaction between the application logic and the
     \item[\texttt{tests/integration/test\_evse.py}] Verifies the \texttt{Evse} class orchestrator.
     \begin{itemize}
         \item Simulates the complete EV connection flow (CP State change $\rightarrow$ SLAC $\rightarrow$ V2G Session).
-        \item Validates that V2G messages (e.g., \texttt{ChargeParameterDiscovery}) correctly update the \texttt{Charger} setpoints.
+        \item Validates that V2G messages (e.g., \texttt{ChargeParameterDiscovery}) correctly update the \texttt{ChargerSim} setpoints.
     \end{itemize}
 \end{description}
 
@@ -965,7 +965,7 @@ System tests verify the full end-to-end stack, including the external management
 \begin{description}
     \item[\texttt{tests/system/test\_system.py}] Verifies the connection between OCPP and the local Charging hardware.
     \begin{itemize}
-        \item Validates that an OCPP \texttt{RemoteStart} command successfully transitions the local \texttt{Charger} to an active state.
+        \item Validates that an OCPP \texttt{RemoteStart} command successfully transitions the local \texttt{ChargerSim} to an active state.
         \item Verifies that hardware faults or stops are correctly reported back to the OCPP layer.
     \end{itemize}
 \end{description}

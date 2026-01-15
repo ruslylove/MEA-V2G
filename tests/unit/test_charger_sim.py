@@ -6,11 +6,11 @@ import time
 # Add parent directory to path to import modules
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
-from Charger import Charger
+from ChargerSim import ChargerSim
 
-class TestCharger(unittest.TestCase):
+class TestChargerSim(unittest.TestCase):
     def setUp(self):
-        self.charger = Charger()
+        self.charger = ChargerSim()
 
     def test_initial_state(self):
         self.assertTrue(self.charger.stopped)
