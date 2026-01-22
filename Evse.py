@@ -24,6 +24,7 @@ class Evse():
         self.reservation_expiry_time = None
         self.pending_availability = None
         self.offline_sessions = [] # Store {id_tag, start_time, stop_time, reason}
+        self.last_update_time = 0
 
         if api_port:
             self.api_server = ApiServer(self, port=api_port)
@@ -253,29 +254,36 @@ class Evse():
         try:
             while True:
                 if self.charging:
-                    # Continuously update the charger's simulated output
-                    self.charger.getEvsePresentVoltage()
-                    self.charger.getEvsePresentCurrent()
+                    # Rate limit 0x63 updates to at most once per 250ms
+                    # This prevents overwhelming the Whitebeet module CPU.
+                    current_time = time.time()
+                    if current_time - self.last_update_time >= 0.25:
+                        # Continuously update the charger's simulated output
+                        self.charger.getEvsePresentVoltage()
+                        self.charger.getEvsePresentCurrent()
 
+                        charging_parameters = {
+                            'isolation_level': 0,
+                            'present_voltage': int(self.charger.getEvsePresentVoltage()),
+                            'present_current': int(self.charger.getEvsePresentCurrent()),
+                            'max_voltage': int(self.charger.getEvseMaxVoltage()),
+                            'max_current': int(self.charger.getEvseMaxCurrent()),
+                            'max_power': int(self.charger.getEvseMaxPower()),
+                            'status': 0,
+                        }
+
+                        try:
+                            self.whitebeet.v2gEvseUpdateDcChargingParameters(charging_parameters)
+                            self.last_update_time = current_time
+                        except Warning as e:
+                            print("Warning: {}".format(e))
+                        except ConnectionError as e:
+                            print("ConnectionError: {}".format(e))
+
+                    # Non-blocking check for next Whitebeet message
                     id, data = self.whitebeet.v2gEvseReceiveRequestSilent()
-
-                    charging_parameters = {
-                        'isolation_level': 0,
-                        'present_voltage': int(self.charger.getEvsePresentVoltage()),
-                        'present_current': int(self.charger.getEvsePresentCurrent()),
-                        'max_voltage': int(self.charger.getEvseMaxVoltage()),
-                        'max_current': int(self.charger.getEvseMaxCurrent()),
-                        'max_power': int(self.charger.getEvseMaxPower()),
-                        'status': 0,
-                    }
-
-                    try:
-                        self.whitebeet.v2gEvseUpdateDcChargingParameters(charging_parameters)
-                    except Warning as e:
-                        print("Warning: {}".format(e))
-                    except ConnectionError as e:
-                        print("ConnectionError: {}".format(e))
                 else:
+                    # In non-charging states, we can block longer
                     id, data = self.whitebeet.v2gEvseReceiveRequest()
                 
                 # Check Timeouts
@@ -448,8 +456,9 @@ class Evse():
         Handle the energy transfer mode selected notification
         """
         print("\"Energy transfer mode selected\" received")
-        self.charging = True
-        self.set_status("Charging")
+        # Do NOT set self.charging = True here yet. 
+        # Wait for StartChargingRequested (PowerDelivery) to begin loop.
+        self.set_status("Preparing") 
 
         # Record start of offline session
         if not self.ocpp_worker:
@@ -665,6 +674,8 @@ class Evse():
         print("Schedule tuple ID: {}".format(message['schedule_tuple_id']))
         print("Charging profiles: {}".format(message['charging_profiles']))
         self.charger.start()
+        self.charging = True
+        self.set_status("Charging")
         try:
             self.whitebeet.v2gEvseStartCharging()
         except Warning as e:
