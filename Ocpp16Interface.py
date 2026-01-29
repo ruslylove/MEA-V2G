@@ -682,15 +682,21 @@ class Ocpp16Interface(Ocpp16ChargePoint):
              self.configuration[key] = value
              
              # Specific logic for side-effects
-             if key == "MEA_V2G_PowerDemand":
+             if key in ["MEA_V2G_PowerDemand", "Power.Active.Import"]:
                 try:
                     power_watts = int(value)
                     if power_watts < 0:
                         LOGGER.info(f"[V2G] Grid Demand: Discharging {abs(power_watts)} W")
+                        if self.evse:
+                            self.evse.set_v2g_discharge_limit(abs(power_watts))
                     elif power_watts > 0:
                         LOGGER.info(f"[V2G] Grid Supply: Charging {power_watts} W")
+                        if self.evse:
+                            self.evse.set_v2g_discharge_limit(0)
                     else:
                         LOGGER.info("[V2G] Idle")
+                        if self.evse:
+                            self.evse.set_v2g_discharge_limit(0)
                 except ValueError:
                     return call_result.ChangeConfiguration(status=ConfigurationStatus.rejected)
 

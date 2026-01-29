@@ -25,6 +25,7 @@ class Evse():
         self.pending_availability = None
         self.offline_sessions = [] # Store {id_tag, start_time, stop_time, reason}
         self.last_update_time = 0
+        self.v2g_discharge_limit_watts = 0
 
         if api_port:
             self.api_server = ApiServer(self, port=api_port)
@@ -112,6 +113,14 @@ class Evse():
                 else:
                     print("CP in wrong state: {}".format(cp_state))
                     return False
+
+    def set_v2g_discharge_limit(self, limit_watts):
+        """
+        Sets a discharge limit (BPT). 
+        Positive value indicates discharge is allowed at up to that power level.
+        """
+        print(f"[BPT] Setting discharge limit: {limit_watts} W")
+        self.v2g_discharge_limit_watts = limit_watts
 
     def stop_charging(self):
         """
@@ -221,9 +230,9 @@ class Evse():
         self.evse_config = {
             "evse_id_DIN": '+49*123*456*789',
             "evse_id_ISO": 'DE*A23*E45B*78C',
-            "protocol": [0, 1], 
+            "protocol": [0, 1, 2], 
             "payment_method": [0],
-            "energy_transfer_mode": [0, 1, 2, 3, 4, 5],
+            "energy_transfer_mode": [0, 1, 2, 3, 4, 5, 6, 7],
             "certificate_installation_support": False,
             "certificate_update_support": False,
         }
@@ -267,8 +276,8 @@ class Evse():
                             'present_voltage': int(self.charger.getEvsePresentVoltage()),
                             'present_current': int(self.charger.getEvsePresentCurrent()),
                             'max_voltage': int(self.charger.getEvseMaxVoltage()),
-                            'max_current': int(self.charger.getEvseMaxCurrent()),
-                            'max_power': int(self.charger.getEvseMaxPower()),
+                            'max_current': int(self.charger.getEvseMaxCurrent() if self.v2g_discharge_limit_watts == 0 else -abs(int(self.v2g_discharge_limit_watts / max(1, self.charger.getEvsePresentVoltage())))),
+                            'max_power': int(self.charger.getEvseMaxPower() if self.v2g_discharge_limit_watts == 0 else -abs(self.v2g_discharge_limit_watts)),
                             'status': 0,
                         }
 

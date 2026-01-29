@@ -30,7 +30,7 @@ class CanCharger(ChargerInterface):
     # Source Address (Controller)
     SOURCE_ADDR_DEFAULT = 0xF0
 
-    def __init__(self, interface='virtual', channel='vcan0', bitrate=125000):
+    def __init__(self, interface='virtual', channel='vcan0', bitrate=125000, use_polling=True):
         if can is None:
             raise ImportError("python-can library not installed.")
 
@@ -56,13 +56,22 @@ class CanCharger(ChargerInterface):
         self.ev_max_power = 0
         
         self.started = False
+        self.use_polling = use_polling
         self._stop_event = threading.Event()
         self._receive_thread = None
+        self._polling_thread = None
+        self._lock = threading.Lock()
 
         # Try to open connection
         try:
             # Note: For many interfaces, bitrate is set at OS level, but we pass it anyway
             self.bus = can.Bus(interface=self.interface_type, channel=self.channel, bitrate=self.bitrate)
+            
+            # Set filters to only receive messages targeting this device (0xF0)
+            # Ident Bits: 15-8 are Target Addr. 
+            # Mask 0xFF00 filters those bits.
+            self.bus.set_filters([{"can_id": 0x0000F000, "can_mask": 0x0000FF00, "extended": True}])
+            
             self.is_connected = True
             print(f"Connected to CAN interface: {self.interface_type}/{self.channel}")
         except Exception as e:
@@ -70,22 +79,76 @@ class CanCharger(ChargerInterface):
 
         if self.is_connected:
             self._start_receive_thread()
+            if self.use_polling:
+                self._start_polling_thread()
 
     def _start_receive_thread(self):
         self._receive_thread = threading.Thread(target=self._receive_loop, daemon=True)
         self._receive_thread.start()
 
+    def _start_polling_thread(self):
+        self._polling_thread = threading.Thread(target=self._polling_loop, daemon=True)
+        self._polling_thread.start()
+
     def _receive_loop(self):
         while not self._stop_event.is_set():
             try:
-                # python-can recv is blocking with timeout
+                # Get at least one message (blocking)
                 msg = self.bus.recv(timeout=1.0)
                 if msg:
                     self._process_frame(msg)
+                    # Aggressively drain the rest of the buffer (non-blocking)
+                    # to prevent buildup during high traffic
+                    while True:
+                        msg = self.bus.recv(timeout=0)
+                        if msg:
+                            self._process_frame(msg)
+                        else:
+                            break
             except Exception as e:
                 print(f"Error in receive loop: {e}")
                 # Don't tight loop on error
                 time.sleep(0.1)
+
+    def _flush_buffer(self):
+        """Discards all pending messages in the receive buffer."""
+        if not self.bus:
+            return
+        try:
+            count = 0
+            while self.bus.recv(timeout=0):
+                count += 1
+            if count > 0:
+                print(f"Flushed {count} messages from CAN buffer.")
+        except Exception as e:
+            print(f"Error flushing buffer: {e}")
+
+    def _polling_loop(self):
+        """
+        Background loop that polls for voltage and current updates 
+        only when the charger is started.
+        """
+        while not self._stop_event.is_set():
+            if self.started:
+                # Occasionally flush to clear any unprocessed backlog
+                self._flush_buffer()
+                
+                try:
+                    # Request update: 0x23 0x10 0x01 (System Voltage)
+                    volt_data = [0x10, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+                    self._send_command(0x23, volt_data, target_addr=self.TARGET_ADDR_BROADCAST)
+                    
+                    time.sleep(0.1) # Small delay between commands
+
+                    # Request update: 0x23 0x10 0x02 (System Current)
+                    curr_data = [0x10, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+                    self._send_command(0x23, curr_data, target_addr=self.TARGET_ADDR_BROADCAST)
+                    
+                except Exception as e:
+                    print(f"Error in polling loop: {e}")
+            
+            # Wait before next poll cycle (e.g. 500ms total including inner delays)
+            time.sleep(0.4)
                 
     def _process_frame(self, msg):
         """
@@ -119,14 +182,16 @@ class CanCharger(ChargerInterface):
             # Bytes 4-7 is value in mV
             val_bytes = bytes(payload[4:8])
             voltage_mv = int.from_bytes(val_bytes, byteorder='big', signed=False)
-            self.evse_present_voltage = voltage_mv / 1000.0
+            with self._lock:
+                self.evse_present_voltage = voltage_mv / 1000.0
             # print(f"Updated Voltage: {self.evse_present_voltage} V")
 
         # Response to System Current Read: 0x10 0x02 ...
         elif byte0 == 0x10 and byte1 == 0x02:
             val_bytes = bytes(payload[4:8])
-            current_ma = int.from_bytes(val_bytes, byteorder='big', signed=False)
-            self.evse_present_current = current_ma / 1000.0
+            current_ma = int.from_bytes(val_bytes, byteorder='big', signed=True)
+            with self._lock:
+                self.evse_present_current = current_ma / 1000.0
             # print(f"Updated Current: {self.evse_present_current} A")
 
     def _build_identifier(self, error_code, device_no, command_no, target_addr, source_addr):
@@ -181,10 +246,12 @@ class CanCharger(ChargerInterface):
         self.setEvTargetCurrent(0)
 
     def close(self):
-        """Stops receive thread and closes bus."""
+        """Stops receive and polling threads and closes bus."""
         self._stop_event.set()
         if self._receive_thread:
             self._receive_thread.join(timeout=2.0)
+        if self._polling_thread:
+            self._polling_thread.join(timeout=2.0)
         if self.bus:
             self.bus.shutdown()
         self.is_connected = False
@@ -278,16 +345,25 @@ class CanCharger(ChargerInterface):
 
     # --- Real-time Values ---
     def getEvsePresentVoltage(self):
-        # Request update: 0x23 0x10 0x01 (System Voltage)
-        data = [0x10, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
-        self._send_command(0x23, data, target_addr=self.TARGET_ADDR_BROADCAST)
-        return self.evse_present_voltage
+        if not self.use_polling:
+            # Request update: 0x23 0x10 0x01 (System Voltage)
+            data = [0x10, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+            self._send_command(0x23, data, target_addr=self.TARGET_ADDR_BROADCAST)
+            # Short sleep to allow receive thread to process (optional, but requested for 'sync' feel)
+            # time.sleep(0.01) 
+            
+        with self._lock:
+            return self.evse_present_voltage
 
     def getEvsePresentCurrent(self):
-        # Request update: 0x23 0x10 0x02 (System Current)
-        data = [0x10, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
-        self._send_command(0x23, data, target_addr=self.TARGET_ADDR_BROADCAST)
-        return self.evse_present_current
+        if not self.use_polling:
+            # Request update: 0x23 0x10 0x02 (System Current)
+            data = [0x10, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+            self._send_command(0x23, data, target_addr=self.TARGET_ADDR_BROADCAST)
+            # time.sleep(0.01)
+
+        with self._lock:
+            return self.evse_present_current
 
     # --- Safety Checks ---
     def isVoltageLimitExceeded(self, voltage):

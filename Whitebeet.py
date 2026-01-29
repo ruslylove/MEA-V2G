@@ -145,10 +145,10 @@ class Whitebeet():
             while(not (base == 0) and (base % 10) == 0 and exponent < 3):
                 exponent += 1
                 base = base // 10
-            retValue += base.to_bytes(2, "big")
+            retValue += base.to_bytes(2, "big", signed=True)
             retValue += exponent.to_bytes(1, "big")
         else:
-            retValue += value[0].to_bytes(2, "big")
+            retValue += value[0].to_bytes(2, "big", signed=True)
             retValue += value[1].to_bytes(1, "big")
         
         return retValue
