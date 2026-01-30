@@ -67,10 +67,11 @@ class CanCharger(ChargerInterface):
             # Note: For many interfaces, bitrate is set at OS level, but we pass it anyway
             self.bus = can.Bus(interface=self.interface_type, channel=self.channel, bitrate=self.bitrate)
             
-            # Set filters to only receive messages targeting this device (0xF0)
-            # Ident Bits: 15-8 are Target Addr. 
-            # Mask 0xFF00 filters those bits.
-            self.bus.set_filters([{"can_id": 0x0000F000, "can_mask": 0x0000FF00, "extended": True}])
+            # Set filters to only receive messages targeting this controller (0xF0)
+            # using Peer-to-Peer communication (Device No 0x0A)
+            # Ident Bits: 25-22 (Device No), 15-8 (Target Addr)
+            # Filter: (ID & 0x03C0FF00) == 0x0280F000
+            self.bus.set_filters([{"can_id": 0x0280F000, "can_mask": 0x03C0FF00, "extended": True}])
             
             self.is_connected = True
             print(f"Connected to CAN interface: {self.interface_type}/{self.channel}")
