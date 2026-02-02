@@ -267,7 +267,7 @@ class Evse():
                 if self.charging:
                     # Rate limit 0x63 updates to at most once per 250ms
                     # This prevents overwhelming the Whitebeet module CPU.
-                    current_time = time.time()
+                    current_time = time.monotonic()
                     if current_time - self.last_update_time >= 0.25:
                         # Continuously update the charger's simulated output
                         self.charger.getEvsePresentVoltage()
@@ -283,15 +283,19 @@ class Evse():
                             'status': 0,
                         }
 
-                    if self.charging and (charging_parameters != self.last_charging_parameters or time.monotonic() - self.last_update_time > 0.4):
-                        try:
+                    # Check if we should send an update:
+                    # 1. charging_parameters must be defined (it persists from previous iterations if 'if' above is skipped)
+                    # 2. parameters changed OR heartbeat timeout (400ms)
+                    try:
+                        # Ensure 'charging_parameters' exists in local scope (from this or previous iteration)
+                        if 'charging_parameters' in locals() and (charging_parameters != self.last_charging_parameters or time.monotonic() - self.last_update_time > 0.4):
                             self.whitebeet.v2gEvseUpdateDcChargingParameters(charging_parameters)
                             self.last_charging_parameters = charging_parameters
                             self.last_update_time = time.monotonic()
-                        except Warning as e:
-                            print("Warning: {}".format(e))
-                        except ConnectionError as e:
-                            print("ConnectionError: {}".format(e))
+                    except Warning as e:
+                        print("Warning: {}".format(e))
+                    except ConnectionError as e:
+                        print("ConnectionError: {}".format(e))
 
 
                 else:
