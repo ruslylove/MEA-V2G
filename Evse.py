@@ -260,6 +260,8 @@ class Evse():
         time.sleep(0.1)
         print("Start V2G")
         self.whitebeet.v2gEvseStartListen()
+        self.last_charging_parameters = None
+        self.last_update_time = 0
         try:
             while True:
                 if self.charging:
@@ -281,16 +283,17 @@ class Evse():
                             'status': 0,
                         }
 
+                    if self.charging and (charging_parameters != self.last_charging_parameters or time.monotonic() - self.last_update_time > 0.4):
                         try:
                             self.whitebeet.v2gEvseUpdateDcChargingParameters(charging_parameters)
-                            self.last_update_time = current_time
+                            self.last_charging_parameters = charging_parameters
+                            self.last_update_time = time.monotonic()
                         except Warning as e:
                             print("Warning: {}".format(e))
                         except ConnectionError as e:
                             print("ConnectionError: {}".format(e))
 
-                    # Non-blocking check for next Whitebeet message
-                    id, data = self.whitebeet.v2gEvseReceiveRequestSilent()
+
                 else:
                     # In non-charging states, we can block longer
                     id, data = self.whitebeet.v2gEvseReceiveRequest()
