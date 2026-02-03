@@ -252,6 +252,7 @@ class FramingInterface():
 
             else:
                 # Timeout not exceeded, continue
+                time.sleep(0.001)
                 pass
 
         self.frame_backlog = temp_backlog + self.frame_backlog

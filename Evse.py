@@ -264,10 +264,24 @@ class Evse():
         self.last_update_time = 0
         try:
             while True:
+                # 1. Determine receive timeout based on state
+                # If charging, we want to pulse parameters frequently, so use short timeout.
+                # If not charging, we can block longer.
+                timeout = 0.1 if self.charging else 30
+                try:
+                    id, data = self.whitebeet.v2gEvseReceiveRequest(timeout=timeout)
+                except TimeoutError:
+                    id, data = None, None
+                except (ConnectionError, Warning) as e:
+                    print(f"Communication error: {e}")
+                    id, data = None, None
+
                 if self.charging:
+                    # 2. Update Charging Parameters (Heartbeat / Rate Limited)
+                    current_time = time.monotonic()
+                    
                     # Rate limit 0x63 updates to at most once per 250ms
                     # This prevents overwhelming the Whitebeet module CPU.
-                    current_time = time.monotonic()
                     if current_time - self.last_update_time >= 0.25:
                         # Continuously update the charger's simulated output
                         self.charger.getEvsePresentVoltage()
@@ -284,23 +298,20 @@ class Evse():
                         }
 
                     # Check if we should send an update:
-                    # 1. charging_parameters must be defined (it persists from previous iterations if 'if' above is skipped)
-                    # 2. parameters changed OR heartbeat timeout (400ms)
-                    try:
-                        # Ensure 'charging_parameters' exists in local scope (from this or previous iteration)
-                        if 'charging_parameters' in locals() and (charging_parameters != self.last_charging_parameters or time.monotonic() - self.last_update_time > 0.4):
-                            self.whitebeet.v2gEvseUpdateDcChargingParameters(charging_parameters)
-                            self.last_charging_parameters = charging_parameters
-                            self.last_update_time = time.monotonic()
-                    except Warning as e:
-                        print("Warning: {}".format(e))
-                    except ConnectionError as e:
-                        print("ConnectionError: {}".format(e))
+                    # 1. charging_parameters must be defined
+                    # 2. parameters changed OR heartbeat timeout (400ms reached)
+                    if 'charging_parameters' in locals():
+                        if (charging_parameters != self.last_charging_parameters or time.monotonic() - self.last_update_time > 0.4):
+                            try:
+                                self.whitebeet.v2gEvseUpdateDcChargingParameters(charging_parameters)
+                                self.last_charging_parameters = charging_parameters
+                                self.last_update_time = time.monotonic()
+                            except (Warning, ConnectionError) as e:
+                                print(f"Heartbeat Warning/Error: {e}")
 
-
-                else:
-                    # In non-charging states, we can block longer
-                    id, data = self.whitebeet.v2gEvseReceiveRequest()
+                    # If no message was received, yield some CPU
+                    if id is None:
+                        time.sleep(0.01)
                 
                 # Check Timeouts
                 if self.state in ["SuspendedEV", "SuspendedEVSE"]:

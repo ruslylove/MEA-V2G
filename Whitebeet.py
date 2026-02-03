@@ -2052,7 +2052,7 @@ class Whitebeet():
         self.payloadReaderFinalize()
         return message
 
-    def v2gEvseReceiveRequest(self):
+    def v2gEvseReceiveRequest(self, timeout=30):
         """
         Receives a V2G request status message.
         """
@@ -2074,10 +2074,10 @@ class Whitebeet():
         sub_id_list.append(0x8F)
         sub_id_list.append(0x90)
         sub_id_list.append(0x91)
-        response = self._receive(self.v2g_mod_id, sub_id_list, [0x00, 0xFF], 30)
+        response = self._receive(self.v2g_mod_id, sub_id_list, [0x00, 0xFF], timeout)
         return response.sub_id, response.payload
 
-    def v2gEvseReceiveRequestSilent(self):
+    def v2gEvseReceiveRequestSilent(self, timeout=30):
         """
         Receives a V2G request status message.
         """
@@ -2099,11 +2099,8 @@ class Whitebeet():
         sub_id_list.append(0x8F)
         sub_id_list.append(0x90)
         sub_id_list.append(0x91)
-        response = self._receiveSilent(self.v2g_mod_id, sub_id_list, [0x00, 0xFF], 0.1)
-        if response is not None:
-            return response.sub_id, response.payload
-        else:
-            return None, None
+        response = self._receiveSilent(self.v2g_mod_id, sub_id_list, [0x00, 0xFF], timeout)
+        return response.sub_id, response.payload
 
     def v2gEvReceiveRequest(self):
         """
