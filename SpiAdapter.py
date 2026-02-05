@@ -12,8 +12,20 @@ import multiprocessing
 import time
 import sys
 import spidev
-import RPi.GPIO as GPIO
 import re
+import platform
+
+# Handle GPIO for different platforms
+try:
+    import RPi.GPIO as GPIO
+    PLATFORM = "RPi"
+except ImportError:
+    try:
+        import Adafruit_BBIO.GPIO as GPIO
+        PLATFORM = "BB"
+    except ImportError:
+        GPIO = None
+        PLATFORM = "Unknown"
 
 
 from SUTAdapter import *
@@ -36,20 +48,33 @@ class SpiAdapter(SUTAdapter):
         self.sut_interface = ""
         self.packet = None
         self.spi = None
-        self.gpioRxReady = 22
-        self.gpioTxPending = 27
-        self.gpioAltCS = 24
+
+        # Default pin mappings - override or detect platform
+        if PLATFORM == "BB":
+            self.gpioRxReady = "P9_23"  # Example BeagleBone pin
+            self.gpioTxPending = "P9_24"
+            self.gpioAltCS = "P9_17"
+        else:
+            self.gpioRxReady = 22
+            self.gpioTxPending = 27
+            self.gpioAltCS = 24
+
         self.DefectPacket = 0
         self.PacketCount = 0
         
-        # Prepare GPIOS for Rx Ready and Tx Pending detection
-        GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self.gpioRxReady, GPIO.IN)
-        GPIO.setup(self.gpioTxPending, GPIO.IN)
-        
-        # Optional CS (needed due to problems with default CS)
-        GPIO.setup(self.gpioAltCS, GPIO.OUT, initial=GPIO.HIGH)
+        if GPIO:
+            # Prepare GPIOS for Rx Ready and Tx Pending detection
+            GPIO.setwarnings(False)
+            if PLATFORM == "RPi":
+                GPIO.setmode(GPIO.BCM)
+            
+            GPIO.setup(self.gpioRxReady, GPIO.IN)
+            GPIO.setup(self.gpioTxPending, GPIO.IN)
+            
+            # Optional CS (needed due to problems with default CS)
+            GPIO.setup(self.gpioAltCS, GPIO.OUT, initial=GPIO.HIGH)
+        else:
+            print("Warning: No compatible GPIO library found (RPi or BBIO)")
 
     """
     send data

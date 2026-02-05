@@ -359,6 +359,63 @@ Power up the WHITE-beet and run the application in SPI mode with the following c
 sudo .venv/bin/python3 Application.py spi -i spidev0.0 -m 00:01:01:63:77:33 -r EVSE
 ```
 
+## BEAGLEBONE SPI
+
+Install the python packages needed
+```console
+$ pip install spidev
+$ pip install Adafruit_BBIO
+```
+
+Connect the WHITE-beet to the BeagleBone (P9 Header)
+
+| WB Pin | BeagleBone Pin |
+| - | - |
+| J8 MOSI | P9_18 (SPI0 MOSI) |
+| J8 MISO | P9_21 (SPI0 MISO) |
+| J8 SCK | P9_22 (SPI0 SCLK) |
+| J8 NSS | P9_17 (GPIO) |
+| J8 GND | Ground |
+| J1 PD4 | P9_23 (GPIO Rx Ready) |
+| J1 PD11 | P9_24 (GPIO Tx Pending) |
+
+### Enabling SPI on BeagleBone Black (Debian Buster)
+
+To use SPI0, you must first resolve a conflict with the HDMI video/audio output and enable the appropriate overlay.
+
+1.  **Disable HDMI Conflict & Enable SPI0 Overlay**:
+    Edit `/boot/uEnv.txt` on the BeagleBone:
+    ```bash
+    sudo nano /boot/uEnv.txt
+    ```
+    Uncomment or add the following lines:
+    ```bash
+    disable_uboot_overlay_video=1
+    disable_uboot_overlay_audio=1
+    uboot_overlay_addr5=/lib/firmware/BB-SPIDEV0-00A0.dtbo
+    ```
+    *Note: You may also need to comment out conflicting UART overlays (e.g., UART1) if they claim SPI pins.*
+
+2.  **Reboot**:
+    ```bash
+    sudo reboot
+    ```
+
+3.  **Configure Pinmuxing**:
+    After reboot, configure the pins for SPI mode:
+    ```bash
+    sudo config-pin P9.17 spi_cs
+    sudo config-pin P9.18 spi
+    sudo config-pin P9.21 spi
+    sudo config-pin P9.22 spi_sclk
+    ```
+
+Power up the WHITE-beet and run the application in SPI mode with the following command
+
+```console
+sudo .venv/bin/python3 Application.py spi -i spidev0.0 -m 00:01:01:63:77:33 -r EVSE
+```
+
 ## MEA Project
 
 EVSE
