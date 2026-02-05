@@ -102,7 +102,7 @@ class Whitebeet():
         iftype =  iftype.upper()
 
         try:
-            if iftype == 'ETH':
+            if iftype in ['ETH', 'ETH_RAW']:
                 self.framing.initialize_framing(iftype, iface, mac)
                 log("iface: {}, name: {}, mac: {}".format(iftype, iface, mac))
             else:

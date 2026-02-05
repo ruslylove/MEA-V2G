@@ -129,10 +129,14 @@ $ pip install ocpp websockets python-can
 
 Install the packages required for your specific connection mode:
 
-#### Ethernet Mode (`eth`)
+#### Ethernet Mode (`eth` - Standard)
+Uses the Scapy library for packet sniffing. Easy to set up but may have high CPU usage on resource-constrained devices.
 ```console
 $ pip install --pre scapy[basic] Cython python-libpcap
 ```
+
+#### High-Performance Ethernet Mode (`eth_raw` - Recommended for BeagleBone)
+Uses native Linux raw sockets. Significantly reduces CPU load and is highly recommended for BeagleBone Black or similar platforms. **No extra python dependencies required** for communication (uses built-in `socket` and `struct` modules).
 
 #### SPI Mode (`spi`)
 - **Raspberry Pi**:
@@ -156,9 +160,13 @@ Find the ethernet interface the WHITE-beet is connected to with
 $ ip link
 ```
 
-Run the Application in EVSE mode by typing (we need root privileges for raw socket access).
+Run the Application in EVSE mode by typing (we need root privileges for raw socket access). Use `eth` for standard Scapy-based communication or `eth_raw` for high-performance Linux raw sockets.
 
 ```console
+# High-performance mode (Recommended)
+$ sudo .venv/bin/python3 Application.py eth_raw -i eth0 -m c4:93:00:22:22:22 -r EVSE
+
+# Standard mode (Scapy)
 $ sudo .venv/bin/python3 Application.py eth -i eth0 -m c4:93:00:22:22:22 -r EVSE
 ```
 

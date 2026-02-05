@@ -55,6 +55,11 @@ class FramingInterface():
             self.sut_adapter = EthernetAdapter.EthernetAdapter()
             if mac:
                 self.sut_adapter.dut_mac = mac
+        elif self.connection_mode == "ETH_RAW":
+            import EthernetAdapterRaw
+            self.sut_adapter = EthernetAdapterRaw.EthernetAdapterRaw()
+            if mac:
+                self.sut_adapter.dut_mac = mac
         elif self.connection_mode == "SPI":
             import SpiAdapter
             self.sut_adapter = SpiAdapter.SpiAdapter()
