@@ -40,7 +40,6 @@ class GuiLauncher(tk.Tk):
         self.portmirror_var = tk.BooleanVar()
         self.sudo_password_var = tk.StringVar()
         self.auto_auth_var = tk.BooleanVar()
-        self.api_port_var = tk.StringVar()
 
         # Role
         ttk.Label(config_frame, text="Role:").grid(row=0, column=0, sticky=tk.W, padx=5, pady=2)
@@ -78,9 +77,7 @@ class GuiLauncher(tk.Tk):
         ttk.Label(config_frame, text="Sudo Password:").grid(row=7, column=0, sticky=tk.W, padx=5, pady=2)
         ttk.Entry(config_frame, textvariable=self.sudo_password_var, show="*").grid(row=7, column=1, columnspan=3, sticky=tk.EW, padx=5)
 
-        # API Port
-        ttk.Label(config_frame, text="API Port:").grid(row=8, column=0, sticky=tk.W, padx=5, pady=2)
-        ttk.Entry(config_frame, textvariable=self.api_port_var).grid(row=8, column=1, columnspan=3, sticky=tk.EW, padx=5)
+
 
         # --- Control Widgets ---
         self.start_button = ttk.Button(control_frame, text="Start", command=self.start_application)
@@ -154,8 +151,6 @@ class GuiLauncher(tk.Tk):
             command.append('-p')
         if self.auto_auth_var.get():
             command.append('--auto')
-        if self.api_port_var.get().strip():
-            command.extend(['--api-port', self.api_port_var.get().strip()])
 
         self.log_message(f"Starting command: {' '.join(command)}\n")
 

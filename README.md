@@ -120,13 +120,29 @@ $ python3 -m venv .venv
 $ source .venv/bin/activate
 ```
 
-Install the python packages needed
+Install the core python packages:
 ```console
-$ pip install --pre scapy[basic]
-$ pip install Cython
-$ pip install python-libpcap
-$ pip install ocpp websockets python-can Flask
+$ pip install ocpp websockets python-can
 ```
+
+### Interface Dependencies (Optional)
+
+Install the packages required for your specific connection mode:
+
+#### Ethernet Mode (`eth`)
+```console
+$ pip install --pre scapy[basic] Cython python-libpcap
+```
+
+#### SPI Mode (`spi`)
+- **Raspberry Pi**:
+  ```console
+  $ pip install spidev RPi.GPIO
+  ```
+- **BeagleBone**:
+  ```console
+  $ pip install spidev Adafruit_BBIO
+  ```
 
 ## GETTING STARTED
 
@@ -301,41 +317,14 @@ $ python3 gui_launcher.py
 
 The GUI provides fields for all command-line options. For operations requiring `sudo`, a password field is provided in the interface. Simply enter your password there before clicking "Start". All output from the application will be displayed in the log area within the window.
 
-## DASHBOARD API (FOR GRAFANA)
 
-The application includes a simple REST API to expose real-time simulation data, which is ideal for creating live dashboards with tools like Grafana.
+Once the simulation is running, all output from the application will be displayed in the console.
 
-### Installation
-
-The API requires the **Flask** library. Install it into your virtual environment:
-
-```console
-$ .venv/bin/python3 -m pip install Flask
-```
-
-### Enabling the API
-
-You can enable the API either through the GUI or the command line:
-
-*   **From the GUI**: Enter a port number (e.g., `5000`) in the "API Port" field.
-*   **From the command line**: Add the `--api-port` argument when running `Application.py`:
-    ```console
-    $ sudo .venv/bin/python3 Application.py eth -i enp3s0 -r EVSE --api-port 5000 --ocpp-version 2.0.1
-    ```
-
-### API Endpoint
-
-Once the simulation is running with the API enabled, you can access the status data by making a GET request to the `/status` endpoint.
-
-**URL**: `http://<your-ip-address>:5000/status`
 
 ## RASPBERRY PI SPI
 
-Install the python packages needed
-```console
-$ pip install spidev
-$ pip install RPi.GPIO
-```
+
+Connect the WHITE-beet to the Raspberry Pi
 
 Connect the WHITE-beet to the Raspberry Pi
 
@@ -361,11 +350,8 @@ sudo .venv/bin/python3 Application.py spi -i spidev0.0 -m 00:01:01:63:77:33 -r E
 
 ## BEAGLEBONE SPI
 
-Install the python packages needed
-```console
-$ pip install spidev
-$ pip install Adafruit_BBIO
-```
+
+Connect the WHITE-beet to the BeagleBone (P9 Header)
 
 Connect the WHITE-beet to the BeagleBone (P9 Header)
 

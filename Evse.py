@@ -3,10 +3,9 @@ import sys
 from Whitebeet import *
 from ChargerSim import *
 from RFIDSim import RFIDSim
-from api_server import ApiServer
 
 class Evse():
-    def __init__(self, iftype, iface, mac, auto_authorize=False, api_port=None):
+    def __init__(self, iftype, iface, mac, auto_authorize=False):
         self.whitebeet = Whitebeet(iftype, iface, mac)
         print(f"WHITE-beet-EI firmware version: {self.whitebeet.version}")
         self.charger = ChargerSim()
@@ -18,7 +17,6 @@ class Evse():
         self.state = "Unavailable" # Initial state
         self.state_timer = 0
         self.SUSPENDED_TIMEOUT = 300 # 5 minutes
-        self.api_server = None
         self.ocpp_worker = None
         self.authorized_id_tag = None
         self.reservation_expiry_time = None
@@ -27,24 +25,18 @@ class Evse():
         self.last_update_time = 0
         self.v2g_discharge_limit_watts = 0
 
-        if api_port:
-            self.api_server = ApiServer(self, port=api_port)
-            self.api_server.start()
+        self.SUSPENDED_TIMEOUT = 300 # 5 minutes
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if self.api_server:
-            self.api_server.shutdown()
         if hasattr(self, "rfid_reader"):
             self.rfid_reader.stop()
         if hasattr(self, "whitebeet"):
             del self.whitebeet
 
     def __del__(self):
-        if self.api_server:
-            self.api_server.shutdown()
         if hasattr(self, "rfid_reader"):
            self.rfid_reader.stop()
         if hasattr(self, "whitebeet"):

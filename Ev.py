@@ -1,18 +1,14 @@
 import time
 import traceback
 from Logger import *
-from scapy.automaton import Message
 from Whitebeet import *
 from Battery import *
-from api_server import ApiServer
 
 class Ev():
 
-    def __init__(self, iftype, iface, mac, api_port=None):
+    def __init__(self, iftype, iface, mac):
         self.logger = Logger()
         self.whitebeet = Whitebeet(iftype, iface, mac)
-        print(f"WHITE-beet-PI firmware version: {self.whitebeet.version}")
-        self.api_server = None
 
         self.battery = Battery()
 
@@ -41,22 +37,16 @@ class Ev():
 
         self.state = "init"
 
-        if api_port:
-            self.api_server = ApiServer(self, port=api_port)
-            self.api_server.start()
+        self.state = "init"
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if self.api_server:
-            self.api_server.shutdown()
         if hasattr(self, "whitebeet"):
             del self.whitebeet
 
     def __del__(self):
-        if self.api_server:
-            self.api_server.shutdown()
         if hasattr(self, "whitebeet"):
             del self.whitebeet
 
