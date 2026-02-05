@@ -43,10 +43,10 @@ if __name__ == "__main__":
                 config = None # Ensure config is None if JSON is bad
                 
         # If no MAC was provided by command line or config file, use the default.
-        if args.interface_type == "eth" and mac is None:
+        if args.interface_type in ["eth", "eth_raw"] and mac is None:
             mac = WHITEBBET_DEFAULT_MAC
 
-        if mac is None and args.interface_type == "eth":
+        if mac is None and args.interface_type in ["eth", "eth_raw"]:
             print("Error: A MAC address must be provided for an ethernet interface via command line (-m) or a config file (-c).")
             exit(1)
 
