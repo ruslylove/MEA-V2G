@@ -3,6 +3,7 @@ import traceback
 from Logger import *
 from Whitebeet import *
 from Battery import *
+from PriorityUtils import set_high_priority
 
 class Ev():
 
@@ -191,6 +192,9 @@ class Ev():
         available payment options and energy transfer modes. Then we start waiting for
         notifications for requested parameters.
         """
+        # Elevate priority specifically for the V2G session matching and charging loops
+        set_high_priority()
+
         print("Set V2G mode to EV")
         self.whitebeet.v2gSetMode(0)
         print("Set V2G configuration")

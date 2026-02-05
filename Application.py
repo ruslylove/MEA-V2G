@@ -7,26 +7,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'ocpp_lib'))
 from Evse import *
 from Ev import *
 
-def set_high_priority():
-    """
-    Sets the process priority to the highest possible on Linux.
-    This helps ensure the charging loop is not interrupted by other tasks.
-    """
-    try:
-        if sys.platform == "linux":
-            # Set niceness to -20 (highest priority for regular scheduler)
-            os.nice(-20)
-            
-            # Use 'chrt' to set real-time priority (SCHED_FIFO, priority 99)
-            # This requires root, which we normally have via sudo.
-            pid = os.getpid()
-            if os.system(f"chrt -f -p 99 {pid}") == 0:
-                print("Process priority set to REAL-TIME (SCHED_FIFO 99)")
-            else:
-                print("Note: Could not set SCHED_FIFO priority (is chrt available?)")
-    except Exception as e:
-        print(f"Note: Could not set high priority: {e}")
-
 if __name__ == "__main__":
     WHITEBBET_DEFAULT_MAC = "00:01:01:63:77:33"
     parser = argparse.ArgumentParser(description='Codico Whitebeet reference implementation.')
@@ -42,9 +22,6 @@ if __name__ == "__main__":
     parser.add_argument('--ocpp-id', type=str, help='Charge Point ID for OCPP.')
     parser.add_argument('--ocpp-version', type=str, choices=('1.6', '2.0.1', '2.1'), default='1.6', help='OCPP Protocol Version (default: 1.6).')
     args = parser.parse_args()
-
-    # Optimize for performance on embedded systems (Linux only)
-    set_high_priority()
 
     print(f'Welcome to Codico Whitebeet {args.role} reference implementation')
 

@@ -3,6 +3,7 @@ import sys
 from Whitebeet import *
 from ChargerSim import *
 from RFIDSim import RFIDSim
+from PriorityUtils import set_high_priority
 
 class Evse():
     def __init__(self, iftype, iface, mac, auto_authorize=False):
@@ -216,6 +217,9 @@ class Evse():
         available payment options and energy transfer modes. Then we start waiting for
         notifications for requested parameters.
         """
+        # Elevate priority specifically for the V2G session matching and charging loops
+        set_high_priority()
+
         print("Set V2G mode to EVSE")
         self.whitebeet.v2gSetMode(1)
 
