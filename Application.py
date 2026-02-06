@@ -10,7 +10,7 @@ from Ev import *
 if __name__ == "__main__":
     WHITEBBET_DEFAULT_MAC = "00:01:01:63:77:33"
     parser = argparse.ArgumentParser(description='Codico Whitebeet reference implementation.')
-    parser.add_argument('interface_type', type=str, choices=('eth', 'eth_raw', 'spi'), help='Type of the interface through which the Whitebeet is connected. ("eth", "eth_raw" or "spi").')
+    parser.add_argument('interface_type', type=str, choices=('eth', 'eth_raw', 'spi', 'spi_pru'), help='Type of the interface through which the Whitebeet is connected. ("eth", "eth_raw", "spi", or "spi_pru").')
     parser.add_argument('-i', '--interface', type=str, required=True, help='This is the name of the interface where the Whitebeet is connected to (i.e. for eth "eth0" or spi "0").')
     parser.add_argument('-m', '--mac', type=str, help='This is the MAC address of the ethernet interface of the Whitebeet (i.e. "{}").'.format(WHITEBBET_DEFAULT_MAC))
     parser.add_argument('-r', '--role', type=str, choices=('EVSE', 'EV'), required=True, help='This is the role of the Whitebeet. "EV" for EV mode and "EVSE" for EVSE mode')

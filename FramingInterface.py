@@ -63,6 +63,9 @@ class FramingInterface():
         elif self.connection_mode == "SPI":
             import SpiAdapter
             self.sut_adapter = SpiAdapter.SpiAdapter()
+        elif self.connection_mode == "SPI_PRU":
+            import PruSpiAdapter
+            self.sut_adapter = PruSpiAdapter.PruSpiAdapter()
         else:
             raise AssertionError("Invalid interface!")
 

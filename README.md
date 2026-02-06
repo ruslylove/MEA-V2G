@@ -410,6 +410,70 @@ Power up the WHITE-beet and run the application in SPI mode with the following c
 sudo .venv/bin/python3 Application.py spi -i spidev0.0 -m 00:01:01:63:77:33 -r EVSE
 ```
 
+## BEAGLEBONE SPI (PRU Real-Time Mode)
+
+For industrial applications requiring high-frequency communication or minimal CPU jitter, FreeV2G supports offloading the SPI handshake to the BeagleBone Black's **Programmable Real-Time Units (PRU)**. 
+
+### Why use PRU Offloading?
+- **Zero-Latency Polling**: The PRU runs at a constant 200MHz and polls the `RxReady` and `TxPending` pins with nanosecond precision.
+- **CPU Offloading**: The main ARM CPU no longer spends cycles bit-banging or busy-waiting on GPIO transitions.
+- **Deterministic Handshake**: Eliminates Linux kernel scheduling jitter during the critical Whitebeet SPI handshake.
+
+### Technical Architecture
+
+The system uses a producer-consumer model over **Shared RAM**:
+
+1.  **Shared Memory**: Communication happens via a 12KB block of Shared RAM at `0x4A310000`.
+2.  **Memory Map**:
+    - `Offset 0`: PRU Status (0: IDLE, 1: BUSY)
+    - `Offset 1`: Host Command (1: START TRANSFER)
+    - `Offset 2-3`: TX Data Size (Big-endian uint16)
+    - `Offset 4-5`: RX Data Size (Returned by Slave)
+    - `Offset 6+`: Data Buffer (Shared for TX and RX)
+3.  **Synchronization**: The Python `PruSpiAdapter` writes data to Shared RAM and toggles the Command byte. The PRU detects the command, performs the SPI handshake (SIZE and DATA phases), and updates the memory with received data before marking itself as IDLE.
+
+### 1. Compile & Deploy PRU Firmware
+The firmware is written in C and compiled with the TI `clpru` compiler.
+
+```bash
+cd ~/MEA-V2G/pru
+make
+sudo make deploy
+```
+*Note: I have already performed the compilation and deployment for you. The PRU is currently running the binary `spi_whitebeet.out`.*
+
+### 2. Configure Pinmuxing
+The pins must be configured for the PRU to take direct control of the handshake signals:
+
+| Pin | Function | Mode |
+| --- | --- | --- |
+| P9.17 | SPI_CS | `spi_cs` |
+| P9.18 | SPI_MOSI | `spi` |
+| P9.21 | SPI_MISO | `spi` |
+| P9.22 | SPI_SCLK | `spi_sclk` |
+| P9.23 | RxReady | `pruin` |
+| P9.24 | TxPending | `pruin` |
+
+```bash
+sudo config-pin P9.17 spi_cs
+sudo config-pin P9.18 spi
+sudo config-pin P9.21 spi
+sudo config-pin P9.22 spi_sclk
+sudo config-pin P9.23 pruin
+sudo config-pin P9.24 pruin
+```
+
+### 3. Run the Application
+Use the `spi_pru` interface type:
+```console
+sudo .venv/bin/python3 Application.py spi_pru -i spidev0.0 -m 00:01:01:63:77:33 -r EVSE
+```
+
+### Troubleshooting
+- **Check PRU State**: `cat /sys/class/remoteproc/remoteproc1/state`. It should say `running`.
+- **Dmesg Logs**: Check `dmesg | grep remoteproc` if the firmware fails to load.
+- **Mmap Permissions**: Ensure the application is run with `sudo` to allow access to `/dev/mem`.
+
 ## MEA Project
 
 EVSE
