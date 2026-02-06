@@ -30,6 +30,7 @@ except ImportError:
 
 from SUTAdapter import *
 from FramingAPIDef import *
+import PruUtils
 
 #def log(x): return print(x)
 def log(x): return
@@ -203,6 +204,11 @@ class SpiAdapter(SUTAdapter):
     """
     def start(self):
         log("SpiAdapter->start()")
+
+        if PLATFORM == "BB":
+            # Ensure PRU is not running to avoid resource conflict on SPI/GPIO
+            PruUtils.ensure_pru_stopped()
+
         # get SPI bus and device from given interface string
         temp = re.match(r'^spidev(\d+)\.(\d+)$', self.sut_interface)
         bus = int(temp.group(1))

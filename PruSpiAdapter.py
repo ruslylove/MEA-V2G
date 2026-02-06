@@ -4,6 +4,7 @@ import time
 import struct
 from SUTAdapter import *
 from FramingAPIDef import *
+import PruUtils
 
 # Memory offsets for AM335x PRU Shared RAM
 PRU_BASE_ADDR = 0x4A300000
@@ -26,17 +27,17 @@ class PruSpiAdapter(SUTAdapter):
 
     def start(self):
         print("Starting PruSpiAdapter...")
+        # 1. Ensure PRU is running
+        if not PruUtils.ensure_pru_running():
+            print("Error: Could not ensure PRU is running.")
+            return
+
         try:
-            # Open /dev/mem for mmap access to PRU RAM
+            # 2. Open /dev/mem for mmap access to PRU RAM
             self.fd = os.open("/dev/mem", os.O_RDWR | os.O_SYNC)
             self.mem = mmap.mmap(self.fd, PRU_SHARED_RAM_SIZE, 
-                                mmap.MAP_SHARED, mmap.PROT_READ | mmap.PROT_WRITE,
-                                offset=PRU_BASE_ADDR + PRU_SHARED_RAM_OFFSET)
-            
-            # TODO: Ensure PRU firmware is loaded and running via remoteproc
-            # This would typically be:
-            # os.system("echo spi_whitebeet.out > /sys/class/remoteproc/remoteproc1/firmware")
-            # os.system("echo start > /sys/class/remoteproc/remoteproc1/state")
+                                 mmap.MAP_SHARED, mmap.PROT_READ | mmap.PROT_WRITE,
+                                 offset=PRU_BASE_ADDR + PRU_SHARED_RAM_OFFSET)
             
             self.started = True
         except Exception as e:
@@ -49,6 +50,10 @@ class PruSpiAdapter(SUTAdapter):
             self.mem.close()
         if self.fd:
             os.close(self.fd)
+        
+        # Stop the PRU to release SPI/GPIO resources
+        PruUtils.ensure_pru_stopped()
+        
         self.started = False
 
     def send(self, data):

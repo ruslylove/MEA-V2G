@@ -432,7 +432,7 @@ The system uses a producer-consumer model over **Shared RAM**:
     - `Offset 6+`: Data Buffer (Shared for TX and RX)
 3.  **Synchronization**: The Python `PruSpiAdapter` writes data to Shared RAM and toggles the Command byte. The PRU detects the command, performs the SPI handshake (SIZE and DATA phases), and updates the memory with received data before marking itself as IDLE.
 
-### 1. Compile & Deploy PRU Firmware
+### 1. Deploy PRU Firmware
 The firmware is written in C and compiled with the TI `clpru` compiler. A pre-compiled version, `spi_whitebeet.out`, is included in the `pru/` directory for convenience.
 
 ```bash
@@ -441,7 +441,7 @@ cd ~/MEA-V2G/pru
 # make
 sudo make deploy
 ```
-*Note: I have already performed the compilation and deployment for you. The PRU is currently running the binary `spi_whitebeet.out`.*
+*Note: The application will automatically attempt to load `spi_whitebeet.out` and start the PRU if it is not already running. You only need to run `sudo make deploy` once to copy the binary to `/lib/firmware/`.*
 
 ### 2. Configure Pinmuxing
 The pins must be configured for the PRU to take direct control of the handshake signals:
