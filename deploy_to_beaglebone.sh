@@ -28,7 +28,6 @@ rsync -avz --delete \
     --exclude='.agent/' \
     --exclude='.gemini/' \
     --exclude='pru/gen/' \
-    --exclude='pru/*.out' \
     "$LOCAL_DIR/" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR/"
 
 if [ $? -eq 0 ]; then

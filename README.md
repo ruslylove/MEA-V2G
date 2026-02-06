@@ -433,11 +433,12 @@ The system uses a producer-consumer model over **Shared RAM**:
 3.  **Synchronization**: The Python `PruSpiAdapter` writes data to Shared RAM and toggles the Command byte. The PRU detects the command, performs the SPI handshake (SIZE and DATA phases), and updates the memory with received data before marking itself as IDLE.
 
 ### 1. Compile & Deploy PRU Firmware
-The firmware is written in C and compiled with the TI `clpru` compiler.
+The firmware is written in C and compiled with the TI `clpru` compiler. A pre-compiled version, `spi_whitebeet.out`, is included in the `pru/` directory for convenience.
 
 ```bash
 cd ~/MEA-V2G/pru
-make
+# Optional: recompile if you have clpru installed
+# make
 sudo make deploy
 ```
 *Note: I have already performed the compilation and deployment for you. The PRU is currently running the binary `spi_whitebeet.out`.*
