@@ -1,5 +1,6 @@
 import time
 import sys
+import gc
 from Whitebeet import *
 from ChargerSim import *
 from RFIDSim import RFIDSim
@@ -258,7 +259,22 @@ class Evse():
         self.whitebeet.v2gEvseStartListen()
         self.last_charging_parameters = None
         self.last_update_time = 0
+
+        # Pre-allocate charging parameters dictionary to avoid reallocation in loop
+        charging_parameters = {
+            'isolation_level': 0,
+            'present_voltage': 0,
+            'present_current': 0,
+            'max_voltage': 0,
+            'max_current': 0,
+            'max_power': 0,
+            'status': 0,
+        }
+
         try:
+            # Disable GC during critical loop to avoid jitter
+            gc.collect()
+            gc.disable()
             while True:
                 # 1. Determine receive timeout based on state
                 # If charging, we want to pulse parameters frequently, so use short timeout.
@@ -283,15 +299,21 @@ class Evse():
                         self.charger.getEvsePresentVoltage()
                         self.charger.getEvsePresentCurrent()
 
-                        charging_parameters = {
-                            'isolation_level': 0,
-                            'present_voltage': int(self.charger.getEvsePresentVoltage()),
-                            'present_current': int(self.charger.getEvsePresentCurrent()),
-                            'max_voltage': int(self.charger.getEvseMaxVoltage()),
-                            'max_current': int(self.charger.getEvseMaxCurrent() if self.v2g_discharge_limit_watts == 0 else -abs(int(self.v2g_discharge_limit_watts / max(1, self.charger.getEvsePresentVoltage())))),
-                            'max_power': int(self.charger.getEvseMaxPower() if self.v2g_discharge_limit_watts == 0 else -abs(self.v2g_discharge_limit_watts)),
-                            'status': 0,
-                        }
+                        # Update existing dictionary in place
+                        charging_parameters['present_voltage'] = int(self.charger.getEvsePresentVoltage())
+                        charging_parameters['present_current'] = int(self.charger.getEvsePresentCurrent())
+                        charging_parameters['max_voltage'] = int(self.charger.getEvseMaxVoltage())
+                        
+                        if self.v2g_discharge_limit_watts == 0:
+                            charging_parameters['max_current'] = int(self.charger.getEvseMaxCurrent())
+                            charging_parameters['max_power'] = int(self.charger.getEvseMaxPower())
+                        else:
+                            # Calculate BPT limits
+                            present_voltage = max(1, self.charger.getEvsePresentVoltage())
+                            charging_parameters['max_current'] = -abs(int(self.v2g_discharge_limit_watts / present_voltage))
+                            charging_parameters['max_power'] = -abs(self.v2g_discharge_limit_watts)
+
+                        charging_parameters['status'] = 0
 
                     # Check if we should send an update:
                     # 1. charging_parameters must be defined
@@ -374,6 +396,9 @@ class Evse():
                     print("Message ID not supported: {:02x}".format(id))
                     break
         finally:
+            # Re-enable GC when loop exits
+            gc.enable()
+            gc.collect()
             self.whitebeet.v2gEvseStopListen()
 
     def _handleSessionStarted(self, data):
