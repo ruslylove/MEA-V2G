@@ -66,14 +66,12 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         self.offline_buffer = []
         # Configuration Store
         self.configuration = {
-             'MEAV2G': 'true', 
-             'MeterValueSampleInterval': '5', 
              'HeartbeatInterval': '600',
-             'LocalAuthorizeOffline': 'false', # Default false for compliance? Or true? 
-             # Section 9.3 changes it to false. Default probably true for robustness or false for security?
-             # MEA specs usually default false?
-             'Power.Active.Import': '0', # For 9.4 test
-             'V2GMode': 'false', # MEA Requirement
+             'MeterValueSampleInterval': '5', 
+             'LocalAuthorizeOffline': 'false', 
+             'Power.Active.Import': '0',
+             'V2GMode': 'true', # Changed from MEAV2G/false to V2GMode/true for compliance
+             'AutoCharge': 'false',
         }
         # Local Authorization List
         self.local_auth_list = {} # idTag -> idTagInfo
@@ -190,21 +188,6 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                 await asyncio.sleep(0.1)
             except Exception as e:
                 LOGGER.error(f"Error flushing offline message: {e}")
-
-        
-        # Configuration Store
-        self.configuration = {
-            'HeartbeatInterval': '60',
-            'ConnectionTimeOut': '60',
-            'MeterValueSampleInterval': '60',
-            'LocalAuthorizeOffline': 'False',
-            'UnlockConnectorOnEVSideDisconnect': 'False',
-            'AutoCharge': 'False',
-            'MEA_V2G_PowerDemand': '0',
-            'MEAV2G': 'true',
-            'Power.Active.Import': '0',
-            'V2GMode': 'false', # MEA Requirement
-        }
 
     async def send_boot_notification(self, model="MEA-V2G-01", vendor="KMUTNB"):
         request = call.BootNotification(

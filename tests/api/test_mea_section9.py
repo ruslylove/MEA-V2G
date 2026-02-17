@@ -70,9 +70,9 @@ class TestMeaSection9:
         assert self.wait_for_packet("StatusNotification ACKNOWLEDGED", timeout=10)
 
     # --- 9.1 MEA Specific Configuration ---
-    def test_9_01_meav2g_config(self, evse_simulation):
+    def test_9_01_v2gmode_config(self, evse_simulation):
         # Expect generic response message put in queue by Ocpp16Interface
-        assert self.send_change_config(evse_simulation, "MEAV2G", "true")
+        assert self.send_change_config(evse_simulation, "V2GMode", "true")
 
     def test_9_02_meter_sample(self, evse_simulation):
         assert self.send_change_config(evse_simulation, "MeterValueSampleInterval", "10")

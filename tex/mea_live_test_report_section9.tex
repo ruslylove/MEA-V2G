@@ -42,7 +42,7 @@
 \textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
 \midrule
 \endhead
-9.1 & test\_9\_01\_meav2g\_config & \textcolor{green}{Pass} & 0.104 \\
+9.1 & test\_9\_01\_v2gmode\_config & \textcolor{green}{Pass} & 0.104 \\
 \bottomrule
 \end{longtable}
 \subsection{Meter Value Sample Interval}
@@ -78,46 +78,21 @@
 9.4.3 & test\_9\_04\_03\_power\_0 & \textcolor{green}{Pass} & 0.108 \\
 \bottomrule
 \end{longtable}
-\section{Individual Test Case Logs}\subsection*{test\_9\_01\_meav2g\_config}
+\section{Individual Test Case Logs}\subsection*{test\_9\_01\_v2gmode\_config}
 \begin{lstlisting}
 --------------------------------- Captured Out ---------------------------------
 
---- ChangeConfiguration MEAV2G=true ---
-DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
-DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Connector 1: Available)...
-DEBUG: Found in queue: [EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
-DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"ffb2aa5c-eac7-4def-b7ff-9f76898a64b3",{}]
-DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
-DEBUG: Found in queue: [EVSE] Sending Heartbeat...
-DEBUG: Buffering unmatched: [EVSE] Sending Heartbeat...
-DEBUG: Found in queue: [EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
-DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"b8d574bc-e690-4457-8a74-2254ff8e1053",{"currentTime":"2026-01-11T09:45:13Z"}]
-DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
-DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-01-11T09:45:13Z)
+--- ChangeConfiguration V2GMode=true ---
 
-[EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+[EVSE] RAW RECV: [2, "uuid-V2GMode", "ChangeConfiguration", {"key": "V2GMode", "value": "true"}]
 
 [EVSE] RECV Packet: ChangeConfiguration
 Payload: {
-  "key": "MEAV2G",
+  "key": "V2GMode",
   "value": "true"
 }
 
 [EVSE] Sending ChangeConfiguration Response (Accepted)
-DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
-DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
-DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
-Payload: {
-  "key": "MEAV2G",
-  "value": "true"
-}
-DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
-Payload: {
-  "key": "MEAV2G",
-  "value": "true"
-}
-DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
 \end{lstlisting}
 \subsection*{test\_9\_02\_meter\_sample}
 \begin{lstlisting}
