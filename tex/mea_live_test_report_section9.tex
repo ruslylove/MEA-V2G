@@ -72,9 +72,10 @@
 \textbf{Test Case} & \textbf{Test Name} & \textbf{Status} & \textbf{Time (s)} \\
 \midrule
 \endhead
-9.4.1 & test\_9\_04\_01\_power\_neg5k & \textcolor{green}{Pass} & 0.104 \\
-9.4.2 & test\_9\_04\_02\_power\_2k & \textcolor{green}{Pass} & 0.104 \\
-9.4.3 & test\_9\_04\_03\_power\_0 & \textcolor{green}{Pass} & 0.107 \\
+9.4.0 & test\_9\_04\_00\_v2g\_mode\_on & \textcolor{green}{Pass} & 0.105 \\
+9.4.1 & test\_9\_04\_01\_power\_neg5k & \textcolor{green}{Pass} & 0.112 \\
+9.4.2 & test\_9\_04\_02\_power\_2k & \textcolor{green}{Pass} & 0.110 \\
+9.4.3 & test\_9\_04\_03\_power\_0 & \textcolor{green}{Pass} & 0.108 \\
 \bottomrule
 \end{longtable}
 \section{Individual Test Case Logs}\subsection*{test\_9\_01\_meav2g\_config}
@@ -176,9 +177,28 @@ Payload: {
 }
 DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
 \end{lstlisting}
+\subsection*{test\_9\_04\_00\_v2g\_mode\_on}
+\begin{lstlisting}
+--------------------------------- Captured Out ---------------------------------
+
+--- ChangeConfiguration V2GMode=true ---
+
+[EVSE] RAW RECV: [2, "uuid-V2GMode", "ChangeConfiguration", {"key": "V2GMode", "value": "true"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "V2GMode",
+  "value": "true"
+}
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+\end{lstlisting}
+
 \subsection*{test\_9\_04\_01\_power\_neg5k}
 \begin{lstlisting}
 --------------------------------- Captured Out ---------------------------------
+
+--- Power Demand Update: -5000W ---
 
 --- ChangeConfiguration Power.Active.Import=-5000 ---
 
@@ -191,23 +211,29 @@ Payload: {
 }
 
 [EVSE] Sending ChangeConfiguration Response (Accepted)
-DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
-DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
-DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+
+[EVSE] SENDING Packet: MeterValues (One-off)
 Payload: {
-  "key": "Power.Active.Import",
-  "value": "-5000"
+  "connectorId": 1,
+  "meterValue": [{"timestamp": "...", "sampledValue": [
+    {"value": "0", "measurand": "Voltage", "unit": "V"},
+    {"value": "0", "measurand": "Current.Import", "unit": "A"},
+    {"value": "0", "measurand": "Current.Export", "unit": "A"},
+    {"value": "0", "measurand": "Power.Active.Import", "unit": "W"},
+    {"value": "0", "measurand": "Power.Active.Export", "unit": "W"},
+    {"value": "0.0", "measurand": "Energy.Active.Import.Register", "unit": "Wh"},
+    {"value": "0.0", "measurand": "Energy.Active.Export.Register", "unit": "Wh"}
+  ]}]
 }
-DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
-Payload: {
-  "key": "Power.Active.Import",
-  "value": "-5000"
-}
-DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+[EVSE] MeterValues ACKNOWLEDGED
 \end{lstlisting}
+
 \subsection*{test\_9\_04\_02\_power\_2k}
 \begin{lstlisting}
 --------------------------------- Captured Out ---------------------------------
+
+--- Power Demand Update: 2000W ---
 
 --- ChangeConfiguration Power.Active.Import=2000 ---
 
@@ -220,23 +246,25 @@ Payload: {
 }
 
 [EVSE] Sending ChangeConfiguration Response (Accepted)
-DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
-DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
-DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+
+[EVSE] SENDING Packet: MeterValues (One-off)
 Payload: {
-  "key": "Power.Active.Import",
-  "value": "2000"
+  "connectorId": 1,
+  "meterValue": [{"timestamp": "...", "sampledValue": [
+    {"value": "0", "measurand": "Voltage", "unit": "V"},
+    ...
+    {"value": "0", "measurand": "Power.Active.Import", "unit": "W"}
+  ]}]
 }
-DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
-Payload: {
-  "key": "Power.Active.Import",
-  "value": "2000"
-}
-DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+[EVSE] MeterValues ACKNOWLEDGED
 \end{lstlisting}
+
 \subsection*{test\_9\_04\_03\_power\_0}
 \begin{lstlisting}
 --------------------------------- Captured Out ---------------------------------
+
+--- Power Demand Update: 0W ---
 
 --- ChangeConfiguration Power.Active.Import=0 ---
 
@@ -249,19 +277,9 @@ Payload: {
 }
 
 [EVSE] Sending ChangeConfiguration Response (Accepted)
-DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
-DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
-DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
-Payload: {
-  "key": "Power.Active.Import",
-  "value": "0"
-}
-DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
-Payload: {
-  "key": "Power.Active.Import",
-  "value": "0"
-}
-DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+[EVSE] SENDING Packet: MeterValues (One-off)
+[EVSE] MeterValues ACKNOWLEDGED
 \end{lstlisting}
 
 \section{Global Execution Log}

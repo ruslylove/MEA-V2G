@@ -80,12 +80,23 @@ class TestMeaSection9:
     def test_9_03_local_auth(self, evse_simulation):
         assert self.send_change_config(evse_simulation, "LocalAuthorizeOffline", "false")
 
+    def send_power_demand(self, evse_simulation, value):
+        print(f"\n--- Power Demand Update: {value}W ---")
+        assert self.send_change_config(evse_simulation, "Power.Active.Import", value)
+        # Trigger MeterValue to verify the change
+        evse_simulation.queue.put({'command': 'METER_VALUES', 'args': {'connector_id': 1}})
+        assert self.wait_for_packet("SENDING Packet: MeterValues (One-off)")
+        return self.wait_for_packet("MeterValues ACKNOWLEDGED")
+
     # --- 9.4 Power Demand Verification ---
+    def test_9_04_00_v2g_mode_on(self, evse_simulation):
+        assert self.send_change_config(evse_simulation, "V2GMode", "true")
+
     def test_9_04_01_power_neg5k(self, evse_simulation):
-        assert self.send_change_config(evse_simulation, "Power.Active.Import", "-5000")
+        assert self.send_power_demand(evse_simulation, "-5000")
 
     def test_9_04_02_power_2k(self, evse_simulation):
-        assert self.send_change_config(evse_simulation, "Power.Active.Import", "2000")
+        assert self.send_power_demand(evse_simulation, "2000")
 
     def test_9_04_03_power_0(self, evse_simulation):
-        assert self.send_change_config(evse_simulation, "Power.Active.Import", "0")
+        assert self.send_power_demand(evse_simulation, "0")

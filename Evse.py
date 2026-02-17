@@ -26,6 +26,7 @@ class Evse():
         self.offline_sessions = [] # Store {id_tag, start_time, stop_time, reason}
         self.last_update_time = 0
         self.v2g_discharge_limit_watts = 0
+        self.v2g_enabled = False # MEA Milestone 3
 
         self.SUSPENDED_TIMEOUT = 300 # 5 minutes
 
@@ -108,13 +109,52 @@ class Evse():
                     print("CP in wrong state: {}".format(cp_state))
                     return False
 
+    def set_v2g_mode(self, enabled):
+        """Enable or disable V2G/BPT capability for this session."""
+        print(f"[MEA] V2G Mode enabled: {enabled}")
+        self.v2g_enabled = enabled
+
     def set_v2g_discharge_limit(self, limit_watts):
         """
         Sets a discharge limit (BPT). 
         Positive value indicates discharge is allowed at up to that power level.
         """
+        # If V2G is NOT enabled, we should probably ignore negative limits or reject them earlier.
+        # But for robustness, we cap it at 0 if not enabled.
+        if not self.v2g_enabled and limit_watts > 0:
+            print("[MEA] Ignoring discharge limit because V2GMode is disabled.")
+            limit_watts = 0
+
         print(f"[BPT] Setting discharge limit: {limit_watts} W")
         self.v2g_discharge_limit_watts = limit_watts
+
+    def _get_v2g_charging_parameters(self):
+        """
+        Helper to calculate DC charging parameters, accounting for V2G export.
+        """
+        v_pres = self.charger.getEvsePresentVoltage()
+        i_pres = self.charger.getEvsePresentCurrent()
+        
+        # If we have a discharge limit > 0 AND V2G is enabled, we are in export mode.
+        # Whitebeet indicates export by setting max_current/max_power to negative values.
+        if self.v2g_enabled and self.v2g_discharge_limit_watts > 0:
+            # V2G Export
+            max_p = -abs(int(self.v2g_discharge_limit_watts))
+            max_i = -abs(int(self.v2g_discharge_limit_watts / max(1, v_pres)))
+        else:
+            # Normal Charging
+            max_p = int(self.charger.getEvseMaxPower())
+            max_i = int(self.charger.getEvseMaxCurrent())
+
+        return {
+            'isolation_level': 0,
+            'present_voltage': int(v_pres),
+            'present_current': int(i_pres),
+            'max_voltage': int(self.charger.getEvseMaxVoltage()),
+            'max_current': max_i,
+            'max_power': max_p,
+            'status': 0,
+        }
 
     def stop_charging(self):
         """
@@ -300,20 +340,7 @@ class Evse():
                         self.charger.getEvsePresentCurrent()
 
                         # Update existing dictionary in place
-                        charging_parameters['present_voltage'] = int(self.charger.getEvsePresentVoltage())
-                        charging_parameters['present_current'] = int(self.charger.getEvsePresentCurrent())
-                        charging_parameters['max_voltage'] = int(self.charger.getEvseMaxVoltage())
-                        
-                        if self.v2g_discharge_limit_watts == 0:
-                            charging_parameters['max_current'] = int(self.charger.getEvseMaxCurrent())
-                            charging_parameters['max_power'] = int(self.charger.getEvseMaxPower())
-                        else:
-                            # Calculate BPT limits
-                            present_voltage = max(1, self.charger.getEvsePresentVoltage())
-                            charging_parameters['max_current'] = -abs(int(self.v2g_discharge_limit_watts / present_voltage))
-                            charging_parameters['max_power'] = -abs(self.v2g_discharge_limit_watts)
-
-                        charging_parameters['status'] = 0
+                        charging_parameters = self._get_v2g_charging_parameters()
 
                     # Check if we should send an update:
                     # 1. charging_parameters must be defined
@@ -645,15 +672,7 @@ class Evse():
             if evse_max_current > 0 and target_current > 0:
                 self.set_status("Charging")
     
-        charging_parameters = {
-            'isolation_level': 0,
-            'present_voltage': int(self.charger.getEvsePresentVoltage()),
-            'present_current': int(self.charger.getEvsePresentCurrent()),
-            'max_voltage': int(self.charger.getEvseMaxVoltage()),
-            'max_current': int(self.charger.getEvseMaxCurrent()),
-            'max_power': int(self.charger.getEvseMaxPower()),
-            'status': 0,
-        }
+        charging_parameters = self._get_v2g_charging_parameters()
 
         try:
             self.whitebeet.v2gEvseUpdateDcChargingParameters(charging_parameters)

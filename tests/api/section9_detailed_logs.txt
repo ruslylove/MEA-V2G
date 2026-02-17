@@ -1,0 +1,351 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.0, pytest-9.0.2, pluggy-1.6.0 -- /Users/rus/Development/MEA-V2G/.venv/bin/python3.14
+cachedir: .pytest_cache
+rootdir: /Users/rus/Development/MEA-V2G
+configfile: pytest.ini
+collecting ... collected 8 items
+
+tests/api/test_mea_section9.py::TestMeaSection9::test_9_00_initialization INFO:EVSE_Sim:Starting EVSE Simulation...
+INFO:EVSE_Sim:Connecting to wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001
+INFO:EVSE_Sim:Connected to CSMS!
+INFO:EVSE_Sim:Command processing loop started.
+
+[EVSE] SENDING Packet: BootNotification
+Payload: {
+  "chargePointModel": "MEA-V2G-01",
+  "chargePointVendor": "KMUTNB"
+}
+INFO:ocpp:rddQC4000001: send [2,"de06d20d-6b61-4978-9756-82ac16f84cd0","BootNotification",{"chargePointModel":"MEA-V2G-01","chargePointVendor":"KMUTNB"}]
+INFO:ocpp:rddQC4000001: receive message [3,"de06d20d-6b61-4978-9756-82ac16f84cd0",{"currentTime":"2026-02-17T03:50:45Z","interval":3600,"status":"Accepted"}]
+
+--- 9.0 Initialization ---
+DEBUG: Found in queue: [EVSE] Connected to CSMS!
+DEBUG: Found in queue: [EVSE] Sending BootNotification...
+DEBUG: Buffering unmatched: [EVSE] Sending BootNotification...
+DEBUG: Found in queue: [EVSE] SENDING Packet: BootNotification
+Payload: {
+  "chargePointModel": "MEA-V2G-01",
+  "chargePointVendor": "KMUTNB"
+}
+DEBUG: Buffering unmatched: [EVSE] SENDING Packet: BootNotification
+Payload: {
+  "chargePointModel": "MEA-V2G-01",
+  "chargePointVendor": "KMUTNB"
+}
+
+[EVSE] RAW RECV: [3,"de06d20d-6b61-4978-9756-82ac16f84cd0",{"currentTime":"2026-02-17T03:50:45Z","interval":3600,"status":"Accepted"}]
+
+[EVSE] BootNotification ACCEPTED
+INFO:ocpp_16_interface:Connected to central system.
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+INFO:ocpp:rddQC4000001: send [2,"fca0a584-1988-44ed-8dce-9d49f3dcbe13","StatusNotification",{"connectorId":0,"errorCode":"NoError","status":"Available","timestamp":"2026-02-17T03:49:55Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+INFO:ocpp:rddQC4000001: receive message [3,"fca0a584-1988-44ed-8dce-9d49f3dcbe13",{}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"de06d20d-6b61-4978-9756-82ac16f84cd0",{"currentTime":"2026-02-17T03:50:45Z","interval":3600,"status":"Accepted"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"de06d20d-6b61-4978-9756-82ac16f84cd0",{"currentTime":"2026-02-17T03:50:45Z","interval":3600,"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] BootNotification ACCEPTED
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Available)...
+DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Available)
+DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"fca0a584-1988-44ed-8dce-9d49f3dcbe13",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] SENDING Packet: StatusNotification (Available)
+INFO:ocpp:rddQC4000001: send [2,"2e04d763-67f2-4086-bf3f-f047434a2bda","StatusNotification",{"connectorId":1,"errorCode":"NoError","status":"Available","timestamp":"2026-02-17T03:49:56Z","vendorId":"KMUTNB","vendorErrorCode":""}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"fca0a584-1988-44ed-8dce-9d49f3dcbe13",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"fca0a584-1988-44ed-8dce-9d49f3dcbe13",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+PASSED
+tests/api/test_mea_section9.py::TestMeaSection9::test_9_01_meav2g_config INFO:ocpp:rddQC4000001: receive message [3,"2e04d763-67f2-4086-bf3f-f047434a2bda",{}]
+
+--- ChangeConfiguration MEAV2G=true ---
+DEBUG: Found in queue: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Buffering unmatched: [EVSE] Sending StatusNotification (Connector 1: Available)...
+DEBUG: Found in queue: [EVSE] SENDING Packet: StatusNotification (Available)
+DEBUG: Buffering unmatched: [EVSE] SENDING Packet: StatusNotification (Available)
+
+[EVSE] RAW RECV: [3,"2e04d763-67f2-4086-bf3f-f047434a2bda",{}]
+
+[EVSE] StatusNotification ACKNOWLEDGED (Available)
+
+[EVSE] SENDING Packet: Heartbeat
+INFO:ocpp:rddQC4000001: send [2,"2dc98e82-9ca7-4f2a-a820-104f1e52b880","Heartbeat",{}]
+INFO:ocpp:rddQC4000001: receive message [3,"2dc98e82-9ca7-4f2a-a820-104f1e52b880",{"currentTime":"2026-02-17T03:50:45Z"}]
+
+[EVSE] RAW RECV: [3,"2dc98e82-9ca7-4f2a-a820-104f1e52b880",{"currentTime":"2026-02-17T03:50:45Z"}]
+
+[EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-02-17T03:50:45Z)
+INFO:EVSE_Sim:Processing Command: INJECT_MSG with args: {'msg': '[2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]'}
+INFO:EVSE_Sim:Injecting CSMS Message: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2e04d763-67f2-4086-bf3f-f047434a2bda",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2e04d763-67f2-4086-bf3f-f047434a2bda",{}]
+DEBUG: Found in queue: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Buffering unmatched: [EVSE] StatusNotification ACKNOWLEDGED (Available)
+DEBUG: Found in queue: [EVSE] Sending Heartbeat...
+DEBUG: Buffering unmatched: [EVSE] Sending Heartbeat...
+DEBUG: Found in queue: [EVSE] SENDING Packet: Heartbeat
+DEBUG: Buffering unmatched: [EVSE] SENDING Packet: Heartbeat
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"2dc98e82-9ca7-4f2a-a820-104f1e52b880",{"currentTime":"2026-02-17T03:50:45Z"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"2dc98e82-9ca7-4f2a-a820-104f1e52b880",{"currentTime":"2026-02-17T03:50:45Z"}]
+DEBUG: Found in queue: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-02-17T03:50:45Z)
+DEBUG: Buffering unmatched: [EVSE] Heartbeat ACKNOWLEDGED (Time: 2026-02-17T03:50:45Z)
+
+[EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+INFO:ocpp_16_interface:Received ChangeConfiguration for MEAV2G to true
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"uuid-MEAV2G",{"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-MEAV2G", "ChangeConfiguration", {"key": "MEAV2G", "value": "true"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MEAV2G",
+  "value": "true"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+PASSED
+tests/api/test_mea_section9.py::TestMeaSection9::test_9_02_meter_sample INFO:EVSE_Sim:Processing Command: INJECT_MSG with args: {'msg': '[2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]'}
+INFO:EVSE_Sim:Injecting CSMS Message: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+
+--- ChangeConfiguration MeterValueSampleInterval=10 ---
+
+[EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+INFO:ocpp_16_interface:Received ChangeConfiguration for MeterValueSampleInterval to 10
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"uuid-MeterValueSampleInterval",{"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-MeterValueSampleInterval", "ChangeConfiguration", {"key": "MeterValueSampleInterval", "value": "10"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "MeterValueSampleInterval",
+  "value": "10"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+PASSED
+tests/api/test_mea_section9.py::TestMeaSection9::test_9_03_local_auth INFO:EVSE_Sim:Processing Command: INJECT_MSG with args: {'msg': '[2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]'}
+INFO:EVSE_Sim:Injecting CSMS Message: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+
+--- ChangeConfiguration LocalAuthorizeOffline=false ---
+
+[EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+INFO:ocpp_16_interface:Received ChangeConfiguration for LocalAuthorizeOffline to false
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"uuid-LocalAuthorizeOffline",{"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-LocalAuthorizeOffline", "ChangeConfiguration", {"key": "LocalAuthorizeOffline", "value": "false"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "LocalAuthorizeOffline",
+  "value": "false"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+PASSED
+tests/api/test_mea_section9.py::TestMeaSection9::test_9_04_00_v2g_mode_on INFO:EVSE_Sim:Processing Command: INJECT_MSG with args: {'msg': '[2, "uuid-V2GMode", "ChangeConfiguration", {"key": "V2GMode", "value": "true"}]'}
+INFO:EVSE_Sim:Injecting CSMS Message: [2, "uuid-V2GMode", "ChangeConfiguration", {"key": "V2GMode", "value": "true"}]
+
+--- ChangeConfiguration V2GMode=true ---
+
+[EVSE] RAW RECV: [2, "uuid-V2GMode", "ChangeConfiguration", {"key": "V2GMode", "value": "true"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "V2GMode",
+  "value": "true"
+}
+INFO:ocpp_16_interface:Received ChangeConfiguration for V2GMode to true
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"uuid-V2GMode",{"status":"Accepted"}]
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-V2GMode", "ChangeConfiguration", {"key": "V2GMode", "value": "true"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-V2GMode", "ChangeConfiguration", {"key": "V2GMode", "value": "true"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "V2GMode",
+  "value": "true"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "V2GMode",
+  "value": "true"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+PASSED
+tests/api/test_mea_section9.py::TestMeaSection9::test_9_04_01_power_neg5k INFO:EVSE_Sim:Processing Command: INJECT_MSG with args: {'msg': '[2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]'}
+INFO:EVSE_Sim:Injecting CSMS Message: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+
+--- Power Demand Update: -5000W ---
+
+--- ChangeConfiguration Power.Active.Import=-5000 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+INFO:ocpp_16_interface:Received ChangeConfiguration for Power.Active.Import to -5000
+INFO:ocpp_16_interface:[V2G] Grid Demand: Discharging 5000 W
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"uuid-Power.Active.Import",{"status":"Accepted"}]
+INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "-5000"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "-5000"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+[EVSE] SENDING Packet: MeterValues (One-off)
+INFO:ocpp:rddQC4000001: send [2,"25b7e818-9988-400a-845c-cd4dbb129e4e","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-02-17T03:49:56Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Export","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Export","unit":"W"},{"value":"0.0","context":"Sample.Periodic","format":"Raw","measurand":"Energy.Active.Import.Register","unit":"Wh"},{"value":"0.0","context":"Sample.Periodic","format":"Raw","measurand":"Energy.Active.Export.Register","unit":"Wh"}]}]}]
+INFO:ocpp:rddQC4000001: receive message [3,"25b7e818-9988-400a-845c-cd4dbb129e4e",{}]
+DEBUG: Found in queue: [EVSE] SENDING Packet: MeterValues (One-off)
+
+[EVSE] RAW RECV: [3,"25b7e818-9988-400a-845c-cd4dbb129e4e",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"25b7e818-9988-400a-845c-cd4dbb129e4e",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"25b7e818-9988-400a-845c-cd4dbb129e4e",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+PASSED
+tests/api/test_mea_section9.py::TestMeaSection9::test_9_04_02_power_2k INFO:EVSE_Sim:Processing Command: INJECT_MSG with args: {'msg': '[2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]'}
+INFO:EVSE_Sim:Injecting CSMS Message: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+
+--- Power Demand Update: 2000W ---
+
+--- ChangeConfiguration Power.Active.Import=2000 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+INFO:ocpp_16_interface:Received ChangeConfiguration for Power.Active.Import to 2000
+INFO:ocpp_16_interface:[V2G] Grid Supply: Charging 2000 W
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"uuid-Power.Active.Import",{"status":"Accepted"}]
+INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "2000"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "2000"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+[EVSE] SENDING Packet: MeterValues (One-off)
+INFO:ocpp:rddQC4000001: send [2,"f548eecb-ec56-4e6a-9d0e-233c88076209","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-02-17T03:49:57Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Export","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Export","unit":"W"},{"value":"0.0","context":"Sample.Periodic","format":"Raw","measurand":"Energy.Active.Import.Register","unit":"Wh"},{"value":"0.0","context":"Sample.Periodic","format":"Raw","measurand":"Energy.Active.Export.Register","unit":"Wh"}]}]}]
+INFO:ocpp:rddQC4000001: receive message [3,"f548eecb-ec56-4e6a-9d0e-233c88076209",{}]
+DEBUG: Found in queue: [EVSE] SENDING Packet: MeterValues (One-off)
+
+[EVSE] RAW RECV: [3,"f548eecb-ec56-4e6a-9d0e-233c88076209",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"f548eecb-ec56-4e6a-9d0e-233c88076209",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"f548eecb-ec56-4e6a-9d0e-233c88076209",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+PASSED
+tests/api/test_mea_section9.py::TestMeaSection9::test_9_04_03_power_0 INFO:EVSE_Sim:Processing Command: INJECT_MSG with args: {'msg': '[2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]'}
+INFO:EVSE_Sim:Injecting CSMS Message: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+
+--- Power Demand Update: 0W ---
+
+--- ChangeConfiguration Power.Active.Import=0 ---
+
+[EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+
+[EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+INFO:ocpp_16_interface:Received ChangeConfiguration for Power.Active.Import to 0
+INFO:ocpp_16_interface:[V2G] Idle
+
+[EVSE] Sending ChangeConfiguration Response (Accepted)
+INFO:ocpp:rddQC4000001: send [3,"uuid-Power.Active.Import",{"status":"Accepted"}]
+INFO:EVSE_Sim:Processing Command: METER_VALUES with args: {'connector_id': 1}
+DEBUG: Found in queue: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [2, "uuid-Power.Active.Import", "ChangeConfiguration", {"key": "Power.Active.Import", "value": "0"}]
+DEBUG: Found in queue: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+DEBUG: Buffering unmatched: [EVSE] RECV Packet: ChangeConfiguration
+Payload: {
+  "key": "Power.Active.Import",
+  "value": "0"
+}
+DEBUG: Found in queue: [EVSE] Sending ChangeConfiguration Response (Accepted)
+
+[EVSE] SENDING Packet: MeterValues (One-off)
+INFO:ocpp:rddQC4000001: send [2,"53688a0a-d809-4591-b272-df8bc524ac3f","MeterValues",{"connectorId":1,"meterValue":[{"timestamp":"2026-02-17T03:49:57Z","sampledValue":[{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Voltage","unit":"V"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Import","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Current.Export","unit":"A"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Import","unit":"W"},{"value":"0","context":"Sample.Periodic","format":"Raw","measurand":"Power.Active.Export","unit":"W"},{"value":"0.0","context":"Sample.Periodic","format":"Raw","measurand":"Energy.Active.Import.Register","unit":"Wh"},{"value":"0.0","context":"Sample.Periodic","format":"Raw","measurand":"Energy.Active.Export.Register","unit":"Wh"}]}]}]
+INFO:ocpp:rddQC4000001: receive message [3,"53688a0a-d809-4591-b272-df8bc524ac3f",{}]
+DEBUG: Found in queue: [EVSE] SENDING Packet: MeterValues (One-off)
+
+[EVSE] RAW RECV: [3,"53688a0a-d809-4591-b272-df8bc524ac3f",{}]
+
+[EVSE] MeterValues ACKNOWLEDGED
+DEBUG: Found in queue: [EVSE] RAW RECV: [3,"53688a0a-d809-4591-b272-df8bc524ac3f",{}]
+DEBUG: Buffering unmatched: [EVSE] RAW RECV: [3,"53688a0a-d809-4591-b272-df8bc524ac3f",{}]
+DEBUG: Found in queue: [EVSE] MeterValues ACKNOWLEDGED
+PASSEDINFO:EVSE_Sim:Stopping EVSE Simulation...
+
+
+============================== 8 passed in 3.96s ===============================

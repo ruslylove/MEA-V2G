@@ -42,7 +42,7 @@ LOGGER.addHandler(fh)
 
 class Ocpp16Interface(Ocpp16ChargePoint):
     # Configurable flags
-    LOG_SEND_PACKETS = False
+    LOG_SEND_PACKETS = True
 
     def __init__(self, id, connection, charger=None, evse=None):
         super().__init__(id, connection, response_timeout=20)
@@ -72,7 +72,8 @@ class Ocpp16Interface(Ocpp16ChargePoint):
              'LocalAuthorizeOffline': 'false', # Default false for compliance? Or true? 
              # Section 9.3 changes it to false. Default probably true for robustness or false for security?
              # MEA specs usually default false?
-             'Power.Active.Import': '0' # For 9.4 test
+             'Power.Active.Import': '0', # For 9.4 test
+             'V2GMode': 'false', # MEA Requirement
         }
         # Local Authorization List
         self.local_auth_list = {} # idTag -> idTagInfo
@@ -201,7 +202,8 @@ class Ocpp16Interface(Ocpp16ChargePoint):
             'AutoCharge': 'False',
             'MEA_V2G_PowerDemand': '0',
             'MEAV2G': 'true',
-            'Power.Active.Import': '0'
+            'Power.Active.Import': '0',
+            'V2GMode': 'false', # MEA Requirement
         }
 
     async def send_boot_notification(self, model="MEA-V2G-01", vendor="KMUTNB"):
@@ -343,10 +345,20 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                 return
 
         # Prepare payload
+        if self.evse:
+            # Determine meterStart based on mode
+            # MEA: Energy.Active.Import.Register for Charging, Energy.Active.Export.Register for V2G
+            if self.configuration.get('V2GMode', 'false').lower() == 'true':
+                meter_start = int(self.evse.charger.getEnergyActiveExportRegister())
+            else:
+                meter_start = int(self.evse.charger.getEnergyActiveImportRegister())
+        else:
+            meter_start = 0
+
         request_payload = {
             'connector_id': connector_id,
             'id_tag': id_tag if id_tag else "UnknownTag",
-            'meter_start': 0, # Simplified
+            'meter_start': meter_start,
             'timestamp': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
         }
         
@@ -483,9 +495,18 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         await self.send_status_notification(connector_id, "Finishing")
 
         # Send StopTransaction
+        if self.evse:
+            # Determine meter_stop based on mode
+            if self.configuration.get('V2GMode', 'false').lower() == 'true':
+                meter_stop = int(self.evse.charger.getEnergyActiveExportRegister())
+            else:
+                meter_stop = int(self.evse.charger.getEnergyActiveImportRegister())
+        else:
+            meter_stop = 0
+
         request = call.StopTransaction(
             transaction_id=transaction_id,
-            meter_stop=100, # Simplified
+            meter_stop=meter_stop,
             timestamp=datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             reason=reason
         )
@@ -520,18 +541,31 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                 await asyncio.sleep(interval)
                 
                 # Snapshot values
-                voltage = self.charger.getEvsePresentVoltage()
-                current = self.charger.getEvsePresentCurrent()
-                power = voltage * current
+                charger = self.charger if self.charger else (self.evse.charger if self.evse else None)
+                if charger:
+                    voltage = charger.getEvsePresentVoltage()
+                    current_import = charger.getCurrentImport()
+                    current_export = charger.getCurrentExport()
+                    power_import = charger.getPowerActiveImport()
+                    power_export = charger.getPowerActiveExport()
+                    energy_import = charger.getEnergyActiveImportRegister()
+                    energy_export = charger.getEnergyActiveExportRegister()
+                else:
+                    voltage = 0; current_import = 0; current_export = 0
+                    power_import = 0; power_export = 0
+                    energy_import = 0; energy_export = 0
                 
                 # Prepare MeterValues
-                # NOTE: MEA requires specific measurands.
-                # Voltage, Current.Import, Energy.Active.Import.Register, Power.Active.Import, SoC, Power.Offered
+                # MEA requires: Voltage, Current.Import, Current.Export, Power.Active.Import, Power.Active.Export, Energy.Active.Import.Register, Energy.Active.Export.Register
                 
                 sampled_values = [
-                    {"value": str(voltage), "context": "Sample.Periodic", "format": "Raw", "measurand": "Voltage", "unit": "V"},
-                    {"value": str(current), "context": "Sample.Periodic", "format": "Raw", "measurand": "Current.Import", "unit": "A"},
-                    {"value": str(power),   "context": "Sample.Periodic", "format": "Raw", "measurand": "Power.Active.Import", "unit": "W"}
+                    {"value": str(round(voltage, 2)), "context": "Sample.Periodic", "format": "Raw", "measurand": "Voltage", "unit": "V"},
+                    {"value": str(round(current_import, 2)), "context": "Sample.Periodic", "format": "Raw", "measurand": "Current.Import", "unit": "A"},
+                    {"value": str(round(current_export, 2)), "context": "Sample.Periodic", "format": "Raw", "measurand": "Current.Export", "unit": "A"},
+                    {"value": str(round(power_import, 0)), "context": "Sample.Periodic", "format": "Raw", "measurand": "Power.Active.Import", "unit": "W"},
+                    {"value": str(round(power_export, 0)), "context": "Sample.Periodic", "format": "Raw", "measurand": "Power.Active.Export", "unit": "W"},
+                    {"value": str(round(energy_import, 0)), "context": "Sample.Periodic", "format": "Raw", "measurand": "Energy.Active.Import.Register", "unit": "Wh"},
+                    {"value": str(round(energy_export, 0)), "context": "Sample.Periodic", "format": "Raw", "measurand": "Energy.Active.Export.Register", "unit": "Wh"},
                 ]
                 
                 request = call.MeterValues(
@@ -700,6 +734,10 @@ class Ocpp16Interface(Ocpp16ChargePoint):
                 except ValueError:
                     return call_result.ChangeConfiguration(status=ConfigurationStatus.rejected)
 
+             if key == "V2GMode":
+                 if self.evse:
+                     self.evse.set_v2g_mode(value.lower() == "true")
+
              msg_resp = f"[EVSE] Sending ChangeConfiguration Response (Accepted)"
              print(f"\n{msg_resp}", flush=True)
              PACKET_QUEUE.put(msg_resp)
@@ -771,15 +809,23 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         return call_result.TriggerMessage(status=ConfigurationStatus.accepted)
 
     async def send_meter_values_one_off(self, connector_id=1):
-         # Snapshot values
+        # Snapshot values
         voltage = self.charger.getEvsePresentVoltage()
-        current = self.charger.getEvsePresentCurrent()
-        power = voltage * current
+        current_import = self.charger.getPowerActiveImport() / voltage if voltage > 0 else 0
+        current_export = self.charger.getPowerActiveExport() / voltage if voltage > 0 else 0
+        power_import = self.charger.getPowerActiveImport()
+        power_export = self.charger.getPowerActiveExport()
+        energy_import = self.charger.getEnergyActiveImportRegister()
+        energy_export = self.charger.getEnergyActiveExportRegister()
         
         sampled_values = [
             {"value": str(voltage), "context": "Sample.Periodic", "format": "Raw", "measurand": "Voltage", "unit": "V"},
-            {"value": str(current), "context": "Sample.Periodic", "format": "Raw", "measurand": "Current.Import", "unit": "A"},
-            {"value": str(power),   "context": "Sample.Periodic", "format": "Raw", "measurand": "Power.Active.Import", "unit": "W"}
+            {"value": str(current_import), "context": "Sample.Periodic", "format": "Raw", "measurand": "Current.Import", "unit": "A"},
+            {"value": str(current_export), "context": "Sample.Periodic", "format": "Raw", "measurand": "Current.Export", "unit": "A"},
+            {"value": str(power_import),   "context": "Sample.Periodic", "format": "Raw", "measurand": "Power.Active.Import", "unit": "W"},
+            {"value": str(power_export),   "context": "Sample.Periodic", "format": "Raw", "measurand": "Power.Active.Export", "unit": "W"},
+            {"value": str(energy_import),  "context": "Sample.Periodic", "format": "Raw", "measurand": "Energy.Active.Import.Register", "unit": "Wh"},
+            {"value": str(energy_export),  "context": "Sample.Periodic", "format": "Raw", "measurand": "Energy.Active.Export.Register", "unit": "Wh"}
         ]
         
         request = call.MeterValues(
@@ -923,6 +969,29 @@ class Ocpp16Interface(Ocpp16ChargePoint):
         print(f"\n{msg}", flush=True)
         PACKET_QUEUE.put(msg)
         LOGGER.info(f"Received SetChargingProfile for connector {connector_id}")
+
+        # Extract limit from profile (MEA Milestone 3: Support signed limits)
+        try:
+            schedule = cs_charging_profiles.get('chargingSchedule', {})
+            periods = schedule.get('chargingSchedulePeriod', [])
+            if periods:
+                limit = periods[0].get('limit')
+                if limit is not None:
+                    limit_val = float(limit)
+                    LOGGER.info(f"[OCPP] Applying power limit: {limit_val} W")
+                    if self.evse:
+                        if limit_val < 0:
+                            self.evse.set_v2g_discharge_limit(abs(limit_val))
+                        else:
+                            self.evse.set_v2g_discharge_limit(0)
+                        
+                        # Note: Positive limit usually means max charging power.
+                        # For now, we reuse the existing discharge limit logic as 
+                        # the primary control for V2G mode.
+        except Exception as e:
+            LOGGER.error(f"Error parsing SetChargingProfile: {e}")
+            return call_result.SetChargingProfile(status=ChargingProfileStatus.rejected)
+
         msg_resp = f"[EVSE] Sending SetChargingProfile Response (Accepted)"
         print(f"\n{msg_resp}", flush=True)
         PACKET_QUEUE.put(msg_resp)

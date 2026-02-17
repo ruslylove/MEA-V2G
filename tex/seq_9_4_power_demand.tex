@@ -8,20 +8,30 @@
     \umlactor[class=EVSE,x=0]{EVSE}
     \umlactor[class=CSMS,x=10]{CSMS}
 
-    % 9.4.1 Discharge
-    \begin{umlcall}[op=9.4.1: ChangeConfiguration(MEA\_V2G\_PowerDemand:-5000), type=synchron, return=Accepted, dt=10]{CSMS}{EVSE}
+    % 9.4.0 Initialize V2G Mode
+    \begin{umlcall}[op=9.4.0: ChangeConfiguration(V2GMode:true), type=synchron, return=Accepted, dt=10]{CSMS}{EVSE}
     \end{umlcall}
-    \node[draw, fill=white] at (0, -0.7) {Discharging 5kW to Grid};
+
+    % 9.4.1 Discharge
+    \begin{umlcall}[op=9.4.1: ChangeConfiguration(Power.Active.Import:-5000), type=synchron, return=Accepted, dt=10]{CSMS}{EVSE}
+    \end{umlcall}
+    \begin{umlcall}[op=MeterValues(P.Act.Export: 5000W), type=synchron, return=conf, dt=10]{EVSE}{CSMS}
+    \end{umlcall}
+    \node[draw, fill=orange!10] at (0, -2.6) {V2G Mode: Discharging 5kW};
 
     % 9.4.2 Charge
-    \begin{umlcall}[op=9.4.2: ChangeConfiguration(MEA\_V2G\_PowerDemand:2000), type=synchron, return=Accepted, dt=10]{CSMS}{EVSE}
+    \begin{umlcall}[op=9.4.2: ChangeConfiguration(Power.Active.Import:2000), type=synchron, return=Accepted, dt=10]{CSMS}{EVSE}
     \end{umlcall}
-    \node[draw, fill=white] at (0, -2.5) {Charging 2kW from Grid};
+    \begin{umlcall}[op=MeterValues(P.Act.Import: 2000W), type=synchron, return=conf, dt=10]{EVSE}{CSMS}
+    \end{umlcall}
+    \node[draw, fill=blue!5] at (0, -6.4) {Charging 2kW from Grid};
 
     % 9.4.3 Idle
-    \begin{umlcall}[op=9.4.3: ChangeConfiguration(MEA\_V2G\_PowerDemand:0), type=synchron, return=Accepted, dt=10]{CSMS}{EVSE}
+    \begin{umlcall}[op=9.4.3: ChangeConfiguration(Power.Active.Import:0), type=synchron, return=Accepted, dt=10]{CSMS}{EVSE}
     \end{umlcall}
-    \node[draw, fill=white] at (0, -4.5) {Idle / 0W};
+    \begin{umlcall}[op=MeterValues(P.Act.Imp: 0W\, P.Act.Exp: 0W), type=synchron, return=conf, dt=10]{EVSE}{CSMS}
+    \end{umlcall}
+    \node[draw, fill=white] at (0, -10.2) {Idle / 0W};
 
   \end{umlseqdiag}
 \end{tikzpicture}

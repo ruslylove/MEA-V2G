@@ -24,6 +24,11 @@ class ChargerSim(ChargerInterface):
         self.ev_target_voltage = 0
         self.ev_target_current = 0
         self.stopped = True
+        
+        # Energy Registers (Wh)
+        self.energy_import_register = 0.0
+        self.energy_export_register = 0.0
+        self.last_energy_calc_time = time.time_ns() / 1000000000.0 # seconds
 
     def is_charging(self):
         """
@@ -70,6 +75,21 @@ class ChargerSim(ChargerInterface):
         else:
             # Target current already reached
             pass
+        
+        # --- Energy Integration (Milestone 3) ---
+        now = time.time_ns() / 1000000000.0
+        dt = now - self.last_energy_calc_time
+        self.last_energy_calc_time = now
+        
+        if not self.stopped:
+            # Power in Watts (approximate as constant over dt)
+            power = self.evse_present_voltage * self.evse_present_current
+            energy_wh = (power * dt) / 3600.0
+            
+            if power >= 0:
+                self.energy_import_register += energy_wh
+            else:
+                self.energy_export_register += abs(energy_wh)
 
     def start(self):
         """
@@ -208,3 +228,28 @@ class ChargerSim(ChargerInterface):
             return True
         else:
             return False
+
+    # --- Energy and Directional Measurands (Milestone 3) ---
+    def getEnergyActiveImportRegister(self):
+        self._calcEvsePresentCurrent() # Triggers integration
+        return self.energy_import_register
+
+    def getEnergyActiveExportRegister(self):
+        self._calcEvsePresentCurrent() # Triggers integration
+        return self.energy_export_register
+
+    def getPowerActiveImport(self):
+        p = self.getEvsePresentVoltage() * self.getEvsePresentCurrent()
+        return max(0, p)
+
+    def getPowerActiveExport(self):
+        p = self.getEvsePresentVoltage() * self.getEvsePresentCurrent()
+        return max(0, -p)
+
+    def getCurrentImport(self):
+        i = self.getEvsePresentCurrent()
+        return max(0, i)
+
+    def getCurrentExport(self):
+        i = self.getEvsePresentCurrent()
+        return max(0, -i)

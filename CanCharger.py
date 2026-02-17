@@ -376,6 +376,15 @@ class CanCharger(ChargerInterface):
     def isPowerLimitExceeded(self, power):
         return power > self.evse_max_power
 
+    # --- Energy and Directional Measurands (Milestone 3) ---
+    # Hardware implementation would need to read specific CAN registers if available
+    def getEnergyActiveImportRegister(self): return 0.0
+    def getEnergyActiveExportRegister(self): return 0.0
+    def getPowerActiveImport(self): return max(0, self.getEvsePresentVoltage() * self.getEvsePresentCurrent())
+    def getPowerActiveExport(self): return max(0, -(self.getEvsePresentVoltage() * self.getEvsePresentCurrent()))
+    def getCurrentImport(self): return max(0, self.getEvsePresentCurrent())
+    def getCurrentExport(self): return max(0, -self.getEvsePresentCurrent())
+
 if __name__ == "__main__":
     print("Initializing CanCharger with virtual interface...")
     # NOTE: This requires a virtual CAN interface named 'vcan0' to be up.

@@ -153,6 +153,37 @@ class ChargerInterface(ABC):
         """Returns the actual output current flowing."""
         pass
 
+    # --- Energy and Directional Measurands (Milestone 3) ---
+    @abstractmethod
+    def getEnergyActiveImportRegister(self):
+        """Returns cumulative Energy.Active.Import in Wh."""
+        pass
+
+    @abstractmethod
+    def getEnergyActiveExportRegister(self):
+        """Returns cumulative Energy.Active.Export in Wh."""
+        pass
+
+    @abstractmethod
+    def getPowerActiveImport(self):
+        """Returns present Power.Active.Import (Positive if charging)."""
+        pass
+
+    @abstractmethod
+    def getPowerActiveExport(self):
+        """Returns present Power.Active.Export (Positive if discharging/V2G)."""
+        pass
+
+    @abstractmethod
+    def getCurrentImport(self):
+        """Returns present Current.Import (Positive if charging)."""
+        pass
+
+    @abstractmethod
+    def getCurrentExport(self):
+        """Returns present Current.Export (Positive if discharging/V2G)."""
+        pass
+
     # --- Safety Checks ---
     @abstractmethod
     def isVoltageLimitExceeded(self, voltage):
