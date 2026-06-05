@@ -1,0 +1,161 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{passgreen}{RGB}{34,139,34}
+\definecolor{failred}{RGB}{200,0,0}
+\definecolor{skipgray}{RGB}{120,120,120}
+
+\title{\textbf{vSECC OCPP 1.6 Compliance Test Report}\\[0.5em]
+\large Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
+\author{MEA-V2G Project --- Automated Test}
+\date{2026-06-05 15:51}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{vSECC OCPP 1.6 Compliance Report}
+\rhead{Page \thepage}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Test Configuration}
+\begin{tabular}{ll}
+\textbf{Device Under Test} & Vector vSECC.single Board \\
+\textbf{Device IP} & 192.168.1.166 \\
+\textbf{OCPP Version} & 1.6 (JSON) \\
+\textbf{CP ID} & rddQC4000001 \\
+\textbf{CSMS} & wss://ocpp.measandbox.com:2930 \\
+\textbf{Test PC} & 192.168.1.100 (WS proxy) \\
+\textbf{Test Date} & 2026-06-05 15:51 \\
+\end{tabular}
+
+\subsection*{Test Setup}
+The vSECC connects to a local WebSocket proxy on the test PC (\texttt{ws://192.168.1.100:9000}).
+The proxy transparently forwards all OCPP frames to the MEA CSMS over TLS
+(\texttt{wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001}).
+OCPP extension messages unsupported by MEA (e.g.\ \texttt{SecurityEventNotification})
+are intercepted by the proxy and answered with an empty ACK to maintain the session.
+
+\section{Test Results Summary}
+
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{|c|p{6cm}|p{5cm}|c|}
+\hline
+\rowcolor{gray!30}
+\textbf{\#} & \textbf{Test Item} & \textbf{Detail} & \textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!30}
+\textbf{\#} & \textbf{Test Item} & \textbf{Detail} & \textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+
+\hline
+\multicolumn{4}{|c|}{\cellcolor{gray!15}
+  \textbf{Summary: 16/19 PASS \quad 3 FAIL \quad 6 SKIP}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{0. vSECC Authentication}} \\
+\hline
+1 & vSECC login & \texttt{} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{1. Configure vSECC OCPP → MEA CSMS}} \\
+\hline
+2 & CSMS URL (local proxy) already = 'ws://192.168.1.100:9000/EV/Srv/JSON/1.6' & \texttt{} & \textcolor{skipgray}{SKIP} \\
+\hline
+3 & URL identity overwrite (CP ID) already = 'rddQC4000001' & \texttt{} & \textcolor{skipgray}{SKIP} \\
+\hline
+4 & Identity (CP ID) already = 'rddQC4000001' & \texttt{} & \textcolor{skipgray}{SKIP} \\
+\hline
+5 & Clear basic auth password already = '' & \texttt{} & \textcolor{skipgray}{SKIP} \\
+\hline
+6 & Security profile (0=no TLS for ws://) already = '0' & \texttt{} & \textcolor{skipgray}{SKIP} \\
+\hline
+7 & Backend communication activated already = 'true' & \texttt{} & \textcolor{skipgray}{SKIP} \\
+\hline
+8 & CSMS URL set correctly & \texttt{ws://192.168.1.100:9000/EV/Srv/JSON/1.6} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+9 & CP identity set correctly & \texttt{rddQC4000001} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{2. Restart vSECC OCPP Stack}} \\
+\hline
+10 & Restart accepted & \texttt{} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{3. Wait for OCPP Connection to MEA CSMS}} \\
+\hline
+11 & vSECC connected to MEA CSMS & \texttt{} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{4. Boot \& Heartbeat Verification (via CSMS GetConfig)}} \\
+\hline
+12 & GetConfiguration(HeartbeatInterval) → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+13 & GetConfiguration(V2GMode) → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{5. Configuration Control}} \\
+\hline
+14 & ChangeConfiguration(V2GMode=true) → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+15 & ChangeConfiguration(MEA\_V2G\_PowerDemand=3000) → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+16 & ChangeConfiguration(MEA\_V2G\_PowerDemand=-3000/V2G discharge) → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{6. Remote Start/Stop}} \\
+\hline
+17 & RemoteStartTransaction → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+18 & RemoteStopTransaction → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{7. Reservation}} \\
+\hline
+19 & ReserveNow → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+20 & CancelReservation → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{8. Smart Charging}} \\
+\hline
+21 & SetChargingProfile → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{9. Trigger Messages}} \\
+\hline
+22 & TriggerMessage(Heartbeat) → 200 & \texttt{None} & \textcolor{failred}{\textbf{FAIL}} \\
+\hline
+23 & TriggerMessage(MeterValues) → 200 & \texttt{None} & \textcolor{failred}{\textbf{FAIL}} \\
+\hline
+24 & TriggerMessage(StatusNotification) → 200 & \texttt{None} & \textcolor{failred}{\textbf{FAIL}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{blue!8}\textbf{10. Reset}} \\
+\hline
+25 & Reset(Soft) → 200 & \texttt{HTTP 200} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+
+\end{longtable}
+
+\section{OCPP Message Trace (Proxy Log)}
+\label{sec:proxy_log}
+\lstset{
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt
+}
+\lstinputlisting{vsecc_ocpp_test.log}
+
+\end{document}
