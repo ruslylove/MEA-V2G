@@ -1,0 +1,144 @@
+{
+  "section": 3,
+  "title": "การตรวจสอบการทำงานปกติ",
+  "cp_id": "rddQC4000001",
+  "timestamp": "2026-06-08T08:43:05.485594Z",
+  "method": "direct-to-csms",
+  "ev_wait_sec": 0,
+  "local_stop_wait_sec": 0,
+  "results": [
+    {
+      "item": "3.1",
+      "message": "BootNotification → Accepted (currentTime, interval, status)",
+      "status": "PASS",
+      "detail": "CSMS connection active — BootNotification Accepted confirmed",
+      "remark": ""
+    },
+    {
+      "item": "3.2",
+      "message": "StatusNotification Available (initial state)",
+      "status": "WARN",
+      "detail": "Available status not in recent MQTT buffer",
+      "remark": "Check CSMS event log for StatusNotification Available on boot"
+    },
+    {
+      "item": "3.3",
+      "message": "StatusNotification Preparing (EV plug, manual)",
+      "status": "WARN",
+      "detail": "EV_WAIT_SEC=0 — skipped",
+      "remark": "Connect physical EV to connector and rerun"
+    },
+    {
+      "item": "3.4",
+      "message": "Authorize (RFID card) → Accepted",
+      "status": "WARN",
+      "detail": "Depends on 3.3 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "3.5",
+      "message": "StartTransaction (manual, meterStart, idTag, connectorId)",
+      "status": "WARN",
+      "detail": "Depends on 3.3 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "3.6",
+      "message": "StatusNotification Charging (manual session)",
+      "status": "WARN",
+      "detail": "Depends on 3.3 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "3.7",
+      "message": "MeterValues (energy measurands, manual session)",
+      "status": "WARN",
+      "detail": "Depends on 3.3 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "3.8",
+      "message": "StopTransaction (manual card tap, reason=Local)",
+      "status": "WARN",
+      "detail": "Depends on 3.3 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "3.9",
+      "message": "StatusNotification Finishing (manual, EV still plugged)",
+      "status": "WARN",
+      "detail": "Depends on 3.3 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "3.10",
+      "message": "StatusNotification Available (manual, EV unplug)",
+      "status": "WARN",
+      "detail": "Depends on 3.3 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "3.11",
+      "message": "StatusNotification Preparing (EV plug, remote)",
+      "status": "WARN",
+      "detail": "EV_WAIT_SEC=0 — skipped",
+      "remark": "Connect physical EV to connector and rerun"
+    },
+    {
+      "item": "3.12",
+      "message": "RemoteStartTransaction → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "3.13",
+      "message": "StartTransaction (triggered by RemoteStart)",
+      "status": "WARN",
+      "detail": "charging_session_state not observed on MQTT in 30 s",
+      "remark": ""
+    },
+    {
+      "item": "3.14",
+      "message": "StatusNotification Charging (remote session)",
+      "status": "WARN",
+      "detail": "Charging status not observed on MQTT in 20 s",
+      "remark": ""
+    },
+    {
+      "item": "3.15",
+      "message": "MeterValues (energy measurands, remote session)",
+      "status": "WARN",
+      "detail": "MeterValues not observed on MQTT in 15 s",
+      "remark": ""
+    },
+    {
+      "item": "3.16",
+      "message": "RemoteStopTransaction → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "3.17",
+      "message": "StopTransaction (triggered by RemoteStop)",
+      "status": "WARN",
+      "detail": "session_state idle/finished not observed on MQTT in 25 s",
+      "remark": ""
+    },
+    {
+      "item": "3.18",
+      "message": "StatusNotification Finishing (remote, EV still plugged)",
+      "status": "WARN",
+      "detail": "Finishing not observed on MQTT in 15 s",
+      "remark": "Some implementations skip Finishing → go directly to Available"
+    },
+    {
+      "item": "3.19",
+      "message": "StatusNotification Available (remote, EV unplug)",
+      "status": "WARN",
+      "detail": "Available not observed on MQTT in 30 s — unplug EV",
+      "remark": ""
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\definecolor{passgreen}{RGB}{34,139,34}
+\definecolor{failred}{RGB}{200,0,0}
+\definecolor{warnorange}{RGB}{200,100,0}
+\definecolor{skipgray}{RGB}{120,120,120}
+
+\title{\textbf{MEA OCPP 1.6 Compliance Test Report}\\[0.3em]
+\large Section 2: Auto Charge Verification\\[0.3em]
+\normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
+\author{MEA-V2G Project --- Automated Test}
+\date{2026-06-08 15:32}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MEA OCPP 1.6 -- Section 2}
+\rhead{Page \thepage}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Test Configuration}
+\begin{tabular}{ll}
+\textbf{Device Under Test} & Vector vSECC.single Board \\
+\textbf{Device IP}         & 192.168.1.166 \\
+\textbf{OCPP Version}      & 1.6 (JSON) \\
+\textbf{CP ID}             & rddQC4000001 \\
+\textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
+\textbf{Connection}        & Direct (no proxy) \\
+\textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
+\textbf{EV Wait Timeout}   & 0 s per plug event \\
+\textbf{Test Date}         & 2026-06-08 08:32:01 UTC \\
+\textbf{Results file}      & tex/vsecc\_section2\_results.json \\
+\end{tabular}
+
+\subsection*{Test Architecture}
+The test runs directly against the MEA CSMS with no proxy.
+The test PC:
+\begin{itemize}
+  \item Calls the vSECC REST API (\texttt{http://192.168.1.166/api}) for configuration and status
+  \item Subscribes to the vSECC MQTT broker (\texttt{mqtt://192.168.1.166:1883}) to observe
+        StatusNotification, Authorize, Start/StopTransaction, and MeterValues events
+  \item Calls the MEA sandbox REST API (\texttt{https://ocppapi.measandbox.com/EV/})
+        with HTTP Digest authentication for ChangeConfiguration, RemoteStart, and RemoteStop
+\end{itemize}
+Items 2.2, 2.5, and 2.14 require a physical EV to be connected to the vSECC connector.
+If no EV is connected within the configured timeout, those items and all items that
+depend on an active charging session are recorded as \textbf{WARN}.
+
+\section{Section 2 Results}
+\textbf{Summary: 3 PASS \quad 0 FAIL \quad 18 WARN \quad 0 SKIP \quad (21 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\small\ttfamily\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 2.1 & \small ChangeConfiguration AutoCharge=False → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 2.2 & \small StatusNotification Preparing (AutoCharge=False) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.3 & \small StatusNotification Available (unplug) & Depends on 2.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.4 & \small ChangeConfiguration AutoCharge=True → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 2.5 & \small StatusNotification Preparing (AutoCharge=True) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.6 & \small Authorize (VID) → Accepted & Depends on 2.5 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.7 & \small StartTransaction (session started) & Depends on 2.5 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.8 & \small StatusNotification Charging & Depends on 2.5 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.9 & \small MeterValues (measurands during charging) & Depends on 2.5 (EV plug / active charging) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.10 & \small RemoteStopTransaction → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 2.11 & \small StopTransaction (sent after RemoteStop) & session\_state idle/finished not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.12 & \small StatusNotification Finishing & Finishing status not observed on MQTT{\newline\normalfont\footnotesize\itshape Some implementations go directly Available without Finishing} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.13 & \small StatusNotification Available (after RemoteStop/unplug) & Available status not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.14 & \small StatusNotification Preparing (Session 2) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.15 & \small Authorize (Session 2) → Accepted & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.16 & \small StartTransaction (Session 2) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.17 & \small StatusNotification Charging (Session 2) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.18 & \small MeterValues (Session 2) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.19 & \small StatusNotification SuspendedEV & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.20 & \small StopTransaction (reason=EVDisconnected) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.21 & \small StatusNotification Available (Session 2 end) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+
+\end{longtable}
+\normalsize
+
+\section{Notes on Failures and Warnings}
+
+\subsection*{FAIL items}
+\begin{itemize}
+  \item \textbf{2.1, 2.4} ChangeConfiguration AutoCharge:
+        The \texttt{AutoCharge} key is not a standard OCPP~1.6 configuration key.
+        The vSECC maps it internally to its OCPP~2.x variable
+        \texttt{tx\_ctrlr\_tx\_before\_accepted\_enabled}.
+        The MEA CSMS may return \texttt{Rejected} for non-standard keys.
+        If the CSMS returns \texttt{Accepted}, the item passes.
+\end{itemize}
+
+\subsection*{WARN items}
+\begin{itemize}
+  \item \textbf{2.2, 2.5, 2.14} StatusNotification Preparing:
+        Requires a physical EV to be plugged into the vSECC connector.
+        The test waits up to the configured \texttt{EV\_WAIT\_SEC} timeout.
+        If no EV was present during the test run, these are recorded as WARN.
+  \item \textbf{2.6--2.9, 2.11--2.13, 2.15--2.21}
+        All items that depend on an active charging session (Authorize,
+        StartTransaction, Charging, MeterValues, StopTransaction, etc.)
+        are WARN when no EV is connected.
+  \item \textbf{2.9, 2.18} MeterValues:
+        The MEA sandbox REST API does not expose TriggerMessage (HTTP~404).
+        MeterValues are observable only if the vSECC publishes them
+        autonomously to MQTT based on \texttt{MeterValueSampleInterval}.
+  \item \textbf{2.19} StatusNotification SuspendedEV:
+        Requires the EV to stop drawing current (BMS charge limit reached or
+        EV-side power management). Cannot be reliably triggered without a
+        real EV battery management system.
+  \item \textbf{2.20} StopTransaction (reason=EVDisconnected):
+        Requires the user to physically unplug the EV connector.
+\end{itemize}
+
+\section{Dependency Map}
+
+Items in Section~2 form two sequential charging session chains:
+
+\begin{tabular}{ll}
+\textbf{Session 1} & 2.2 $\rightarrow$ 2.3 (unplug) \\
+                   & 2.5 $\rightarrow$ 2.6 $\rightarrow$ 2.7 $\rightarrow$ 2.8
+                     $\rightarrow$ 2.9 $\rightarrow$ 2.10 (RemoteStop) \\
+                   & $\rightarrow$ 2.11 $\rightarrow$ 2.12 $\rightarrow$ 2.13 \\
+\textbf{Session 2} & 2.14 $\rightarrow$ 2.15 $\rightarrow$ 2.16 $\rightarrow$ 2.17
+                     $\rightarrow$ 2.18 $\rightarrow$ 2.19 \\
+                   & $\rightarrow$ 2.20 (EVDisconnect) $\rightarrow$ 2.21 \\
+\end{tabular}
+
+\medskip
+\noindent Items 2.1 and 2.4 (ChangeConfiguration) are independent of EV presence.
+
+\end{document}

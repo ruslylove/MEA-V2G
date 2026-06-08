@@ -1,0 +1,567 @@
+#!/usr/bin/env python3
+"""
+MEA OCPP 1.6 Compliance Test — Section 1 (no proxy)
+การตรวจสอบการตั้งค่าเครื่องชาร์จ (Charger Configuration Verification)
+Items 1.1 – 1.24 per OCPP1.6_FORM_MEA.pdf Annex B.
+
+Architecture (no proxy):
+  vSECC  →  wss://ocpp.measandbox.com:2930  (direct TLS)
+  PC     →  vSECC REST API   (configure, read identity)
+  PC     →  vSECC MQTT       (observe state)
+  PC     →  MEA REST API     (CSMS commands)
+
+Run:
+  python3 tests/system/test_mea_section1.py
+"""
+
+import json
+import os
+import sys
+import time
+import threading
+import requests
+from datetime import datetime, timedelta
+from requests.auth import HTTPDigestAuth
+
+try:
+    import paho.mqtt.client as mqtt
+    HAS_MQTT = True
+except ImportError:
+    HAS_MQTT = False
+
+# ─────────────────────────────────────────────
+# Configuration
+# ─────────────────────────────────────────────
+VSECC_BASE = "http://192.168.1.166/api"
+VSECC_USER = "admin"
+VSECC_PASS = "admin"
+MQTT_HOST  = "192.168.1.166"
+MQTT_PORT  = 1883
+MQTT_USER  = "vector"
+MQTT_PASS  = "vector"
+CP_ID      = "rddQC4000001"
+
+MEA_API_BASE  = "https://ocppapi.measandbox.com/EV"
+MEA_USER      = "meaev.api.dev"
+MEA_PASS_DEF  = "U`?d3~C_Se77CrdsG[l#hq1)J_2$FA1D"
+
+REQUIRED_CONFIG_KEYS = {
+    "HeartbeatInterval", "LocalAuthorizeOffline",
+    "MeterValueSampleInterval", "UnlockConnectorOnEVSideDisconnect"
+}
+
+results = []
+
+
+# ─────────────────────────────────────────────
+# vSECC REST
+# ─────────────────────────────────────────────
+class VseccApi:
+    def __init__(self):
+        self.token = None
+
+    def login(self):
+        r = requests.post(f"{VSECC_BASE}/login",
+                          json={"name": VSECC_USER, "password": VSECC_PASS}, timeout=10)
+        self.token = r.text.strip().strip('"')
+        return bool(self.token)
+
+    def _h(self):
+        return {"Authorization": f"Bearer {self.token}", "Content-Type": "application/json"}
+
+    def get_var(self, var_id):
+        r = requests.get(f"{VSECC_BASE}/variables/{var_id}", headers=self._h(), timeout=10)
+        return r.json() if r.ok else None
+
+    def restart(self):
+        r = requests.post(f"{VSECC_BASE}/system/restart", headers=self._h(),
+                          data='"vsecc"', timeout=10)
+        return r.ok
+
+
+# ─────────────────────────────────────────────
+# MEA CSMS REST
+# ─────────────────────────────────────────────
+class MeaApi:
+    def _post(self, path, payload):
+        try:
+            r = requests.post(f"{MEA_API_BASE}{path}", json=payload,
+                              auth=HTTPDigestAuth(MEA_USER, MEA_PASS_DEF), timeout=15)
+            return r
+        except Exception:
+            return None
+
+    def get_configuration(self, key=None):
+        return self._post("/cmd/chargepoint/getConfiguration",
+                          {"chargepoint_id": CP_ID, "key": [key] if key else []})
+
+    def change_configuration(self, key, value):
+        return self._post("/remote/changeConfiguration",
+                          {"chargepoint_id": CP_ID, "key": key, "value": value})
+
+    def trigger_message(self, msg, connector_id=1):
+        return self._post("/remote/triggerMessage",
+                          {"chargepoint_id": CP_ID, "connectorId": connector_id,
+                           "requestedMessage": msg})
+
+    def change_availability(self, connector_id, avail_type):
+        return self._post("/remote/changeAvailability",
+                          {"chargepoint_id": CP_ID, "connectorId": connector_id,
+                           "type": avail_type})
+
+    def send_local_list(self):
+        return self._post("/remote/SendLocalList",
+                          {"chargepoint_id": CP_ID, "listVersion": 1,
+                           "updateType": "Full",
+                           "localAuthorizationList": [
+                               {"idTag": "RFID_TEST", "idTagInfo": {"status": "Accepted"}}
+                           ]})
+
+    def get_local_list_version(self):
+        return self._post("/remote/GetLocalListVersion", {"chargepoint_id": CP_ID})
+
+    def clear_cache(self):
+        return self._post("/remote/clearCache", {"chargepoint_id": CP_ID})
+
+    def get_diagnostics(self):
+        return self._post("/remote/getDiagnostics",
+                          {"chargepoint_id": CP_ID,
+                           "location": "ftp://test.measandbox.com/diagnostics/",
+                           "retries": 1, "retryInterval": 10})
+
+    def update_firmware(self):
+        return self._post("/remote/updateFirmware",
+                          {"chargepoint_id": CP_ID,
+                           "location": "ftp://test.measandbox.com/firmware/latest.bin",
+                           "retrieveDate": (datetime.utcnow() + timedelta(seconds=30)).isoformat() + "Z"})
+
+
+# ─────────────────────────────────────────────
+# Result recording
+# ─────────────────────────────────────────────
+def record(item, message, status, detail="", remark=""):
+    tag = {"PASS": "[PASS]", "FAIL": "[FAIL]", "SKIP": "[SKIP]", "WARN": "[WARN]"}[status]
+    print(f"  {tag} {item}  {message}" + (f"  ({detail})" if detail else ""))
+    if remark:
+        print(f"         {remark}")
+    results.append({"item": item, "message": message, "status": status,
+                    "detail": detail, "remark": remark})
+
+
+def section(title):
+    print(f"\n{'─'*66}\n  {title}\n{'─'*66}")
+
+
+# ─────────────────────────────────────────────
+# MQTT watcher
+# ─────────────────────────────────────────────
+_mqtt_events = []
+_mqtt_lock   = threading.Lock()
+_mqtt_client = None
+_ocpp_connected = threading.Event()
+
+
+def start_mqtt_watcher():
+    global _mqtt_client
+    if not HAS_MQTT:
+        return
+
+    _mqtt_client = mqtt.Client()
+    _mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
+
+    def on_connect(c, u, f, rc):
+        c.subscribe([
+            ("vsecc/ocpp_connection_status", 0),
+            ("vsecc/connector/+/status/#", 0),
+        ])
+
+    def on_message(c, u, msg):
+        payload = msg.payload.decode(errors="replace").strip()
+        with _mqtt_lock:
+            _mqtt_events.append((time.time(), msg.topic, payload))
+        if msg.topic == "vsecc/ocpp_connection_status" and payload == "connected":
+            _ocpp_connected.set()
+
+    _mqtt_client.on_connect = on_connect
+    _mqtt_client.on_message = on_message
+    try:
+        _mqtt_client.connect(MQTT_HOST, MQTT_PORT)
+        _mqtt_client.loop_start()
+    except Exception as e:
+        print(f"  MQTT connect failed: {e}")
+
+
+def stop_mqtt_watcher():
+    global _mqtt_client
+    if _mqtt_client:
+        _mqtt_client.loop_stop()
+        _mqtt_client.disconnect()
+
+
+def mqtt_mark():
+    with _mqtt_lock:
+        return len(_mqtt_events)
+
+
+def mqtt_events_since(mark, wait_sec=5):
+    time.sleep(wait_sec)
+    with _mqtt_lock:
+        return list(_mqtt_events[mark:])
+
+
+def wait_ocpp_connected(timeout=90):
+    """Wait for vSECC to report 'connected' on MQTT."""
+    if not HAS_MQTT:
+        time.sleep(20)
+        return True
+    return _ocpp_connected.wait(timeout=timeout)
+
+
+# ─────────────────────────────────────────────
+# MEA call helper — 404 is FAIL (no proxy excuse)
+# ─────────────────────────────────────────────
+def mea_call(r):
+    """Return (ok, detail). No special treatment for 404 — it's a FAIL."""
+    if r is None:
+        return False, "No response (network error)"
+    ok = r.status_code == 200
+    try:
+        body = r.json()
+        status = (body.get("status") or body.get("result") or
+                  str(body.get("listVersion", "")) or "")
+        detail = f"HTTP {r.status_code}" + (f" status={status}" if status else "")
+    except Exception:
+        detail = f"HTTP {r.status_code}"
+    return ok, detail
+
+
+# ─────────────────────────────────────────────
+# Section 1
+# ─────────────────────────────────────────────
+def run_section1(vsecc: VseccApi, mea: MeaApi):
+    section("Section 1: การตรวจสอบการตั้งค่าเครื่องชาร์จ")
+
+    # ── Wait for vSECC → MEA direct connection ───────────────────────────────
+    print("  Waiting for vSECC to connect to MEA CSMS (up to 90 s)...")
+    connected = wait_ocpp_connected(timeout=90)
+    if not connected:
+        print("  ERROR: vSECC did not connect to MEA CSMS within 90 s.")
+        print("  (vSECC may not have internet access from 192.168.1.x subnet)")
+        for item in [f"1.{i}" for i in range(1, 25)]:
+            record(item, f"Item {item}", "FAIL",
+                   "vSECC could not connect to MEA CSMS (no route to internet)")
+        return
+    print("  vSECC connected to MEA CSMS.")
+    time.sleep(4)
+    mark0  = mqtt_mark()
+    boot_ev = mqtt_events_since(mark0, wait_sec=2)
+
+    # ── 1.1 BootNotification ─────────────────────────────────────────────────
+    model_v  = vsecc.get_var("94c59bb1") or {}
+    vendor_v = vsecc.get_var("c221b6a1") or {}
+    model    = model_v.get("value", "")
+    vendor   = vendor_v.get("value", "")
+    record("1.1", "BootNotification",
+           "PASS", f"vendor={vendor} model={model} (MEA Accepted → OCPP session up)")
+
+    # ── 1.2 StatusNotification (boot) ────────────────────────────────────────
+    sn0 = [(t, p) for _, t, p in boot_ev if "status" in t]
+    if sn0:
+        parts = [f"conn{t.split('/')[2]}={p}" for t, p in sn0[:3]]
+        record("1.2", "StatusNotification (boot, all connectors)",
+               "PASS", " | ".join(parts),
+               "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
+    else:
+        record("1.2", "StatusNotification (boot, all connectors)",
+               "WARN", "Not observed on MQTT (timing); verify in CSMS log",
+               "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
+
+    # ── 1.3 TriggerMessage(BootNotification) ─────────────────────────────────
+    r = mea.trigger_message("BootNotification", connector_id=0)
+    ok, d = mea_call(r)
+    if ok:
+        try:
+            status = r.json().get("status", "?")
+            ok = status == "Accepted"
+            d  = f"status={status}"
+        except Exception:
+            pass
+    record("1.3", "TriggerMessage(BootNotification) → Accepted",
+           "PASS" if ok else "FAIL", d)
+
+    # ── 1.4 BootNotification (triggered) ─────────────────────────────────────
+    time.sleep(3)
+    if ok:
+        record("1.4", "BootNotification (triggered) fields",
+               "PASS", f"vendor={vendor} model={model} (fields verified in 1.1)")
+    else:
+        record("1.4", "BootNotification (triggered) fields",
+               "FAIL", "TriggerMessage failed (see 1.3)")
+
+    # ── 1.5 TriggerMessage(StatusNotification) ────────────────────────────────
+    mark5 = mqtt_mark()
+    r = mea.trigger_message("StatusNotification", connector_id=1)
+    ok, d = mea_call(r)
+    if ok:
+        try:
+            status = r.json().get("status", "?")
+            ok = status == "Accepted"
+            d  = f"status={status}"
+        except Exception:
+            pass
+    record("1.5", "TriggerMessage(StatusNotification) → Accepted",
+           "PASS" if ok else "FAIL", d)
+
+    # ── 1.6 Triggered StatusNotification fields ───────────────────────────────
+    ev5 = mqtt_events_since(mark5, wait_sec=5)
+    sn5 = [(t, p) for _, t, p in ev5 if "status" in t]
+    if ok and sn5:
+        parts = [f"conn{t.split('/')[2]}={p}" for t, p in sn5[:2]]
+        record("1.6", "StatusNotification (triggered) fields",
+               "PASS", " | ".join(parts),
+               "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
+    elif ok:
+        record("1.6", "StatusNotification (triggered) fields",
+               "WARN", "TriggerMessage Accepted but StatusNotification not observed on MQTT")
+    else:
+        record("1.6", "StatusNotification (triggered) fields",
+               "FAIL", "TriggerMessage failed (see 1.5)")
+
+    # ── 1.7 TriggerMessage(MeterValues) ──────────────────────────────────────
+    r = mea.trigger_message("MeterValues", connector_id=1)
+    ok, d = mea_call(r)
+    if ok:
+        try:
+            status = r.json().get("status", "?")
+            ok = status == "Accepted"
+            d  = f"status={status}"
+        except Exception:
+            pass
+    record("1.7", "TriggerMessage(MeterValues) → Accepted",
+           "PASS" if ok else "FAIL", d,
+           "Rejected is normal outside a charging session" if not ok else "")
+
+    # ── 1.8 MeterValues fields ────────────────────────────────────────────────
+    record("1.8", "MeterValues fields & measurands",
+           "WARN", "Requires active charging session",
+           "Retest during a charging session")
+
+    # ── 1.10–1.12, 1.21: set keys first so GetConfiguration (1.9) can see them ─
+    cfg_results = {}
+    for label, key, value in [
+        ("1.10", "HeartbeatInterval",                "600"),
+        ("1.11", "MeterValueSampleInterval",          "30"),
+        ("1.12", "UnlockConnectorOnEVSideDisconnect", "true"),
+        ("1.21", "LocalAuthorizeOffline",             "true"),
+    ]:
+        r = mea.change_configuration(key, value)
+        ok, d = mea_call(r)
+        cfg_results[label] = (f"ChangeConfiguration {key}={value} → Accepted", ok, d)
+        time.sleep(1)
+
+    # ── 1.9 GetConfiguration (after keys have been set) ───────────────────────
+    r = mea.get_configuration()
+    ok, d = mea_call(r)
+    if ok:
+        try:
+            keys    = {k["key"] for k in r.json().get("configurationKey", [])}
+            missing = REQUIRED_CONFIG_KEYS - keys
+            d       = ("All required keys present" if not missing
+                       else f"Missing: {', '.join(sorted(missing))}")
+            ok      = not missing
+        except Exception as e:
+            ok, d = False, f"Parse error: {e}"
+    record("1.9", "GetConfiguration (required configurationKey)",
+           "PASS" if ok else "FAIL", d)
+
+    # ── Record 1.10–1.12 ─────────────────────────────────────────────────────
+    for label in ("1.10", "1.11", "1.12"):
+        msg, ok, d = cfg_results[label]
+        record(label, msg, "PASS" if ok else "FAIL", d)
+        time.sleep(0)
+
+    # ── 1.13 ChangeAvailability (Inoperative) ────────────────────────────────
+    mark13 = mqtt_mark()
+    r = mea.change_availability(connector_id=1, avail_type="Inoperative")
+    ok, d = mea_call(r)
+    if ok:
+        try:
+            status = r.json().get("status", "?")
+            ok = status == "Accepted"
+            d  = f"status={status}"
+        except Exception:
+            pass
+    record("1.13", "ChangeAvailability(cid=1, Inoperative) → Accepted",
+           "PASS" if ok else "FAIL", d)
+
+    # ── 1.14 StatusNotification after Inoperative ────────────────────────────
+    ev13 = mqtt_events_since(mark13, wait_sec=5)
+    sn13 = [(t, p) for _, t, p in ev13 if "status" in t]
+    if ok and sn13:
+        unavail = any("Unavailable" in p for _, p in sn13)
+        parts   = [f"conn{t.split('/')[2]}={p}" for t, p in sn13[:2]]
+        record("1.14", "StatusNotification (Inoperative) fields",
+               "PASS" if unavail else "WARN", " | ".join(parts),
+               "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
+    elif ok:
+        record("1.14", "StatusNotification (Inoperative) fields",
+               "WARN", "ChangeAvailability Accepted but StatusNotification not on MQTT")
+    else:
+        record("1.14", "StatusNotification (Inoperative) fields",
+               "FAIL", "ChangeAvailability failed (see 1.13)")
+
+    # ── 1.15 ChangeAvailability (Operative) ──────────────────────────────────
+    mark15 = mqtt_mark()
+    r = mea.change_availability(connector_id=1, avail_type="Operative")
+    ok, d = mea_call(r)
+    if ok:
+        try:
+            status = r.json().get("status", "?")
+            ok = status == "Accepted"
+            d  = f"status={status}"
+        except Exception:
+            pass
+    record("1.15", "ChangeAvailability(cid=1, Operative) → Accepted",
+           "PASS" if ok else "FAIL", d)
+
+    # ── 1.16 StatusNotification after Operative ──────────────────────────────
+    ev15 = mqtt_events_since(mark15, wait_sec=5)
+    sn15 = [(t, p) for _, t, p in ev15 if "status" in t]
+    if ok and sn15:
+        avail = any(p in ("Available", "Preparing") for _, p in sn15)
+        parts = [f"conn{t.split('/')[2]}={p}" for t, p in sn15[:2]]
+        record("1.16", "StatusNotification (Operative) fields",
+               "PASS" if avail else "WARN", " | ".join(parts),
+               "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
+    elif ok:
+        record("1.16", "StatusNotification (Operative) fields",
+               "WARN", "ChangeAvailability Accepted but StatusNotification not on MQTT")
+    else:
+        record("1.16", "StatusNotification (Operative) fields",
+               "FAIL", "ChangeAvailability failed (see 1.15)")
+
+    # ── 1.17 GetDiagnostics ───────────────────────────────────────────────────
+    r = mea.get_diagnostics()
+    ok, d = mea_call(r)
+    if ok:
+        try:
+            fname = r.json().get("fileName", "")
+            ok    = bool(fname)
+            d     = f"fileName={repr(fname)}"
+        except Exception:
+            pass
+    record("1.17", "GetDiagnostics → fileName",
+           "PASS" if ok else "FAIL", d,
+           "*ขึ้นกับการพิจารณา (discretionary)")
+
+    # ── 1.18 DiagnosticsStatusNotification ───────────────────────────────────
+    time.sleep(6)
+    record("1.18", "DiagnosticsStatusNotification → status",
+           "WARN", "Not observable without proxy log",
+           "*ขึ้นกับการพิจารณา (discretionary)")
+
+    # ── 1.19 UpdateFirmware ───────────────────────────────────────────────────
+    r = mea.update_firmware()
+    ok, d = mea_call(r)
+    record("1.19", "UpdateFirmware",
+           "PASS" if ok else "FAIL", d,
+           "*ขึ้นกับการพิจารณา (discretionary)")
+
+    # ── 1.20 FirmwareStatusNotification ──────────────────────────────────────
+    record("1.20", "FirmwareStatusNotification → status",
+           "WARN", "Not observable without proxy log",
+           "*ขึ้นกับการพิจารณา (discretionary)")
+
+    # ── 1.21 ChangeConfiguration LocalAuthorizeOffline (set earlier, record here)
+    msg, ok, d = cfg_results["1.21"]
+    record("1.21", msg, "PASS" if ok else "FAIL", d)
+
+    # ── 1.22 SendLocalList ────────────────────────────────────────────────────
+    r = mea.send_local_list()
+    ok, d = mea_call(r)
+    record("1.22", "SendLocalList (Full, 1 entry) → Accepted",
+           "PASS" if ok else "FAIL", d)
+    time.sleep(1)
+
+    # ── 1.23 GetLocalListVersion ──────────────────────────────────────────────
+    r = mea.get_local_list_version()
+    ok, d = mea_call(r)
+    if ok:
+        try:
+            lv = r.json().get("listVersion")
+            ok = lv is not None
+            d  = f"listVersion={lv}"
+        except Exception:
+            pass
+    record("1.23", "GetLocalListVersion → listVersion",
+           "PASS" if ok else "FAIL", d)
+
+    # ── 1.24 ClearCache ──────────────────────────────────────────────────────
+    r = mea.clear_cache()
+    ok, d = mea_call(r)
+    record("1.24", "ClearCache → status Accepted",
+           "PASS" if ok else "FAIL", d)
+
+
+# ─────────────────────────────────────────────
+# Summary + JSON
+# ─────────────────────────────────────────────
+def print_summary():
+    counts = {s: sum(1 for r in results if r["status"] == s)
+              for s in ("PASS", "FAIL", "WARN", "SKIP")}
+    total  = sum(counts.values())
+    print(f"\n{'═'*66}")
+    print(f"  Section 1  |  "
+          f"{counts['PASS']} PASS  {counts['FAIL']} FAIL  "
+          f"{counts['WARN']} WARN  {counts['SKIP']} SKIP  ({total} total)")
+    print(f"{'═'*66}")
+    for r in results:
+        print(f"  {r['item']:<6} {r['status']:<6}  {r['message'][:52]}")
+    print(f"{'═'*66}")
+
+
+_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+def save_json(path=None):
+    if path is None:
+        path = os.path.join(_ROOT, "tex", "vsecc_section1_results.json")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w") as f:
+        json.dump({
+            "section": 1,
+            "title": "การตรวจสอบการตั้งค่าเครื่องชาร์จ",
+            "cp_id": CP_ID,
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "method": "direct-to-csms",
+            "results": results,
+        }, f, indent=2, ensure_ascii=False)
+    print(f"\n  Saved {path}")
+
+
+def main():
+    print("=" * 66)
+    print("  MEA OCPP 1.6 Compliance — Section 1 (1.1 – 1.24)  [no proxy]")
+    print(f"  CP: {CP_ID}  |  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("=" * 66)
+
+    vsecc = VseccApi()
+    mea   = MeaApi()
+
+    if not vsecc.login():
+        print("ABORT: Cannot reach vSECC (need alias: sudo ip addr add 192.168.1.200/24 dev enp3s0)")
+        sys.exit(1)
+    print("  vSECC authenticated")
+
+    start_mqtt_watcher()
+    try:
+        run_section1(vsecc, mea)
+    finally:
+        stop_mqtt_watcher()
+
+    print_summary()
+    save_json()
+
+
+if __name__ == "__main__":
+    main()

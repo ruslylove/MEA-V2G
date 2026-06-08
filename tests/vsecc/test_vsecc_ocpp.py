@@ -23,10 +23,10 @@ except ImportError:
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
-VSECC_BASE     = "http://192.168.1.166/api"
+VSECC_BASE     = "http://192.168.111.166/api"
 VSECC_USER     = "admin"
 VSECC_PASS     = "admin"
-MQTT_HOST      = "192.168.1.166"
+MQTT_HOST      = "192.168.111.166"
 MQTT_PORT      = 1883
 MQTT_USER      = "vector"
 MQTT_PASS      = "vector"
@@ -34,7 +34,7 @@ MQTT_PASS      = "vector"
 CP_ID          = "rddQC4000001"
 # vSECC connects to the local WS proxy on the PC; proxy forwards to MEA CSMS
 # This avoids the need for internet routing/NAT on the PC's Ethernet interface.
-CSMS_BASE_URL  = "ws://192.168.1.100:9000/EV/Srv/JSON/1.6"
+CSMS_BASE_URL  = "ws://192.168.111.185:9000/EV/Srv/JSON/1.6"
 CSMS_SEC_PROFILE = "0"  # 0 = no TLS for ws://
 
 MEA_API_BASE   = "https://ocppapi.measandbox.com/EV"

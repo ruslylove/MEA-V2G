@@ -1,0 +1,177 @@
+{
+  "section": 1,
+  "title": "การตรวจสอบการตั้งค่าเครื่องชาร์จ",
+  "cp_id": "rddQC4000001",
+  "timestamp": "2026-06-08T06:04:00.611025Z",
+  "method": "direct-to-csms",
+  "results": [
+    {
+      "item": "1.1",
+      "message": "BootNotification",
+      "status": "PASS",
+      "detail": "vendor=KMUTNB2 model=KMUTNB2 (MEA Accepted → OCPP session up)",
+      "remark": ""
+    },
+    {
+      "item": "1.2",
+      "message": "StatusNotification (boot, all connectors)",
+      "status": "WARN",
+      "detail": "Not observed on MQTT (timing); verify in CSMS log",
+      "remark": "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*"
+    },
+    {
+      "item": "1.3",
+      "message": "TriggerMessage(BootNotification) → Accepted",
+      "status": "FAIL",
+      "detail": "HTTP 404",
+      "remark": ""
+    },
+    {
+      "item": "1.4",
+      "message": "BootNotification (triggered) fields",
+      "status": "FAIL",
+      "detail": "TriggerMessage failed (see 1.3)",
+      "remark": ""
+    },
+    {
+      "item": "1.5",
+      "message": "TriggerMessage(StatusNotification) → Accepted",
+      "status": "FAIL",
+      "detail": "HTTP 404",
+      "remark": ""
+    },
+    {
+      "item": "1.6",
+      "message": "StatusNotification (triggered) fields",
+      "status": "FAIL",
+      "detail": "TriggerMessage failed (see 1.5)",
+      "remark": ""
+    },
+    {
+      "item": "1.7",
+      "message": "TriggerMessage(MeterValues) → Accepted",
+      "status": "FAIL",
+      "detail": "HTTP 404",
+      "remark": "Rejected is normal outside a charging session"
+    },
+    {
+      "item": "1.8",
+      "message": "MeterValues fields & measurands",
+      "status": "WARN",
+      "detail": "Requires active charging session",
+      "remark": "Retest during a charging session"
+    },
+    {
+      "item": "1.9",
+      "message": "GetConfiguration (required configurationKey)",
+      "status": "FAIL",
+      "detail": "Missing: HeartbeatInterval, LocalAuthorizeOffline, MeterValueSampleInterval, UnlockConnectorOnEVSideDisconnect",
+      "remark": ""
+    },
+    {
+      "item": "1.10",
+      "message": "ChangeConfiguration HeartbeatInterval=600 → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "1.11",
+      "message": "ChangeConfiguration MeterValueSampleInterval=30 → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "1.12",
+      "message": "ChangeConfiguration UnlockConnectorOnEVSideDisconnect=true → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "1.13",
+      "message": "ChangeAvailability(cid=1, Inoperative) → Accepted",
+      "status": "FAIL",
+      "detail": "HTTP 404",
+      "remark": ""
+    },
+    {
+      "item": "1.14",
+      "message": "StatusNotification (Inoperative) fields",
+      "status": "FAIL",
+      "detail": "ChangeAvailability failed (see 1.13)",
+      "remark": ""
+    },
+    {
+      "item": "1.15",
+      "message": "ChangeAvailability(cid=1, Operative) → Accepted",
+      "status": "FAIL",
+      "detail": "HTTP 404",
+      "remark": ""
+    },
+    {
+      "item": "1.16",
+      "message": "StatusNotification (Operative) fields",
+      "status": "FAIL",
+      "detail": "ChangeAvailability failed (see 1.15)",
+      "remark": ""
+    },
+    {
+      "item": "1.17",
+      "message": "GetDiagnostics → fileName",
+      "status": "FAIL",
+      "detail": "HTTP 404",
+      "remark": "*ขึ้นกับการพิจารณา (discretionary)"
+    },
+    {
+      "item": "1.18",
+      "message": "DiagnosticsStatusNotification → status",
+      "status": "WARN",
+      "detail": "Not observable without proxy log",
+      "remark": "*ขึ้นกับการพิจารณา (discretionary)"
+    },
+    {
+      "item": "1.19",
+      "message": "UpdateFirmware",
+      "status": "FAIL",
+      "detail": "HTTP 404",
+      "remark": "*ขึ้นกับการพิจารณา (discretionary)"
+    },
+    {
+      "item": "1.20",
+      "message": "FirmwareStatusNotification → status",
+      "status": "WARN",
+      "detail": "Not observable without proxy log",
+      "remark": "*ขึ้นกับการพิจารณา (discretionary)"
+    },
+    {
+      "item": "1.21",
+      "message": "ChangeConfiguration LocalAuthorizeOffline=true → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "1.22",
+      "message": "SendLocalList (Full, 1 entry) → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "1.23",
+      "message": "GetLocalListVersion → listVersion",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "1.24",
+      "message": "ClearCache → status Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    }
+  ]
+}

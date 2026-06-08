@@ -1,0 +1,157 @@
+{
+  "section": 2,
+  "title": "การตรวจสอบ Auto Charge",
+  "cp_id": "rddQC4000001",
+  "timestamp": "2026-06-08T08:32:01.312977Z",
+  "method": "direct-to-csms",
+  "ev_wait_sec": 0,
+  "results": [
+    {
+      "item": "2.1",
+      "message": "ChangeConfiguration AutoCharge=False → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "2.2",
+      "message": "StatusNotification Preparing (AutoCharge=False)",
+      "status": "WARN",
+      "detail": "EV_WAIT_SEC=0 — skipped",
+      "remark": "Connect physical EV to connector and rerun"
+    },
+    {
+      "item": "2.3",
+      "message": "StatusNotification Available (unplug)",
+      "status": "WARN",
+      "detail": "Depends on 2.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.4",
+      "message": "ChangeConfiguration AutoCharge=True → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "2.5",
+      "message": "StatusNotification Preparing (AutoCharge=True)",
+      "status": "WARN",
+      "detail": "EV_WAIT_SEC=0 — skipped",
+      "remark": "Connect physical EV to connector and rerun"
+    },
+    {
+      "item": "2.6",
+      "message": "Authorize (VID) → Accepted",
+      "status": "WARN",
+      "detail": "Depends on 2.5 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.7",
+      "message": "StartTransaction (session started)",
+      "status": "WARN",
+      "detail": "Depends on 2.5 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.8",
+      "message": "StatusNotification Charging",
+      "status": "WARN",
+      "detail": "Depends on 2.5 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.9",
+      "message": "MeterValues (measurands during charging)",
+      "status": "WARN",
+      "detail": "Depends on 2.5 (EV plug / active charging)",
+      "remark": ""
+    },
+    {
+      "item": "2.10",
+      "message": "RemoteStopTransaction → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "2.11",
+      "message": "StopTransaction (sent after RemoteStop)",
+      "status": "WARN",
+      "detail": "session_state idle/finished not observed on MQTT in 30 s",
+      "remark": ""
+    },
+    {
+      "item": "2.12",
+      "message": "StatusNotification Finishing",
+      "status": "WARN",
+      "detail": "Finishing status not observed on MQTT",
+      "remark": "Some implementations go directly Available without Finishing"
+    },
+    {
+      "item": "2.13",
+      "message": "StatusNotification Available (after RemoteStop/unplug)",
+      "status": "WARN",
+      "detail": "Available status not observed on MQTT in 30 s",
+      "remark": ""
+    },
+    {
+      "item": "2.14",
+      "message": "StatusNotification Preparing (Session 2)",
+      "status": "WARN",
+      "detail": "EV_WAIT_SEC=0 — skipped",
+      "remark": "Connect physical EV to connector and rerun"
+    },
+    {
+      "item": "2.15",
+      "message": "Authorize (Session 2) → Accepted",
+      "status": "WARN",
+      "detail": "Depends on 2.14 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.16",
+      "message": "StartTransaction (Session 2)",
+      "status": "WARN",
+      "detail": "Depends on 2.14 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.17",
+      "message": "StatusNotification Charging (Session 2)",
+      "status": "WARN",
+      "detail": "Depends on 2.14 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.18",
+      "message": "MeterValues (Session 2)",
+      "status": "WARN",
+      "detail": "Depends on 2.14 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.19",
+      "message": "StatusNotification SuspendedEV",
+      "status": "WARN",
+      "detail": "Depends on 2.14 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.20",
+      "message": "StopTransaction (reason=EVDisconnected)",
+      "status": "WARN",
+      "detail": "Depends on 2.14 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "2.21",
+      "message": "StatusNotification Available (Session 2 end)",
+      "status": "WARN",
+      "detail": "Depends on 2.14 (EV plug)",
+      "remark": ""
+    }
+  ]
+}
