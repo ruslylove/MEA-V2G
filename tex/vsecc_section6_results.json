@@ -1,0 +1,193 @@
+{
+  "section": 6,
+  "title": "การตรวจสอบ Charging Profile",
+  "cp_id": "rddQC4000001",
+  "timestamp": "2026-06-09T07:27:04.593193Z",
+  "method": "direct-to-csms",
+  "ev_wait_sec": 60,
+  "local_stop_wait_sec": 30,
+  "results": [
+    {
+      "item": "6.1",
+      "message": "StatusNotification Available (initial state)",
+      "status": "WARN",
+      "detail": "Available status not in recent MQTT buffer",
+      "remark": "Check CSMS event log for StatusNotification Available"
+    },
+    {
+      "item": "6.2",
+      "message": "StatusNotification Preparing (EV plug, Flow 1)",
+      "status": "WARN",
+      "detail": "No Preparing event in 60s — no EV connected",
+      "remark": "Connect physical EV and rerun for full Section 6 coverage"
+    },
+    {
+      "item": "6.3",
+      "message": "Authorize (RFID card) → Accepted",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.4",
+      "message": "StartTransaction (manual RFID, meterStart, idTag, connectorId)",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.5",
+      "message": "StatusNotification Charging (Flow 1)",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.6",
+      "message": "MeterValues (Flow 1, before SetChargingProfile)",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.7",
+      "message": "SetChargingProfile (TxProfile, 5 kW, stackLevel=1) → Accepted",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.8",
+      "message": "MeterValues (Flow 1, after first SetChargingProfile)",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.9",
+      "message": "SetChargingProfile (update, 7.4 kW, stackLevel=1) → Accepted",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.10",
+      "message": "MeterValues (Flow 1, after second SetChargingProfile)",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.11",
+      "message": "StopTransaction (manual card tap, reason=Local)",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.12",
+      "message": "StatusNotification Finishing (Flow 1, EV still plugged)",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.13",
+      "message": "StatusNotification Available (Flow 1, EV unplug)",
+      "status": "WARN",
+      "detail": "Depends on 6.2 (EV plug)",
+      "remark": ""
+    },
+    {
+      "item": "6.14",
+      "message": "StatusNotification Preparing (EV plug, Flow 2)",
+      "status": "WARN",
+      "detail": "No Preparing event in 60s — no EV connected",
+      "remark": "Connect physical EV and rerun for full Section 6 coverage"
+    },
+    {
+      "item": "6.15",
+      "message": "RemoteStartTransaction → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "6.16",
+      "message": "StartTransaction (triggered by RemoteStart)",
+      "status": "WARN",
+      "detail": "charging_session_state not observed on MQTT in 30 s",
+      "remark": ""
+    },
+    {
+      "item": "6.17",
+      "message": "StatusNotification Charging (Flow 2)",
+      "status": "WARN",
+      "detail": "Charging status not observed on MQTT in 20 s",
+      "remark": ""
+    },
+    {
+      "item": "6.18",
+      "message": "MeterValues (Flow 2, before SetChargingProfile)",
+      "status": "WARN",
+      "detail": "MeterValues not observed on MQTT in 15 s",
+      "remark": ""
+    },
+    {
+      "item": "6.19",
+      "message": "SetChargingProfile (Flow 2, TxProfile 5 kW) → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "6.20",
+      "message": "MeterValues (Flow 2, after first SetChargingProfile)",
+      "status": "WARN",
+      "detail": "MeterValues not observed on MQTT in 15 s",
+      "remark": ""
+    },
+    {
+      "item": "6.21",
+      "message": "SetChargingProfile (Flow 2, update 7.4 kW) → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "6.22",
+      "message": "MeterValues (Flow 2, after second SetChargingProfile)",
+      "status": "WARN",
+      "detail": "MeterValues not observed on MQTT in 15 s",
+      "remark": ""
+    },
+    {
+      "item": "6.23",
+      "message": "RemoteStopTransaction → Accepted",
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": ""
+    },
+    {
+      "item": "6.24",
+      "message": "StopTransaction (triggered by RemoteStop)",
+      "status": "WARN",
+      "detail": "session_state idle/finished not observed on MQTT in 25 s",
+      "remark": ""
+    },
+    {
+      "item": "6.25",
+      "message": "StatusNotification Finishing (Flow 2, EV still plugged)",
+      "status": "WARN",
+      "detail": "Finishing not observed on MQTT in 15 s",
+      "remark": "Some implementations skip Finishing → go directly to Available"
+    },
+    {
+      "item": "6.26",
+      "message": "StatusNotification Available (Flow 2, EV unplug)",
+      "status": "WARN",
+      "detail": "Available not observed on MQTT in 30 s — unplug EV",
+      "remark": ""
+    }
+  ]
+}

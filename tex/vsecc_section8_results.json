@@ -1,0 +1,360 @@
+{
+  "section": 8,
+  "title": "Dual Connector Verification",
+  "cp_id": "rddQC4000001",
+  "timestamp": "2026-06-09T07:15:33.122742Z",
+  "method": "direct-to-csms",
+  "note": "All items SKIP — vSECC.single has one connector; dual-connector scenarios N/A",
+  "results": [
+    {
+      "item": "8.1.1",
+      "message": "Concurrent RemoteStart — Connector 1 Accepted",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.2",
+      "message": "Concurrent RemoteStart — Connector 2 Accepted",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.3",
+      "message": "StartTransaction — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.4",
+      "message": "StartTransaction — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.5",
+      "message": "StatusNotification Charging — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.6",
+      "message": "StatusNotification Charging — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.7",
+      "message": "MeterValues — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.8",
+      "message": "MeterValues — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.9",
+      "message": "RemoteStop — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.10",
+      "message": "RemoteStop — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.11",
+      "message": "StopTransaction — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.12",
+      "message": "StopTransaction — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.13",
+      "message": "StatusNotification Finishing — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.14",
+      "message": "StatusNotification Finishing — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.15",
+      "message": "StatusNotification Available — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.16",
+      "message": "StatusNotification Available — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.17",
+      "message": "Transaction isolation — Connector 1 not affected by Connector 2 stop",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.1.18",
+      "message": "Transaction isolation — Connector 2 not affected by Connector 1 stop",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.1",
+      "message": "Emergency Stop signal sent",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.2",
+      "message": "RemoteStop broadcast — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.3",
+      "message": "RemoteStop broadcast — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.4",
+      "message": "StopTransaction (EmergencyStop reason) — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.5",
+      "message": "StopTransaction (EmergencyStop reason) — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.6",
+      "message": "StatusNotification Faulted — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.7",
+      "message": "StatusNotification Faulted — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.8",
+      "message": "StatusNotification Unavailable (after fault clear) — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.9",
+      "message": "StatusNotification Unavailable (after fault clear) — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.10",
+      "message": "ChangeAvailability Operative — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.11",
+      "message": "ChangeAvailability Operative — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.12",
+      "message": "StatusNotification Available — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.13",
+      "message": "StatusNotification Available — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.14",
+      "message": "New session possible after emergency stop — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.15",
+      "message": "New session possible after emergency stop — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.2.16",
+      "message": "Shared emergency stop clears both connectors simultaneously",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.1",
+      "message": "Power loss event detected",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.2",
+      "message": "Active session aborted — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.3",
+      "message": "Active session aborted — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.4",
+      "message": "StopTransaction (PowerLoss reason) — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.5",
+      "message": "StopTransaction (PowerLoss reason) — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.6",
+      "message": "vSECC power loss BootNotification after restore",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.7",
+      "message": "StatusNotification Available after power restore — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.8",
+      "message": "StatusNotification Available after power restore — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.9",
+      "message": "Session data integrity after power restore — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.10",
+      "message": "Session data integrity after power restore — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.11",
+      "message": "RemoteStart accepted after power restore — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.12",
+      "message": "RemoteStart accepted after power restore — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.13",
+      "message": "StartTransaction after power restore — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.14",
+      "message": "StartTransaction after power restore — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.15",
+      "message": "StatusNotification Charging after power restore — Connector 1",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    },
+    {
+      "item": "8.3.16",
+      "message": "StatusNotification Charging after power restore — Connector 2",
+      "status": "SKIP",
+      "detail": "vSECC.single has one connector — dual-connector scenarios N/A",
+      "remark": ""
+    }
+  ]
+}

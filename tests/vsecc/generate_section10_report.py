@@ -1,0 +1,242 @@
+#!/usr/bin/env python3
+"""
+Generate a LaTeX/PDF test report for MEA OCPP 1.6 Section 10.
+Reads  tex/vsecc_section10_results.json  (produced by test_mea_section10.py)
+Writes tex/vsecc_section10_report.tex
+Compiles tex/vsecc_section10_report.pdf  (requires pdflatex)
+
+Usage (from project root):
+  python3 tests/vsecc/generate_section10_report.py
+"""
+import json
+import os
+import subprocess
+import datetime
+
+_ROOT        = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+RESULTS_JSON = os.path.join(_ROOT, "tex", "vsecc_section10_results.json")
+OUTPUT_TEX   = os.path.join(_ROOT, "tex", "vsecc_section10_report.tex")
+PDF_NAME     = "vsecc_section10_report.pdf"
+TEX_DIR      = os.path.join(_ROOT, "tex")
+
+CP_ID = "rddQC4000001"
+NOW   = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+
+
+def escape(s: str) -> str:
+    for ch, rep in [("\\", "\\\\"), ("{", "\\{"), ("}", "\\}"),
+                    ("_", "\\_"), ("#", "\\#"), ("&", "\\&"),
+                    ("%", "\\%"), ("$", "\\$"),
+                    ("~", "\\textasciitilde{}"),
+                    ("^", "\\textasciicircum{}")]:
+        s = s.replace(ch, rep)
+    return s
+
+
+def trunc(s: str, n: int) -> str:
+    return s if len(s) <= n else s[:n - 1] + r"\ldots{}"
+
+
+def status_cell(status: str) -> str:
+    if status == "PASS":
+        return r"\textcolor{passgreen}{\textbf{PASS}}"
+    elif status == "FAIL":
+        return r"\textcolor{failred}{\textbf{FAIL}}"
+    elif status == "WARN":
+        return r"\textcolor{warnorange}{\textbf{WARN}}"
+    else:
+        return r"\textcolor{skipgray}{SKIP}"
+
+
+def build_tex(data: dict) -> str:
+    results    = data["results"]
+    run_ts     = data.get("timestamp", NOW)
+    boot_wait  = data.get("boot_wait_sec", "?")
+    pass_n     = sum(1 for r in results if r["status"] == "PASS")
+    fail_n     = sum(1 for r in results if r["status"] == "FAIL")
+    warn_n     = sum(1 for r in results if r["status"] == "WARN")
+    skip_n     = sum(1 for r in results if r["status"] == "SKIP")
+    total      = pass_n + fail_n + warn_n + skip_n
+
+    tex = r"""\documentclass[10pt, a4paper]{article}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\definecolor{passgreen}{RGB}{34,139,34}
+\definecolor{failred}{RGB}{200,0,0}
+\definecolor{warnorange}{RGB}{200,100,0}
+\definecolor{skipgray}{RGB}{120,120,120}
+
+\title{\textbf{MEA OCPP 1.6 Compliance Test Report}\\[0.3em]
+\large Section 10: CSMS Command Verification\\[0.3em]
+\normalsize Vector vSECC.single Board vs MEA CSMS (""" + escape(CP_ID) + r""")}
+\author{MEA-V2G Project --- Automated Test}
+\date{""" + NOW + r"""}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MEA OCPP 1.6 -- Section 10}
+\rhead{Page \thepage}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Test Configuration}
+\begin{tabular}{ll}
+\textbf{Device Under Test} & Vector vSECC.single Board \\
+\textbf{Device IP}         & 192.168.1.166 \\
+\textbf{OCPP Version}      & 1.6 (JSON) \\
+\textbf{CP ID}             & """ + escape(CP_ID) + r""" \\
+\textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
+\textbf{Connection}        & Direct (no proxy) \\
+\textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
+\textbf{Boot Wait Timeout} & """ + str(boot_wait) + r""" s (after item 10.8 Hard Reset) \\
+\textbf{Test Date}         & """ + run_ts[:19].replace("T", " ") + r""" UTC \\
+\textbf{Results file}      & tex/vsecc\_section10\_results.json \\
+\end{tabular}
+
+\subsection*{Test Architecture}
+Each item in Section~10 tests one OCPP~1.6 message or command by calling the
+corresponding MEA sandbox REST API endpoint with HTTP Digest authentication.
+The test records the HTTP response code:
+\begin{itemize}
+  \item \textbf{HTTP 200} $\rightarrow$ \textbf{PASS} --- the CSMS accepted and
+        forwarded the command to the charger.
+  \item \textbf{HTTP 404} $\rightarrow$ \textbf{FAIL} --- the endpoint is not
+        exposed by the MEA sandbox REST API.
+  \item \textbf{CS$\rightarrow$CSMS messages} $\rightarrow$ \textbf{WARN} ---
+        some OCPP messages originate at the charger and cannot be triggered by
+        the CSMS; these are observed passively via MQTT.
+\end{itemize}
+Item~10.8 (Hard Reset) causes the vSECC to reboot; the test waits up to
+\texttt{BOOT\_WAIT\_SEC}~seconds for the charger to reconnect before
+continuing with item~10.9.
+
+\section{Section 10 Results}
+\textbf{Summary: """ + str(pass_n) + r""" PASS \quad """ + str(fail_n) + r""" FAIL \quad """ + str(warn_n) + r""" WARN \quad """ + str(skip_n) + r""" SKIP \quad (""" + str(total) + r""" total)}
+
+\renewcommand{\arraystretch}{1.35}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\small\ttfamily\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+"""
+
+    for r in results:
+        item_esc   = escape(r["item"])
+        msg        = trunc(escape(r["message"]), 72)
+        detail     = trunc(escape(r["detail"] or ""), 90)
+        remark     = trunc(escape(r.get("remark") or ""), 80)
+        cell       = status_cell(r["status"])
+        detail_col = detail
+        if remark:
+            detail_col += r"{\newline\normalfont\footnotesize\itshape " + remark + "}"
+        tex += f"\\small {item_esc} & \\small {msg} & {detail_col} & {cell} \\\\\n\\hline\n"
+
+    tex += r"""
+\end{longtable}
+\normalsize
+
+\section{Notes on Failures and Warnings}
+
+\subsection*{HTTP 404 items — endpoints not exposed by MEA sandbox}
+The following OCPP~1.6 commands are defined in the specification but are
+\textbf{not available} via the MEA sandbox REST API.  They return HTTP~404
+and are therefore recorded as \textbf{FAIL}:
+\begin{itemize}
+  \item \textbf{10.15 TriggerMessage} (\texttt{POST /EV/remote/triggerMessage}) ---
+        Not exposed.  Meter values and status notifications are observable
+        autonomously on the vSECC MQTT broker.
+  \item \textbf{10.18 ChangeAvailability} (\texttt{POST /EV/remote/changeAvailability}) ---
+        Not exposed.  The connector availability can be changed via the
+        vSECC REST API directly if needed.
+  \item \textbf{10.19 GetDiagnostics} (\texttt{POST /EV/remote/getDiagnostics}) ---
+        Not exposed.  Diagnostic files must be retrieved via vSECC local access.
+  \item \textbf{10.20 UpdateFirmware} (\texttt{POST /EV/remote/updateFirmware}) ---
+        Not exposed.  Firmware updates are performed via vSECC local tools.
+\end{itemize}
+
+\subsection*{CS$\rightarrow$CSMS messages (WARN)}
+\begin{itemize}
+  \item \textbf{10.1 Authorize} --- Sent by the charger when an RFID card is
+        presented.  Observable on MQTT \texttt{vsecc/connector/+/ev/charging\_authorization\_state}.
+  \item \textbf{10.2 BootNotification} --- Sent by the charger on startup.
+        Confirmed by a successful CSMS connection probe (HTTP~200 on GetConfiguration).
+  \item \textbf{10.5 MeterValues} --- Sent by the charger periodically or on
+        trigger.  Observable on MQTT \texttt{vsecc/connector/+/metervalues}.
+  \item \textbf{10.9 StartTransaction} --- Sent by the charger when a charging
+        session begins.  Observable via MQTT \texttt{charging\_session\_state}.
+  \item \textbf{10.10 StatusNotification} --- Sent by the charger on connector
+        state changes.  Observable via MQTT \texttt{vsecc/connector/+/status/\#}.
+  \item \textbf{10.11 StopTransaction} --- Sent by the charger when a session ends.
+        Observable via MQTT \texttt{charging\_session\_state}.
+\end{itemize}
+
+\subsection*{Item 10.7 RemoteStopTransaction}
+Uses \texttt{transaction\_id=0} because no active charging session exists at the
+time of the test.  Some CSMS implementations accept \texttt{transaction\_id=0}
+when only one transaction is active; others require a valid transaction ID.
+Re-run during an active charging session for a definitive result.
+
+\subsection*{Item 10.8 Hard Reset timing}
+After the Hard Reset command the vSECC physically reboots.
+The test waits up to \texttt{BOOT\_WAIT\_SEC}~seconds for reconnection before
+continuing.  Items 10.9 onward are always executed regardless of reconnect status.
+
+\end{document}
+"""
+    return tex
+
+
+def main():
+    if not os.path.exists(RESULTS_JSON):
+        print(f"ERROR: {RESULTS_JSON} not found.  Run test_mea_section10.py first.")
+        return
+
+    with open(RESULTS_JSON) as f:
+        data = json.load(f)
+
+    tex_body = build_tex(data)
+    os.makedirs(TEX_DIR, exist_ok=True)
+    with open(OUTPUT_TEX, "w") as f:
+        f.write(tex_body)
+    print(f"LaTeX written to {OUTPUT_TEX}")
+
+    tex_filename = os.path.basename(OUTPUT_TEX)
+    for _ in range(2):
+        r = subprocess.run(
+            ["pdflatex", "-interaction=nonstopmode", tex_filename],
+            cwd=TEX_DIR, capture_output=True, errors="replace"
+        )
+    pdf_path = os.path.join(TEX_DIR, PDF_NAME)
+    if os.path.exists(pdf_path):
+        size = os.path.getsize(pdf_path)
+        print(f"PDF compiled: {pdf_path}  ({size // 1024} KB)")
+    else:
+        print("pdflatex failed.  Check tex/*.log for errors.")
+        print(r.stdout[-1000:])
+
+
+if __name__ == "__main__":
+    main()

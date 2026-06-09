@@ -1,0 +1,181 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\definecolor{passgreen}{RGB}{34,139,34}
+\definecolor{failred}{RGB}{200,0,0}
+\definecolor{warnorange}{RGB}{200,100,0}
+\definecolor{skipgray}{RGB}{120,120,120}
+
+\title{\textbf{MEA OCPP 1.6 Compliance Test Report}\\[0.3em]
+\large Section 4: Reset Check\\[0.3em]
+\normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
+\author{MEA-V2G Project --- Automated Test}
+\date{2026-06-09 13:56}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MEA OCPP 1.6 -- Section 4}
+\rhead{Page \thepage}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Test Configuration}
+\begin{tabular}{ll}
+\textbf{Device Under Test} & Vector vSECC.single Board \\
+\textbf{Device IP}         & 192.168.1.166 \\
+\textbf{OCPP Version}      & 1.6 (JSON) \\
+\textbf{CP ID}             & rddQC4000001 \\
+\textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
+\textbf{Connection}        & Direct (no proxy) \\
+\textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
+\textbf{EV Plug Timeout}   & 0 s per plug event \\
+\textbf{Boot Wait Timeout} & 30 s (after Hard Reset) \\
+\textbf{Test Date}         & 2026-06-09 06:36:03 UTC \\
+\textbf{Results file}      & tex/vsecc\_section4\_results.json \\
+\end{tabular}
+
+\subsection*{Test Architecture}
+Reset commands are issued via the MEA REST API
+(\texttt{POST /EV/remote/reset}).
+Three reset scenarios are tested:
+\begin{enumerate}
+  \item \textbf{Hard Reset while idle (4.1--4.8):}
+        Hard Reset is sent when the charger is idle.
+        The vSECC reboots and sends a new BootNotification.
+        A charging session is then started via RemoteStart.
+  \item \textbf{Soft Reset during charging (4.9--4.17):}
+        Soft Reset is sent during an active charging session.
+        The vSECC should gracefully send StopTransaction before rebooting.
+        A new charging session is started after recovery.
+  \item \textbf{Hard Reset during charging (4.18--4.21):}
+        Hard Reset is sent during an active charging session.
+        The session may be aborted immediately; the vSECC reboots
+        and reports Available after reconnection.
+\end{enumerate}
+
+\section{Section 4 Results}
+\textbf{Summary: 6 PASS \quad 0 FAIL \quad 15 WARN \quad 0 SKIP \quad (21 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\small\ttfamily\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{Flow 1: Hard Reset (Idle) --- Items 4.1--4.8}} \\
+\hline
+\small 4.1 & \small Reset (Hard) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 4.2 & \small BootNotification → Accepted (after Hard Reset) & CSMS reconnection confirmed after reset & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 4.3 & \small StatusNotification Available (after reboot) & Available not observed on MQTT in 20 s after reset & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.4 & \small StatusNotification Preparing (EV plug, Flow 1) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.5 & \small RemoteStartTransaction → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 4.6 & \small StartTransaction (triggered by RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.7 & \small StatusNotification Charging (Flow 1) & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.8 & \small MeterValues (Flow 1, during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{Flow 2: Soft Reset (During Charging) --- Items 4.9--4.17}} \\
+\hline
+\small 4.9 & \small Reset (Soft) → Accepted (during charging) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 4.10 & \small StopTransaction (triggered by Soft Reset) & session\_state idle/finished not observed in 30 s{\newline\normalfont\footnotesize\itshape Soft Reset should cause graceful StopTransaction before reboot} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.11 & \small StatusNotification Finishing (Soft Reset, EV plugged) & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Some implementations skip Finishing → go directly to Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.12 & \small StatusNotification Available (unplug after Soft Reset) & Available not observed on MQTT in 30 s — unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.13 & \small StatusNotification Preparing (EV plug, Flow 2) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.14 & \small RemoteStartTransaction → Accepted (Flow 2) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 4.15 & \small StartTransaction (Flow 2, triggered by RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.16 & \small StatusNotification Charging (Flow 2) & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.17 & \small MeterValues (Flow 2, during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{Flow 3: Hard Reset (During Charging) --- Items 4.18--4.21}} \\
+\hline
+\small 4.18 & \small Reset (Hard) → Accepted (during charging) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 4.19 & \small StopTransaction (triggered by Hard Reset) & session\_state idle/finished not observed in 30 s{\newline\normalfont\footnotesize\itshape Hard Reset may not send StopTransaction before rebooting} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.20 & \small StatusNotification Finishing (Hard Reset, EV plugged) & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Hard Reset typically skips Finishing — goes directly Available after reboot} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.21 & \small StatusNotification Available (after Hard Reset, EV unplug) & Available not observed in 30s — unplug EV / wait for reboot & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+
+\end{longtable}
+\normalsize
+
+\section{Notes on Failures and Warnings}
+
+\subsection*{Reset command}
+The MEA sandbox REST API endpoint \texttt{POST /EV/remote/reset} accepts
+\texttt{"reset\_type": "Hard"} or \texttt{"reset\_type": "Soft"}.
+Items 4.1, 4.9, and 4.18 are PASS if the API returns HTTP~200.
+
+\subsection*{Hard Reset reboot timing}
+After a Hard Reset the vSECC physically reboots.
+The test waits up to \texttt{BOOT\_WAIT\_SEC} seconds for the MQTT
+\texttt{vsecc/ocpp\_connection\_status=connected} event or a successful
+REST API probe to confirm reconnection.
+
+\subsection*{EV-dependent items}
+\begin{itemize}
+  \item \textbf{4.4, 4.13} StatusNotification Preparing: require a physical EV
+        to plug in within the \texttt{EV\_WAIT\_SEC} timeout.
+  \item \textbf{4.6--4.8, 4.15--4.17} Charging session items depend on RemoteStart
+        succeeding with an EV present.
+\end{itemize}
+
+\subsection*{StopTransaction on reset}
+\begin{itemize}
+  \item \textbf{4.10} Soft Reset: the OCPP specification requires the charger to send
+        StopTransaction with \texttt{reason=SoftReset} before restarting.
+  \item \textbf{4.19} Hard Reset: the specification allows the charger to immediately
+        reboot without a graceful StopTransaction; session is recovered on the CSMS
+        side via a timeout or explicit cleanup.
+\end{itemize}
+
+\section{Dependency Map}
+\begin{tabular}{ll}
+\textbf{Flow 1} & 4.1 (Reset Hard) $\rightarrow$ 4.2 (Boot) $\rightarrow$ 4.3
+                  $\rightarrow$ 4.4 $\rightarrow$ 4.5 $\rightarrow$ 4.6
+                  $\rightarrow$ 4.7 $\rightarrow$ 4.8 \\
+\textbf{Flow 2} & 4.9 (Reset Soft) $\rightarrow$ 4.10 $\rightarrow$ 4.11
+                  $\rightarrow$ 4.12 $\rightarrow$ 4.13 $\rightarrow$ 4.14
+                  $\rightarrow$ 4.15 $\rightarrow$ 4.16 $\rightarrow$ 4.17 \\
+\textbf{Flow 3} & 4.18 (Reset Hard) $\rightarrow$ 4.19 $\rightarrow$ 4.20
+                  $\rightarrow$ 4.21 \\
+\end{tabular}
+
+\end{document}

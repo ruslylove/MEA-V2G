@@ -1,0 +1,28 @@
+{
+  "section": 11,
+  "title": "Performance -- Reconnect Time",
+  "cp_id": "rddQC4000001",
+  "timestamp": "2026-06-09T08:44:44.880112Z",
+  "method": "direct-to-csms",
+  "boot_wait_sec": 90,
+  "pass_threshold_sec": 90,
+  "warn_threshold_sec": 180,
+  "repeat_count": 3,
+  "repeat_delay_sec": 5,
+  "results": [
+    {
+      "item": "11.1",
+      "message": "Reconnect Time after Hard Reset",
+      "status": "PASS",
+      "detail": "Reconnected in 0.3 s (< 90 s threshold)",
+      "remark": "time_ms=257"
+    },
+    {
+      "item": "11.2",
+      "message": "Average Reconnect Time (3 measurements)",
+      "status": "PASS",
+      "detail": "avg=0.3s min=0.2s max=0.3s [0.3, 0.2, 0.3]",
+      "remark": "run1=260ms; run2=239ms; run3=258ms"
+    }
+  ]
+}

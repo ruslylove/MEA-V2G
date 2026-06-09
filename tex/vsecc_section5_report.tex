@@ -1,0 +1,192 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\definecolor{passgreen}{RGB}{34,139,34}
+\definecolor{failred}{RGB}{200,0,0}
+\definecolor{warnorange}{RGB}{200,100,0}
+\definecolor{skipgray}{RGB}{120,120,120}
+
+\title{\textbf{MEA OCPP 1.6 Compliance Test Report}\\[0.3em]
+\large Section 5: Reservation Check\\[0.3em]
+\normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
+\author{MEA-V2G Project --- Automated Test}
+\date{2026-06-09 15:50}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MEA OCPP 1.6 -- Section 5}
+\rhead{Page \thepage}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Test Configuration}
+\begin{tabular}{ll}
+\textbf{Device Under Test} & Vector vSECC.single Board \\
+\textbf{Device IP}         & 192.168.1.166 \\
+\textbf{OCPP Version}      & 1.6 (JSON) \\
+\textbf{CP ID}             & rddQC4000001 \\
+\textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
+\textbf{Connection}        & Direct (no proxy) \\
+\textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
+\textbf{EV Plug Timeout}   & 60 s per plug event \\
+\textbf{Expiry Wait}       & 90 s (wait for CSMS to expire short reservation) \\
+\textbf{Test Date}         & 2026-06-09 07:21:41 UTC \\
+\textbf{Results file}      & tex/vsecc\_section5\_results.json \\
+\end{tabular}
+
+\subsection*{Test Architecture}
+Reservation commands are issued via the MEA REST API.
+\begin{itemize}
+  \item \texttt{POST /EV/cmd/chargepoint/reserve}
+        with \texttt{chargepoint}, \texttt{connector}, \texttt{card\_id}, and \texttt{duration}.
+  \item \texttt{POST /EV/cmd/chargepoint/cancel}
+        with \texttt{chargepoint} and \texttt{reservation\_id}.
+\end{itemize}
+MQTT topics \texttt{vsecc/connector/+/status/\#} and
+\texttt{vsecc/connector/+/ev/\#} are observed for status changes.
+
+Three reservation scenarios are tested:
+\begin{enumerate}
+  \item \textbf{Flow 1 --- Reserve \textrightarrow{} Cancel (5.1--5.5):}
+        ReserveNow is sent for 5 minutes, then CancelReservation is issued.
+        Charger should return to Available.
+  \item \textbf{Flow 2 --- Reserve \textrightarrow{} Expiry (5.6--5.8):}
+        ReserveNow is sent with a short duration.
+        The CSMS expires the reservation automatically and
+        the charger returns to Available.
+  \item \textbf{Flow 3 --- Reserve \textrightarrow{} EV Plug \textrightarrow{} Charge (5.9--5.19):}
+        ReserveNow is sent for 10 minutes, an EV is plugged in while
+        the connector is reserved, RemoteStart initiates a charging session,
+        and RemoteStop terminates it.
+\end{enumerate}
+
+\section{Section 5 Results}
+\textbf{Summary: 6 PASS \quad 0 FAIL \quad 13 WARN \quad 0 SKIP \quad (19 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\small\ttfamily\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{Flow 1: Reserve $\rightarrow$ Cancel --- Items 5.1--5.5}} \\
+\hline
+\small 5.1 & \small StatusNotification Available (initial) & Available not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.2 & \small ReserveNow (5 min) → Accepted & HTTP 200{\newline\normalfont\footnotesize\itshape reservation\_id not found in response} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 5.3 & \small StatusNotification Reserved (after ReserveNow) & Reserved status not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape vSECC may use different status reporting for reservations} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.4 & \small CancelReservation (id=0) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 5.5 & \small StatusNotification Available (after cancel) & Available not observed on MQTT in 15 s after cancel & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{Flow 2: Reserve $\rightarrow$ Expiry --- Items 5.6--5.8}} \\
+\hline
+\small 5.6 & \small ReserveNow (short, for expiry test) → Accepted & HTTP 200{\newline\normalfont\footnotesize\itshape reservation\_id not found} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 5.7 & \small Reservation expiry (wait ≤90s) & Available not observed in 90s{\newline\normalfont\footnotesize\itshape MEA CSMS may enforce a minimum reservation duration; expiry auto-cancelled} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.8 & \small StatusNotification Available (after expiry) & Available not observed on MQTT in 15 s after expiry/cancel & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{Flow 3: Reserve $\rightarrow$ EV Plug $\rightarrow$ RemoteStart $\rightarrow$ Charge $\rightarrow$ RemoteStop --- Items 5.9--5.19}} \\
+\hline
+\small 5.9 & \small ReserveNow (10 min, for charge session) → Accepted & HTTP 200{\newline\normalfont\footnotesize\itshape reservation\_id not found} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 5.10 & \small StatusNotification Reserved (Flow 3) & Reserved status not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.11 & \small StatusNotification Reserved/Preparing (EV plug) & No EV plug event in 60s{\newline\normalfont\footnotesize\itshape Connect physical EV and rerun for full Section 5 coverage} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.12 & \small RemoteStartTransaction → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 5.13 & \small StartTransaction (triggered by RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.14 & \small StatusNotification Charging & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.15 & \small MeterValues (during reservation charge) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.16 & \small RemoteStopTransaction → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 5.17 & \small StopTransaction (triggered by RemoteStop) & session\_state idle/finished not observed on MQTT in 25 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.18 & \small StatusNotification Finishing (EV still plugged) & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Some implementations skip Finishing → go directly to Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.19 & \small StatusNotification Available (EV unplug) & Available not observed on MQTT in 30 s — unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+
+\end{longtable}
+\normalsize
+
+\section{Notes on Failures and Warnings}
+
+\subsection*{Reservation API}
+\begin{itemize}
+  \item The reserve endpoint is \texttt{POST /EV/cmd/chargepoint/reserve}.
+        Payload keys: \texttt{"chargepoint"} (not \texttt{"chargepoint\_id"}),
+        \texttt{"connector"}, \texttt{"card\_id"}, and \texttt{"duration"} (seconds).
+  \item The cancel endpoint is \texttt{POST /EV/cmd/chargepoint/cancel}.
+        Payload keys: \texttt{"chargepoint"} and \texttt{"reservation\_id"}.
+  \item The \texttt{reservation\_id} is extracted from the ReserveNow response body
+        at \texttt{data["result"]["reservation\_id"]}.
+\end{itemize}
+
+\subsection*{StatusNotification observation}
+MQTT topic \texttt{vsecc/connector/1/status/\ldots} reports \texttt{Reserved},
+\texttt{Preparing}, \texttt{Charging}, \texttt{Finishing}, and \texttt{Available}
+states. Items that WARN on this topic indicate that the vSECC did not publish
+a state change within the observation window, or that the status key differs
+from the expected keyword.
+
+\subsection*{Reservation expiry (Flow 2)}
+The MEA CSMS may enforce a minimum reservation duration longer than the
+requested 60 seconds. If the Available status is not observed within
+\texttt{EXPIRY\_WAIT\_SEC}, the test cancels the reservation automatically
+to unblock Flow 3. Rerun with a longer expiry wait or a shorter minimum
+enforced at the CSMS if this item WARNs.
+
+\subsection*{EV-dependent items (Flow 3)}
+\begin{itemize}
+  \item \textbf{5.11} StatusNotification Reserved/Preparing:
+        requires a physical EV to be connected to the reserved connector.
+  \item \textbf{5.12--5.19} All depend on RemoteStart succeeding with an
+        EV present and a valid reserved RFID tag.
+\end{itemize}
+Set \texttt{EV\_WAIT\_SEC > 0} in the test script to enable EV plug detection.
+
+\section{Dependency Map}
+\begin{tabular}{ll}
+\textbf{Flow 1} & 5.1 $\rightarrow$ 5.2 (ReserveNow) $\rightarrow$ 5.3
+                  $\rightarrow$ 5.4 (CancelReservation) $\rightarrow$ 5.5 \\
+\textbf{Flow 2} & 5.6 (ReserveNow) $\rightarrow$ 5.7 (Expiry)
+                  $\rightarrow$ 5.8 \\
+\textbf{Flow 3} & 5.9 (ReserveNow) $\rightarrow$ 5.10 $\rightarrow$ 5.11
+                  (EV plug) $\rightarrow$ 5.12 (RemoteStart) \\
+                & $\rightarrow$ 5.13 $\rightarrow$ 5.14 $\rightarrow$ 5.15
+                  (MeterValues) $\rightarrow$ 5.16 (RemoteStop) \\
+                & $\rightarrow$ 5.17 $\rightarrow$ 5.18 $\rightarrow$ 5.19
+                  (Unplug) \\
+\end{tabular}
+
+\end{document}

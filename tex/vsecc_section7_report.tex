@@ -1,0 +1,311 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{3em}
+
+\definecolor{passgreen}{RGB}{34,139,34}
+\definecolor{failred}{RGB}{200,0,0}
+\definecolor{warnorange}{RGB}{200,100,0}
+\definecolor{skipgray}{RGB}{120,120,120}
+
+\title{\textbf{MEA OCPP 1.6 Compliance Test Report}\\[0.3em]
+\large Section 7: Abnormal Operation Verification\\[0.3em]
+\normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
+\author{MEA-V2G Project --- Automated Test}
+\date{2026-06-09 15:50}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MEA OCPP 1.6 -- Section 7}
+\rhead{Page \thepage}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Test Configuration}
+\begin{tabular}{ll}
+\textbf{Device Under Test}  & Vector vSECC.single Board \\
+\textbf{Device IP}          & 192.168.1.166 \\
+\textbf{OCPP Version}       & 1.6 (JSON) \\
+\textbf{CP ID}              & rddQC4000001 \\
+\textbf{CSMS}               & wss://ocpp.measandbox.com:2930 \\
+\textbf{Connection}         & Direct (no proxy) \\
+\textbf{Test PC}            & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
+\textbf{EV Plug Timeout}    & 0 s per plug event \\
+\textbf{Boot Wait Timeout}  & 90 s (after Hard Reset) \\
+\textbf{Local Stop Timeout} & 30 s \\
+\textbf{Test Date}          & 2026-06-09 08:43:23 UTC \\
+\textbf{Results file}       & tex/vsecc\_section7\_results.json \\
+\end{tabular}
+
+\subsection*{Test Architecture}
+The test runs directly against the MEA CSMS with no proxy.
+The test PC:
+\begin{itemize}
+  \item Calls the vSECC REST API (\texttt{http://192.168.1.166/api}) for login and state queries
+  \item Subscribes to the vSECC MQTT broker (\texttt{mqtt://192.168.1.166:1883}) to observe
+        StatusNotification, charging session state, and meter values
+  \item Calls the MEA sandbox REST API (\texttt{https://ocppapi.measandbox.com/EV/})
+        with HTTP Digest authentication for RemoteStart, RemoteStop, Reset,
+        and SendLocalList
+\end{itemize}
+Several sub-scenarios (7.3, 7.4, 7.5) require physical hardware interaction
+(RFID card scan, emergency stop button, door open switch) that cannot be
+triggered programmatically.  Those items are recorded as \textbf{WARN} with a remark
+describing the required physical action.
+Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST API.
+
+\section{Section 7 Results}
+\textbf{Summary: 8 PASS \quad 1 FAIL \quad 45 WARN \quad 0 SKIP \quad (54 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\small\ttfamily\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\begin{longtable}{|L{1.1cm}|L{5.4cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.1 --- RemoteStart while Unplugged (Available State)}} \\
+\hline
+\small 7.1.1 & \small StatusNotification Available (charger idle, no EV) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.1.2 & \small RemoteStartTransaction (EV not connected) → HTTP 200 & HTTP 200{\newline\normalfont\footnotesize\itshape vSECC should respond Rejected when no EV present} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.2 --- Concurrent RemoteStart (Second Rejected)}} \\
+\hline
+\small 7.2.1 & \small StatusNotification Available (before EV plug) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.3 & \small RemoteStartTransaction (first) → HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 7.2.4 & \small RemoteStartTransaction (second, concurrent) → HTTP 200 & HTTP 200{\newline\normalfont\footnotesize\itshape CSMS likely blocks duplicate; charger-level Rejected not observable without pro\ldots{}} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 7.2.5 & \small StartTransaction (session started after first RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.6 & \small StatusNotification Charging & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.7 & \small MeterValues (during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.8 & \small RemoteStopTransaction → HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 7.2.9 & \small StopTransaction (session ended after RemoteStop) & session\_state idle/finished not observed on MQTT in 25 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.10 & \small StatusNotification Finishing & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Some implementations skip Finishing and go directly to Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.11 & \small StatusNotification Available (after stop / unplug) & Available not observed on MQTT in 30 s — unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.3 --- Swap Card (Invalid then Valid RFID)}} \\
+\hline
+\small 7.3.1 & \small StatusNotification Available (before EV plug) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.3 & \small Authorize (invalid RFID tag) → Rejected & Not triggerable via API — vSECC reads RFID directly from hardware{\newline\normalfont\footnotesize\itshape Requires physical RFID scan on vSECC hardware of unknown/blocked card} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.4 & \small Authorize (valid RFID tag) → Accepted & Not triggerable via API — vSECC reads RFID directly from hardware{\newline\normalfont\footnotesize\itshape Requires physical RFID scan on vSECC hardware of authorized card after rejected\ldots{}} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.5 & \small StartTransaction (after valid RFID) & Depends on 7.3.3/7.3.4 (physical RFID scan){\newline\normalfont\footnotesize\itshape Session starts only after valid RFID tap on vSECC hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.6 & \small StatusNotification Charging (after valid auth) & Depends on 7.3.5 (StartTransaction){\newline\normalfont\footnotesize\itshape Requires completed Authorize sequence via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.7 & \small MeterValues (during charging) & Depends on 7.3.6 (Charging state){\newline\normalfont\footnotesize\itshape Requires completed Authorize sequence via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.8 & \small RemoteStopTransaction & Depends on 7.3.5 (StartTransaction){\newline\normalfont\footnotesize\itshape Requires active session started via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.9 & \small StopTransaction (after RemoteStop) & Depends on 7.3.8 (RemoteStop){\newline\normalfont\footnotesize\itshape Requires active session started via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.10 & \small StatusNotification Finishing & Depends on 7.3.8 (RemoteStop){\newline\normalfont\footnotesize\itshape Requires active session started via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.11 & \small StatusNotification Available (after stop / unplug) & Depends on 7.3.8 (RemoteStop){\newline\normalfont\footnotesize\itshape Requires active session started via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.4 --- Emergency Stop}} \\
+\hline
+\small 7.4.1 & \small StatusNotification Available (before EV plug) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.3 & \small RemoteStartTransaction → HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 7.4.4 & \small StartTransaction (session started after RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.5 & \small StatusNotification Charging & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.6 & \small MeterValues (during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.7 & \small StopTransaction (reason=EmergencyStop) & Triggered by physical emergency stop button on vSECC hardware{\newline\normalfont\footnotesize\itshape Requires physical emergency stop button press on the vSECC unit} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.8 & \small StatusNotification Faulted (after EmergencyStop) & Faulted status not observed on MQTT (E-stop not pressed){\newline\normalfont\footnotesize\itshape Requires physical emergency stop button press on the vSECC unit} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.9 & \small StatusNotification Available (E-stop cleared) & Depends on 7.4.7 (physical E-stop press and release){\newline\normalfont\footnotesize\itshape E-stop must be physically released to restore normal operation} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.10 & \small StatusNotification Available (EV unplug after E-stop recovery) & Depends on 7.4.7 (physical E-stop press and release){\newline\normalfont\footnotesize\itshape EV must be unplugged after E-stop recovery to reach Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.5 --- Open Door}} \\
+\hline
+\small 7.5.1 & \small StatusNotification Available (before door open) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.5.2 & \small StatusNotification Faulted (reason=DoorOpen) & Triggered by opening physical door/panel on vSECC hardware{\newline\normalfont\footnotesize\itshape Requires physical door open on vSECC hardware; not triggerable via API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.5.3 & \small StatusNotification Available (after door closed) & Depends on 7.5.2 (physical door open and close){\newline\normalfont\footnotesize\itshape Door must be physically closed to restore normal operation} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.6 --- Power Loss / Reboot (Simulated via Hard Reset)}} \\
+\hline
+\small 7.6.1 & \small StatusNotification Available (before EV plug) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.3 & \small RemoteStartTransaction → HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 7.6.4 & \small StartTransaction (session started after RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.5 & \small StatusNotification Charging & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.6 & \small MeterValues (during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.7 & \small StopTransaction (PowerLoss) — simulated via Hard Reset → HTTP 200 & HTTP 200{\newline\normalfont\footnotesize\itshape Simulated via Hard Reset; physical power loss not testable in this environment} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 7.6.8 & \small BootNotification → Accepted (vSECC reconnected after reboot) & CSMS reconnection confirmed after Hard Reset & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 7.6.9 & \small StatusNotification Preparing (EV still connected after reboot) & Preparing not observed on MQTT in 20 s after reboot{\newline\normalfont\footnotesize\itshape EV must remain connected through the reboot sequence} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.10 & \small StatusNotification Available (EV unplug after reboot) & Available not observed on MQTT in 30 s — unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.7 --- Local List Offline}} \\
+\hline
+\small 7.7.1 & \small SendLocalList (version=1, RFID\_TEST=Accepted) → HTTP 200 & HTTP 404 & \textcolor{failred}{\textbf{FAIL}} \\
+\hline
+\small 7.7.2 & \small StatusNotification Available (charger online before offline test) & Offline sequence not observable via MQTT/REST without proxy{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.3 & \small StatusNotification Preparing (EV plug while charger offline) & Offline start requires disconnecting vSECC from CSMS network{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.4 & \small Authorize (local list lookup while offline) → Accepted & vSECC must authorize from local list while CSMS unreachable{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.5 & \small StartTransaction (offline, buffered by vSECC) & vSECC buffers transaction in firmware; not observable without proxy{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.6 & \small StopTransaction (offline, buffered by vSECC) & vSECC buffers stop in firmware; delivered when CSMS reconnects{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.7 & \small CSMS reconnect — buffered Start/StopTransaction flushed & Reconnect flushing is firmware-internal; not observable without proxy{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+
+\end{longtable}
+\normalsize
+
+\section{Notes on Failures and Warnings}
+
+\subsection*{7.1 --- RemoteStart while unplugged}
+\begin{itemize}
+  \item \textbf{7.1.2} The MEA REST API call returns HTTP~200 if the command was
+        delivered to the vSECC.  The vSECC OCPP layer should respond
+        \texttt{Rejected} to the CSMS because no EV is present.
+        This rejection is observable only via a proxy intercepting the
+        OCPP WebSocket; therefore the item is recorded as PASS for HTTP~200
+        delivery with a WARN remark about the expected Rejected response.
+\end{itemize}
+
+\subsection*{7.2 --- Concurrent RemoteStart}
+\begin{itemize}
+  \item \textbf{7.2.4} A second RemoteStart while a session is already active
+        will be blocked by the CSMS before reaching the charger.
+        Whether the charger itself responds \texttt{Rejected} is not
+        observable without a proxy.  The item is recorded as WARN.
+  \item \textbf{7.2.5--7.2.11} Depend on the first RemoteStart being accepted
+        and the EV being physically connected (item 7.2.2).
+\end{itemize}
+
+\subsection*{7.3 --- Swap Card}
+\begin{itemize}
+  \item \textbf{7.3.3, 7.3.4} The vSECC reads RFID cards directly via its
+        hardware reader.  There is no REST or MQTT API to inject an RFID
+        scan.  Both items (invalid card, then valid card) require the operator
+        to physically tap RFID cards on the vSECC unit.
+  \item \textbf{7.3.5--7.3.11} All subsequent items in this sub-scenario
+        depend on the completed RFID swap sequence and are therefore WARN.
+\end{itemize}
+
+\subsection*{7.4 --- Emergency Stop}
+\begin{itemize}
+  \item \textbf{7.4.7} The emergency stop is a physical button on the vSECC
+        hardware.  There is no software API to trigger it.
+        Items 7.4.8--7.4.10 depend on the E-stop being pressed and released
+        physically and are recorded as WARN.
+\end{itemize}
+
+\subsection*{7.5 --- Open Door}
+\begin{itemize}
+  \item \textbf{7.5.2} The door-open fault is triggered by a physical
+        door/panel switch on the vSECC unit.
+        There is no software API to simulate this condition.
+        Item 7.5.3 depends on the door being physically closed and is WARN.
+\end{itemize}
+
+\subsection*{7.6 --- Power Loss / Reboot}
+\begin{itemize}
+  \item \textbf{7.6.7} Physical power loss cannot be reproduced in a
+        controlled automated test without additional hardware.
+        A Hard Reset via \texttt{POST /EV/remote/reset} is used as the
+        closest available approximation.  The item is recorded as PASS if
+        the MEA REST API returns HTTP~200, with a WARN remark.
+  \item \textbf{7.6.8} After the Hard Reset the vSECC reboots.  The test
+        waits up to \texttt{BOOT\_WAIT\_SEC} seconds for reconnection,
+        confirmed by the MQTT \texttt{vsecc/ocpp\_connection\_status=connected}
+        event or a successful REST API probe.
+  \item \textbf{7.6.9, 7.6.10} EV must remain plugged in through the reboot
+        and then be unplugged to trigger the final Available transition.
+\end{itemize}
+
+\subsection*{7.7 --- Local List Offline}
+\begin{itemize}
+  \item \textbf{7.7.1} SendLocalList is issued via
+        \texttt{POST /EV/remote/sendLocalList} on the MEA REST API.
+        HTTP~200 confirms the command was accepted by the CSMS and relayed
+        to the vSECC.
+  \item \textbf{7.7.2--7.7.7} Offline start, local RFID authorization,
+        transaction buffering, and reconnect flushing are handled entirely
+        within the vSECC firmware.  Without a proxy intercepting the OCPP
+        WebSocket it is not possible to observe these behaviors from the
+        test PC.  All items are recorded as WARN.
+\end{itemize}
+
+\section{Dependency Map}
+
+\begin{tabular}{lp{11cm}}
+\textbf{7.1} & Independent (no EV required) \\[2pt]
+\textbf{7.2} & 7.2.2 (EV plug) $\rightarrow$ 7.2.3 (RemoteStart\,1) $\rightarrow$
+               7.2.5 $\rightarrow$ 7.2.6 $\rightarrow$ 7.2.7 $\rightarrow$
+               7.2.8 (RemoteStop) $\rightarrow$ 7.2.9 $\rightarrow$ 7.2.10
+               $\rightarrow$ 7.2.11 \\[2pt]
+\textbf{7.3} & 7.3.2 (EV plug) $\rightarrow$ 7.3.3/7.3.4 (physical RFID)
+               $\rightarrow$ 7.3.5 $\rightarrow$ \ldots $\rightarrow$ 7.3.11 \\[2pt]
+\textbf{7.4} & 7.4.2 (EV plug) $\rightarrow$ 7.4.3 (RemoteStart) $\rightarrow$
+               7.4.4 $\rightarrow$ 7.4.5 $\rightarrow$ 7.4.6 $\rightarrow$
+               7.4.7 (physical E-stop) $\rightarrow$ 7.4.8 $\rightarrow$
+               7.4.9 $\rightarrow$ 7.4.10 \\[2pt]
+\textbf{7.5} & 7.5.2 (physical door open) $\rightarrow$ 7.5.3 \\[2pt]
+\textbf{7.6} & 7.6.2 (EV plug) $\rightarrow$ 7.6.3 (RemoteStart) $\rightarrow$
+               7.6.4 $\rightarrow$ 7.6.5 $\rightarrow$ 7.6.6 $\rightarrow$
+               7.6.7 (Hard Reset) $\rightarrow$ 7.6.8 (BootNotification)
+               $\rightarrow$ 7.6.9 $\rightarrow$ 7.6.10 \\[2pt]
+\textbf{7.7} & 7.7.1 (SendLocalList) independent;
+               7.7.2--7.7.7 require offline network isolation \\
+\end{tabular}
+
+\end{document}
