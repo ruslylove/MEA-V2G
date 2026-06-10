@@ -12,18 +12,18 @@
 \contentsline {subsection}{\numberline {4.3}MQTT monitor (optional, for debugging)}{3}{subsection.4.3}%
 \contentsline {section}{\numberline {5}Configuration}{4}{section.5}%
 \contentsline {section}{\numberline {6}Running the Tests}{4}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Section guide}{4}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Run all sections without EV (quick validation)}{5}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Run all sections with real EV}{5}{subsection.6.3}%
-\contentsline {section}{\numberline {7}Running With a Real EV --- Step by Step}{5}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Pre-run checklist}{5}{subsection.7.1}%
+\contentsline {subsection}{\numberline {6.1}Section guide}{5}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Run without EV (API connectivity check only)}{5}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Run with real EV (recommended for compliance)}{5}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Running With a Real EV --- Step by Step}{6}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Pre-run checklist}{6}{subsection.7.1}%
 \contentsline {subsection}{\numberline {7.2}Section 3 — Normal Operation}{6}{subsection.7.2}%
-\contentsline {subsection}{\numberline {7.3}Section 4 --- Reset Check}{6}{subsection.7.3}%
-\contentsline {subsection}{\numberline {7.4}Section 7 --- Abnormal Operation}{6}{subsection.7.4}%
-\contentsline {section}{\numberline {8}Building PDF Reports}{6}{section.8}%
-\contentsline {section}{\numberline {9}Interpreting Results}{7}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Result codes}{7}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Known MEA sandbox limitations}{7}{subsection.9.2}%
-\contentsline {section}{\numberline {10}Troubleshooting}{7}{section.10}%
-\contentsline {section}{\numberline {11}Quick Reference}{8}{section.11}%
+\contentsline {subsection}{\numberline {7.3}Section 4 --- Reset Check}{7}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Section 7 --- Abnormal Operation}{7}{subsection.7.4}%
+\contentsline {section}{\numberline {8}Building PDF Reports}{7}{section.8}%
+\contentsline {section}{\numberline {9}Interpreting Results}{8}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Result codes}{8}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Known MEA sandbox limitations}{8}{subsection.9.2}%
+\contentsline {section}{\numberline {10}Troubleshooting}{8}{section.10}%
+\contentsline {section}{\numberline {11}Quick Reference}{9}{section.11}%
 \contentsline {section}{\numberline {12}File Structure}{10}{section.12}%

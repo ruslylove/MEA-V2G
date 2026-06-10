@@ -382,28 +382,40 @@ Results are saved automatically to \texttt{tex/vsecc\_sectionN\_results.json}.
 
 \begin{center}
 \renewcommand{\arraystretch}{1.3}
-\begin{tabular}{C{1cm} L{4cm} C{2cm} L{7cm}}
+\begin{tabular}{C{1cm} L{4cm} C{2.2cm} L{7cm}}
 \toprule
 \textbf{Sec.} & \textbf{Title} & \textbf{EV needed} & \textbf{Notes} \\
 \midrule
-2  & Auto Charge           & No        & Verifies OCPP boot + auto-auth \\
-3  & Normal Operation      & Yes (3.3+) & Local RFID + RemoteStart flows \\
-4  & Reset Check           & Yes (4.4+) & Hard \& Soft Reset; vSECC reboots \\
-5  & Reservation           & Yes (5.11+) & Reserve$\to$Cancel, Expiry, Charge \\
-6  & Charging Profile      & Yes (6.2+) & SetChargingProfile during session \\
-7  & Abnormal Operation    & Yes (7.2+) & E-stop, door, power loss, local list \\
-8  & Dual Connector        & N/A        & All SKIP — single connector device \\
-9  & V2G / BPT             & No         & ChangeConfiguration + metervalues \\
-10 & CSMS Commands         & No         & All 23 OCPP commands \\
-11 & Performance           & No         & Reconnect time (3$\times$ Hard Reset) \\
+1  & Charger Configuration & No            & GetConfiguration, ChangeConfiguration, identity checks \\
+2  & Auto Charge           & \textbf{Yes}  & All 21 items require EV plug for auto-charge flow \\
+3  & Normal Operation      & \textbf{Yes}  & Local RFID + RemoteStart; 16 of 19 items need EV \\
+4  & Reset Check           & \textbf{Yes}  & 15 of 21 items need EV (charging during reset) \\
+5  & Reservation           & \textbf{Yes}  & Flow 3 (9 items) needs EV; Flows 1--2 work without \\
+6  & Charging Profile      & \textbf{Yes}  & All charging-profile items need active EV session \\
+7  & Abnormal Operation    & \textbf{Yes}  & E-stop, door, power loss all require EV plugged in \\
+8  & Dual Connector        & N/A           & All SKIP — single connector device \\
+9  & V2G / BPT             & Partial       & Config items (9.1--9.3) no EV; BPT items (9.4) need EV \\
+10 & CSMS Commands         & No            & All 23 commands testable via REST without EV \\
+11 & Performance           & No            & Reconnect time only; 3$\times$ Hard Reset \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\subsection{Run all sections without EV (quick validation)}
+\begin{tcolorbox}[noteboxstyle={Important: Run with EV for meaningful compliance results}]
+Sections 2--7 have the majority of their items dependent on a physical EV
+being connected. Without EV, these items record \textbf{WARN} and
+cannot demonstrate compliance. Connect a real EV before running
+sections 2--7 to obtain \textbf{PASS} results for the full test suite.
+\end{tcolorbox}
+
+\subsection{Run without EV (API connectivity check only)}
+
+Sections 2--7 will produce mostly \textbf{WARN} results without an EV.
+Use this mode only to verify that the vSECC is reachable and the MEA API
+is responding correctly before a full EV session.
 
 \begin{lstlisting}[language=bash]
-for s in 2 3 4 5 6 7 8 9 10 11; do
+for s in 1 2 3 4 5 6 7 8 9 10 11; do
   sed -i 's/^EV_WAIT_SEC = 60/EV_WAIT_SEC = 0/' \
     tests/vsecc/test_mea_section${s}.py 2>/dev/null
   echo "=== Section $s ==="
@@ -411,17 +423,20 @@ for s in 2 3 4 5 6 7 8 9 10 11; do
 done
 \end{lstlisting}
 
-\subsection{Run all sections with real EV}
+\subsection{Run with real EV (recommended for compliance)}
+
+This is the recommended mode for a proper compliance test run.
+Connect an EV to the vSECC connector before starting.
 
 \begin{lstlisting}[language=bash]
-# Restore EV wait timeout:
+# Restore EV wait timeout (60 s per plug event):
 for s in 2 3 4 5 6 7; do
   sed -i 's/^EV_WAIT_SEC = 0/EV_WAIT_SEC = 60/' \
     tests/vsecc/test_mea_section${s}.py 2>/dev/null
 done
 
 # Run all sections:
-for s in 2 3 4 5 6 7 8 9 10 11; do
+for s in 1 2 3 4 5 6 7 8 9 10 11; do
   echo "=== Section $s ==="
   .venv/bin/python3 tests/vsecc/test_mea_section${s}.py
 done
@@ -525,7 +540,7 @@ After running a test (which saves \texttt{tex/vsecc\_sectionN\_results.json}):
 .venv/bin/python3 tests/vsecc/generate_section5_report.py
 
 # All sections at once:
-for s in 2 3 4 5 6 7 8 9 10 11; do
+for s in 1 2 3 4 5 6 7 8 9 10 11; do
   .venv/bin/python3 tests/vsecc/generate_section${s}_report.py
 done
 \end{lstlisting}
@@ -537,6 +552,7 @@ Output files are written to the \texttt{tex/} directory:
 \toprule
 \textbf{File} & \textbf{Section} \\
 \midrule
+\texttt{tex/vsecc\_section1\_report.pdf}  & Section 1: Charger Configuration \\
 \texttt{tex/vsecc\_section2\_report.pdf}  & Section 2: Auto Charge \\
 \texttt{tex/vsecc\_section3\_report.pdf}  & Section 3: Normal Operation \\
 $\vdots$ & $\vdots$ \\
@@ -665,7 +681,7 @@ mosquitto_sub -h 192.168.1.166 -u vector -P vector \
 .venv/bin/python3 tests/vsecc/generate_section3_report.py
 
 # 6. Run all sections + build all PDFs in one go:
-for s in 2 3 4 5 6 7 8 9 10 11; do
+for s in 1 2 3 4 5 6 7 8 9 10 11; do
   .venv/bin/python3 tests/vsecc/test_mea_section${s}.py
   .venv/bin/python3 tests/vsecc/generate_section${s}_report.py
 done
@@ -679,6 +695,7 @@ done
 \begin{lstlisting}
 MEA-V2G/
 |-- tests/vsecc/
+|   |-- test_mea_section1.py         Section 1:  Charger Configuration
 |   |-- test_mea_section2.py         Section 2:  Auto Charge
 |   |-- test_mea_section3.py         Section 3:  Normal Operation
 |   |-- test_mea_section4.py         Section 4:  Reset Check
@@ -689,6 +706,7 @@ MEA-V2G/
 |   |-- test_mea_section9.py         Section 9:  V2G / BPT
 |   |-- test_mea_section10.py        Section 10: CSMS Commands
 |   |-- test_mea_section11.py        Section 11: Performance
+|   |-- generate_section1_report.py
 |   |-- generate_section2_report.py
 |   |-- generate_section3_report.py
 |   |-- ...

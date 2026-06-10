@@ -172,31 +172,34 @@ Results are saved to `tex/vsecc_sectionN_results.json` automatically.
 
 | Section | File | EV needed | Notes |
 |---------|------|-----------|-------|
-| **2** Auto Charge | `test_mea_section2.py` | No | Verifies OCPP boot + auto-auth |
-| **3** Normal Operation | `test_mea_section3.py` | Yes (items 3.3–3.11) | Local RFID + RemoteStart flows |
-| **4** Reset Check | `test_mea_section4.py` | Yes (items 4.4–4.21) | Hard & Soft Reset; vSECC reboots |
-| **5** Reservation | `test_mea_section5.py` | Yes (items 5.11–5.19) | Reserve → Cancel, Expiry, Charge |
-| **6** Charging Profile | `test_mea_section6.py` | Yes (items 6.2–6.13) | SetChargingProfile during session |
-| **7** Abnormal Operation | `test_mea_section7.py` | Yes (items 7.2–7.6) | E-stop, door, power loss, local list |
+| **1** Charger Configuration | `test_mea_section1.py` | No | GetConfiguration, ChangeConfiguration, identity checks |
+| **2** Auto Charge | `test_mea_section2.py` | **Yes** | All 21 items require EV plug for auto-charge flow |
+| **3** Normal Operation | `test_mea_section3.py` | **Yes** | Local RFID + RemoteStart; 16 of 19 items need EV |
+| **4** Reset Check | `test_mea_section4.py` | **Yes** | 15 of 21 items need EV (charging during reset) |
+| **5** Reservation | `test_mea_section5.py` | **Yes** | Flow 3 (9 items) needs EV; Flows 1–2 work without |
+| **6** Charging Profile | `test_mea_section6.py` | **Yes** | All charging-profile items need active EV session |
+| **7** Abnormal Operation | `test_mea_section7.py` | **Yes** | E-stop, door, power loss all require EV plugged in |
 | **8** Dual Connector | `test_mea_section8.py` | N/A | All SKIP — single connector device |
-| **9** V2G / BPT | `test_mea_section9.py` | No | ChangeConfiguration + metervalues |
-| **10** CSMS Commands | `test_mea_section10.py` | No | All 23 OCPP commands |
-| **11** Performance | `test_mea_section11.py` | No | Reconnect time (3 Hard Reset runs) |
+| **9** V2G / BPT | `test_mea_section9.py` | Partial | Config items (9.1–9.3) no EV; BPT items (9.4) need EV |
+| **10** CSMS Commands | `test_mea_section10.py` | No | All 23 commands testable via REST without EV |
+| **11** Performance | `test_mea_section11.py` | No | Reconnect time only; 3× Hard Reset |
+
+> **Important:** Sections 2–7 have the majority of items dependent on a physical EV being connected. Without EV, these items record **WARN** and cannot demonstrate compliance. Connect a real EV before running sections 2–7 to obtain **PASS** results for the full test suite.
 
 ### 6.2 Run all sections in sequence
 
 ```bash
-# Without EV (fast):
-for s in 2 3 4 5 6 7 8 9 10 11; do
+# Without EV — API connectivity check only (sections 2–7 will WARN):
+for s in 1 2 3 4 5 6 7 8 9 10 11; do
   sed -i 's/^EV_WAIT_SEC = 60/EV_WAIT_SEC = 0/' tests/vsecc/test_mea_section${s}.py 2>/dev/null
   echo "=== Section $s ===" && .venv/bin/python3 tests/vsecc/test_mea_section${s}.py
 done
 
-# With EV (restore EV_WAIT_SEC first):
+# With EV — recommended for compliance (restore EV_WAIT_SEC first):
 for s in 2 3 4 5 6 7; do
   sed -i 's/^EV_WAIT_SEC = 0/EV_WAIT_SEC = 60/' tests/vsecc/test_mea_section${s}.py 2>/dev/null
 done
-for s in 2 3 4 5 6 7 8 9 10 11; do
+for s in 1 2 3 4 5 6 7 8 9 10 11; do
   echo "=== Section $s ===" && .venv/bin/python3 tests/vsecc/test_mea_section${s}.py
 done
 ```
@@ -264,7 +267,7 @@ After running a test (which saves the JSON result file):
 .venv/bin/python3 tests/vsecc/generate_section5_report.py
 
 # All sections at once:
-for s in 2 3 4 5 6 7 8 9 10 11; do
+for s in 1 2 3 4 5 6 7 8 9 10 11; do
   .venv/bin/python3 tests/vsecc/generate_section${s}_report.py
 done
 ```
@@ -384,7 +387,7 @@ mosquitto_sub -h 192.168.1.166 -u vector -P vector \
 .venv/bin/python3 tests/vsecc/generate_section3_report.py
 
 # 6. Run all sections + build all PDFs:
-for s in 2 3 4 5 6 7 8 9 10 11; do
+for s in 1 2 3 4 5 6 7 8 9 10 11; do
   .venv/bin/python3 tests/vsecc/test_mea_section${s}.py &&
   .venv/bin/python3 tests/vsecc/generate_section${s}_report.py
 done
