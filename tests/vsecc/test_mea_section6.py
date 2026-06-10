@@ -233,6 +233,17 @@ def mqtt_wait(mark, topic_kw, value_kw, timeout=30):
     return None, None
 
 
+def mqtt_set_availability(evse_id, state, wait_kw=None, timeout=10):
+    if not HAS_MQTT or _mqtt_client is None:
+        return None, None
+    mark = mqtt_mark()
+    _mqtt_client.publish(
+        f"vsecc/connector/{evse_id}/status/set_availability", state)
+    if wait_kw:
+        return mqtt_wait(mark, "status", wait_kw, timeout=timeout)
+    return None, None
+
+
 # ─────────────────────────────────────────────
 # MEA call helpers
 # ─────────────────────────────────────────────
@@ -309,25 +320,21 @@ def run_section6(vsecc: VseccApi, mea: MeaApi):
     print("\n  [Flow 1] Local Start with Charging Profile")
 
     # ── 6.1  StatusNotification Available ────────────────────────────────────
-    mark61 = mqtt_mark()
-    time.sleep(1)
-    # Check recent MQTT buffer for Available status
-    with _mqtt_lock:
-        recent = _mqtt_events[-30:]
-    available_seen = any("status" in t and "Available" in p for _, t, p in recent)
-    if available_seen:
+    payload61, _ = mqtt_set_availability(1, "operative",
+                                         wait_kw="Available", timeout=10)
+    if payload61:
         record("6.1", "StatusNotification Available (initial state)",
-               "PASS", "Available status observed on MQTT")
+               "PASS", "Available confirmed on MQTT (via MQTT set_availability)")
     else:
-        # Try waiting briefly for an Available event
-        payload, topic = mqtt_wait(mark61, "status", "Available", timeout=10)
-        if payload:
+        with _mqtt_lock:
+            recent = _mqtt_events[-30:]
+        if any("status" in t and "Available" in p for _, t, p in recent):
             record("6.1", "StatusNotification Available (initial state)",
-                   "PASS", f"{topic.split('/')[-1]}={payload}")
+                   "PASS", "Available observed in recent MQTT buffer")
         else:
             record("6.1", "StatusNotification Available (initial state)",
-                   "WARN", "Available status not in recent MQTT buffer",
-                   "Check CSMS event log for StatusNotification Available")
+                   "WARN", "Available not observed on MQTT in 10 s",
+                   "Check CSMS event log; charger may already be available")
 
     # ── 6.2  StatusNotification Preparing (EV plug, Flow 1) ──────────────────
     mark62 = mqtt_mark()

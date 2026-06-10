@@ -231,6 +231,17 @@ def mqtt_wait(mark, topic_kw, value_kw, timeout=30):
     return None, None
 
 
+def mqtt_set_availability(evse_id, state, wait_kw=None, timeout=10):
+    if not HAS_MQTT or _mqtt_client is None:
+        return None, None
+    mark = mqtt_mark()
+    _mqtt_client.publish(
+        f"vsecc/connector/{evse_id}/status/set_availability", state)
+    if wait_kw:
+        return mqtt_wait(mark, "status", wait_kw, timeout=timeout)
+    return None, None
+
+
 def mqtt_events_since(mark, wait_sec=2):
     time.sleep(wait_sec)
     with _mqtt_lock:
@@ -317,18 +328,21 @@ def _ev_item(item, message, mark, timeout=None):
 
 
 # ─────────────────────────────────────────────
-# Available state check helper (recent MQTT buffer)
+# Available state check helper
 # ─────────────────────────────────────────────
 def _check_available(item, message):
-    """Check MQTT recent buffer for Available status; WARN if not found."""
-    with _mqtt_lock:
-        recent = _mqtt_events[-50:]
-    seen = any("status" in t and "Available" in p for _, t, p in recent)
-    if seen:
-        record(item, message, "PASS", "Available status observed on MQTT")
+    """Force connector to operative via MQTT then confirm Available StatusNotification."""
+    payload, _ = mqtt_set_availability(1, "operative", wait_kw="Available", timeout=10)
+    if payload:
+        record(item, message, "PASS", "Available confirmed on MQTT (via MQTT set_availability)")
     else:
-        record(item, message, "WARN", "Available status not in recent MQTT buffer",
-               "Check CSMS event log for StatusNotification Available")
+        with _mqtt_lock:
+            recent = _mqtt_events[-50:]
+        if any("status" in t and "Available" in p for _, t, p in recent):
+            record(item, message, "PASS", "Available observed in recent MQTT buffer")
+        else:
+            record(item, message, "WARN", "Available not observed on MQTT in 10 s",
+                   "Check CSMS event log; charger may already be available")
 
 
 # ─────────────────────────────────────────────

@@ -199,6 +199,18 @@ def mqtt_wait(mark, topic_kw, value_kw, timeout=30):
     return None, None
 
 
+def mqtt_set_availability(evse_id, state, wait_kw=None, timeout=10):
+    """Publish K.2.25 set_availability; optionally wait for status event."""
+    if not HAS_MQTT or _mqtt_client is None:
+        return None, None
+    mark = mqtt_mark()
+    _mqtt_client.publish(
+        f"vsecc/connector/{evse_id}/status/set_availability", state)
+    if wait_kw:
+        return mqtt_wait(mark, "status", wait_kw, timeout=timeout)
+    return None, None
+
+
 # ─────────────────────────────────────────────
 # MEA call helpers
 # ─────────────────────────────────────────────
@@ -290,21 +302,24 @@ def run_section3(vsecc: VseccApi, mea: MeaApi):
            "PASS", "CSMS connection active — BootNotification Accepted confirmed")
 
     # ── 3.2  StatusNotification Available (initial) ───────────────────────────
-    # Check MQTT for any recent Available status from connector 1.
-    mark32 = mqtt_mark()
-    time.sleep(1)
-    # Look in recent history too (last 30 events)
-    with _mqtt_lock:
-        recent = _mqtt_events[-30:]
-    available_seen = any("status" in t and "Available" in p for _, t, p in recent)
-    if available_seen:
+    # Publish "operative" via MQTT K.2.25 to force a fresh StatusNotification
+    # Available on MQTT (works even if the charger was already available before
+    # the MQTT watcher subscribed).
+    payload32, _ = mqtt_set_availability(1, "operative",
+                                         wait_kw="Available", timeout=10)
+    if payload32:
         record("3.2", "StatusNotification Available (initial state)",
-               "PASS", "Available status observed on MQTT")
+               "PASS", "Available confirmed on MQTT (via MQTT set_availability)")
     else:
-        # May not be in recent buffer if no recent reconnect; WARN not FAIL
-        record("3.2", "StatusNotification Available (initial state)",
-               "WARN", "Available status not in recent MQTT buffer",
-               "Check CSMS event log for StatusNotification Available on boot")
+        with _mqtt_lock:
+            recent = _mqtt_events[-30:]
+        if any("status" in t and "Available" in p for _, t, p in recent):
+            record("3.2", "StatusNotification Available (initial state)",
+                   "PASS", "Available status observed in recent MQTT buffer")
+        else:
+            record("3.2", "StatusNotification Available (initial state)",
+                   "WARN", "Available not observed on MQTT in 10 s",
+                   "Check CSMS event log for StatusNotification Available on boot")
 
     # ══════════════════════════════════════════════════════════════════════════
     # Manual session — 3.3 – 3.10

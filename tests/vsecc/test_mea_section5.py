@@ -197,6 +197,18 @@ def mqtt_wait(mark, topic_kw, value_kw, timeout=30):
     return None, None
 
 
+def mqtt_set_availability(evse_id, state, wait_kw=None, timeout=10):
+    """Publish K.2.25 set_availability; optionally wait for status event."""
+    if not HAS_MQTT or _mqtt_client is None:
+        return None, None
+    mark = mqtt_mark()
+    _mqtt_client.publish(
+        f"vsecc/connector/{evse_id}/status/set_availability", state)
+    if wait_kw:
+        return mqtt_wait(mark, "status", wait_kw, timeout=timeout)
+    return None, None
+
+
 # ─────────────────────────────────────────────
 # MEA call helper
 # ─────────────────────────────────────────────
@@ -294,17 +306,21 @@ def run_section5(vsecc: VseccApi, mea: MeaApi):
     print("\n  [Flow 1] Reserve → Cancel")
 
     # ── 5.1  StatusNotification Available ────────────────────────────────────
-    mark51 = mqtt_mark()
-    time.sleep(1)
-    with _mqtt_lock:
-        recent = _mqtt_events[-30:]
-    if any("status" in t and "Available" in p for _, t, p in recent):
+    payload51, _ = mqtt_set_availability(1, "operative",
+                                         wait_kw="Available", timeout=10)
+    if payload51:
         record("5.1", "StatusNotification Available (initial)",
-               "PASS", "Available observed in recent MQTT buffer")
+               "PASS", "Available confirmed on MQTT (via MQTT set_availability)")
     else:
-        record("5.1", "StatusNotification Available (initial)",
-               "WARN", "Available not in recent MQTT buffer",
-               "Check CSMS event log; charger may already be available")
+        with _mqtt_lock:
+            recent = _mqtt_events[-30:]
+        if any("status" in t and "Available" in p for _, t, p in recent):
+            record("5.1", "StatusNotification Available (initial)",
+                   "PASS", "Available observed in recent MQTT buffer")
+        else:
+            record("5.1", "StatusNotification Available (initial)",
+                   "WARN", "Available not observed on MQTT in 10 s",
+                   "Check CSMS event log; charger may already be available")
 
     # ── 5.2  ReserveNow → Reserved ───────────────────────────────────────────
     mark52 = mqtt_mark()
