@@ -18,7 +18,7 @@
 \large Section 5: Reservation Check\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-09 15:50}
+\date{2026-06-10 15:45}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -39,9 +39,9 @@
 \textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
 \textbf{Connection}        & Direct (no proxy) \\
 \textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
-\textbf{EV Plug Timeout}   & 60 s per plug event \\
+\textbf{EV Plug Timeout}   & 0 s per plug event \\
 \textbf{Expiry Wait}       & 90 s (wait for CSMS to expire short reservation) \\
-\textbf{Test Date}         & 2026-06-09 07:21:41 UTC \\
+\textbf{Test Date}         & 2026-06-10 08:44:54 UTC \\
 \textbf{Results file}      & tex/vsecc\_section5\_results.json \\
 \end{tabular}
 
@@ -93,7 +93,7 @@ Three reservation scenarios are tested:
 \endfoot
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{Flow 1: Reserve $\rightarrow$ Cancel --- Items 5.1--5.5}} \\
 \hline
-\small 5.1 & \small StatusNotification Available (initial) & Available not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 5.1 & \small StatusNotification Available (initial) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 5.2 & \small ReserveNow (5 min) → Accepted & HTTP 200{\newline\normalfont\footnotesize\itshape reservation\_id not found in response} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
@@ -117,7 +117,7 @@ Three reservation scenarios are tested:
 \hline
 \small 5.10 & \small StatusNotification Reserved (Flow 3) & Reserved status not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 5.11 & \small StatusNotification Reserved/Preparing (EV plug) & No EV plug event in 60s{\newline\normalfont\footnotesize\itshape Connect physical EV and rerun for full Section 5 coverage} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 5.11 & \small StatusNotification Reserved/Preparing (EV plug) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 5.12 & \small RemoteStartTransaction → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline

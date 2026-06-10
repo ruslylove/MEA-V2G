@@ -18,7 +18,7 @@
 \large Section 3: Normal Operation Check\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-08 15:42}
+\date{2026-06-10 15:45}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -40,8 +40,8 @@
 \textbf{Connection}        & Direct (no proxy) \\
 \textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
 \textbf{EV Plug Timeout}   & 0 s per plug event \\
-\textbf{Local Stop Timeout} & 0 s (RFID card tap) \\
-\textbf{Test Date}         & 2026-06-08 08:40:52 UTC \\
+\textbf{Local Stop Timeout} & 30 s (RFID card tap) \\
+\textbf{Test Date}         & 2026-06-10 08:33:26 UTC \\
 \textbf{Results file}      & tex/vsecc\_section3\_results.json \\
 \end{tabular}
 
@@ -81,7 +81,7 @@ StatusNotification, Authorize, StartTransaction, StopTransaction, and MeterValue
 \hline
 \small 3.1 & \small BootNotification → Accepted (currentTime, interval, status) & CSMS connection active — BootNotification Accepted confirmed & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 3.2 & \small StatusNotification Available (initial state) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available on boot} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 3.2 & \small StatusNotification Available (initial state) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available on boot} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 3.3 & \small StatusNotification Preparing (EV plug, manual) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline

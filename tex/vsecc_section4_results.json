@@ -2,157 +2,178 @@
   "section": 4,
   "title": "การตรวจสอบ Reset",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-09T06:36:03.994356Z",
+  "timestamp": "2026-06-10T08:39:57.950789Z",
   "method": "direct-to-csms",
   "ev_wait_sec": 0,
-  "boot_wait_sec": 30,
+  "boot_wait_sec": 90,
   "results": [
     {
       "item": "4.1",
       "message": "Reset (Hard) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "4.2",
       "message": "BootNotification → Accepted (after Hard Reset)",
       "status": "PASS",
       "detail": "CSMS reconnection confirmed after reset",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "4.3",
       "message": "StatusNotification Available (after reboot)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 20 s after reset",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "4.4",
       "message": "StatusNotification Preparing (EV plug, Flow 1)",
       "status": "WARN",
       "detail": "EV_WAIT_SEC=0 — skipped",
-      "remark": "Connect physical EV to connector and rerun"
+      "remark": "Connect physical EV to connector and rerun",
+      "raw": ""
     },
     {
       "item": "4.5",
       "message": "RemoteStartTransaction → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "4.6",
       "message": "StartTransaction (triggered by RemoteStart)",
       "status": "WARN",
       "detail": "charging_session_state not observed on MQTT in 30 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "4.7",
       "message": "StatusNotification Charging (Flow 1)",
       "status": "WARN",
       "detail": "Charging status not observed on MQTT in 20 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "4.8",
       "message": "MeterValues (Flow 1, during charging)",
       "status": "WARN",
       "detail": "MeterValues not observed on MQTT in 15 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "4.9",
       "message": "Reset (Soft) → Accepted (during charging)",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "4.10",
       "message": "StopTransaction (triggered by Soft Reset)",
       "status": "WARN",
       "detail": "session_state idle/finished not observed in 30 s",
-      "remark": "Soft Reset should cause graceful StopTransaction before reboot"
+      "remark": "Soft Reset should cause graceful StopTransaction before reboot",
+      "raw": ""
     },
     {
       "item": "4.11",
       "message": "StatusNotification Finishing (Soft Reset, EV plugged)",
       "status": "WARN",
       "detail": "Finishing not observed on MQTT in 15 s",
-      "remark": "Some implementations skip Finishing → go directly to Available"
+      "remark": "Some implementations skip Finishing → go directly to Available",
+      "raw": ""
     },
     {
       "item": "4.12",
       "message": "StatusNotification Available (unplug after Soft Reset)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 30 s — unplug EV",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "4.13",
       "message": "StatusNotification Preparing (EV plug, Flow 2)",
       "status": "WARN",
       "detail": "EV_WAIT_SEC=0 — skipped",
-      "remark": "Connect physical EV to connector and rerun"
+      "remark": "Connect physical EV to connector and rerun",
+      "raw": ""
     },
     {
       "item": "4.14",
       "message": "RemoteStartTransaction → Accepted (Flow 2)",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "4.15",
       "message": "StartTransaction (Flow 2, triggered by RemoteStart)",
       "status": "WARN",
       "detail": "charging_session_state not observed on MQTT in 30 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "4.16",
       "message": "StatusNotification Charging (Flow 2)",
       "status": "WARN",
       "detail": "Charging status not observed on MQTT in 20 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "4.17",
       "message": "MeterValues (Flow 2, during charging)",
       "status": "WARN",
       "detail": "MeterValues not observed on MQTT in 15 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "4.18",
       "message": "Reset (Hard) → Accepted (during charging)",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "4.19",
       "message": "StopTransaction (triggered by Hard Reset)",
       "status": "WARN",
       "detail": "session_state idle/finished not observed in 30 s",
-      "remark": "Hard Reset may not send StopTransaction before rebooting"
+      "remark": "Hard Reset may not send StopTransaction before rebooting",
+      "raw": ""
     },
     {
       "item": "4.20",
       "message": "StatusNotification Finishing (Hard Reset, EV plugged)",
       "status": "WARN",
       "detail": "Finishing not observed on MQTT in 15 s",
-      "remark": "Hard Reset typically skips Finishing — goes directly Available after reboot"
+      "remark": "Hard Reset typically skips Finishing — goes directly Available after reboot",
+      "raw": ""
     },
     {
       "item": "4.21",
       "message": "StatusNotification Available (after Hard Reset, EV unplug)",
       "status": "WARN",
-      "detail": "Available not observed in 30s — unplug EV / wait for reboot",
-      "remark": ""
+      "detail": "Available not observed in 90s — unplug EV / wait for reboot",
+      "remark": "",
+      "raw": ""
     }
   ]
 }

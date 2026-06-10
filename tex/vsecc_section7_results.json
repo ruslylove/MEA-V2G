@@ -2,7 +2,7 @@
   "section": 7,
   "title": "การตรวจสอบการทำงานผิดปกติ",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-09T08:43:23.566811Z",
+  "timestamp": "2026-06-10T08:20:29.909855Z",
   "method": "direct-to-csms",
   "ev_wait_sec": 0,
   "boot_wait_sec": 90,
@@ -12,8 +12,8 @@
       "item": "7.1.1",
       "message": "StatusNotification Available (charger idle, no EV)",
       "status": "WARN",
-      "detail": "Available status not in recent MQTT buffer",
-      "remark": "Check CSMS event log for StatusNotification Available"
+      "detail": "Available not observed on MQTT in 10 s",
+      "remark": "Check CSMS event log; charger may already be available"
     },
     {
       "item": "7.1.2",
@@ -26,8 +26,8 @@
       "item": "7.2.1",
       "message": "StatusNotification Available (before EV plug)",
       "status": "WARN",
-      "detail": "Available status not in recent MQTT buffer",
-      "remark": "Check CSMS event log for StatusNotification Available"
+      "detail": "Available not observed on MQTT in 10 s",
+      "remark": "Check CSMS event log; charger may already be available"
     },
     {
       "item": "7.2.2",
@@ -103,8 +103,8 @@
       "item": "7.3.1",
       "message": "StatusNotification Available (before EV plug)",
       "status": "WARN",
-      "detail": "Available status not in recent MQTT buffer",
-      "remark": "Check CSMS event log for StatusNotification Available"
+      "detail": "Available not observed on MQTT in 10 s",
+      "remark": "Check CSMS event log; charger may already be available"
     },
     {
       "item": "7.3.2",
@@ -180,8 +180,8 @@
       "item": "7.4.1",
       "message": "StatusNotification Available (before EV plug)",
       "status": "WARN",
-      "detail": "Available status not in recent MQTT buffer",
-      "remark": "Check CSMS event log for StatusNotification Available"
+      "detail": "Available not observed on MQTT in 10 s",
+      "remark": "Check CSMS event log; charger may already be available"
     },
     {
       "item": "7.4.2",
@@ -250,8 +250,8 @@
       "item": "7.5.1",
       "message": "StatusNotification Available (before door open)",
       "status": "WARN",
-      "detail": "Available status not in recent MQTT buffer",
-      "remark": "Check CSMS event log for StatusNotification Available"
+      "detail": "Available not observed on MQTT in 10 s",
+      "remark": "Check CSMS event log; charger may already be available"
     },
     {
       "item": "7.5.2",
@@ -271,8 +271,8 @@
       "item": "7.6.1",
       "message": "StatusNotification Available (before EV plug)",
       "status": "WARN",
-      "detail": "Available status not in recent MQTT buffer",
-      "remark": "Check CSMS event log for StatusNotification Available"
+      "detail": "Available not observed on MQTT in 10 s",
+      "remark": "Check CSMS event log; charger may already be available"
     },
     {
       "item": "7.6.2",

@@ -18,7 +18,7 @@
 \large Section 7: Abnormal Operation Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-09 15:50}
+\date{2026-06-10 15:45}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -42,7 +42,7 @@
 \textbf{EV Plug Timeout}    & 0 s per plug event \\
 \textbf{Boot Wait Timeout}  & 90 s (after Hard Reset) \\
 \textbf{Local Stop Timeout} & 30 s \\
-\textbf{Test Date}          & 2026-06-09 08:43:23 UTC \\
+\textbf{Test Date}          & 2026-06-10 08:20:29 UTC \\
 \textbf{Results file}       & tex/vsecc\_section7\_results.json \\
 \end{tabular}
 
@@ -85,13 +85,13 @@ Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST A
 \endfoot
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.1 --- RemoteStart while Unplugged (Available State)}} \\
 \hline
-\small 7.1.1 & \small StatusNotification Available (charger idle, no EV) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 7.1.1 & \small StatusNotification Available (charger idle, no EV) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 7.1.2 & \small RemoteStartTransaction (EV not connected) → HTTP 200 & HTTP 200{\newline\normalfont\footnotesize\itshape vSECC should respond Rejected when no EV present} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.2 --- Concurrent RemoteStart (Second Rejected)}} \\
 \hline
-\small 7.2.1 & \small StatusNotification Available (before EV plug) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 7.2.1 & \small StatusNotification Available (before EV plug) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 7.2.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
@@ -115,7 +115,7 @@ Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST A
 \hline
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.3 --- Swap Card (Invalid then Valid RFID)}} \\
 \hline
-\small 7.3.1 & \small StatusNotification Available (before EV plug) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 7.3.1 & \small StatusNotification Available (before EV plug) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 7.3.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
@@ -139,7 +139,7 @@ Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST A
 \hline
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.4 --- Emergency Stop}} \\
 \hline
-\small 7.4.1 & \small StatusNotification Available (before EV plug) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 7.4.1 & \small StatusNotification Available (before EV plug) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 7.4.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
@@ -161,7 +161,7 @@ Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST A
 \hline
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.5 --- Open Door}} \\
 \hline
-\small 7.5.1 & \small StatusNotification Available (before door open) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 7.5.1 & \small StatusNotification Available (before door open) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 7.5.2 & \small StatusNotification Faulted (reason=DoorOpen) & Triggered by opening physical door/panel on vSECC hardware{\newline\normalfont\footnotesize\itshape Requires physical door open on vSECC hardware; not triggerable via API} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
@@ -169,7 +169,7 @@ Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST A
 \hline
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.6 --- Power Loss / Reboot (Simulated via Hard Reset)}} \\
 \hline
-\small 7.6.1 & \small StatusNotification Available (before EV plug) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 7.6.1 & \small StatusNotification Available (before EV plug) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 7.6.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline

@@ -2,24 +2,24 @@
   "section": 6,
   "title": "การตรวจสอบ Charging Profile",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-09T07:27:04.593193Z",
+  "timestamp": "2026-06-10T08:14:38.247899Z",
   "method": "direct-to-csms",
-  "ev_wait_sec": 60,
+  "ev_wait_sec": 0,
   "local_stop_wait_sec": 30,
   "results": [
     {
       "item": "6.1",
       "message": "StatusNotification Available (initial state)",
       "status": "WARN",
-      "detail": "Available status not in recent MQTT buffer",
-      "remark": "Check CSMS event log for StatusNotification Available"
+      "detail": "Available not observed on MQTT in 10 s",
+      "remark": "Check CSMS event log; charger may already be available"
     },
     {
       "item": "6.2",
       "message": "StatusNotification Preparing (EV plug, Flow 1)",
       "status": "WARN",
-      "detail": "No Preparing event in 60s — no EV connected",
-      "remark": "Connect physical EV and rerun for full Section 6 coverage"
+      "detail": "EV_WAIT_SEC=0 — skipped",
+      "remark": "Connect physical EV to connector and rerun"
     },
     {
       "item": "6.3",
@@ -102,8 +102,8 @@
       "item": "6.14",
       "message": "StatusNotification Preparing (EV plug, Flow 2)",
       "status": "WARN",
-      "detail": "No Preparing event in 60s — no EV connected",
-      "remark": "Connect physical EV and rerun for full Section 6 coverage"
+      "detail": "EV_WAIT_SEC=0 — skipped",
+      "remark": "Connect physical EV to connector and rerun"
     },
     {
       "item": "6.15",

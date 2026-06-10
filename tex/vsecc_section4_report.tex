@@ -18,7 +18,7 @@
 \large Section 4: Reset Check\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-09 13:56}
+\date{2026-06-10 15:45}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -40,8 +40,8 @@
 \textbf{Connection}        & Direct (no proxy) \\
 \textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
 \textbf{EV Plug Timeout}   & 0 s per plug event \\
-\textbf{Boot Wait Timeout} & 30 s (after Hard Reset) \\
-\textbf{Test Date}         & 2026-06-09 06:36:03 UTC \\
+\textbf{Boot Wait Timeout} & 90 s (after Hard Reset) \\
+\textbf{Test Date}         & 2026-06-10 08:39:57 UTC \\
 \textbf{Results file}      & tex/vsecc\_section4\_results.json \\
 \end{tabular}
 
@@ -130,7 +130,7 @@ Three reset scenarios are tested:
 \hline
 \small 4.20 & \small StatusNotification Finishing (Hard Reset, EV plugged) & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Hard Reset typically skips Finishing — goes directly Available after reboot} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 4.21 & \small StatusNotification Available (after Hard Reset, EV unplug) & Available not observed in 30s — unplug EV / wait for reboot & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 4.21 & \small StatusNotification Available (after Hard Reset, EV unplug) & Available not observed in 90s — unplug EV / wait for reboot & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 
 \end{longtable}

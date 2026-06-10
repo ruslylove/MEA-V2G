@@ -51,6 +51,7 @@ REQUIRED_CONFIG_KEYS = {
 }
 
 results = []
+_last_raw = ""
 
 
 # ─────────────────────────────────────────────
@@ -142,12 +143,15 @@ class MeaApi:
 # Result recording
 # ─────────────────────────────────────────────
 def record(item, message, status, detail="", remark=""):
+    global _last_raw
+    raw = _last_raw
+    _last_raw = ""
     tag = {"PASS": "[PASS]", "FAIL": "[FAIL]", "SKIP": "[SKIP]", "WARN": "[WARN]"}[status]
     print(f"  {tag} {item}  {message}" + (f"  ({detail})" if detail else ""))
     if remark:
         print(f"         {remark}")
     results.append({"item": item, "message": message, "status": status,
-                    "detail": detail, "remark": remark})
+                    "detail": detail, "remark": remark, "raw": raw})
 
 
 def section(title):

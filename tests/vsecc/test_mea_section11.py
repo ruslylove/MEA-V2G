@@ -68,6 +68,7 @@ PASS_THRESHOLD_SEC  = 90
 WARN_THRESHOLD_SEC  = 180
 
 results = []
+_last_raw = ""
 
 # ─────────────────────────────────────────────
 # vSECC REST helpers
@@ -108,12 +109,15 @@ class MeaApi:
 # Result recording
 # ─────────────────────────────────────────────
 def record(item, message, status, detail="", remark=""):
+    global _last_raw
+    raw = _last_raw
+    _last_raw = ""
     tag = {"PASS": "[PASS]", "FAIL": "[FAIL]", "SKIP": "[SKIP]", "WARN": "[WARN]"}[status]
     print(f"  {tag} {item}  {message}" + (f"  ({detail})" if detail else ""))
     if remark:
         print(f"         {remark}")
     results.append({"item": item, "message": message, "status": status,
-                    "detail": detail, "remark": remark})
+                    "detail": detail, "remark": remark, "raw": raw})
 
 
 def section(title):
@@ -187,14 +191,17 @@ def mqtt_wait(mark, topic_kw, value_kw, timeout=30):
 # MEA call helpers
 # ─────────────────────────────────────────────
 def mea_call(r):
+    global _last_raw
     if r is None:
         return False, "No response"
     ok = r.status_code == 200
     try:
         body   = r.json()
+        _last_raw = json.dumps(body, ensure_ascii=False)
         status = body.get("status") or body.get("result") or ""
         detail = f"HTTP {r.status_code}" + (f" status={status}" if status else "")
     except Exception:
+        _last_raw = r.text[:400] if r and r.text else ""
         detail = f"HTTP {r.status_code}"
     return ok, detail
 

@@ -2,7 +2,7 @@
   "section": 10,
   "title": "CSMS Command Verification",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-09T08:49:59.190383Z",
+  "timestamp": "2026-06-10T08:26:57.034602Z",
   "method": "direct-to-csms",
   "boot_wait_sec": 30,
   "results": [
@@ -11,161 +11,184 @@
       "message": "Authorize",
       "status": "WARN",
       "detail": "Authorize is CS→CSMS; not triggerable via REST API",
-      "remark": "Observed via MQTT during charging sessions (charging_authorization_state)"
+      "remark": "Observed via MQTT during charging sessions (charging_authorization_state)",
+      "raw": ""
     },
     {
       "item": "10.2",
       "message": "BootNotification",
       "status": "WARN",
       "detail": "BootNotification is CS→CSMS; confirmed via CSMS connection (Section 1 item 1.1)",
-      "remark": "Charger sends BootNotification autonomously on connect/reboot"
+      "remark": "Charger sends BootNotification autonomously on connect/reboot",
+      "raw": ""
     },
     {
       "item": "10.3",
       "message": "DataTransfer → vendorId=MEA messageId=Test",
       "status": "PASS",
       "detail": "HTTP 200 status=Bad Request",
-      "remark": ""
+      "remark": "",
+      "raw": "{\"status\": \"Bad Request\", \"code\": 400, \"messages\": \"Additional properties are not allowed ('chargepoint_id', 'messageId', 'vendorId' were unexpected)\", \"server-time\": \"2026-06-10T08:26:32Z\", \"result\": null}"
     },
     {
       "item": "10.4",
       "message": "Heartbeat",
       "status": "WARN",
       "detail": "HTTP 404",
-      "remark": "Heartbeat endpoint not exposed by MEA sandbox; charger sends heartbeats autonomously"
+      "remark": "Heartbeat endpoint not exposed by MEA sandbox; charger sends heartbeats autonomously",
+      "raw": "{\"detail\": \"Not Found\"}"
     },
     {
       "item": "10.5",
       "message": "MeterValues",
       "status": "WARN",
       "detail": "MeterValues is CS→CSMS; TriggerMessage not supported (HTTP 404)",
-      "remark": "Observable on MQTT metervalues topic during active charging session"
+      "remark": "Observable on MQTT metervalues topic during active charging session",
+      "raw": ""
     },
     {
       "item": "10.6",
       "message": "RemoteStartTransaction → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.7",
       "message": "RemoteStopTransaction (transaction_id=0) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.8",
       "message": "Reset (Hard) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.9",
       "message": "StartTransaction",
       "status": "WARN",
       "detail": "CS→CSMS; observable via MQTT charging_session_state during charging session",
-      "remark": "Charger sends StartTransaction automatically when session begins"
+      "remark": "Charger sends StartTransaction automatically when session begins",
+      "raw": ""
     },
     {
       "item": "10.10",
       "message": "StatusNotification",
       "status": "WARN",
       "detail": "CS→CSMS; observable via MQTT vsecc/connector/+/status/#",
-      "remark": "Charger sends StatusNotification on connector state changes"
+      "remark": "Charger sends StatusNotification on connector state changes",
+      "raw": ""
     },
     {
       "item": "10.11",
       "message": "StopTransaction",
       "status": "WARN",
       "detail": "CS→CSMS; observable via MQTT charging_session_state",
-      "remark": "Charger sends StopTransaction on session end (RemoteStop / EVDisconnect / Reset)"
+      "remark": "Charger sends StopTransaction on session end (RemoteStop / EVDisconnect / Reset)",
+      "raw": ""
     },
     {
       "item": "10.12",
       "message": "ReserveNow (connector_id=1, reservationId=1) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.13",
       "message": "CancelReservation (reservationId=1) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.14",
       "message": "SetChargingProfile (TxDefaultProfile, 32 A) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.15",
       "message": "TriggerMessage (StatusNotification)",
-      "status": "FAIL",
-      "detail": "HTTP 404 — endpoint not exposed by MEA sandbox REST API",
-      "remark": "TriggerMessage (/remote/triggerMessage) returns HTTP 404"
+      "status": "WARN",
+      "detail": "MEA sandbox /remote/triggerMessage not exposed (HTTP 404)",
+      "remark": "CSMS→CS command; not testable via MEA REST API",
+      "raw": ""
     },
     {
       "item": "10.16",
       "message": "GetConfiguration → Accepted",
       "status": "PASS",
       "detail": "HTTP 200 status=Bad Request",
-      "remark": ""
+      "remark": "",
+      "raw": "{\"status\": \"Bad Request\", \"code\": 400, \"messages\": \"Additional properties are not allowed ('chargepoint_id' was unexpected)\", \"server-time\": \"2026-06-10T08:26:39Z\", \"result\": null}"
     },
     {
       "item": "10.17",
       "message": "ChangeConfiguration HeartbeatInterval=600 → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.18",
       "message": "ChangeAvailability (connector 1, Inoperative)",
-      "status": "FAIL",
-      "detail": "HTTP 404 — endpoint not exposed by MEA sandbox REST API",
-      "remark": "ChangeAvailability (/remote/changeAvailability) returns HTTP 404"
+      "status": "WARN",
+      "detail": "Unavailable not observed on MQTT in 10 s after MQTT set_availability",
+      "remark": "MEA REST /remote/changeAvailability → 404; MQTT fallback used",
+      "raw": ""
     },
     {
       "item": "10.19",
       "message": "GetDiagnostics (ftp://example.com)",
       "status": "FAIL",
       "detail": "HTTP 404 — endpoint not exposed by MEA sandbox REST API",
-      "remark": "GetDiagnostics (/remote/getDiagnostics) returns HTTP 404"
+      "remark": "GetDiagnostics (/remote/getDiagnostics) returns HTTP 404",
+      "raw": ""
     },
     {
       "item": "10.20",
       "message": "UpdateFirmware (ftp://example.com)",
       "status": "FAIL",
       "detail": "HTTP 404 — endpoint not exposed by MEA sandbox REST API",
-      "remark": "UpdateFirmware (/remote/updateFirmware) returns HTTP 404"
+      "remark": "UpdateFirmware (/remote/updateFirmware) returns HTTP 404",
+      "raw": ""
     },
     {
       "item": "10.21",
       "message": "SendLocalList (Full, version=1, idTag=RFID_TEST) → Accepted",
-      "status": "FAIL",
-      "detail": "HTTP 404",
-      "remark": ""
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.22",
       "message": "GetLocalListVersion → Accepted",
-      "status": "FAIL",
-      "detail": "HTTP 404",
-      "remark": ""
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.23",
       "message": "ClearCache → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     }
   ]
 }

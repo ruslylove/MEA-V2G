@@ -2,7 +2,7 @@
   "section": 9,
   "title": "MEA-Specific Configuration & V2G/BPT",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-09T08:44:14.040691Z",
+  "timestamp": "2026-06-10T08:21:20.587511Z",
   "method": "direct-to-csms",
   "meter_wait_sec": 15,
   "results": [

@@ -2,143 +2,162 @@
   "section": 5,
   "title": "การตรวจสอบ Reservation",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-09T07:21:41.327633Z",
+  "timestamp": "2026-06-10T08:44:54.972608Z",
   "method": "direct-to-csms",
-  "ev_wait_sec": 60,
+  "ev_wait_sec": 0,
   "expiry_wait_sec": 90,
   "results": [
     {
       "item": "5.1",
       "message": "StatusNotification Available (initial)",
       "status": "WARN",
-      "detail": "Available not in recent MQTT buffer",
-      "remark": "Check CSMS event log; charger may already be available"
+      "detail": "Available not observed on MQTT in 10 s",
+      "remark": "Check CSMS event log; charger may already be available",
+      "raw": ""
     },
     {
       "item": "5.2",
       "message": "ReserveNow (5 min) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": "reservation_id not found in response"
+      "remark": "reservation_id not found in response",
+      "raw": "\"\""
     },
     {
       "item": "5.3",
       "message": "StatusNotification Reserved (after ReserveNow)",
       "status": "WARN",
       "detail": "Reserved status not observed on MQTT in 15 s",
-      "remark": "vSECC may use different status reporting for reservations"
+      "remark": "vSECC may use different status reporting for reservations",
+      "raw": ""
     },
     {
       "item": "5.4",
       "message": "CancelReservation (id=0) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "5.5",
       "message": "StatusNotification Available (after cancel)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 15 s after cancel",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "5.6",
       "message": "ReserveNow (short, for expiry test) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": "reservation_id not found"
+      "remark": "reservation_id not found",
+      "raw": "\"\""
     },
     {
       "item": "5.7",
       "message": "Reservation expiry (wait ≤90s)",
       "status": "WARN",
       "detail": "Available not observed in 90s",
-      "remark": "MEA CSMS may enforce a minimum reservation duration; expiry auto-cancelled"
+      "remark": "MEA CSMS may enforce a minimum reservation duration; expiry auto-cancelled",
+      "raw": ""
     },
     {
       "item": "5.8",
       "message": "StatusNotification Available (after expiry)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 15 s after expiry/cancel",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "5.9",
       "message": "ReserveNow (10 min, for charge session) → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": "reservation_id not found"
+      "remark": "reservation_id not found",
+      "raw": "\"\""
     },
     {
       "item": "5.10",
       "message": "StatusNotification Reserved (Flow 3)",
       "status": "WARN",
       "detail": "Reserved status not observed on MQTT in 15 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "5.11",
       "message": "StatusNotification Reserved/Preparing (EV plug)",
       "status": "WARN",
-      "detail": "No EV plug event in 60s",
-      "remark": "Connect physical EV and rerun for full Section 5 coverage"
+      "detail": "EV_WAIT_SEC=0 — skipped",
+      "remark": "Connect physical EV to connector and rerun",
+      "raw": ""
     },
     {
       "item": "5.12",
       "message": "RemoteStartTransaction → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "5.13",
       "message": "StartTransaction (triggered by RemoteStart)",
       "status": "WARN",
       "detail": "charging_session_state not observed on MQTT in 30 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "5.14",
       "message": "StatusNotification Charging",
       "status": "WARN",
       "detail": "Charging status not observed on MQTT in 20 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "5.15",
       "message": "MeterValues (during reservation charge)",
       "status": "WARN",
       "detail": "MeterValues not observed on MQTT in 15 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "5.16",
       "message": "RemoteStopTransaction → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "5.17",
       "message": "StopTransaction (triggered by RemoteStop)",
       "status": "WARN",
       "detail": "session_state idle/finished not observed on MQTT in 25 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "5.18",
       "message": "StatusNotification Finishing (EV still plugged)",
       "status": "WARN",
       "detail": "Finishing not observed on MQTT in 15 s",
-      "remark": "Some implementations skip Finishing → go directly to Available"
+      "remark": "Some implementations skip Finishing → go directly to Available",
+      "raw": ""
     },
     {
       "item": "5.19",
       "message": "StatusNotification Available (EV unplug)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 30 s — unplug EV",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     }
   ]
 }

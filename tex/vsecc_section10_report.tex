@@ -18,7 +18,7 @@
 \large Section 10: CSMS Command Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-09 15:50}
+\date{2026-06-10 15:45}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -40,7 +40,7 @@
 \textbf{Connection}        & Direct (no proxy) \\
 \textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
 \textbf{Boot Wait Timeout} & 30 s (after item 10.8 Hard Reset) \\
-\textbf{Test Date}         & 2026-06-09 08:49:59 UTC \\
+\textbf{Test Date}         & 2026-06-10 08:26:57 UTC \\
 \textbf{Results file}      & tex/vsecc\_section10\_results.json \\
 \end{tabular}
 
@@ -62,7 +62,7 @@ Item~10.8 (Hard Reset) causes the vSECC to reboot; the test waits up to
 continuing with item~10.9.
 
 \section{Section 10 Results}
-\textbf{Summary: 10 PASS \quad 6 FAIL \quad 7 WARN \quad 0 SKIP \quad (23 total)}
+\textbf{Summary: 12 PASS \quad 2 FAIL \quad 9 WARN \quad 0 SKIP \quad (23 total)}
 
 \renewcommand{\arraystretch}{1.35}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -85,9 +85,9 @@ continuing with item~10.9.
 \hline
 \small 10.2 & \small BootNotification & BootNotification is CS→CSMS; confirmed via CSMS connection (Section 1 item 1.1){\newline\normalfont\footnotesize\itshape Charger sends BootNotification autonomously on connect/reboot} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.3 & \small DataTransfer → vendorId=MEA messageId=Test & HTTP 200 status=Bad Request & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.3 & \small DataTransfer → vendorId=MEA messageId=Test & HTTP 200 status=Bad Request{\newline\color{gray!70}\scriptsize\ttfamily \{"status": "Bad Request", "code": 400, "messages": "Additional properties are not allowed ('chargepoint\_id', 'messageId', 'vendorId' were unexpected)", "serv\ldots{}} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.4 & \small Heartbeat & HTTP 404{\newline\normalfont\footnotesize\itshape Heartbeat endpoint not exposed by MEA sandbox; charger sends heartbeats autonom\ldots{}} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 10.4 & \small Heartbeat & HTTP 404{\newline\normalfont\footnotesize\itshape Heartbeat endpoint not exposed by MEA sandbox; charger sends heartbeats autonom\ldots{}}{\newline\color{gray!70}\scriptsize\ttfamily \{"detail": "Not Found"\}} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 10.5 & \small MeterValues & MeterValues is CS→CSMS; TriggerMessage not supported (HTTP 404){\newline\normalfont\footnotesize\itshape Observable on MQTT metervalues topic during active charging session} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
@@ -109,21 +109,21 @@ continuing with item~10.9.
 \hline
 \small 10.14 & \small SetChargingProfile (TxDefaultProfile, 32 A) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.15 & \small TriggerMessage (StatusNotification) & HTTP 404 — endpoint not exposed by MEA sandbox REST API{\newline\normalfont\footnotesize\itshape TriggerMessage (/remote/triggerMessage) returns HTTP 404} & \textcolor{failred}{\textbf{FAIL}} \\
+\small 10.15 & \small TriggerMessage (StatusNotification) & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMS→CS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.16 & \small GetConfiguration → Accepted & HTTP 200 status=Bad Request & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.16 & \small GetConfiguration → Accepted & HTTP 200 status=Bad Request{\newline\color{gray!70}\scriptsize\ttfamily \{"status": "Bad Request", "code": 400, "messages": "Additional properties are not allowed ('chargepoint\_id' was unexpected)", "server-time": "2026-06-10T08:2\ldots{}} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
 \small 10.17 & \small ChangeConfiguration HeartbeatInterval=600 → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.18 & \small ChangeAvailability (connector 1, Inoperative) & HTTP 404 — endpoint not exposed by MEA sandbox REST API{\newline\normalfont\footnotesize\itshape ChangeAvailability (/remote/changeAvailability) returns HTTP 404} & \textcolor{failred}{\textbf{FAIL}} \\
+\small 10.18 & \small ChangeAvailability (connector 1, Inoperative) & Unavailable not observed on MQTT in 10 s after MQTT set\_availability{\newline\normalfont\footnotesize\itshape MEA REST /remote/changeAvailability → 404; MQTT fallback used} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 10.19 & \small GetDiagnostics (ftp://example.com) & HTTP 404 — endpoint not exposed by MEA sandbox REST API{\newline\normalfont\footnotesize\itshape GetDiagnostics (/remote/getDiagnostics) returns HTTP 404} & \textcolor{failred}{\textbf{FAIL}} \\
 \hline
 \small 10.20 & \small UpdateFirmware (ftp://example.com) & HTTP 404 — endpoint not exposed by MEA sandbox REST API{\newline\normalfont\footnotesize\itshape UpdateFirmware (/remote/updateFirmware) returns HTTP 404} & \textcolor{failred}{\textbf{FAIL}} \\
 \hline
-\small 10.21 & \small SendLocalList (Full, version=1, idTag=RFID\_TEST) → Accepted & HTTP 404 & \textcolor{failred}{\textbf{FAIL}} \\
+\small 10.21 & \small SendLocalList (Full, version=1, idTag=RFID\_TEST) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.22 & \small GetLocalListVersion → Accepted & HTTP 404 & \textcolor{failred}{\textbf{FAIL}} \\
+\small 10.22 & \small GetLocalListVersion → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
 \small 10.23 & \small ClearCache → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline

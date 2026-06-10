@@ -172,9 +172,13 @@ Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST A
         detail     = trunc(escape(r["detail"] or ""), 90)
         remark     = trunc(escape(r.get("remark") or ""), 80)
         cell       = status_cell(r["status"])
+        raw        = trunc(escape(r.get("raw") or ""), 160)
+        if raw == '""': raw = ""
         detail_col = detail
         if remark:
             detail_col += r"{\newline\normalfont\footnotesize\itshape " + remark + "}"
+        if raw:
+            detail_col += r"{\newline\color{gray!70}\scriptsize\ttfamily " + raw + "}"
         tex += f"\\small {item_esc} & \\small {msg} & {detail_col} & {cell} \\\\\n\\hline\n"
 
     tex += r"""

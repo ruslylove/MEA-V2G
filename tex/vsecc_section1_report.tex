@@ -18,7 +18,7 @@
 \large Section 1: Charger Configuration Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-08 15:08}
+\date{2026-06-10 15:45}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -39,7 +39,7 @@
 \textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
 \textbf{Proxy}             & ws://192.168.1.200:9000 (PC alias on enp3s0) \\
 \textbf{Test PC}           & 192.168.111.185 / 192.168.1.200 \\
-\textbf{Test Date}         & 2026-06-08 15:08 \\
+\textbf{Test Date}         & 2026-06-10 15:45 \\
 \textbf{Results file}      & tex/vsecc\_section1\_results.json \\
 \end{tabular}
 
@@ -52,7 +52,7 @@ A control API on port 9001 allows the test to inject CSMS-initiated commands
 does not expose those endpoints.
 
 \section{Section 1 Results}
-\textbf{Summary: 8 PASS \quad 12 FAIL \quad 4 WARN \quad 0 SKIP \quad (24 total)}
+\textbf{Summary: 8 PASS \quad 1 FAIL \quad 15 WARN \quad 0 SKIP \quad (24 total)}
 
 \renewcommand{\arraystretch}{1.35}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -75,19 +75,19 @@ does not expose those endpoints.
 \hline
 \small 1.2 & \small StatusNotification (boot, all connectors) & Not observed on MQTT (timing); verify in CSMS log{\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.3 & \small TriggerMessage(BootNotification) → Accepted & HTTP 404 & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.3 & \small TriggerMessage(BootNotification) → Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMS→CS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.4 & \small BootNotification (triggered) fields & TriggerMessage failed (see 1.3) & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.4 & \small BootNotification (triggered) fields & Depends on 1.3 (TriggerMessage not available via MEA REST API) & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.5 & \small TriggerMessage(StatusNotification) → Accepted & HTTP 404 & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.5 & \small TriggerMessage(StatusNotification) → Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMS→CS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.6 & \small StatusNotification (triggered) fields & TriggerMessage failed (see 1.5) & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.6 & \small StatusNotification (triggered) fields & Depends on 1.5 (TriggerMessage not available via MEA REST API) & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.7 & \small TriggerMessage(MeterValues) → Accepted & HTTP 404{\newline\normalfont\footnotesize\itshape Rejected is normal outside a charging session} & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.7 & \small TriggerMessage(MeterValues) → Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMS→CS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 1.8 & \small MeterValues fields \& measurands & Requires active charging session{\newline\normalfont\footnotesize\itshape Retest during a charging session} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.9 & \small GetConfiguration (required configurationKey) & Missing: HeartbeatInterval, LocalAuthorizeOffline, MeterValueSampleInterval, UnlockConnec\ldots{} & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.9 & \small GetConfiguration (required configurationKey) & Missing: HeartbeatInterval, MeterValueSampleInterval, StopTransactionOnEVSideDisconnect & \textcolor{failred}{\textbf{FAIL}} \\
 \hline
 \small 1.10 & \small ChangeConfiguration HeartbeatInterval=600 → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
@@ -95,19 +95,19 @@ does not expose those endpoints.
 \hline
 \small 1.12 & \small ChangeConfiguration UnlockConnectorOnEVSideDisconnect=true → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.13 & \small ChangeAvailability(cid=1, Inoperative) → Accepted & HTTP 404 & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.13 & \small ChangeAvailability(cid=1, Inoperative) → Accepted & Unavailable not observed on MQTT in 10 s after set\_availability{\newline\normalfont\footnotesize\itshape MEA REST /remote/changeAvailability not exposed (HTTP 404)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.14 & \small StatusNotification (Inoperative) fields & ChangeAvailability failed (see 1.13) & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.14 & \small StatusNotification (Inoperative) fields & Depends on 1.13 (ChangeAvailability not available via MEA REST API) & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.15 & \small ChangeAvailability(cid=1, Operative) → Accepted & HTTP 404 & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.15 & \small ChangeAvailability(cid=1, Operative) → Accepted & Available not observed on MQTT in 10 s after set\_availability{\newline\normalfont\footnotesize\itshape MEA REST /remote/changeAvailability not exposed (HTTP 404)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.16 & \small StatusNotification (Operative) fields & ChangeAvailability failed (see 1.15) & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.16 & \small StatusNotification (Operative) fields & Depends on 1.15 (ChangeAvailability not available via MEA REST API) & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.17 & \small GetDiagnostics → fileName & HTTP 404{\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.17 & \small GetDiagnostics → fileName & MEA sandbox /remote/getDiagnostics not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 1.18 & \small DiagnosticsStatusNotification → status & Not observable without proxy log{\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.19 & \small UpdateFirmware & HTTP 404{\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.19 & \small UpdateFirmware & MEA sandbox /remote/updateFirmware not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 1.20 & \small FirmwareStatusNotification → status & Not observable without proxy log{\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline

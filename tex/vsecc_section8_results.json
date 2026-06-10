@@ -2,7 +2,7 @@
   "section": 8,
   "title": "Dual Connector Verification",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-09T07:15:33.122742Z",
+  "timestamp": "2026-06-10T08:20:31.622048Z",
   "method": "direct-to-csms",
   "note": "All items SKIP — vSECC.single has one connector; dual-connector scenarios N/A",
   "results": [

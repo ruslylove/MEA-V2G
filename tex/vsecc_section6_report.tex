@@ -18,7 +18,7 @@
 \large Section 6: Charging Profile Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-09 15:50}
+\date{2026-06-10 15:45}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -39,9 +39,9 @@
 \textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
 \textbf{Connection}        & Direct (no proxy) \\
 \textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
-\textbf{EV Plug Timeout}   & 60 s per plug event \\
+\textbf{EV Plug Timeout}   & 0 s per plug event \\
 \textbf{Local Stop Timeout} & 30 s (RFID card tap) \\
-\textbf{Test Date}         & 2026-06-09 07:27:04 UTC \\
+\textbf{Test Date}         & 2026-06-10 08:14:38 UTC \\
 \textbf{Results file}      & tex/vsecc\_section6\_results.json \\
 \end{tabular}
 
@@ -87,9 +87,9 @@ StatusNotification, Authorize, StartTransaction, StopTransaction, and MeterValue
 \endfoot
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{Flow 1: Local Start with Charging Profile (6.1--6.13)}} \\
 \hline
-\small 6.1 & \small StatusNotification Available (initial state) & Available status not in recent MQTT buffer{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 6.1 & \small StatusNotification Available (initial state) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 6.2 & \small StatusNotification Preparing (EV plug, Flow 1) & No Preparing event in 60s — no EV connected{\newline\normalfont\footnotesize\itshape Connect physical EV and rerun for full Section 6 coverage} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 6.2 & \small StatusNotification Preparing (EV plug, Flow 1) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 6.3 & \small Authorize (RFID card) → Accepted & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
@@ -115,7 +115,7 @@ StatusNotification, Authorize, StartTransaction, StopTransaction, and MeterValue
 \hline
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{Flow 2: Remote Start with Charging Profile (6.14--6.26)}} \\
 \hline
-\small 6.14 & \small StatusNotification Preparing (EV plug, Flow 2) & No Preparing event in 60s — no EV connected{\newline\normalfont\footnotesize\itshape Connect physical EV and rerun for full Section 6 coverage} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 6.14 & \small StatusNotification Preparing (EV plug, Flow 2) & EV\_WAIT\_SEC=0 — skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 6.15 & \small RemoteStartTransaction → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
