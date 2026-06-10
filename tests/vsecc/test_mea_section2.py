@@ -110,7 +110,7 @@ class MeaApi:
 
     def get_configuration(self, key=None):
         return self._post("/cmd/chargepoint/getConfiguration",
-                          {"chargepoint_id": CP_ID, "key": [key] if key else []})
+                          {"chargepoint": CP_ID, "key": [key] if key else []})
 
     def remote_start(self, connector_id=1, id_tag=RFID_TAG):
         return self._post("/cmd/chargepoint/remoteStart",

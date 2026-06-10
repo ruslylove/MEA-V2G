@@ -99,7 +99,7 @@ class MeaApi:
 
     def get_configuration(self, key=None):
         return self._post("/cmd/chargepoint/getConfiguration",
-                          {"chargepoint_id": CP_ID, "key": [key] if key else []})
+                          {"chargepoint": CP_ID, "key": [key] if key else []})
 
     def trigger_message(self, msg, connector_id=1):
         return self._post("/remote/triggerMessage",

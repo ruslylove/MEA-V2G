@@ -90,7 +90,7 @@ class MeaApi:
 
     def get_configuration(self, key=None):
         return self._post("/cmd/chargepoint/getConfiguration",
-                          {"chargepoint_id": CP_ID, "key": [key] if key else []})
+                          {"chargepoint": CP_ID, "key": [key] if key else []})
 
     def reserve_now(self, connector_id=1, card_id=RFID_TAG, duration=300):
         return self._post("/cmd/chargepoint/reserve",

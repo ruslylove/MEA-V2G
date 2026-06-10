@@ -92,7 +92,7 @@ class MeaApi:
             return None
 
     def get_configuration(self, key=None):
-        payload = {"chargepoint_id": CP_ID}
+        payload = {"chargepoint": CP_ID}
         if key:
             payload["key"] = [key]
         return self._post("/cmd/chargepoint/getConfiguration", payload)
