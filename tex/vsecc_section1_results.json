@@ -2,7 +2,7 @@
   "section": 1,
   "title": "การตรวจสอบการตั้งค่าเครื่องชาร์จ",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-10T08:29:38.962692Z",
+  "timestamp": "2026-06-11T04:23:20.089861Z",
   "method": "direct-to-csms",
   "results": [
     {
@@ -72,8 +72,8 @@
     {
       "item": "1.9",
       "message": "GetConfiguration (required configurationKey)",
-      "status": "FAIL",
-      "detail": "Missing: HeartbeatInterval, MeterValueSampleInterval, StopTransactionOnEVSideDisconnect",
+      "status": "WARN",
+      "detail": "GetConfiguration sent; response returned asynchronously (no inline configurationKey)",
       "remark": "",
       "raw": ""
     },

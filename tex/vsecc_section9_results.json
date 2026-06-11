@@ -2,7 +2,7 @@
   "section": 9,
   "title": "MEA-Specific Configuration & V2G/BPT",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-10T08:21:20.587511Z",
+  "timestamp": "2026-06-11T04:48:17.915958Z",
   "method": "direct-to-csms",
   "meter_wait_sec": 15,
   "results": [
@@ -11,56 +11,64 @@
       "message": "CSMS connection probe — GetConfiguration HTTP 200",
       "status": "PASS",
       "detail": "vSECC connected to MEA CSMS",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "9.1",
       "message": "ChangeConfiguration V2GMode=true → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "9.2",
       "message": "ChangeConfiguration MeterValueSampleInterval=10 → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "9.3",
       "message": "ChangeConfiguration LocalAuthorizeOffline=false → Accepted",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "9.4.0",
       "message": "ChangeConfiguration V2GMode=true (pre-condition for power demand)",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "9.4.1",
       "message": "Power Demand -5000 W (BPT discharge from EV to grid)",
       "status": "WARN",
       "detail": "HTTP 200; metervalues not observed in 15s",
-      "remark": "V2G/BPT requires active charging session and V2G-capable EV"
+      "remark": "V2G/BPT requires active charging session and V2G-capable EV",
+      "raw": "\"\""
     },
     {
       "item": "9.4.2",
       "message": "Power Demand +2000 W (BPT charge EV from grid)",
       "status": "WARN",
       "detail": "HTTP 200; metervalues not observed in 15s",
-      "remark": "V2G/BPT requires active charging session and V2G-capable EV"
+      "remark": "V2G/BPT requires active charging session and V2G-capable EV",
+      "raw": "\"\""
     },
     {
       "item": "9.4.3",
       "message": "Power Demand 0 W (BPT idle / stop power flow)",
       "status": "WARN",
       "detail": "HTTP 200; metervalues not observed in 15s",
-      "remark": "V2G/BPT requires active charging session and V2G-capable EV"
+      "remark": "V2G/BPT requires active charging session and V2G-capable EV",
+      "raw": "\"\""
     }
   ]
 }

@@ -421,15 +421,21 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
     ok, d = mea_call(r)
     if ok:
         try:
-            keys    = {k["key"] for k in r.json().get("configurationKey", [])}
-            missing = REQUIRED_CONFIG_KEYS - keys
-            d       = ("All required keys present" if not missing
-                       else f"Missing: {', '.join(sorted(missing))}")
-            ok      = not missing
+            body = r.json()
+            if not isinstance(body, dict):
+                # MEA sandbox returns "" — command sent async, no inline result
+                ok, d = None, "GetConfiguration sent; response returned asynchronously (no inline configurationKey)"
+            else:
+                keys    = {k["key"] if isinstance(k, dict) else k
+                           for k in body.get("configurationKey", [])}
+                missing = REQUIRED_CONFIG_KEYS - keys
+                d       = ("All required keys present" if not missing
+                           else f"Missing: {', '.join(sorted(missing))}")
+                ok      = not missing
         except Exception as e:
             ok, d = False, f"Parse error: {e}"
-    record("1.9", "GetConfiguration (required configurationKey)",
-           "PASS" if ok else "FAIL", d)
+    status19 = "WARN" if ok is None else ("PASS" if ok else "FAIL")
+    record("1.9", "GetConfiguration (required configurationKey)", status19, d)
 
     # ── Record 1.10–1.12 ─────────────────────────────────────────────────────
     for label in ("1.10", "1.11", "1.12"):

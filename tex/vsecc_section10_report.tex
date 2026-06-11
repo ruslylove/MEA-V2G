@@ -18,7 +18,7 @@
 \large Section 10: CSMS Command Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-10 15:45}
+\date{2026-06-11 12:07}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -40,7 +40,7 @@
 \textbf{Connection}        & Direct (no proxy) \\
 \textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
 \textbf{Boot Wait Timeout} & 30 s (after item 10.8 Hard Reset) \\
-\textbf{Test Date}         & 2026-06-10 08:26:57 UTC \\
+\textbf{Test Date}         & 2026-06-11 04:48:28 UTC \\
 \textbf{Results file}      & tex/vsecc\_section10\_results.json \\
 \end{tabular}
 
@@ -111,7 +111,7 @@ continuing with item~10.9.
 \hline
 \small 10.15 & \small TriggerMessage (StatusNotification) & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMS→CS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.16 & \small GetConfiguration → Accepted & HTTP 200 status=Bad Request{\newline\color{gray!70}\scriptsize\ttfamily \{"status": "Bad Request", "code": 400, "messages": "Additional properties are not allowed ('chargepoint\_id' was unexpected)", "server-time": "2026-06-10T08:2\ldots{}} & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.16 & \small GetConfiguration → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
 \small 10.17 & \small ChangeConfiguration HeartbeatInterval=600 → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline

@@ -18,7 +18,7 @@
 \large Section 1: Charger Configuration Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-10 15:45}
+\date{2026-06-11 12:07}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -39,7 +39,7 @@
 \textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
 \textbf{Proxy}             & ws://192.168.1.200:9000 (PC alias on enp3s0) \\
 \textbf{Test PC}           & 192.168.111.185 / 192.168.1.200 \\
-\textbf{Test Date}         & 2026-06-10 15:45 \\
+\textbf{Test Date}         & 2026-06-11 12:07 \\
 \textbf{Results file}      & tex/vsecc\_section1\_results.json \\
 \end{tabular}
 
@@ -52,7 +52,7 @@ A control API on port 9001 allows the test to inject CSMS-initiated commands
 does not expose those endpoints.
 
 \section{Section 1 Results}
-\textbf{Summary: 8 PASS \quad 1 FAIL \quad 15 WARN \quad 0 SKIP \quad (24 total)}
+\textbf{Summary: 8 PASS \quad 0 FAIL \quad 16 WARN \quad 0 SKIP \quad (24 total)}
 
 \renewcommand{\arraystretch}{1.35}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -87,7 +87,7 @@ does not expose those endpoints.
 \hline
 \small 1.8 & \small MeterValues fields \& measurands & Requires active charging session{\newline\normalfont\footnotesize\itshape Retest during a charging session} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.9 & \small GetConfiguration (required configurationKey) & Missing: HeartbeatInterval, MeterValueSampleInterval, StopTransactionOnEVSideDisconnect & \textcolor{failred}{\textbf{FAIL}} \\
+\small 1.9 & \small GetConfiguration (required configurationKey) & GetConfiguration sent; response returned asynchronously (no inline configurationKey) & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 1.10 & \small ChangeConfiguration HeartbeatInterval=600 → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline

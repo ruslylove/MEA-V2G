@@ -2,7 +2,7 @@
   "section": 7,
   "title": "การตรวจสอบการทำงานผิดปกติ",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-10T08:20:29.909855Z",
+  "timestamp": "2026-06-11T04:47:27.014689Z",
   "method": "direct-to-csms",
   "ev_wait_sec": 0,
   "boot_wait_sec": 90,
@@ -13,378 +13,432 @@
       "message": "StatusNotification Available (charger idle, no EV)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 10 s",
-      "remark": "Check CSMS event log; charger may already be available"
+      "remark": "Check CSMS event log; charger may already be available",
+      "raw": ""
     },
     {
       "item": "7.1.2",
       "message": "RemoteStartTransaction (EV not connected) → HTTP 200",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": "vSECC should respond Rejected when no EV present"
+      "remark": "vSECC should respond Rejected when no EV present",
+      "raw": "\"\""
     },
     {
       "item": "7.2.1",
       "message": "StatusNotification Available (before EV plug)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 10 s",
-      "remark": "Check CSMS event log; charger may already be available"
+      "remark": "Check CSMS event log; charger may already be available",
+      "raw": ""
     },
     {
       "item": "7.2.2",
       "message": "StatusNotification Preparing (EV plug)",
       "status": "WARN",
       "detail": "EV_WAIT_SEC=0 — skipped",
-      "remark": "Connect physical EV to connector and rerun"
+      "remark": "Connect physical EV to connector and rerun",
+      "raw": ""
     },
     {
       "item": "7.2.3",
       "message": "RemoteStartTransaction (first) → HTTP 200",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "7.2.4",
       "message": "RemoteStartTransaction (second, concurrent) → HTTP 200",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": "CSMS likely blocks duplicate; charger-level Rejected not observable without proxy"
+      "remark": "CSMS likely blocks duplicate; charger-level Rejected not observable without proxy",
+      "raw": "\"\""
     },
     {
       "item": "7.2.5",
       "message": "StartTransaction (session started after first RemoteStart)",
       "status": "WARN",
       "detail": "charging_session_state not observed on MQTT in 30 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.2.6",
       "message": "StatusNotification Charging",
       "status": "WARN",
       "detail": "Charging status not observed on MQTT in 20 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.2.7",
       "message": "MeterValues (during charging)",
       "status": "WARN",
       "detail": "MeterValues not observed on MQTT in 15 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.2.8",
       "message": "RemoteStopTransaction → HTTP 200",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "7.2.9",
       "message": "StopTransaction (session ended after RemoteStop)",
       "status": "WARN",
       "detail": "session_state idle/finished not observed on MQTT in 25 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.2.10",
       "message": "StatusNotification Finishing",
       "status": "WARN",
       "detail": "Finishing not observed on MQTT in 15 s",
-      "remark": "Some implementations skip Finishing and go directly to Available"
+      "remark": "Some implementations skip Finishing and go directly to Available",
+      "raw": ""
     },
     {
       "item": "7.2.11",
       "message": "StatusNotification Available (after stop / unplug)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 30 s — unplug EV",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.3.1",
       "message": "StatusNotification Available (before EV plug)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 10 s",
-      "remark": "Check CSMS event log; charger may already be available"
+      "remark": "Check CSMS event log; charger may already be available",
+      "raw": ""
     },
     {
       "item": "7.3.2",
       "message": "StatusNotification Preparing (EV plug)",
       "status": "WARN",
       "detail": "EV_WAIT_SEC=0 — skipped",
-      "remark": "Connect physical EV to connector and rerun"
+      "remark": "Connect physical EV to connector and rerun",
+      "raw": ""
     },
     {
       "item": "7.3.3",
       "message": "Authorize (invalid RFID tag) → Rejected",
       "status": "WARN",
       "detail": "Not triggerable via API — vSECC reads RFID directly from hardware",
-      "remark": "Requires physical RFID scan on vSECC hardware of unknown/blocked card"
+      "remark": "Requires physical RFID scan on vSECC hardware of unknown/blocked card",
+      "raw": ""
     },
     {
       "item": "7.3.4",
       "message": "Authorize (valid RFID tag) → Accepted",
       "status": "WARN",
       "detail": "Not triggerable via API — vSECC reads RFID directly from hardware",
-      "remark": "Requires physical RFID scan on vSECC hardware of authorized card after rejected card"
+      "remark": "Requires physical RFID scan on vSECC hardware of authorized card after rejected card",
+      "raw": ""
     },
     {
       "item": "7.3.5",
       "message": "StartTransaction (after valid RFID)",
       "status": "WARN",
       "detail": "Depends on 7.3.3/7.3.4 (physical RFID scan)",
-      "remark": "Session starts only after valid RFID tap on vSECC hardware"
+      "remark": "Session starts only after valid RFID tap on vSECC hardware",
+      "raw": ""
     },
     {
       "item": "7.3.6",
       "message": "StatusNotification Charging (after valid auth)",
       "status": "WARN",
       "detail": "Depends on 7.3.5 (StartTransaction)",
-      "remark": "Requires completed Authorize sequence via physical RFID hardware"
+      "remark": "Requires completed Authorize sequence via physical RFID hardware",
+      "raw": ""
     },
     {
       "item": "7.3.7",
       "message": "MeterValues (during charging)",
       "status": "WARN",
       "detail": "Depends on 7.3.6 (Charging state)",
-      "remark": "Requires completed Authorize sequence via physical RFID hardware"
+      "remark": "Requires completed Authorize sequence via physical RFID hardware",
+      "raw": ""
     },
     {
       "item": "7.3.8",
       "message": "RemoteStopTransaction",
       "status": "WARN",
       "detail": "Depends on 7.3.5 (StartTransaction)",
-      "remark": "Requires active session started via physical RFID hardware"
+      "remark": "Requires active session started via physical RFID hardware",
+      "raw": ""
     },
     {
       "item": "7.3.9",
       "message": "StopTransaction (after RemoteStop)",
       "status": "WARN",
       "detail": "Depends on 7.3.8 (RemoteStop)",
-      "remark": "Requires active session started via physical RFID hardware"
+      "remark": "Requires active session started via physical RFID hardware",
+      "raw": ""
     },
     {
       "item": "7.3.10",
       "message": "StatusNotification Finishing",
       "status": "WARN",
       "detail": "Depends on 7.3.8 (RemoteStop)",
-      "remark": "Requires active session started via physical RFID hardware"
+      "remark": "Requires active session started via physical RFID hardware",
+      "raw": ""
     },
     {
       "item": "7.3.11",
       "message": "StatusNotification Available (after stop / unplug)",
       "status": "WARN",
       "detail": "Depends on 7.3.8 (RemoteStop)",
-      "remark": "Requires active session started via physical RFID hardware"
+      "remark": "Requires active session started via physical RFID hardware",
+      "raw": ""
     },
     {
       "item": "7.4.1",
       "message": "StatusNotification Available (before EV plug)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 10 s",
-      "remark": "Check CSMS event log; charger may already be available"
+      "remark": "Check CSMS event log; charger may already be available",
+      "raw": ""
     },
     {
       "item": "7.4.2",
       "message": "StatusNotification Preparing (EV plug)",
       "status": "WARN",
       "detail": "EV_WAIT_SEC=0 — skipped",
-      "remark": "Connect physical EV to connector and rerun"
+      "remark": "Connect physical EV to connector and rerun",
+      "raw": ""
     },
     {
       "item": "7.4.3",
       "message": "RemoteStartTransaction → HTTP 200",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "7.4.4",
       "message": "StartTransaction (session started after RemoteStart)",
       "status": "WARN",
       "detail": "charging_session_state not observed on MQTT in 30 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.4.5",
       "message": "StatusNotification Charging",
       "status": "WARN",
       "detail": "Charging status not observed on MQTT in 20 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.4.6",
       "message": "MeterValues (during charging)",
       "status": "WARN",
       "detail": "MeterValues not observed on MQTT in 15 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.4.7",
       "message": "StopTransaction (reason=EmergencyStop)",
       "status": "WARN",
       "detail": "Triggered by physical emergency stop button on vSECC hardware",
-      "remark": "Requires physical emergency stop button press on the vSECC unit"
+      "remark": "Requires physical emergency stop button press on the vSECC unit",
+      "raw": ""
     },
     {
       "item": "7.4.8",
       "message": "StatusNotification Faulted (after EmergencyStop)",
       "status": "WARN",
       "detail": "Faulted status not observed on MQTT (E-stop not pressed)",
-      "remark": "Requires physical emergency stop button press on the vSECC unit"
+      "remark": "Requires physical emergency stop button press on the vSECC unit",
+      "raw": ""
     },
     {
       "item": "7.4.9",
       "message": "StatusNotification Available (E-stop cleared)",
       "status": "WARN",
       "detail": "Depends on 7.4.7 (physical E-stop press and release)",
-      "remark": "E-stop must be physically released to restore normal operation"
+      "remark": "E-stop must be physically released to restore normal operation",
+      "raw": ""
     },
     {
       "item": "7.4.10",
       "message": "StatusNotification Available (EV unplug after E-stop recovery)",
       "status": "WARN",
       "detail": "Depends on 7.4.7 (physical E-stop press and release)",
-      "remark": "EV must be unplugged after E-stop recovery to reach Available"
+      "remark": "EV must be unplugged after E-stop recovery to reach Available",
+      "raw": ""
     },
     {
       "item": "7.5.1",
       "message": "StatusNotification Available (before door open)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 10 s",
-      "remark": "Check CSMS event log; charger may already be available"
+      "remark": "Check CSMS event log; charger may already be available",
+      "raw": ""
     },
     {
       "item": "7.5.2",
       "message": "StatusNotification Faulted (reason=DoorOpen)",
       "status": "WARN",
       "detail": "Triggered by opening physical door/panel on vSECC hardware",
-      "remark": "Requires physical door open on vSECC hardware; not triggerable via API"
+      "remark": "Requires physical door open on vSECC hardware; not triggerable via API",
+      "raw": ""
     },
     {
       "item": "7.5.3",
       "message": "StatusNotification Available (after door closed)",
       "status": "WARN",
       "detail": "Depends on 7.5.2 (physical door open and close)",
-      "remark": "Door must be physically closed to restore normal operation"
+      "remark": "Door must be physically closed to restore normal operation",
+      "raw": ""
     },
     {
       "item": "7.6.1",
       "message": "StatusNotification Available (before EV plug)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 10 s",
-      "remark": "Check CSMS event log; charger may already be available"
+      "remark": "Check CSMS event log; charger may already be available",
+      "raw": ""
     },
     {
       "item": "7.6.2",
       "message": "StatusNotification Preparing (EV plug)",
       "status": "WARN",
       "detail": "EV_WAIT_SEC=0 — skipped",
-      "remark": "Connect physical EV to connector and rerun"
+      "remark": "Connect physical EV to connector and rerun",
+      "raw": ""
     },
     {
       "item": "7.6.3",
       "message": "RemoteStartTransaction → HTTP 200",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": ""
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "7.6.4",
       "message": "StartTransaction (session started after RemoteStart)",
       "status": "WARN",
       "detail": "charging_session_state not observed on MQTT in 30 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.6.5",
       "message": "StatusNotification Charging",
       "status": "WARN",
       "detail": "Charging status not observed on MQTT in 20 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.6.6",
       "message": "MeterValues (during charging)",
       "status": "WARN",
       "detail": "MeterValues not observed on MQTT in 15 s",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.6.7",
       "message": "StopTransaction (PowerLoss) — simulated via Hard Reset → HTTP 200",
       "status": "PASS",
       "detail": "HTTP 200",
-      "remark": "Simulated via Hard Reset; physical power loss not testable in this environment"
+      "remark": "Simulated via Hard Reset; physical power loss not testable in this environment",
+      "raw": "\"\""
     },
     {
       "item": "7.6.8",
       "message": "BootNotification → Accepted (vSECC reconnected after reboot)",
       "status": "PASS",
       "detail": "CSMS reconnection confirmed after Hard Reset",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.6.9",
       "message": "StatusNotification Preparing (EV still connected after reboot)",
       "status": "WARN",
       "detail": "Preparing not observed on MQTT in 20 s after reboot",
-      "remark": "EV must remain connected through the reboot sequence"
+      "remark": "EV must remain connected through the reboot sequence",
+      "raw": ""
     },
     {
       "item": "7.6.10",
       "message": "StatusNotification Available (EV unplug after reboot)",
       "status": "WARN",
       "detail": "Available not observed on MQTT in 30 s — unplug EV",
-      "remark": ""
+      "remark": "",
+      "raw": ""
     },
     {
       "item": "7.7.1",
       "message": "SendLocalList (version=1, RFID_TEST=Accepted) → HTTP 200",
       "status": "FAIL",
       "detail": "HTTP 404",
-      "remark": ""
+      "remark": "",
+      "raw": "{\"detail\": \"Not Found\"}"
     },
     {
       "item": "7.7.2",
       "message": "StatusNotification Available (charger online before offline test)",
       "status": "WARN",
       "detail": "Offline sequence not observable via MQTT/REST without proxy",
-      "remark": "Offline buffering not observable via MQTT/REST without proxy"
+      "remark": "Offline buffering not observable via MQTT/REST without proxy",
+      "raw": ""
     },
     {
       "item": "7.7.3",
       "message": "StatusNotification Preparing (EV plug while charger offline)",
       "status": "WARN",
       "detail": "Offline start requires disconnecting vSECC from CSMS network",
-      "remark": "Offline buffering not observable via MQTT/REST without proxy"
+      "remark": "Offline buffering not observable via MQTT/REST without proxy",
+      "raw": ""
     },
     {
       "item": "7.7.4",
       "message": "Authorize (local list lookup while offline) → Accepted",
       "status": "WARN",
       "detail": "vSECC must authorize from local list while CSMS unreachable",
-      "remark": "Offline buffering not observable via MQTT/REST without proxy"
+      "remark": "Offline buffering not observable via MQTT/REST without proxy",
+      "raw": ""
     },
     {
       "item": "7.7.5",
       "message": "StartTransaction (offline, buffered by vSECC)",
       "status": "WARN",
       "detail": "vSECC buffers transaction in firmware; not observable without proxy",
-      "remark": "Offline buffering not observable via MQTT/REST without proxy"
+      "remark": "Offline buffering not observable via MQTT/REST without proxy",
+      "raw": ""
     },
     {
       "item": "7.7.6",
       "message": "StopTransaction (offline, buffered by vSECC)",
       "status": "WARN",
       "detail": "vSECC buffers stop in firmware; delivered when CSMS reconnects",
-      "remark": "Offline buffering not observable via MQTT/REST without proxy"
+      "remark": "Offline buffering not observable via MQTT/REST without proxy",
+      "raw": ""
     },
     {
       "item": "7.7.7",
       "message": "CSMS reconnect — buffered Start/StopTransaction flushed",
       "status": "WARN",
       "detail": "Reconnect flushing is firmware-internal; not observable without proxy",
-      "remark": "Offline buffering not observable via MQTT/REST without proxy"
+      "remark": "Offline buffering not observable via MQTT/REST without proxy",
+      "raw": ""
     }
   ]
 }
