@@ -2,7 +2,7 @@
   "section": 7,
   "title": "การตรวจสอบการทำงานผิดปกติ",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-11T04:47:27.014689Z",
+  "timestamp": "2026-06-11T05:20:23.939083Z",
   "method": "direct-to-csms",
   "ev_wait_sec": 0,
   "boot_wait_sec": 90,
@@ -387,10 +387,10 @@
     {
       "item": "7.7.1",
       "message": "SendLocalList (version=1, RFID_TEST=Accepted) → HTTP 200",
-      "status": "FAIL",
-      "detail": "HTTP 404",
+      "status": "PASS",
+      "detail": "HTTP 200",
       "remark": "",
-      "raw": "{\"detail\": \"Not Found\"}"
+      "raw": "\"\""
     },
     {
       "item": "7.7.2",

@@ -1,4 +1,0 @@
-\contentsline {section}{\numberline {1}Test Configuration}{2}{section.1}%
-\contentsline {section}{\numberline {2}Section 5 Results}{2}{section.2}%
-\contentsline {section}{\numberline {3}Notes on Failures and Warnings}{3}{section.3}%
-\contentsline {section}{\numberline {4}Dependency Map}{4}{section.4}%

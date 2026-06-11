@@ -18,7 +18,7 @@
 \large Section 7: Abnormal Operation Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-11 12:07}
+\date{2026-06-11 12:23}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -42,7 +42,7 @@
 \textbf{EV Plug Timeout}    & 0 s per plug event \\
 \textbf{Boot Wait Timeout}  & 90 s (after Hard Reset) \\
 \textbf{Local Stop Timeout} & 30 s \\
-\textbf{Test Date}          & 2026-06-11 04:47:27 UTC \\
+\textbf{Test Date}          & 2026-06-11 05:20:23 UTC \\
 \textbf{Results file}       & tex/vsecc\_section7\_results.json \\
 \end{tabular}
 
@@ -64,7 +64,7 @@ describing the required physical action.
 Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST API.
 
 \section{Section 7 Results}
-\textbf{Summary: 8 PASS \quad 1 FAIL \quad 45 WARN \quad 0 SKIP \quad (54 total)}
+\textbf{Summary: 9 PASS \quad 0 FAIL \quad 45 WARN \quad 0 SKIP \quad (54 total)}
 
 \renewcommand{\arraystretch}{1.35}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -191,7 +191,7 @@ Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST A
 \hline
 \multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{7.7 --- Local List Offline}} \\
 \hline
-\small 7.7.1 & \small SendLocalList (version=1, RFID\_TEST=Accepted) → HTTP 200 & HTTP 404{\newline\color{gray!70}\scriptsize\ttfamily \{"detail": "Not Found"\}} & \textcolor{failred}{\textbf{FAIL}} \\
+\small 7.7.1 & \small SendLocalList (version=1, RFID\_TEST=Accepted) → HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
 \small 7.7.2 & \small StatusNotification Available (charger online before offline test) & Offline sequence not observable via MQTT/REST without proxy{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
@@ -275,7 +275,8 @@ Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST A
 \subsection*{7.7 --- Local List Offline}
 \begin{itemize}
   \item \textbf{7.7.1} SendLocalList is issued via
-        \texttt{POST /EV/remote/sendLocalList} on the MEA REST API.
+        \texttt{POST /EV/remote/SendLocalList} on the MEA REST API
+        (PascalCase endpoint --- lowercase \texttt{sendLocalList} returns HTTP~404).
         HTTP~200 confirms the command was accepted by the CSMS and relayed
         to the vSECC.
   \item \textbf{7.7.2--7.7.7} Offline start, local RFID authorization,

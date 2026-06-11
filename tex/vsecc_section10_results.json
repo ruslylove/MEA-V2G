@@ -2,7 +2,7 @@
   "section": 10,
   "title": "CSMS Command Verification",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-11T04:48:28.444921Z",
+  "timestamp": "2026-06-11T05:20:34.934417Z",
   "method": "direct-to-csms",
   "boot_wait_sec": 30,
   "results": [
@@ -28,7 +28,7 @@
       "status": "PASS",
       "detail": "HTTP 200 status=Bad Request",
       "remark": "",
-      "raw": "{\"status\": \"Bad Request\", \"code\": 400, \"messages\": \"Additional properties are not allowed ('chargepoint_id', 'messageId', 'vendorId' were unexpected)\", \"server-time\": \"2026-06-11T04:48:01Z\", \"result\": null}"
+      "raw": "{\"status\": \"Bad Request\", \"code\": 400, \"messages\": \"Additional properties are not allowed ('chargepoint_id', 'messageId', 'vendorId' were unexpected)\", \"server-time\": \"2026-06-11T05:20:08Z\", \"result\": null}"
     },
     {
       "item": "10.4",
@@ -153,18 +153,18 @@
     {
       "item": "10.19",
       "message": "GetDiagnostics (ftp://example.com)",
-      "status": "FAIL",
-      "detail": "HTTP 404 — endpoint not exposed by MEA sandbox REST API",
-      "remark": "GetDiagnostics (/remote/getDiagnostics) returns HTTP 404",
-      "raw": ""
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.20",
       "message": "UpdateFirmware (ftp://example.com)",
-      "status": "FAIL",
-      "detail": "HTTP 404 — endpoint not exposed by MEA sandbox REST API",
-      "remark": "UpdateFirmware (/remote/updateFirmware) returns HTTP 404",
-      "raw": ""
+      "status": "PASS",
+      "detail": "HTTP 200",
+      "remark": "",
+      "raw": "\"\""
     },
     {
       "item": "10.21",

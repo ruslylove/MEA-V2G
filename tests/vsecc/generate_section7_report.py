@@ -251,7 +251,8 @@ Sub-scenario 7.6 simulates power loss by issuing a Hard Reset via the MEA REST A
 \subsection*{7.7 --- Local List Offline}
 \begin{itemize}
   \item \textbf{7.7.1} SendLocalList is issued via
-        \texttt{POST /EV/remote/sendLocalList} on the MEA REST API.
+        \texttt{POST /EV/remote/SendLocalList} on the MEA REST API
+        (PascalCase endpoint --- lowercase \texttt{sendLocalList} returns HTTP~404).
         HTTP~200 confirms the command was accepted by the CSMS and relayed
         to the vSECC.
   \item \textbf{7.7.2--7.7.7} Offline start, local RFID authorization,

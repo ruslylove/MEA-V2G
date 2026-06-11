@@ -141,7 +141,7 @@ class MeaApi:
     def send_local_list(self, version=1, entries=None):
         if entries is None:
             entries = [{"idTag": RFID_TAG, "idTagInfo": {"status": "Accepted"}}]
-        return self._post("/remote/sendLocalList", {
+        return self._post("/remote/SendLocalList", {
             "chargepoint_id": CP_ID,
             "listVersion": version,
             "localAuthorizationList": entries,

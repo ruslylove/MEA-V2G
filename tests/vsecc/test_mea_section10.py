@@ -143,12 +143,12 @@ class MeaApi:
                            "type": avail_type})
 
     def get_diagnostics(self, location="ftp://example.com"):
-        return self._post("/remote/getDiagnostics",
+        return self._post("/remote/GetDiagnostics",
                           {"chargepoint_id": CP_ID,
                            "location": location})
 
     def update_firmware(self, location="ftp://example.com"):
-        return self._post("/remote/updateFirmware",
+        return self._post("/remote/UpdateFirmware",
                           {"chargepoint_id": CP_ID,
                            "location": location,
                            "retrieveDate": "2026-01-01T00:00:00Z"})

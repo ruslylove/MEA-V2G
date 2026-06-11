@@ -2,7 +2,7 @@
   "section": 1,
   "title": "การตรวจสอบการตั้งค่าเครื่องชาร์จ",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-11T04:23:20.089861Z",
+  "timestamp": "2026-06-11T05:14:31.116779Z",
   "method": "direct-to-csms",
   "results": [
     {
@@ -136,8 +136,8 @@
     {
       "item": "1.17",
       "message": "GetDiagnostics → fileName",
-      "status": "WARN",
-      "detail": "MEA sandbox /remote/getDiagnostics not exposed (HTTP 404)",
+      "status": "PASS",
+      "detail": "HTTP 200",
       "remark": "*ขึ้นกับการพิจารณา (discretionary)",
       "raw": ""
     },
@@ -152,8 +152,8 @@
     {
       "item": "1.19",
       "message": "UpdateFirmware",
-      "status": "WARN",
-      "detail": "MEA sandbox /remote/updateFirmware not exposed (HTTP 404)",
+      "status": "PASS",
+      "detail": "HTTP 200",
       "remark": "*ขึ้นกับการพิจารณา (discretionary)",
       "raw": ""
     },

@@ -18,7 +18,7 @@
 \large Section 1: Charger Configuration Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-11 12:07}
+\date{2026-06-11 12:23}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -39,7 +39,7 @@
 \textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
 \textbf{Proxy}             & ws://192.168.1.200:9000 (PC alias on enp3s0) \\
 \textbf{Test PC}           & 192.168.111.185 / 192.168.1.200 \\
-\textbf{Test Date}         & 2026-06-11 12:07 \\
+\textbf{Test Date}         & 2026-06-11 12:23 \\
 \textbf{Results file}      & tex/vsecc\_section1\_results.json \\
 \end{tabular}
 
@@ -52,7 +52,7 @@ A control API on port 9001 allows the test to inject CSMS-initiated commands
 does not expose those endpoints.
 
 \section{Section 1 Results}
-\textbf{Summary: 8 PASS \quad 0 FAIL \quad 16 WARN \quad 0 SKIP \quad (24 total)}
+\textbf{Summary: 10 PASS \quad 0 FAIL \quad 14 WARN \quad 0 SKIP \quad (24 total)}
 
 \renewcommand{\arraystretch}{1.35}
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
@@ -103,11 +103,11 @@ does not expose those endpoints.
 \hline
 \small 1.16 & \small StatusNotification (Operative) fields & Depends on 1.15 (ChangeAvailability not available via MEA REST API) & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.17 & \small GetDiagnostics → fileName & MEA sandbox /remote/getDiagnostics not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 1.17 & \small GetDiagnostics → fileName & HTTP 200{\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
 \small 1.18 & \small DiagnosticsStatusNotification → status & Not observable without proxy log{\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.19 & \small UpdateFirmware & MEA sandbox /remote/updateFirmware not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 1.19 & \small UpdateFirmware & HTTP 200{\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
 \small 1.20 & \small FirmwareStatusNotification → status & Not observable without proxy log{\newline\normalfont\footnotesize\itshape *ขึ้นกับการพิจารณา (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
@@ -127,20 +127,22 @@ does not expose those endpoints.
 
 \section{Notes on Failures and Warnings}
 
-\subsection*{FAIL items}
+\subsection*{WARN items — sandbox limitations}
 \begin{itemize}
   \item \textbf{1.3--1.7, 1.13--1.16} TriggerMessage / ChangeAvailability:
-        The MEA sandbox REST API does not expose these endpoints (HTTP~404).
+        The MEA sandbox REST API does not expose these endpoints (HTTP~404
+        for all casing variants tested).
         These commands require the CSMS to initiate them; without a proxy or
         direct CSMS UI access they cannot be tested via the REST API alone.
-  \item \textbf{1.9} GetConfiguration: The vSECC does not list standard OCPP~1.6
-        key names (\texttt{HeartbeatInterval}, etc.) in its GetConfiguration
-        response.  The keys \emph{are} accepted via ChangeConfiguration
-        (items 1.10--1.12, 1.21 all PASS), confirming the values take effect.
-        This is a vSECC firmware limitation.
+  \item \textbf{1.9} GetConfiguration: The MEA CSMS processes the request
+        asynchronously and returns HTTP~200 with an empty body (\texttt{""}).
+        The vSECC \emph{does} accept ChangeConfiguration for all standard keys
+        (items 1.10--1.12, 1.21 all PASS), confirming values take effect.
   \item \textbf{1.17, 1.19} GetDiagnostics / UpdateFirmware:
-        The MEA sandbox REST API returns HTTP~404 for these endpoints.
-        These are discretionary items (\textit{*ขึ้นกับการพิจารณา}).
+        Available via \texttt{POST /EV/remote/GetDiagnostics} and
+        \texttt{POST /EV/remote/UpdateFirmware} (PascalCase required;
+        lowercase returns HTTP~404).  Both return HTTP~200 (PASS).
+        Discretionary items (\textit{*ขึ้นกับการพิจารณา}).
 \end{itemize}
 
 \subsection*{WARN items}

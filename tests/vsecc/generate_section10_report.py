@@ -111,8 +111,9 @@ The test records the HTTP response code:
 \begin{itemize}
   \item \textbf{HTTP 200} $\rightarrow$ \textbf{PASS} --- the CSMS accepted and
         forwarded the command to the charger.
-  \item \textbf{HTTP 404} $\rightarrow$ \textbf{FAIL} --- the endpoint is not
-        exposed by the MEA sandbox REST API.
+  \item \textbf{HTTP 404} $\rightarrow$ \textbf{WARN/FAIL} --- the endpoint
+        is not exposed or the path casing is wrong (the MEA REST API is
+        case-sensitive; use PascalCase matching the OCPP command name).
   \item \textbf{CS$\rightarrow$CSMS messages} $\rightarrow$ \textbf{WARN} ---
         some OCPP messages originate at the charger and cannot be triggered by
         the CSMS; these are observed passively via MQTT.
@@ -164,21 +165,23 @@ continuing with item~10.9.
 
 \section{Notes on Failures and Warnings}
 
-\subsection*{HTTP 404 items — endpoints not exposed by MEA sandbox}
-The following OCPP~1.6 commands are defined in the specification but are
-\textbf{not available} via the MEA sandbox REST API.  They return HTTP~404
-and are therefore recorded as \textbf{FAIL}:
+\subsection*{MEA REST API endpoint casing}
+The MEA sandbox REST API is \textbf{case-sensitive}.  Endpoints matching OCPP
+command names use PascalCase.  The following were discovered during testing:
 \begin{itemize}
   \item \textbf{10.15 TriggerMessage} (\texttt{POST /EV/remote/triggerMessage}) ---
-        Not exposed.  Meter values and status notifications are observable
-        autonomously on the vSECC MQTT broker.
+        Not exposed (HTTP~404 for all casing variants tested).
+        Meter values and status notifications are observable autonomously on
+        the vSECC MQTT broker.
   \item \textbf{10.18 ChangeAvailability} (\texttt{POST /EV/remote/changeAvailability}) ---
-        Not exposed.  The connector availability can be changed via the
-        vSECC REST API directly if needed.
-  \item \textbf{10.19 GetDiagnostics} (\texttt{POST /EV/remote/getDiagnostics}) ---
-        Not exposed.  Diagnostic files must be retrieved via vSECC local access.
-  \item \textbf{10.20 UpdateFirmware} (\texttt{POST /EV/remote/updateFirmware}) ---
-        Not exposed.  Firmware updates are performed via vSECC local tools.
+        Not exposed (HTTP~404 for all casing variants tested).
+        Connector availability can be changed via the vSECC REST API directly.
+  \item \textbf{10.19 GetDiagnostics} (\texttt{POST /EV/remote/GetDiagnostics}) ---
+        Available with PascalCase path (HTTP~200).
+        Lowercase \texttt{getDiagnostics} returns HTTP~404.
+  \item \textbf{10.20 UpdateFirmware} (\texttt{POST /EV/remote/UpdateFirmware}) ---
+        Available with PascalCase path (HTTP~200).
+        Lowercase \texttt{updateFirmware} returns HTTP~404.
 \end{itemize}
 
 \subsection*{CS$\rightarrow$CSMS messages (WARN)}

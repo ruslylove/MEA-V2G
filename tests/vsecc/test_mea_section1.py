@@ -127,13 +127,13 @@ class MeaApi:
         return self._post("/remote/clearCache", {"chargepoint_id": CP_ID})
 
     def get_diagnostics(self):
-        return self._post("/remote/getDiagnostics",
+        return self._post("/remote/GetDiagnostics",
                           {"chargepoint_id": CP_ID,
                            "location": "ftp://test.measandbox.com/diagnostics/",
                            "retries": 1, "retryInterval": 10})
 
     def update_firmware(self):
-        return self._post("/remote/updateFirmware",
+        return self._post("/remote/UpdateFirmware",
                           {"chargepoint_id": CP_ID,
                            "location": "ftp://test.measandbox.com/firmware/latest.bin",
                            "retrieveDate": (datetime.utcnow() + timedelta(seconds=30)).isoformat() + "Z"})

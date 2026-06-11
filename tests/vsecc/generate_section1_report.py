@@ -157,20 +157,22 @@ does not expose those endpoints.
 
 \section{Notes on Failures and Warnings}
 
-\subsection*{FAIL items}
+\subsection*{WARN items — sandbox limitations}
 \begin{itemize}
   \item \textbf{1.3--1.7, 1.13--1.16} TriggerMessage / ChangeAvailability:
-        The MEA sandbox REST API does not expose these endpoints (HTTP~404).
+        The MEA sandbox REST API does not expose these endpoints (HTTP~404
+        for all casing variants tested).
         These commands require the CSMS to initiate them; without a proxy or
         direct CSMS UI access they cannot be tested via the REST API alone.
-  \item \textbf{1.9} GetConfiguration: The vSECC does not list standard OCPP~1.6
-        key names (\texttt{HeartbeatInterval}, etc.) in its GetConfiguration
-        response.  The keys \emph{are} accepted via ChangeConfiguration
-        (items 1.10--1.12, 1.21 all PASS), confirming the values take effect.
-        This is a vSECC firmware limitation.
+  \item \textbf{1.9} GetConfiguration: The MEA CSMS processes the request
+        asynchronously and returns HTTP~200 with an empty body (\texttt{""}).
+        The vSECC \emph{does} accept ChangeConfiguration for all standard keys
+        (items 1.10--1.12, 1.21 all PASS), confirming values take effect.
   \item \textbf{1.17, 1.19} GetDiagnostics / UpdateFirmware:
-        The MEA sandbox REST API returns HTTP~404 for these endpoints.
-        These are discretionary items (\textit{*ขึ้นกับการพิจารณา}).
+        Available via \texttt{POST /EV/remote/GetDiagnostics} and
+        \texttt{POST /EV/remote/UpdateFirmware} (PascalCase required;
+        lowercase returns HTTP~404).  Both return HTTP~200 (PASS).
+        Discretionary items (\textit{*ขึ้นกับการพิจารณา}).
 \end{itemize}
 
 \subsection*{WARN items}
