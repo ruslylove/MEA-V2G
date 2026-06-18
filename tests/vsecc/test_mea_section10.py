@@ -37,6 +37,8 @@ try:
 except ImportError:
     HAS_MQTT = False
 
+from vsecc_log import VseccLog, print_ocpp
+
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
@@ -370,7 +372,8 @@ def wait_for_reconnect(mea: MeaApi, mark, timeout=None) -> bool:
 # ─────────────────────────────────────────────
 # Section 10 test body
 # ─────────────────────────────────────────────
-def run_section10(vsecc: VseccApi, mea: MeaApi):
+def run_section10(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
+    global _last_raw
     section("Section 10: CSMS Command Verification")
 
     # ── Connection check ─────────────────────────────────────────────────────
@@ -384,16 +387,40 @@ def run_section10(vsecc: VseccApi, mea: MeaApi):
     print("  vSECC connected to MEA CSMS.")
 
     # ── 10.1  Authorize (CS→CSMS) ────────────────────────────────────────────
-    record("10.1", "Authorize",
-           "WARN",
-           "Authorize is CS→CSMS; not triggerable via REST API",
-           "Observed via MQTT during charging sessions (charging_authorization_state)")
+    if log:
+        log.mark()
+    time.sleep(3)
+    frames_101 = log.ocpp_frames() if log else []
+    log_match_101 = log.find(frames_101, "Authorize") if log else None
+    if frames_101: _last_raw = "\n".join(f.strip() for f in frames_101)
+    if log_match_101:
+        record("10.1", "Authorize",
+               "PASS",
+               f"confirmed via ocpplib.log: {log_match_101.strip()}")
+        print_ocpp(frames_101, "10.1 (from ocpplib.log)")
+    else:
+        record("10.1", "Authorize",
+               "WARN",
+               "Authorize is CS→CSMS; not triggerable via REST API",
+               "Observed via MQTT during charging sessions (charging_authorization_state)")
 
     # ── 10.2  BootNotification (CS→CSMS) ─────────────────────────────────────
-    record("10.2", "BootNotification",
-           "WARN",
-           "BootNotification is CS→CSMS; confirmed via CSMS connection (Section 1 item 1.1)",
-           "Charger sends BootNotification autonomously on connect/reboot")
+    if log:
+        log.mark()
+    time.sleep(3)
+    frames_102 = log.ocpp_frames() if log else []
+    log_match_102 = log.find(frames_102, "BootNotification") if log else None
+    if frames_102: _last_raw = "\n".join(f.strip() for f in frames_102)
+    if log_match_102:
+        record("10.2", "BootNotification",
+               "PASS",
+               f"confirmed via ocpplib.log: {log_match_102.strip()}")
+        print_ocpp(frames_102, "10.2 (from ocpplib.log)")
+    else:
+        record("10.2", "BootNotification",
+               "WARN",
+               "BootNotification is CS→CSMS; confirmed via CSMS connection (Section 1 item 1.1)",
+               "Charger sends BootNotification autonomously on connect/reboot")
 
     # ── 10.3  DataTransfer ───────────────────────────────────────────────────
     r = mea.data_transfer()
@@ -402,22 +429,45 @@ def run_section10(vsecc: VseccApi, mea: MeaApi):
            "PASS" if ok else "FAIL", detail)
 
     # ── 10.4  Heartbeat ──────────────────────────────────────────────────────
+    if log:
+        log.mark()
     r = mea.heartbeat()
     ok, detail = mea_call(r)
     if r is None or r.status_code == 404:
-        record("10.4", "Heartbeat",
-               "WARN",
-               detail,
-               "Heartbeat endpoint not exposed by MEA sandbox; charger sends heartbeats autonomously")
+        frames_104 = log.ocpp_frames() if log else []
+        log_match_104 = log.find(frames_104, "Heartbeat") if log else None
+        if frames_104: _last_raw = "\n".join(f.strip() for f in frames_104)
+        if log_match_104:
+            record("10.4", "Heartbeat",
+                   "PASS",
+                   f"confirmed via ocpplib.log: {log_match_104.strip()}")
+            print_ocpp(frames_104, "10.4 (from ocpplib.log)")
+        else:
+            record("10.4", "Heartbeat",
+                   "WARN",
+                   detail,
+                   "Heartbeat endpoint not exposed by MEA sandbox; charger sends heartbeats autonomously")
     else:
         record("10.4", "Heartbeat",
                "PASS" if ok else "FAIL", detail)
 
     # ── 10.5  MeterValues (CS→CSMS) ──────────────────────────────────────────
-    record("10.5", "MeterValues",
-           "WARN",
-           "MeterValues is CS→CSMS; TriggerMessage not supported (HTTP 404)",
-           "Observable on MQTT metervalues topic during active charging session")
+    if log:
+        log.mark()
+    time.sleep(3)
+    frames_105 = log.ocpp_frames() if log else []
+    log_match_105 = log.find(frames_105, "MeterValues") if log else None
+    if frames_105: _last_raw = "\n".join(f.strip() for f in frames_105)
+    if log_match_105:
+        record("10.5", "MeterValues",
+               "PASS",
+               f"confirmed via ocpplib.log: {log_match_105.strip()}")
+        print_ocpp(frames_105, "10.5 (from ocpplib.log)")
+    else:
+        record("10.5", "MeterValues",
+               "WARN",
+               "MeterValues is CS→CSMS; TriggerMessage not supported (HTTP 404)",
+               "Observable on MQTT metervalues topic during active charging session")
 
     # ── 10.6  RemoteStartTransaction ─────────────────────────────────────────
     r = mea.remote_start()
@@ -448,22 +498,58 @@ def run_section10(vsecc: VseccApi, mea: MeaApi):
         time.sleep(3)
 
     # ── 10.9  StartTransaction (CS→CSMS) ─────────────────────────────────────
-    record("10.9", "StartTransaction",
-           "WARN",
-           "CS→CSMS; observable via MQTT charging_session_state during charging session",
-           "Charger sends StartTransaction automatically when session begins")
+    if log:
+        log.mark()
+    time.sleep(3)
+    frames_109 = log.ocpp_frames() if log else []
+    log_match_109 = log.find(frames_109, "StartTransaction") if log else None
+    if frames_109: _last_raw = "\n".join(f.strip() for f in frames_109)
+    if log_match_109:
+        record("10.9", "StartTransaction",
+               "PASS",
+               f"confirmed via ocpplib.log: {log_match_109.strip()}")
+        print_ocpp(frames_109, "10.9 (from ocpplib.log)")
+    else:
+        record("10.9", "StartTransaction",
+               "WARN",
+               "CS→CSMS; observable via MQTT charging_session_state during charging session",
+               "Charger sends StartTransaction automatically when session begins")
 
     # ── 10.10 StatusNotification (CS→CSMS) ───────────────────────────────────
-    record("10.10", "StatusNotification",
-           "WARN",
-           "CS→CSMS; observable via MQTT vsecc/connector/+/status/#",
-           "Charger sends StatusNotification on connector state changes")
+    if log:
+        log.mark()
+    time.sleep(3)
+    frames_1010 = log.ocpp_frames() if log else []
+    log_match_1010 = log.find(frames_1010, "StatusNotification") if log else None
+    if frames_1010: _last_raw = "\n".join(f.strip() for f in frames_1010)
+    if log_match_1010:
+        record("10.10", "StatusNotification",
+               "PASS",
+               f"confirmed via ocpplib.log: {log_match_1010.strip()}")
+        print_ocpp(frames_1010, "10.10 (from ocpplib.log)")
+    else:
+        record("10.10", "StatusNotification",
+               "WARN",
+               "CS→CSMS; observable via MQTT vsecc/connector/+/status/#",
+               "Charger sends StatusNotification on connector state changes")
 
     # ── 10.11 StopTransaction (CS→CSMS) ──────────────────────────────────────
-    record("10.11", "StopTransaction",
-           "WARN",
-           "CS→CSMS; observable via MQTT charging_session_state",
-           "Charger sends StopTransaction on session end (RemoteStop / EVDisconnect / Reset)")
+    if log:
+        log.mark()
+    time.sleep(3)
+    frames_1011 = log.ocpp_frames() if log else []
+    log_match_1011 = log.find(frames_1011, "StopTransaction") if log else None
+    if frames_1011: _last_raw = "\n".join(f.strip() for f in frames_1011)
+    if log_match_1011:
+        record("10.11", "StopTransaction",
+               "PASS",
+               f"confirmed via ocpplib.log: {log_match_1011.strip()}")
+        print_ocpp(frames_1011, "10.11 (from ocpplib.log)")
+    else:
+        record("10.11", "StopTransaction",
+               "WARN",
+               "CS→CSMS; observable via MQTT charging_session_state",
+               "Charger sends StopTransaction on session end (RemoteStop / EVDisconnect / Reset)")
 
     # ── 10.12 ReserveNow ─────────────────────────────────────────────────────
     r = mea.reserve_now()
@@ -512,6 +598,8 @@ def run_section10(vsecc: VseccApi, mea: MeaApi):
     # MEA REST API doesn't expose /remote/changeAvailability (HTTP 404).
     # Use vSECC MQTT K.2.25 set_availability import to command directly and
     # verify the resulting StatusNotification Unavailable on MQTT.
+    if log:
+        log.mark()
     payload18, topic18 = mqtt_set_availability(1, "inoperative",
                                                wait_kw="Unavailable", timeout=10)
     if payload18:
@@ -522,10 +610,21 @@ def run_section10(vsecc: VseccApi, mea: MeaApi):
         # Restore to operative for subsequent items
         mqtt_set_availability(1, "operative", wait_kw="Available", timeout=10)
     else:
-        record("10.18", "ChangeAvailability (connector 1, Inoperative)",
-               "WARN",
-               "Unavailable not observed on MQTT in 10 s after MQTT set_availability",
-               "MEA REST /remote/changeAvailability → 404; MQTT fallback used")
+        frames_1018 = log.ocpp_frames() if log else []
+        log_match_1018 = log.find(frames_1018, "StatusNotification", "Unavailable") if log else None
+        if frames_1018: _last_raw = "\n".join(f.strip() for f in frames_1018)
+        if log_match_1018:
+            record("10.18", "ChangeAvailability (connector 1, Inoperative)",
+                   "PASS",
+                   f"StatusNotification Unavailable confirmed via ocpplib.log: {log_match_1018.strip()}")
+            print_ocpp(frames_1018, "10.18 (from ocpplib.log)")
+            # Restore to operative for subsequent items
+            mqtt_set_availability(1, "operative", wait_kw="Available", timeout=10)
+        else:
+            record("10.18", "ChangeAvailability (connector 1, Inoperative)",
+                   "WARN",
+                   "Unavailable not observed on MQTT in 10 s after MQTT set_availability",
+                   "MEA REST /remote/changeAvailability → 404; MQTT fallback used")
 
     # ── 10.19 GetDiagnostics ─────────────────────────────────────────────────
     r = mea.get_diagnostics()
@@ -627,9 +726,11 @@ def main():
         sys.exit(1)
     print("  vSECC authenticated")
 
+    vslog = VseccLog(vsecc.token)
+
     start_mqtt_watcher()
     try:
-        run_section10(vsecc, mea)
+        run_section10(vsecc, mea, log=vslog)
     finally:
         stop_mqtt_watcher()
 

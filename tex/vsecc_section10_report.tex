@@ -7,6 +7,8 @@
 \usepackage{fancyhdr}
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \setlength{\emergencystretch}{3em}
 
 \definecolor{passgreen}{RGB}{34,139,34}
@@ -18,7 +20,7 @@
 \large Section 10: CSMS Command Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-11 12:23}
+\date{2026-06-11 05:20 UTC}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -37,30 +39,19 @@
 \textbf{OCPP Version}      & 1.6 (JSON) \\
 \textbf{CP ID}             & rddQC4000001 \\
 \textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
-\textbf{Connection}        & Direct (no proxy) \\
-\textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
-\textbf{Boot Wait Timeout} & 30 s (after item 10.8 Hard Reset) \\
-\textbf{Test Date}         & 2026-06-11 05:20:34 UTC \\
+\textbf{Connection}        & Direct TLS (Security Profile 1, no proxy) \\
+\textbf{Test Date}         & 2026-06-11 05:20 UTC \\
 \textbf{Results file}      & tex/vsecc\_section10\_results.json \\
 \end{tabular}
 
 \subsection*{Test Architecture}
-Each item in Section~10 tests one OCPP~1.6 message or command by calling the
-corresponding MEA sandbox REST API endpoint with HTTP Digest authentication.
-The test records the HTTP response code:
-\begin{itemize}
-  \item \textbf{HTTP 200} $\rightarrow$ \textbf{PASS} --- the CSMS accepted and
-        forwarded the command to the charger.
-  \item \textbf{HTTP 404} $\rightarrow$ \textbf{WARN/FAIL} --- the endpoint
-        is not exposed or the path casing is wrong (the MEA REST API is
-        case-sensitive; use PascalCase matching the OCPP command name).
-  \item \textbf{CS$\rightarrow$CSMS messages} $\rightarrow$ \textbf{WARN} ---
-        some OCPP messages originate at the charger and cannot be triggered by
-        the CSMS; these are observed passively via MQTT.
-\end{itemize}
-Item~10.8 (Hard Reset) causes the vSECC to reboot; the test waits up to
-\texttt{BOOT\_WAIT\_SEC}~seconds for the charger to reconnect before
-continuing with item~10.9.
+The vSECC connects directly to the MEA CSMS at
+\texttt{wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001}
+over TLS with no intermediate proxy.
+OCPP traffic is observed via the vSECC's \texttt{GET /api/logging/files/ocpplib.log}
+REST endpoint (TRACE-level log, raw \texttt{>>>} sent / \texttt{<<<} received frames)
+and via MQTT at \texttt{192.168.1.166:1883} (topic \texttt{vsecc/\#}).
+The test PC NAT-routes internet access for the vSECC subnet (192.168.1.x via enp3s0).
 
 \section{Section 10 Results}
 \textbf{Summary: 14 PASS \quad 0 FAIL \quad 9 WARN \quad 0 SKIP \quad (23 total)}
@@ -82,102 +73,101 @@ continuing with item~10.9.
 \endhead
 \hline
 \endfoot
-\small 10.1 & \small Authorize & Authorize is CS→CSMS; not triggerable via REST API{\newline\normalfont\footnotesize\itshape Observed via MQTT during charging sessions (charging\_authorization\_state)} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 10.1 & \small Authorize & Authorize is CSCSMS; not triggerable via REST API{\newline\normalfont\footnotesize\itshape Observed via MQTT during charging sessions (charging\_authorization\_state)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.2 & \small BootNotification & BootNotification is CS→CSMS; confirmed via CSMS connection (Section 1 item 1.1){\newline\normalfont\footnotesize\itshape Charger sends BootNotification autonomously on connect/reboot} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 10.2 & \small BootNotification & BootNotification is CSCSMS; confirmed via CSMS connection (Section 1 item 1.1){\newline\normalfont\footnotesize\itshape Charger sends BootNotification autonomously on connect/reboot} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.3 & \small DataTransfer → vendorId=MEA messageId=Test & HTTP 200 status=Bad Request{\newline\color{gray!70}\scriptsize\ttfamily \{"status": "Bad Request", "code": 400, "messages": "Additional properties are not allowed ('chargepoint\_id', 'messageId', 'vendorId' were unexpected)", "serv\ldots{}} & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.3 & \small DataTransfer  vendorId=MEA messageId=Test & HTTP 200 status=Bad Request & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.4 & \small Heartbeat & HTTP 404{\newline\normalfont\footnotesize\itshape Heartbeat endpoint not exposed by MEA sandbox; charger sends heartbeats autonom\ldots{}}{\newline\color{gray!70}\scriptsize\ttfamily \{"detail": "Not Found"\}} & \textcolor{warnorange}{\textbf{WARN}} \\
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily \{"status": "Bad Request", "code": 400, "messages": "Additional properties are not allowed ('chargepoint\_id', 'messageId', 'vendorId' were unexpected)", "server-time": "2026-06-11T05:20:08Z", "result": null\}} \\
 \hline
-\small 10.5 & \small MeterValues & MeterValues is CS→CSMS; TriggerMessage not supported (HTTP 404){\newline\normalfont\footnotesize\itshape Observable on MQTT metervalues topic during active charging session} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 10.4 & \small Heartbeat & HTTP 404{\newline\normalfont\footnotesize\itshape Heartbeat endpoint not exposed by MEA sandbox; charger sends heartbeats autonomously} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.6 & \small RemoteStartTransaction → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily \{"detail": "Not Found"\}} \\
 \hline
-\small 10.7 & \small RemoteStopTransaction (transaction\_id=0) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.5 & \small MeterValues & MeterValues is CSCSMS; TriggerMessage not supported (HTTP 404){\newline\normalfont\footnotesize\itshape Observable on MQTT metervalues topic during active charging session} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.8 & \small Reset (Hard) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.6 & \small RemoteStartTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.9 & \small StartTransaction & CS→CSMS; observable via MQTT charging\_session\_state during charging session{\newline\normalfont\footnotesize\itshape Charger sends StartTransaction automatically when session begins} & \textcolor{warnorange}{\textbf{WARN}} \\
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
 \hline
-\small 10.10 & \small StatusNotification & CS→CSMS; observable via MQTT vsecc/connector/+/status/\#{\newline\normalfont\footnotesize\itshape Charger sends StatusNotification on connector state changes} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 10.7 & \small RemoteStopTransaction (transaction\_id=0)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.11 & \small StopTransaction & CS→CSMS; observable via MQTT charging\_session\_state{\newline\normalfont\footnotesize\itshape Charger sends StopTransaction on session end (RemoteStop / EVDisconnect / Reset)} & \textcolor{warnorange}{\textbf{WARN}} \\
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
 \hline
-\small 10.12 & \small ReserveNow (connector\_id=1, reservationId=1) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.8 & \small Reset (Hard)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.13 & \small CancelReservation (reservationId=1) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
 \hline
-\small 10.14 & \small SetChargingProfile (TxDefaultProfile, 32 A) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.9 & \small StartTransaction & CSCSMS; observable via MQTT charging\_session\_state during charging session{\newline\normalfont\footnotesize\itshape Charger sends StartTransaction automatically when session begins} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.15 & \small TriggerMessage (StatusNotification) & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMS→CS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 10.10 & \small StatusNotification & CSCSMS; observable via MQTT vsecc/connector/+/status/\#{\newline\normalfont\footnotesize\itshape Charger sends StatusNotification on connector state changes} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.16 & \small GetConfiguration → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.11 & \small StopTransaction & CSCSMS; observable via MQTT charging\_session\_state{\newline\normalfont\footnotesize\itshape Charger sends StopTransaction on session end (RemoteStop / EVDisconnect / Reset)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 10.17 & \small ChangeConfiguration HeartbeatInterval=600 → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.12 & \small ReserveNow (connector\_id=1, reservationId=1)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.18 & \small ChangeAvailability (connector 1, Inoperative) & Unavailable not observed on MQTT in 10 s after MQTT set\_availability{\newline\normalfont\footnotesize\itshape MEA REST /remote/changeAvailability → 404; MQTT fallback used} & \textcolor{warnorange}{\textbf{WARN}} \\
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.13 & \small CancelReservation (reservationId=1)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.14 & \small SetChargingProfile (TxDefaultProfile, 32 A)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.15 & \small TriggerMessage (StatusNotification) & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMSCS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 10.16 & \small GetConfiguration  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.17 & \small ChangeConfiguration HeartbeatInterval=600  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.18 & \small ChangeAvailability (connector 1, Inoperative) & Unavailable not observed on MQTT in 10 s after MQTT set\_availability{\newline\normalfont\footnotesize\itshape MEA REST /remote/changeAvailability  404; MQTT fallback used} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 10.19 & \small GetDiagnostics (ftp://example.com) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
 \small 10.20 & \small UpdateFirmware (ftp://example.com) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.21 & \small SendLocalList (Full, version=1, idTag=RFID\_TEST) → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
 \hline
-\small 10.22 & \small GetLocalListVersion → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 10.21 & \small SendLocalList (Full, version=1, idTag=RFID\_TEST)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 10.23 & \small ClearCache → Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
 \hline
-
+\small 10.22 & \small GetLocalListVersion  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.23 & \small ClearCache  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
 \end{longtable}
 \normalsize
 
-\section{Notes on Failures and Warnings}
+\section{Notes}
 
-\subsection*{MEA REST API endpoint casing}
-The MEA sandbox REST API is \textbf{case-sensitive}.  Endpoints matching OCPP
-command names use PascalCase.  The following were discovered during testing:
-\begin{itemize}
-  \item \textbf{10.15 TriggerMessage} (\texttt{POST /EV/remote/triggerMessage}) ---
-        Not exposed (HTTP~404 for all casing variants tested).
-        Meter values and status notifications are observable autonomously on
-        the vSECC MQTT broker.
-  \item \textbf{10.18 ChangeAvailability} (\texttt{POST /EV/remote/changeAvailability}) ---
-        Not exposed (HTTP~404 for all casing variants tested).
-        Connector availability can be changed via the vSECC REST API directly.
-  \item \textbf{10.19 GetDiagnostics} (\texttt{POST /EV/remote/GetDiagnostics}) ---
-        Available with PascalCase path (HTTP~200).
-        Lowercase \texttt{getDiagnostics} returns HTTP~404.
-  \item \textbf{10.20 UpdateFirmware} (\texttt{POST /EV/remote/UpdateFirmware}) ---
-        Available with PascalCase path (HTTP~200).
-        Lowercase \texttt{updateFirmware} returns HTTP~404.
-\end{itemize}
+\subsection*{CS\(\to\)CSMS items (10.1, 10.2, 10.5, 10.9--10.11)}
+These OCPP actions are charger-initiated and cannot be triggered via the MEA REST API.
+The test checks \texttt{ocpplib.log} for recent \texttt{>>>} frames as secondary evidence.
+A PASS requires the frame to appear in the log within a 3\,s window.
 
-\subsection*{CS$\rightarrow$CSMS messages (WARN)}
-\begin{itemize}
-  \item \textbf{10.1 Authorize} --- Sent by the charger when an RFID card is
-        presented.  Observable on MQTT \texttt{vsecc/connector/+/ev/charging\_authorization\_state}.
-  \item \textbf{10.2 BootNotification} --- Sent by the charger on startup.
-        Confirmed by a successful CSMS connection probe (HTTP~200 on GetConfiguration).
-  \item \textbf{10.5 MeterValues} --- Sent by the charger periodically or on
-        trigger.  Observable on MQTT \texttt{vsecc/connector/+/metervalues}.
-  \item \textbf{10.9 StartTransaction} --- Sent by the charger when a charging
-        session begins.  Observable via MQTT \texttt{charging\_session\_state}.
-  \item \textbf{10.10 StatusNotification} --- Sent by the charger on connector
-        state changes.  Observable via MQTT \texttt{vsecc/connector/+/status/\#}.
-  \item \textbf{10.11 StopTransaction} --- Sent by the charger when a session ends.
-        Observable via MQTT \texttt{charging\_session\_state}.
-\end{itemize}
+\subsection*{TriggerMessage (item 10.15)}
+The MEA sandbox does not expose \texttt{/remote/triggerMessage} (HTTP~404).
 
-\subsection*{Item 10.7 RemoteStopTransaction}
-Uses \texttt{transaction\_id=0} because no active charging session exists at the
-time of the test.  Some CSMS implementations accept \texttt{transaction\_id=0}
-when only one transaction is active; others require a valid transaction ID.
-Re-run during an active charging session for a definitive result.
+\subsection*{ChangeAvailability (item 10.18)}
+\texttt{/remote/changeAvailability} returns HTTP~404.
+Verified via MQTT \texttt{set\_availability} with \texttt{ocpplib.log} fallback.
 
-\subsection*{Item 10.8 Hard Reset timing}
-After the Hard Reset command the vSECC physically reboots.
-The test waits up to \texttt{BOOT\_WAIT\_SEC}~seconds for reconnection before
-continuing.  Items 10.9 onward are always executed regardless of reconnect status.
+\subsection*{GetDiagnostics / UpdateFirmware (items 10.19--10.20)}
+MEA sandbox returns HTTP~404 for these endpoints (PascalCase path required but both 404).
+
 
 \end{document}

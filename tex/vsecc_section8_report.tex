@@ -7,6 +7,8 @@
 \usepackage{fancyhdr}
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \setlength{\emergencystretch}{3em}
 
 \definecolor{passgreen}{RGB}{34,139,34}
@@ -18,7 +20,7 @@
 \large Section 8: Dual Connector Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-11 12:07}
+\date{2026-06-11 04:47 UTC}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -37,35 +39,19 @@
 \textbf{OCPP Version}      & 1.6 (JSON) \\
 \textbf{CP ID}             & rddQC4000001 \\
 \textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
-\textbf{Connection}        & Direct (no proxy) \\
-\textbf{Test PC}           & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
-\textbf{Test Date}         & 2026-06-11 04:47:28 UTC \\
+\textbf{Connection}        & Direct TLS (Security Profile 1, no proxy) \\
+\textbf{Test Date}         & 2026-06-11 04:47 UTC \\
 \textbf{Results file}      & tex/vsecc\_section8\_results.json \\
 \end{tabular}
 
-\section{Applicability Note}
-
-\begin{center}
-\large\textbf{Section 8 is NOT APPLICABLE to this device.}
-\end{center}
-
-\noindent
-The \textbf{Vector vSECC.single} is a \emph{single-connector} SECC (Supply Equipment
-Communication Controller). Section~8 of the MEA OCPP~1.6 compliance form requires
-\textbf{two independent connectors} operating simultaneously to test:
-\begin{itemize}
-  \item \textbf{8.1} Concurrent RemoteStart on both connectors at the same time
-  \item \textbf{8.2} A shared Emergency Stop signal that simultaneously terminates
-        active sessions on both connectors
-  \item \textbf{8.3} Power loss behaviour with two concurrent charging sessions
-\end{itemize}
-Since the vSECC.single hardware provides only one connector (Connector~1), none of
-these dual-connector scenarios can be executed or observed. All 50 items in
-Section~8 are therefore recorded as \textbf{SKIP} — Not Applicable.
-
-\medskip\noindent
-If a multi-connector SECC (e.g.\ vSECC.dual or another charger with two connectors)
-is used in the future, all items in this section should be re-executed on that device.
+\subsection*{Test Architecture}
+The vSECC connects directly to the MEA CSMS at
+\texttt{wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001}
+over TLS with no intermediate proxy.
+OCPP traffic is observed via the vSECC's \texttt{GET /api/logging/files/ocpplib.log}
+REST endpoint (TRACE-level log, raw \texttt{>>>} sent / \texttt{<<<} received frames)
+and via MQTT at \texttt{192.168.1.166:1883} (topic \texttt{vsecc/\#}).
+The test PC NAT-routes internet access for the vSECC subnet (192.168.1.x via enp3s0).
 
 \section{Section 8 Results}
 \textbf{Summary: 0 PASS \quad 0 FAIL \quad 0 WARN \quad 50 SKIP \quad (50 total)}
@@ -74,7 +60,7 @@ is used in the future, all items in this section should be re-executed on that d
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \newcolumntype{M}[1]{>{\small\ttfamily\raggedright\arraybackslash}p{#1}}
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
-\begin{longtable}{|L{1.2cm}|L{6cm}|M{6.3cm}|C{1.8cm}|}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
 \hline
 \rowcolor{gray!25}
 \textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
@@ -87,138 +73,114 @@ is used in the future, all items in this section should be re-executed on that d
 \endhead
 \hline
 \endfoot
-\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{8.1 Concurrent RemoteStart --- Dual Connectors}} \\
+\small 8.1.1 & \small Concurrent RemoteStart  Connector 1 Accepted & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.1 & \small Concurrent RemoteStart — Connector 1 Accepted & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.2 & \small Concurrent RemoteStart  Connector 2 Accepted & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.2 & \small Concurrent RemoteStart — Connector 2 Accepted & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.3 & \small StartTransaction  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.3 & \small StartTransaction — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.4 & \small StartTransaction  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.4 & \small StartTransaction — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.5 & \small StatusNotification Charging  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.5 & \small StatusNotification Charging — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.6 & \small StatusNotification Charging  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.6 & \small StatusNotification Charging — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.7 & \small MeterValues  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.7 & \small MeterValues — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.8 & \small MeterValues  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.8 & \small MeterValues — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.9 & \small RemoteStop  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.9 & \small RemoteStop — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.10 & \small RemoteStop  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.10 & \small RemoteStop — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.11 & \small StopTransaction  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.11 & \small StopTransaction — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.12 & \small StopTransaction  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.12 & \small StopTransaction — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.13 & \small StatusNotification Finishing  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.13 & \small StatusNotification Finishing — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.14 & \small StatusNotification Finishing  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.14 & \small StatusNotification Finishing — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.15 & \small StatusNotification Available  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.15 & \small StatusNotification Available — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.16 & \small StatusNotification Available  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.16 & \small StatusNotification Available — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.17 & \small Transaction isolation  Connector 1 not affected by Connector 2 stop & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.17 & \small Transaction isolation — Connector 1 not affected by Connector 2 stop & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.1.18 & \small Transaction isolation  Connector 2 not affected by Connector 1 stop & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.1.18 & \small Transaction isolation — Connector 2 not affected by Connector 1 stop & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.1 & \small Emergency Stop signal sent & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{8.2 Shared Emergency Stop --- Dual Connectors}} \\
+\small 8.2.2 & \small RemoteStop broadcast  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.1 & \small Emergency Stop signal sent & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.3 & \small RemoteStop broadcast  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.2 & \small RemoteStop broadcast — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.4 & \small StopTransaction (EmergencyStop reason)  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.3 & \small RemoteStop broadcast — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.5 & \small StopTransaction (EmergencyStop reason)  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.4 & \small StopTransaction (EmergencyStop reason) — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.6 & \small StatusNotification Faulted  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.5 & \small StopTransaction (EmergencyStop reason) — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.7 & \small StatusNotification Faulted  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.6 & \small StatusNotification Faulted — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.8 & \small StatusNotification Unavailable (after fault clear)  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.7 & \small StatusNotification Faulted — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.9 & \small StatusNotification Unavailable (after fault clear)  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.8 & \small StatusNotification Unavailable (after fault clear) — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.10 & \small ChangeAvailability Operative  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.9 & \small StatusNotification Unavailable (after fault clear) — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.11 & \small ChangeAvailability Operative  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.10 & \small ChangeAvailability Operative — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.12 & \small StatusNotification Available  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.11 & \small ChangeAvailability Operative — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.13 & \small StatusNotification Available  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.12 & \small StatusNotification Available — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.14 & \small New session possible after emergency stop  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.13 & \small StatusNotification Available — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.15 & \small New session possible after emergency stop  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.14 & \small New session possible after emergency stop — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.2.16 & \small Shared emergency stop clears both connectors simultaneously & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.15 & \small New session possible after emergency stop — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.1 & \small Power loss event detected & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.2.16 & \small Shared emergency stop clears both connectors simultaneously & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.2 & \small Active session aborted  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{8.3 Power Loss --- Dual Connectors}} \\
+\small 8.3.3 & \small Active session aborted  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.1 & \small Power loss event detected & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.4 & \small StopTransaction (PowerLoss reason)  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.2 & \small Active session aborted — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.5 & \small StopTransaction (PowerLoss reason)  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.3 & \small Active session aborted — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.6 & \small vSECC power loss BootNotification after restore & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.4 & \small StopTransaction (PowerLoss reason) — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.7 & \small StatusNotification Available after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.5 & \small StopTransaction (PowerLoss reason) — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.8 & \small StatusNotification Available after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.6 & \small vSECC power loss BootNotification after restore & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.9 & \small Session data integrity after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.7 & \small StatusNotification Available after power restore — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.10 & \small Session data integrity after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.8 & \small StatusNotification Available after power restore — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.11 & \small RemoteStart accepted after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.9 & \small Session data integrity after power restore — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.12 & \small RemoteStart accepted after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.10 & \small Session data integrity after power restore — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.13 & \small StartTransaction after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.11 & \small RemoteStart accepted after power restore — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.14 & \small StartTransaction after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.12 & \small RemoteStart accepted after power restore — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.15 & \small StatusNotification Charging after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.13 & \small StartTransaction after power restore — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
+\small 8.3.16 & \small StatusNotification Charging after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
 \hline
-\small 8.3.14 & \small StartTransaction after power restore — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
-\hline
-\small 8.3.15 & \small StatusNotification Charging after power restore — Connector 1 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
-\hline
-\small 8.3.16 & \small StatusNotification Charging after power restore — Connector 2 & vSECC.single has one connector — dual-connector scenarios N/A & \textcolor{skipgray}{SKIP} \\
-\hline
-
 \end{longtable}
 \normalsize
 
 \section{Notes}
 
-\subsection*{Why all items are SKIP}
-The Vector vSECC.single board exposes exactly \textbf{one} OCPP connector.
-Dual-connector tests require two simultaneously active EVSE connectors so that:
-\begin{enumerate}
-  \item Two independent charging sessions can be started concurrently (Section 8.1)
-  \item An emergency stop can interrupt both sessions at the same time (Section 8.2)
-  \item A power-loss event can be observed across two active sessions (Section 8.3)
-\end{enumerate}
-None of these conditions can be reproduced on a single-connector device.
-Attempting to run these tests would require a different hardware platform.
+\subsection*{Dual connector}
+The Vector vSECC.single Board supports only a single connector.
+All Section~8 dual-connector items are recorded as SKIP.
 
-\subsection*{Impact on compliance}
-The MEA compliance form classifies dual-connector scenarios as a separate hardware
-configuration class. Single-connector installations are not expected to satisfy
-Section~8. The SKIP status (Not Applicable) indicates that the test was reviewed
-and intentionally excluded rather than omitted by error.
-
-\subsection*{Recommended future action}
-Should a multi-connector vSECC variant become available for integration testing,
-re-run \texttt{test\_mea\_section8.py} against that device after removing the
-\texttt{SKIP} guards and implementing the two-connector session orchestration logic.
 
 \end{document}

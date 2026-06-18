@@ -16,13 +16,13 @@ Run:
 
 import json
 import os
-import re
 import sys
 import time
 import threading
 import requests
 from datetime import datetime, timedelta
 from requests.auth import HTTPDigestAuth
+from vsecc_log import VseccLog, print_ocpp
 
 try:
     import paho.mqtt.client as mqtt
@@ -139,64 +139,6 @@ class MeaApi:
                            "location": "ftp://test.measandbox.com/firmware/latest.bin",
                            "retrieveDate": (datetime.utcnow() + timedelta(seconds=30)).isoformat() + "Z"})
 
-
-# ─────────────────────────────────────────────
-# ocpplib.log helper
-# ─────────────────────────────────────────────
-_ANSI = re.compile(r'\x1b\[[0-9;]*m')
-
-class VseccLog:
-    """Downloads ocpplib.log from vSECC and extracts OCPP frames since last mark."""
-
-    LOG_URL = f"{VSECC_BASE}/logging/files/ocpplib.log".replace("/api/", "/api/")
-
-    def __init__(self, token: str):
-        self._headers = {"Authorization": f"Bearer {token}"}
-        self._pos = 0
-        # Set initial position without printing
-        try:
-            r = requests.get(self.LOG_URL, headers=self._headers, timeout=60)
-            self._pos = len(r.text)
-        except Exception:
-            pass
-
-    def mark(self):
-        """Record current end-of-log position."""
-        try:
-            r = requests.get(self.LOG_URL, headers=self._headers, timeout=60)
-            self._pos = len(r.text)
-        except Exception:
-            pass
-
-    def ocpp_frames(self) -> list[str]:
-        """Return OCPP wire frames (>>> sent / <<< received) since last mark."""
-        try:
-            r = requests.get(self.LOG_URL, headers=self._headers, timeout=60)
-            new_text = r.text[self._pos:]
-            self._pos = len(r.text)
-        except Exception:
-            return []
-        frames = []
-        for line in new_text.splitlines():
-            if ">>> " in line or "<<< " in line:
-                clean = _ANSI.sub("", line).strip()
-                # Extract just the JSON frame part after >>> / <<<
-                for marker in (">>> ", "<<< "):
-                    idx = clean.find(marker)
-                    if idx >= 0:
-                        direction = ">>>" if marker == ">>> " else "<<<"
-                        frames.append(f"  {direction} {clean[idx + len(marker):]}")
-                        break
-        return frames
-
-
-def print_ocpp(frames: list[str], label: str = ""):
-    if not frames:
-        return
-    if label:
-        print(f"       [ocpplib] {label}")
-    for f in frames:
-        print(f"       {f}")
 
 
 # ─────────────────────────────────────────────
@@ -368,11 +310,13 @@ def run_section1(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
         boot_frames = log.ocpp_frames()
         sn_frames = [f for f in boot_frames if '"StatusNotification"' in f]
         if sn_frames:
+            if sn_frames: _last_raw = "\n".join(f.strip() for f in sn_frames)
             record("1.2", "StatusNotification (boot, all connectors)",
                    "PASS", "StatusNotification at boot verified via ocpplib.log",
                    "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
             print_ocpp(sn_frames, "1.2 StatusNotification (boot)")
         else:
+            if boot_frames: _last_raw = "\n".join(f.strip() for f in boot_frames)
             record("1.2", "StatusNotification (boot, all connectors)",
                    "WARN", "Not observed on MQTT or ocpplib.log (vSECC likely connected before test started)",
                    "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
@@ -537,6 +481,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
     elif log:
         frames9 = log.ocpp_frames()
     status19 = "WARN" if ok is None else ("PASS" if ok else "FAIL")
+    if frames9: _last_raw = "\n".join(f.strip() for f in frames9)
     record("1.9", "GetConfiguration (required configurationKey)", status19, d)
     if frames9:
         print_ocpp(frames9, "1.9 GetConfiguration (from ocpplib.log)")
@@ -557,6 +502,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
     frames13 = log.ocpp_frames() if log else []
     log_unavail = next((f for f in frames13
                         if "StatusNotification" in f and "Unavailable" in f), None)
+    if frames13: _last_raw = "\n".join(f.strip() for f in frames13)
     if payload13:
         record("1.13", "ChangeAvailability(cid=1, Inoperative) → Accepted",
                "PASS",
@@ -588,6 +534,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
     frames15 = log.ocpp_frames() if log else []
     log_avail = next((f for f in frames15
                       if "StatusNotification" in f and "Available" in f), None)
+    if frames15: _last_raw = "\n".join(f.strip() for f in frames15)
     if payload15:
         record("1.15", "ChangeAvailability(cid=1, Operative) → Accepted",
                "PASS",
@@ -641,6 +588,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
     time.sleep(6)
     frames18 = log.ocpp_frames() if log else []
     diag_status = next((f for f in frames18 if "DiagnosticsStatusNotification" in f), None)
+    if frames18: _last_raw = "\n".join(f.strip() for f in frames18)
     if diag_status:
         record("1.18", "DiagnosticsStatusNotification → status",
                "PASS", diag_status.strip(),
@@ -670,6 +618,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
     time.sleep(6)
     frames20 = log.ocpp_frames() if log else []
     fw_status = next((f for f in frames20 if "FirmwareStatusNotification" in f), None)
+    if frames20: _last_raw = "\n".join(f.strip() for f in frames20)
     if fw_status:
         record("1.20", "FirmwareStatusNotification → status",
                "PASS", fw_status.strip(),

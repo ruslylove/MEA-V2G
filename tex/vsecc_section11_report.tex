@@ -7,6 +7,8 @@
 \usepackage{fancyhdr}
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \setlength{\emergencystretch}{3em}
 
 \definecolor{passgreen}{RGB}{34,139,34}
@@ -15,10 +17,10 @@
 \definecolor{skipgray}{RGB}{120,120,120}
 
 \title{\textbf{MEA OCPP 1.6 Compliance Test Report}\\[0.3em]
-\large Section 11: Performance --- Reconnect Time\\[0.3em]
+\large Section 11: Performance -- Reconnect Time\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-11 12:07}
+\date{2026-06-11 04:48 UTC}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -32,39 +34,24 @@
 
 \section{Test Configuration}
 \begin{tabular}{ll}
-\textbf{Device Under Test}    & Vector vSECC.single Board \\
-\textbf{Device IP}            & 192.168.1.166 \\
-\textbf{OCPP Version}         & 1.6 (JSON) \\
-\textbf{CP ID}                & rddQC4000001 \\
-\textbf{CSMS}                 & wss://ocpp.measandbox.com:2930 \\
-\textbf{Connection}           & Direct (no proxy) \\
-\textbf{Test PC}              & 192.168.111.185 (alias 192.168.1.200/24 on enp3s0) \\
-\textbf{Boot Wait Timeout}    & 90 s per reconnect attempt \\
-\textbf{PASS Threshold}       & $<$ 90 s \\
-\textbf{WARN Threshold}       & 90--180 s \\
-\textbf{Repeat Count (11.2)}  & 3 measurements \\
-\textbf{Delay Between Runs}   & 5 s \\
-\textbf{Test Date}            & 2026-06-11 04:48:46 UTC \\
-\textbf{Results file}         & tex/vsecc\_section11\_results.json \\
+\textbf{Device Under Test} & Vector vSECC.single Board \\
+\textbf{Device IP}         & 192.168.1.166 \\
+\textbf{OCPP Version}      & 1.6 (JSON) \\
+\textbf{CP ID}             & rddQC4000001 \\
+\textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
+\textbf{Connection}        & Direct TLS (Security Profile 1, no proxy) \\
+\textbf{Test Date}         & 2026-06-11 04:48 UTC \\
+\textbf{Results file}      & tex/vsecc\_section11\_results.json \\
 \end{tabular}
 
-\subsection*{Measurement Method}
-For each reconnect timing:
-\begin{enumerate}
-  \item The MQTT \texttt{\_ocpp\_up} event is cleared.
-  \item A \textbf{Hard Reset} command is issued via the MEA REST API
-        (\texttt{POST /EV/remote/reset}).
-  \item The start time is recorded immediately after the reset call returns.
-  \item The test polls for two parallel reconnect signals:
-        \begin{itemize}
-          \item MQTT topic \texttt{vsecc/ocpp\_connection\_status = connected}
-          \item MEA REST \texttt{POST /EV/cmd/chargepoint/getConfiguration}
-                returning HTTP~200
-        \end{itemize}
-  \item The elapsed time is recorded when either signal is observed.
-\end{enumerate}
-The timing includes the vSECC boot time, TLS handshake, and OCPP
-BootNotification / BootNotification-Accepted exchange.
+\subsection*{Test Architecture}
+The vSECC connects directly to the MEA CSMS at
+\texttt{wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001}
+over TLS with no intermediate proxy.
+OCPP traffic is observed via the vSECC's \texttt{GET /api/logging/files/ocpplib.log}
+REST endpoint (TRACE-level log, raw \texttt{>>>} sent / \texttt{<<<} received frames)
+and via MQTT at \texttt{192.168.1.166:1883} (topic \texttt{vsecc/\#}).
+The test PC NAT-routes internet access for the vSECC subnet (192.168.1.x via enp3s0).
 
 \section{Section 11 Results}
 \textbf{Summary: 2 PASS \quad 0 FAIL \quad 0 WARN \quad 0 SKIP \quad (2 total)}
@@ -86,60 +73,25 @@ BootNotification / BootNotification-Accepted exchange.
 \endhead
 \hline
 \endfoot
-\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{11.1 Reconnect Time --- Single Measurement}} \\
-\hline
 \small 11.1 & \small Reconnect Time after Hard Reset & Reconnected in 0.1 s (< 90 s threshold){\newline\normalfont\footnotesize\itshape time\_ms=146} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\multicolumn{4}{|l|}{\cellcolor{gray!10}\small\textbf{11.2 Average Reconnect Time --- Repeated Measurements}} \\
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
 \hline
-\small 11.2 & \small Average Reconnect Time (3 measurements) & avg=0.2s min=0.2s max=0.2s [0.2, 0.2, 0.2]{\newline \texttt{run1=247\,ms} \newline \texttt{run2=156\,ms} \newline \texttt{run3=161\,ms}} & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 11.2 & \small Average Reconnect Time (3 measurements) & avg=0.2s min=0.2s max=0.2s [0.2, 0.2, 0.2]{\newline\normalfont\footnotesize\itshape run1=247ms; run2=156ms; run3=161ms} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
 \end{longtable}
 \normalsize
 
-\section{Reconnect Time Measurements}
-
-\subsection*{Item 11.1 — Single measurement}
-A single Hard Reset is issued and the time to reconnect is measured.
-The result is classified as:
-\begin{itemize}
-  \item \textbf{PASS} if reconnect time $<$ 90 s
-  \item \textbf{WARN} if reconnect time is 90--180 s (marginal)
-  \item \textbf{FAIL} if no reconnect within 180 s
-\end{itemize}
-The timing captures the full reboot cycle: OS startup, V2G stack initialization,
-WebSocket TLS connection to the CSMS, and OCPP BootNotification exchange.
-
-\subsection*{Item 11.2 — Repeated measurements}
-The reconnect measurement is repeated 3 times with 5~s between runs.
-Individual run timings are shown in the detail column above.
-The average, minimum, and maximum times are reported in the detail field.
-The item is classified as PASS if the \emph{average} reconnect time $<$
-90~s.
-
-\subsection*{Factors affecting reconnect time}
-\begin{itemize}
-  \item \textbf{Boot time:} Linux kernel + systemd startup on the vSECC hardware.
-  \item \textbf{TLS handshake:} Certificate validation and TLS 1.2/1.3 negotiation
-        with \texttt{wss://ocpp.measandbox.com:2930}.
-  \item \textbf{OCPP boot sequence:} BootNotification + BootNotification\-Accepted +
-        initial StatusNotification messages.
-  \item \textbf{Network latency:} Round-trip time to the MEA sandbox CSMS in Thailand.
-\end{itemize}
-
 \section{Notes}
 
-\subsection*{Detection method}
-The test uses a dual detection strategy:
-\begin{enumerate}
-  \item \textbf{MQTT:} The vSECC publishes \texttt{connected} to
-        \texttt{vsecc/ocpp\_connection\_status} when the OCPP WebSocket
-        is established.  This is the most precise signal.
-  \item \textbf{REST probe:} A \texttt{GetConfiguration} call is made to the MEA
-        CSMS every second.  HTTP~200 indicates the CSMS can forward commands to
-        the charger, confirming connectivity.
-\end{enumerate}
-Whichever signal arrives first determines the recorded reconnect time.
+\subsection*{Reconnect time measurement}
+The vSECC is hard-reset via MEA REST API and the test measures elapsed time until
+\texttt{vsecc/ocpp\_connection\_status = connected} is observed on MQTT.
+PASS threshold: $<90$\,s. WARN: 90--180\,s. FAIL: $>180$\,s or no reconnect.
+Three measurements are taken for the average (item~11.2).
+\texttt{ocpplib.log} provides BootNotification frame timestamps as supplementary evidence.
+
 
 \end{document}

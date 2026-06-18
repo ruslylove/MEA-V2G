@@ -38,6 +38,8 @@ try:
 except ImportError:
     HAS_MQTT = False
 
+from vsecc_log import VseccLog, print_ocpp
+
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
@@ -281,7 +283,8 @@ def _measure_reconnect(mea: MeaApi, attempt_label: str) -> float:
 # ─────────────────────────────────────────────
 # Section 11 test body
 # ─────────────────────────────────────────────
-def run_section11(vsecc: VseccApi, mea: MeaApi):
+def run_section11(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
+    global _last_raw
     section("Section 11: Performance — Reconnect Time")
 
     # ── Connection check ─────────────────────────────────────────────────────
@@ -300,6 +303,8 @@ def run_section11(vsecc: VseccApi, mea: MeaApi):
     # ══════════════════════════════════════════════════════════════════════════
     section("11.1 Reconnect Time — Single Measurement")
 
+    if log:
+        log.mark()
     elapsed_11_1 = _measure_reconnect(mea, "11.1")
 
     if elapsed_11_1 < PASS_THRESHOLD_SEC:
@@ -313,6 +318,15 @@ def run_section11(vsecc: VseccApi, mea: MeaApi):
         status_11_1  = "FAIL"
         detail_11_1  = (f"No reconnect in {elapsed_11_1:.1f} s "
                         f"(> {WARN_THRESHOLD_SEC} s threshold)")
+
+    # Collect BootNotification from ocpplib.log as additional evidence (informational)
+    frames_111 = []
+    if log:
+        frames_111 = log.ocpp_frames()
+        boot_frame = log.find(frames_111, "BootNotification")
+        if frames_111: _last_raw = "\n".join(f.strip() for f in frames_111)
+        if boot_frame:
+            print_ocpp(frames_111, "11.1 BootNotification (from ocpplib.log)")
 
     record("11.1", "Reconnect Time after Hard Reset",
            status_11_1, detail_11_1,
@@ -328,9 +342,19 @@ def run_section11(vsecc: VseccApi, mea: MeaApi):
     section(f"11.2 Average Reconnect Time — {REPEAT_COUNT} Measurements")
 
     timings = []
+    all_frames_112 = []
     for i in range(1, REPEAT_COUNT + 1):
+        if log:
+            log.mark()
         elapsed = _measure_reconnect(mea, f"11.2 run {i}/{REPEAT_COUNT}")
         timings.append(elapsed)
+        # Show BootNotification from ocpplib.log as additional evidence (informational)
+        if log:
+            frames_112 = log.ocpp_frames()
+            all_frames_112.extend(frames_112)
+            boot_frame = log.find(frames_112, "BootNotification")
+            if boot_frame:
+                print_ocpp(frames_112, f"11.2 run {i} BootNotification (from ocpplib.log)")
         if i < REPEAT_COUNT:
             print(f"  Waiting {REPEAT_DELAY} s before next measurement...")
             time.sleep(REPEAT_DELAY)
@@ -354,6 +378,7 @@ def run_section11(vsecc: VseccApi, mea: MeaApi):
     timing_remark_parts = [f"run{i+1}={t*1000:.0f}ms" for i, t in enumerate(timings)]
     timing_remark = "; ".join(timing_remark_parts)
 
+    if all_frames_112: _last_raw = "\n".join(f.strip() for f in all_frames_112)
     record("11.2",
            f"Average Reconnect Time ({REPEAT_COUNT} measurements)",
            status_11_2, detail_11_2, timing_remark)
@@ -420,9 +445,11 @@ def main():
         sys.exit(1)
     print("  vSECC authenticated")
 
+    vslog = VseccLog(vsecc.token)
+
     start_mqtt_watcher()
     try:
-        run_section11(vsecc, mea)
+        run_section11(vsecc, mea, log=vslog)
     finally:
         stop_mqtt_watcher()
 

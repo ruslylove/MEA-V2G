@@ -34,6 +34,7 @@ import threading
 import requests
 from datetime import datetime, timedelta
 from requests.auth import HTTPDigestAuth
+from vsecc_log import VseccLog, print_ocpp
 
 try:
     import paho.mqtt.client as mqtt
@@ -316,7 +317,7 @@ def _probe_csms_connection(mea: MeaApi, timeout=30) -> bool:
     return False
 
 
-def run_section2(vsecc: VseccApi, mea: MeaApi):
+def run_section2(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
     section("Section 2: การตรวจสอบ Auto Charge (Auto Charge Verification)")
 
     # ── Verify OCPP connection (MQTT event OR REST API probe) ─────────────────
@@ -346,13 +347,23 @@ def run_section2(vsecc: VseccApi, mea: MeaApi):
     # ── 2.3  StatusNotification Available (unplug) ────────────────────────────
     if ok22:
         print("  ...waiting for Available (unplug EV)...")
+        if log: log.mark()
         payload, topic = mqtt_wait(mark22, "status", "Available", timeout=60)
+        frames_23 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_23, "StatusNotification", "Available") if log else None
+        if frames_23: _last_raw = "\n".join(f.strip() for f in frames_23)
         if payload:
             record("2.3", "StatusNotification Available (unplug)",
                    "PASS", f"{topic.split('/')[-1]}={payload}")
+        elif log_match:
+            record("2.3", "StatusNotification Available (unplug)",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_23, "2.3 (from ocpplib.log)")
         else:
             record("2.3", "StatusNotification Available (unplug)",
-                   "WARN", "No Available event in 60 s")
+                   "WARN", "not observed on MQTT or ocpplib.log in 60 s")
+        if frames_23 and not payload and not log_match:
+            print_ocpp(frames_23, "2.3 frames")
     else:
         record("2.3", "StatusNotification Available (unplug)",
                "WARN", "Depends on 2.2 (EV plug)")
@@ -373,46 +384,77 @@ def run_section2(vsecc: VseccApi, mea: MeaApi):
     # vSECC sends Authorize when it reads the RFID/VID tag.
     # Observable on MQTT charging_authorization_state.
     if ok25:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark25, "authorization", "Accepted", timeout=30)
         if not payload:
             # Also accept "authorized" in CP state transitions
             payload, topic = mqtt_wait(mark25, "cp_state", "C", timeout=10)
+        frames_26 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_26, "Authorize") if log else None
+        if frames_26: _last_raw = "\n".join(f.strip() for f in frames_26)
         if payload:
             record("2.6", "Authorize (VID) → Accepted",
                    "PASS", f"auth_state={payload}")
+        elif log_match:
+            record("2.6", "Authorize (VID) → Accepted",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_26, "2.6 (from ocpplib.log)")
         else:
             record("2.6", "Authorize (VID) → Accepted",
-                   "WARN", "authorization_state not observed on MQTT in 30 s",
+                   "WARN", "not observed on MQTT or ocpplib.log in 30 s",
                    "May require RFID scan on physical hardware")
+        if frames_26 and not payload and not log_match:
+            print_ocpp(frames_26, "2.6 frames")
     else:
         record("2.6", "Authorize (VID) → Accepted",
                "WARN", "Depends on 2.5 (EV plug)")
 
     # ── 2.7  StartTransaction ─────────────────────────────────────────────────
     if ok25:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark25, "charging_session_state", "started", timeout=30)
         if not payload:
             payload, topic = mqtt_wait(mark25, "charging_session_state", "active", timeout=5)
+        frames_27 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_27, "StartTransaction") if log else None
+        if frames_27: _last_raw = "\n".join(f.strip() for f in frames_27)
         if payload:
             _s.session_active = True
             record("2.7", "StartTransaction (session started)",
                    "PASS", f"session_state={payload}")
+        elif log_match:
+            _s.session_active = True
+            record("2.7", "StartTransaction (session started)",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_27, "2.7 (from ocpplib.log)")
         else:
             record("2.7", "StartTransaction (session started)",
-                   "WARN", "charging_session_state not observed on MQTT")
+                   "WARN", "not observed on MQTT or ocpplib.log")
+        if frames_27 and not payload and not log_match:
+            print_ocpp(frames_27, "2.7 frames")
     else:
         record("2.7", "StartTransaction (session started)",
                "WARN", "Depends on 2.5 (EV plug)")
 
     # ── 2.8  StatusNotification Charging ──────────────────────────────────────
     if ok25:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark25, "status", "Charging", timeout=20)
+        frames_28 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_28, "StatusNotification", "Charging") if log else None
+        if frames_28: _last_raw = "\n".join(f.strip() for f in frames_28)
         if payload:
             record("2.8", "StatusNotification Charging",
                    "PASS", f"{topic.split('/')[-1]}={payload}")
+        elif log_match:
+            record("2.8", "StatusNotification Charging",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_28, "2.8 (from ocpplib.log)")
         else:
             record("2.8", "StatusNotification Charging",
-                   "WARN", "Charging status not observed on MQTT in 20 s")
+                   "WARN", "not observed on MQTT or ocpplib.log in 20 s")
+        if frames_28 and not payload and not log_match:
+            print_ocpp(frames_28, "2.8 frames")
     else:
         record("2.8", "StatusNotification Charging",
                "WARN", "Depends on 2.5 (EV plug)")
@@ -451,43 +493,74 @@ def run_section2(vsecc: VseccApi, mea: MeaApi):
     # ── 2.11 StopTransaction (sent by vSECC after RemoteStop) ─────────────────
     if ok:
         # StopTransaction is reflected in session_state going to "finished"/"idle"
+        if log: log.mark()
         payload, topic = mqtt_wait(mark210, "charging_session_state", "idle", timeout=20)
         if not payload:
             payload, topic = mqtt_wait(mark210, "charging_session_state", "finish", timeout=10)
+        frames_211 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_211, "StopTransaction") if log else None
+        if frames_211: _last_raw = "\n".join(f.strip() for f in frames_211)
         if payload:
             _s.session_active = False
             record("2.11", "StopTransaction (sent after RemoteStop)",
                    "PASS", f"session_state={payload}")
+        elif log_match:
+            _s.session_active = False
+            record("2.11", "StopTransaction (sent after RemoteStop)",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_211, "2.11 (from ocpplib.log)")
         else:
             record("2.11", "StopTransaction (sent after RemoteStop)",
-                   "WARN", "session_state idle/finished not observed on MQTT in 30 s")
+                   "WARN", "not observed on MQTT or ocpplib.log in 30 s")
+        if frames_211 and not payload and not log_match:
+            print_ocpp(frames_211, "2.11 frames")
     else:
         record("2.11", "StopTransaction (sent after RemoteStop)",
                "WARN", "Depends on 2.10 (RemoteStop)")
 
     # ── 2.12 StatusNotification Finishing ────────────────────────────────────
     if ok:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark210, "status", "Finishing", timeout=20)
+        frames_212 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_212, "StatusNotification", "Finishing") if log else None
+        if frames_212: _last_raw = "\n".join(f.strip() for f in frames_212)
         if payload:
             record("2.12", "StatusNotification Finishing",
                    "PASS", f"{topic.split('/')[-1]}={payload}")
+        elif log_match:
+            record("2.12", "StatusNotification Finishing",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_212, "2.12 (from ocpplib.log)")
         else:
             record("2.12", "StatusNotification Finishing",
-                   "WARN", "Finishing status not observed on MQTT",
+                   "WARN", "not observed on MQTT or ocpplib.log",
                    "Some implementations go directly Available without Finishing")
+        if frames_212 and not payload and not log_match:
+            print_ocpp(frames_212, "2.12 frames")
     else:
         record("2.12", "StatusNotification Finishing",
                "WARN", "Depends on 2.10 (RemoteStop)")
 
     # ── 2.13 StatusNotification Available (after RemoteStop / unplug) ─────────
     if ok:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark210, "status", "Available", timeout=30)
+        frames_213 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_213, "StatusNotification", "Available") if log else None
+        if frames_213: _last_raw = "\n".join(f.strip() for f in frames_213)
         if payload:
             record("2.13", "StatusNotification Available (after RemoteStop/unplug)",
                    "PASS", f"{topic.split('/')[-1]}={payload}")
+        elif log_match:
+            record("2.13", "StatusNotification Available (after RemoteStop/unplug)",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_213, "2.13 (from ocpplib.log)")
         else:
             record("2.13", "StatusNotification Available (after RemoteStop/unplug)",
-                   "WARN", "Available status not observed on MQTT in 30 s")
+                   "WARN", "not observed on MQTT or ocpplib.log in 30 s")
+        if frames_213 and not payload and not log_match:
+            print_ocpp(frames_213, "2.13 frames")
     else:
         record("2.13", "StatusNotification Available (after RemoteStop/unplug)",
                "WARN", "Depends on 2.10 (RemoteStop)")
@@ -503,42 +576,73 @@ def run_section2(vsecc: VseccApi, mea: MeaApi):
 
     # ── 2.15 Authorize (Session 2) ────────────────────────────────────────────
     if ok14:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark214, "authorization", "Accepted", timeout=30)
+        frames_215 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_215, "Authorize") if log else None
+        if frames_215: _last_raw = "\n".join(f.strip() for f in frames_215)
         if payload:
             record("2.15", "Authorize (Session 2) → Accepted",
                    "PASS", f"auth_state={payload}")
+        elif log_match:
+            record("2.15", "Authorize (Session 2) → Accepted",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_215, "2.15 (from ocpplib.log)")
         else:
             record("2.15", "Authorize (Session 2) → Accepted",
-                   "WARN", "authorization_state not observed on MQTT in 30 s")
+                   "WARN", "not observed on MQTT or ocpplib.log in 30 s")
+        if frames_215 and not payload and not log_match:
+            print_ocpp(frames_215, "2.15 frames")
     else:
         record("2.15", "Authorize (Session 2) → Accepted",
                "WARN", "Depends on 2.14 (EV plug)")
 
     # ── 2.16 StartTransaction (Session 2) ────────────────────────────────────
     if ok14:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark214, "charging_session_state", "started", timeout=30)
         if not payload:
             payload, topic = mqtt_wait(mark214, "charging_session_state", "active", timeout=5)
+        frames_216 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_216, "StartTransaction") if log else None
+        if frames_216: _last_raw = "\n".join(f.strip() for f in frames_216)
         if payload:
             _s.session_active = True
             record("2.16", "StartTransaction (Session 2)",
                    "PASS", f"session_state={payload}")
+        elif log_match:
+            _s.session_active = True
+            record("2.16", "StartTransaction (Session 2)",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_216, "2.16 (from ocpplib.log)")
         else:
             record("2.16", "StartTransaction (Session 2)",
-                   "WARN", "charging_session_state not observed on MQTT")
+                   "WARN", "not observed on MQTT or ocpplib.log")
+        if frames_216 and not payload and not log_match:
+            print_ocpp(frames_216, "2.16 frames")
     else:
         record("2.16", "StartTransaction (Session 2)",
                "WARN", "Depends on 2.14 (EV plug)")
 
     # ── 2.17 StatusNotification Charging (Session 2) ─────────────────────────
     if ok14:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark214, "status", "Charging", timeout=20)
+        frames_217 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_217, "StatusNotification", "Charging") if log else None
+        if frames_217: _last_raw = "\n".join(f.strip() for f in frames_217)
         if payload:
             record("2.17", "StatusNotification Charging (Session 2)",
                    "PASS", f"{topic.split('/')[-1]}={payload}")
+        elif log_match:
+            record("2.17", "StatusNotification Charging (Session 2)",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_217, "2.17 (from ocpplib.log)")
         else:
             record("2.17", "StatusNotification Charging (Session 2)",
-                   "WARN", "Charging status not observed on MQTT")
+                   "WARN", "not observed on MQTT or ocpplib.log")
+        if frames_217 and not payload and not log_match:
+            print_ocpp(frames_217, "2.17 frames")
     else:
         record("2.17", "StatusNotification Charging (Session 2)",
                "WARN", "Depends on 2.14 (EV plug)")
@@ -546,13 +650,23 @@ def run_section2(vsecc: VseccApi, mea: MeaApi):
     # ── 2.18 MeterValues (Session 2) ─────────────────────────────────────────
     if ok14:
         mea.trigger_message("MeterValues", connector_id=1)
+        if log: log.mark()
         payload, topic = mqtt_wait(mark214, "metervalues", "", timeout=15)
+        frames_218 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_218, "MeterValues") if log else None
+        if frames_218: _last_raw = "\n".join(f.strip() for f in frames_218)
         if payload:
             record("2.18", "MeterValues (Session 2)",
                    "PASS", f"metervalues received: {payload[:60]}")
+        elif log_match:
+            record("2.18", "MeterValues (Session 2)",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_218, "2.18 (from ocpplib.log)")
         else:
             record("2.18", "MeterValues (Session 2)",
-                   "WARN", "MeterValues not observed on MQTT in 15 s")
+                   "WARN", "not observed on MQTT or ocpplib.log in 15 s")
+        if frames_218 and not payload and not log_match:
+            print_ocpp(frames_218, "2.18 frames")
     else:
         record("2.18", "MeterValues (Session 2)",
                "WARN", "Depends on 2.14 (EV plug)")
@@ -561,14 +675,24 @@ def run_section2(vsecc: VseccApi, mea: MeaApi):
     # This occurs when the EV stops drawing power (BMS full / schedule limit).
     # Observable via MQTT status topic.
     if ok14:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark214, "status", "Suspended", timeout=30)
+        frames_219 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_219, "StatusNotification", "SuspendedEV") if log else None
+        if frames_219: _last_raw = "\n".join(f.strip() for f in frames_219)
         if payload:
             record("2.19", "StatusNotification SuspendedEV",
                    "PASS", f"{topic.split('/')[-1]}={payload}")
+        elif log_match:
+            record("2.19", "StatusNotification SuspendedEV",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_219, "2.19 (from ocpplib.log)")
         else:
             record("2.19", "StatusNotification SuspendedEV",
-                   "WARN", "SuspendedEV not observed in 30 s",
+                   "WARN", "not observed on MQTT or ocpplib.log in 30 s",
                    "Requires EV to stop drawing current (BMS full or EV-side suspend)")
+        if frames_219 and not payload and not log_match:
+            print_ocpp(frames_219, "2.19 frames")
     else:
         record("2.19", "StatusNotification SuspendedEV",
                "WARN", "Depends on 2.14 (EV plug)")
@@ -577,30 +701,51 @@ def run_section2(vsecc: VseccApi, mea: MeaApi):
     # This happens when the EV is unplugged during or after charging.
     if ok14:
         print("  ...waiting for EV disconnect (StopTransaction EVDisconnected)...")
+        if log: log.mark()
         payload, topic = mqtt_wait(mark214, "charging_session_state", "idle", timeout=60)
         if not payload:
             payload, topic = mqtt_wait(mark214, "charging_session_state", "finish", timeout=5)
+        frames_220 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_220, "StopTransaction") if log else None
+        if frames_220: _last_raw = "\n".join(f.strip() for f in frames_220)
         if payload:
             _s.session_active = False
             record("2.20", "StopTransaction (reason=EVDisconnected)",
                    "PASS", f"session_state={payload}")
+        elif log_match:
+            _s.session_active = False
+            record("2.20", "StopTransaction (reason=EVDisconnected)",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_220, "2.20 (from ocpplib.log)")
         else:
             record("2.20", "StopTransaction (reason=EVDisconnected)",
-                   "WARN", "session_state idle/finished not observed in 60 s",
+                   "WARN", "not observed on MQTT or ocpplib.log in 60 s",
                    "Unplug EV to trigger EVDisconnected StopTransaction")
+        if frames_220 and not payload and not log_match:
+            print_ocpp(frames_220, "2.20 frames")
     else:
         record("2.20", "StopTransaction (reason=EVDisconnected)",
                "WARN", "Depends on 2.14 (EV plug)")
 
     # ── 2.21 StatusNotification Available (Session 2 end) ────────────────────
     if ok14:
+        if log: log.mark()
         payload, topic = mqtt_wait(mark214, "status", "Available", timeout=20)
+        frames_221 = log.ocpp_frames() if log else []
+        log_match = log.find(frames_221, "StatusNotification", "Available") if log else None
+        if frames_221: _last_raw = "\n".join(f.strip() for f in frames_221)
         if payload:
             record("2.21", "StatusNotification Available (Session 2 end)",
                    "PASS", f"{topic.split('/')[-1]}={payload}")
+        elif log_match:
+            record("2.21", "StatusNotification Available (Session 2 end)",
+                   "PASS", f"confirmed via ocpplib.log: {log_match.strip()}")
+            print_ocpp(frames_221, "2.21 (from ocpplib.log)")
         else:
             record("2.21", "StatusNotification Available (Session 2 end)",
-                   "WARN", "Available status not observed on MQTT in 20 s")
+                   "WARN", "not observed on MQTT or ocpplib.log in 20 s")
+        if frames_221 and not payload and not log_match:
+            print_ocpp(frames_221, "2.21 frames")
     else:
         record("2.21", "StatusNotification Available (Session 2 end)",
                "WARN", "Depends on 2.14 (EV plug)")
@@ -661,9 +806,13 @@ def main():
         sys.exit(1)
     print("  vSECC authenticated")
 
+    print("  Initialising ocpplib.log position...")
+    vslog = VseccLog(vsecc.token)
+    print(f"  ocpplib.log baseline: {vslog._pos:,} bytes")
+
     start_mqtt_watcher()
     try:
-        run_section2(vsecc, mea)
+        run_section2(vsecc, mea, log=vslog)
     finally:
         stop_mqtt_watcher()
 

@@ -7,7 +7,7 @@
 \usepackage{fancyhdr}
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
-\usepackage{fontenc}
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \setlength{\emergencystretch}{3em}
 
@@ -20,7 +20,7 @@
 \large Section 1: Charger Configuration Verification\\[0.3em]
 \normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
 \author{MEA-V2G Project --- Automated Test}
-\date{2026-06-18 09:52}
+\date{2026-06-18 02:52 UTC}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -39,22 +39,19 @@
 \textbf{OCPP Version}      & 1.6 (JSON) \\
 \textbf{CP ID}             & rddQC4000001 \\
 \textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
-\textbf{Connection}        & Direct TLS (no proxy) \\
-\textbf{Security Profile}  & 1 (TLS, no basic auth) \\
-\textbf{Test PC}           & 192.168.1.200/24 (alias on enp3s0) \\
-\textbf{Test Date}         & 2026-06-18 09:52 \\
+\textbf{Connection}        & Direct TLS (Security Profile 1, no proxy) \\
+\textbf{Test Date}         & 2026-06-18 02:52 UTC \\
 \textbf{Results file}      & tex/vsecc\_section1\_results.json \\
 \end{tabular}
 
-\subsection*{Test Setup}
+\subsection*{Test Architecture}
 The vSECC connects directly to the MEA CSMS at
 \texttt{wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6/rddQC4000001}
-over TLS (Security Profile 1) with no intermediate proxy.
-The test PC observes OCPP traffic via the vSECC's \texttt{GET /api/logging/files/ocpplib.log}
-REST endpoint (TRACE-level log containing raw \texttt{>>>} sent and \texttt{<<<} received frames)
+over TLS with no intermediate proxy.
+OCPP traffic is observed via the vSECC's \texttt{GET /api/logging/files/ocpplib.log}
+REST endpoint (TRACE-level log, raw \texttt{>>>} sent / \texttt{<<<} received frames)
 and via MQTT at \texttt{192.168.1.166:1883} (topic \texttt{vsecc/\#}).
-Internet access for the vSECC is provided by the test PC acting as a NAT gateway
-(nftables masquerade, \texttt{net.ipv4.ip\_forward=1}).
+The test PC NAT-routes internet access for the vSECC subnet (192.168.1.x via enp3s0).
 
 \section{Section 1 Results}
 \textbf{Summary: 14 PASS \quad 0 FAIL \quad 10 WARN \quad 0 SKIP \quad (24 total)}
@@ -76,96 +73,74 @@ Internet access for the vSECC is provided by the test PC acting as a NAT gateway
 \endhead
 \hline
 \endfoot
-\small 1.1 & \small BootNotification & vendor=KMUTNB2 model=KMUTNB2 (MEA Accepted, OCPP session up) & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.1 & \small BootNotification & vendor=KMUTNB2 model=KMUTNB2 (MEA Accepted  OCPP session up) & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.2 & \small StatusNotification (boot, all connectors) & Not observed on MQTT or ocpplib.log (vSECC connected before test started){\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 \S4.7)*} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 1.2 & \small StatusNotification (boot, all connectors) & Not observed on MQTT or ocpplib.log (vSECC likely connected before test started){\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 4.7)*} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.3 & \small TriggerMessage(BootNotification) $\to$ Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMS$\to$CS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 1.3 & \small TriggerMessage(BootNotification)  Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMSCS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 1.4 & \small BootNotification (triggered) fields & Depends on 1.3 (TriggerMessage not available via MEA REST API) & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.5 & \small TriggerMessage(StatusNotification) $\to$ Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMS$\to$CS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 1.5 & \small TriggerMessage(StatusNotification)  Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMSCS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 1.6 & \small StatusNotification (triggered) fields & Depends on 1.5 (TriggerMessage not available via MEA REST API) & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.7 & \small TriggerMessage(MeterValues) $\to$ Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMS$\to$CS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 1.7 & \small TriggerMessage(MeterValues)  Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMSCS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
 \small 1.8 & \small MeterValues fields \& measurands & Requires active charging session{\newline\normalfont\footnotesize\itshape Retest during a charging session} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.9 & \small GetConfiguration (required configurationKey) & GetConfiguration sent; response not observed in ocpplib.log{\newline\normalfont\footnotesize\itshape MEA CSMS processes asynchronously; CALLRESULT not captured within timeout} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 1.9 & \small GetConfiguration (required configurationKey) & GetConfiguration sent; response not observed in ocpplib.log & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.10 & \small ChangeConfiguration HeartbeatInterval=600 $\to$ Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.10 & \small ChangeConfiguration HeartbeatInterval=600  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.11 & \small ChangeConfiguration MeterValueSampleInterval=30 $\to$ Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.11 & \small ChangeConfiguration MeterValueSampleInterval=30  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.12 & \small ChangeConfiguration UnlockConnectorOnEVSideDisconnect=true $\to$ Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.12 & \small ChangeConfiguration UnlockConnectorOnEVSideDisconnect=true  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.13 & \small ChangeAvailability(cid=1, Inoperative) $\to$ Accepted & StatusNotification \texttt{status=Unavailable} confirmed via ocpplib.log & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.13 & \small ChangeAvailability(cid=1, Inoperative)  Accepted & StatusNotification Unavailable confirmed via ocpplib.log & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.14 & \small StatusNotification (Inoperative) fields & Unavailable confirmed via ocpplib.log{\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 \S4.7)*} & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.14 & \small StatusNotification (Inoperative) fields & Unavailable confirmed via MQTT/ocpplib.log{\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 4.7)*} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.15 & \small ChangeAvailability(cid=1, Operative) $\to$ Accepted & StatusNotification \texttt{status=Available} confirmed via ocpplib.log & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.15 & \small ChangeAvailability(cid=1, Operative)  Accepted & StatusNotification Available confirmed via ocpplib.log & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.16 & \small StatusNotification (Operative) fields & Available confirmed via ocpplib.log{\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 \S4.7)*} & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.16 & \small StatusNotification (Operative) fields & Available confirmed via MQTT/ocpplib.log{\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 4.7)*} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.17 & \small GetDiagnostics $\to$ fileName & HTTP 200{\newline\normalfont\footnotesize\itshape *Discretionary item} & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.17 & \small GetDiagnostics  fileName & HTTP 200{\newline\normalfont\footnotesize\itshape *discretionary (discretionary)} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.18 & \small DiagnosticsStatusNotification $\to$ status & Not observed in ocpplib.log within 6\,s{\newline\normalfont\footnotesize\itshape *Discretionary item} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 1.18 & \small DiagnosticsStatusNotification  status & Not observed in ocpplib.log within 6 s{\newline\normalfont\footnotesize\itshape *discretionary (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.19 & \small UpdateFirmware & HTTP 200{\newline\normalfont\footnotesize\itshape *Discretionary item} & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.19 & \small UpdateFirmware & HTTP 200{\newline\normalfont\footnotesize\itshape *discretionary (discretionary)} & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.20 & \small FirmwareStatusNotification $\to$ status & Not observed in ocpplib.log within 6\,s{\newline\normalfont\footnotesize\itshape *Discretionary item} & \textcolor{warnorange}{\textbf{WARN}} \\
+\small 1.20 & \small FirmwareStatusNotification  status & Not observed in ocpplib.log within 6 s{\newline\normalfont\footnotesize\itshape *discretionary (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
 \hline
-\small 1.21 & \small ChangeConfiguration LocalAuthorizeOffline=true $\to$ Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.21 & \small ChangeConfiguration LocalAuthorizeOffline=true  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.22 & \small SendLocalList (Full, 1 entry) $\to$ Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.22 & \small SendLocalList (Full, 1 entry)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.23 & \small GetLocalListVersion $\to$ listVersion & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.23 & \small GetLocalListVersion  listVersion & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-\small 1.24 & \small ClearCache $\to$ status Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\small 1.24 & \small ClearCache  status Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
 \hline
-
 \end{longtable}
 \normalsize
-\noindent\footnotesize{* \texttt{vendorId} / \texttt{vendorErrorCode} fields absent (optional per OCPP 1.6 \S 4.7).}
-\normalsize
 
-\section{Notes on Warnings}
+\section{Notes}
 
-\subsection*{MEA sandbox limitations (items 1.3--1.7)}
-The MEA sandbox REST API does not expose the \texttt{/remote/triggerMessage} endpoint
-(HTTP~404 for all casing variants tested).
-TriggerMessage requires the CSMS to initiate the command; it cannot be triggered
-via the MEA REST API alone.
-Items 1.4, 1.6, and 1.8 depend on TriggerMessage and are therefore also WARN.
+\subsection*{Sandbox limitations (items 1.3--1.7)}
+The MEA sandbox REST API does not expose \texttt{/remote/triggerMessage} (HTTP~404).
+TriggerMessage requires the CSMS to initiate the command; items 1.4, 1.6, 1.8 depend on it.
 
 \subsection*{ChangeAvailability (items 1.13--1.16)}
-The MEA sandbox \texttt{/remote/changeAvailability} endpoint returns HTTP~404.
-ChangeAvailability was instead issued via the vSECC's MQTT
-\texttt{vsecc/connector/1/status/set\_availability} topic.
-The resulting OCPP \texttt{StatusNotification} frames
-(\texttt{status=Unavailable} and \texttt{status=Available}) were observed in the
-vSECC's \texttt{ocpplib.log} confirming the transitions reached the CSMS.
-Items 1.13--1.16 are therefore \textbf{PASS}.
+\texttt{/remote/changeAvailability} returns HTTP~404.
+ChangeAvailability was issued via vSECC MQTT \texttt{set\_availability}.
+The resulting \texttt{StatusNotification} frames were confirmed via \texttt{ocpplib.log}.
 
 \subsection*{GetConfiguration (item 1.9)}
-The MEA CSMS processes \texttt{GetConfiguration} asynchronously and returns HTTP~200
-with an empty body.
-The \texttt{ocpplib.log} was polled for the vSECC's CALLRESULT containing
-\texttt{configurationKey} but no frame was captured within the 4\,s poll window.
-The vSECC does accept \texttt{ChangeConfiguration} for all standard keys
-(items 1.10--1.12 and 1.21 all PASS), confirming correct key handling.
-
-\subsection*{Boot StatusNotification (item 1.2)}
-The \texttt{VseccLog} baseline is recorded after the vSECC has already established
-its OCPP session, so the boot-time \texttt{StatusNotification} falls outside the
-capture window.
-A vSECC restart at test start would resolve this; deferred to a dedicated reboot test.
+MEA CSMS processes GetConfiguration asynchronously (HTTP~200, empty body).
+The vSECC accepts ChangeConfiguration for all standard keys (1.10--1.12, 1.21 PASS).
 
 \subsection*{DiagnosticsStatus / FirmwareStatus (items 1.18, 1.20)}
-Both items are discretionary.
-The vSECC does not send \texttt{DiagnosticsStatusNotification} or
-\texttt{FirmwareStatusNotification} within the 6\,s observation window in this
-environment (no real FTP server is reachable at the configured test URL).
+Discretionary items. vSECC does not send these notifications without a real FTP endpoint.
+
 
 \end{document}

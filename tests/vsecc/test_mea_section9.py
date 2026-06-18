@@ -44,6 +44,8 @@ try:
 except ImportError:
     HAS_MQTT = False
 
+from vsecc_log import VseccLog, print_ocpp
+
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
@@ -231,13 +233,18 @@ def _probe_csms_connection(mea: MeaApi, timeout=30) -> bool:
 # ─────────────────────────────────────────────
 # Power demand helper
 # ─────────────────────────────────────────────
-def _power_demand_item(item_id, message, mea: MeaApi, power_w: int):
+def _power_demand_item(item_id, message, mea: MeaApi, power_w: int,
+                       log: VseccLog = None):
     """
     Issue Power.Active.Import ChangeConfiguration then TriggerMessage(MeterValues).
     PASS if MEA API returns HTTP 200.
     WARN if metervalues not observed on MQTT (requires active V2G charging session).
+    If MQTT times out, falls back to ocpplib.log for MeterValues evidence.
     """
+    global _last_raw
     mark = mqtt_mark()
+    if log:
+        log.mark()
     r = mea.change_configuration("Power.Active.Import", str(power_w))
     ok, detail = mea_call(r)
     if not ok:
@@ -255,15 +262,25 @@ def _power_demand_item(item_id, message, mea: MeaApi, power_w: int):
                f"{detail}; metervalues received: {payload[:50]}",
                "Power.Active.Import is MEA-specific BPT command (non-standard OCPP key)")
     else:
-        record(item_id, message, "WARN",
-               f"{detail}; metervalues not observed in {METER_WAIT_SEC}s",
-               "V2G/BPT requires active charging session and V2G-capable EV")
+        # MQTT missed it — check ocpplib.log as secondary evidence
+        frames = log.ocpp_frames() if log else []
+        log_match = log.find(frames, "MeterValues") if log else None
+        if frames: _last_raw = "\n".join(f.strip() for f in frames)
+        if log_match:
+            record(item_id, message, "PASS",
+                   f"{detail}; MeterValues confirmed via ocpplib.log: {log_match.strip()}",
+                   "Power.Active.Import is MEA-specific BPT command (non-standard OCPP key)")
+            print_ocpp(frames, f"{item_id} (from ocpplib.log)")
+        else:
+            record(item_id, message, "WARN",
+                   f"{detail}; metervalues not observed in {METER_WAIT_SEC}s",
+                   "V2G/BPT requires active charging session and V2G-capable EV")
 
 
 # ─────────────────────────────────────────────
 # Section 9 test body
 # ─────────────────────────────────────────────
-def run_section9(vsecc: VseccApi, mea: MeaApi):
+def run_section9(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
     section("Section 9: MEA-Specific Configuration & V2G/BPT")
 
     # ── 9.0  Connection check ────────────────────────────────────────────────
@@ -316,17 +333,17 @@ def run_section9(vsecc: VseccApi, mea: MeaApi):
     # ── 9.4.1  Power Demand -5000 W (BPT discharge) ─────────────────────────
     _power_demand_item("9.4.1",
                        "Power Demand -5000 W (BPT discharge from EV to grid)",
-                       mea, -5000)
+                       mea, -5000, log=log)
 
     # ── 9.4.2  Power Demand +2000 W (BPT charge) ────────────────────────────
     _power_demand_item("9.4.2",
                        "Power Demand +2000 W (BPT charge EV from grid)",
-                       mea, 2000)
+                       mea, 2000, log=log)
 
     # ── 9.4.3  Power Demand 0 W (BPT idle / stop) ───────────────────────────
     _power_demand_item("9.4.3",
                        "Power Demand 0 W (BPT idle / stop power flow)",
-                       mea, 0)
+                       mea, 0, log=log)
 
 
 # ─────────────────────────────────────────────
@@ -384,9 +401,11 @@ def main():
         sys.exit(1)
     print("  vSECC authenticated")
 
+    vslog = VseccLog(vsecc.token)
+
     start_mqtt_watcher()
     try:
-        run_section9(vsecc, mea)
+        run_section9(vsecc, mea, log=vslog)
     finally:
         stop_mqtt_watcher()
 

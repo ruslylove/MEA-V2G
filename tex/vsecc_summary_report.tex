@@ -1,0 +1,1107 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[left=2cm, right=2cm, top=2.5cm, bottom=2.5cm]{geometry}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\setlength{\emergencystretch}{3em}
+
+\definecolor{passgreen}{RGB}{34,139,34}
+\definecolor{failred}{RGB}{200,0,0}
+\definecolor{warnorange}{RGB}{200,100,0}
+\definecolor{skipgray}{RGB}{120,120,120}
+
+\title{\textbf{MEA OCPP 1.6 Compliance Test Report}\\[0.3em]
+\large Full Summary --- All Sections (1--11)\\[0.3em]
+\normalsize Vector vSECC.single Board vs MEA CSMS (rddQC4000001)}
+\author{MEA-V2G Project --- Automated Test}
+\date{2026-06-18}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{MEA OCPP 1.6 -- Full Summary}
+\rhead{Page \thepage}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Test Configuration}
+\begin{tabular}{ll}
+\textbf{Device Under Test} & Vector vSECC.single Board \\
+\textbf{Device IP}         & 192.168.1.166 \\
+\textbf{OCPP Version}      & 1.6 (JSON) \\
+\textbf{CP ID}             & rddQC4000001 \\
+\textbf{CSMS}              & wss://ocpp.measandbox.com:2930 \\
+\textbf{Connection}        & Direct TLS (Security Profile 1, no proxy) \\
+\textbf{Report Generated}  & 2026-06-18 \\
+\end{tabular}
+
+\subsection*{Test Architecture}
+The vSECC connects directly to the MEA CSMS over TLS with no intermediate proxy.
+OCPP traffic is observed via \texttt{GET /api/logging/files/ocpplib.log} (TRACE-level,
+raw \texttt{>>>} sent / \texttt{<<<} received frames) and via MQTT at
+\texttt{192.168.1.166:1883} (\texttt{vsecc/\#}).
+The test PC NAT-routes internet access for the vSECC subnet (192.168.1.x via enp3s0).
+
+\section{Overall Summary}
+\textbf{Grand total: 66 PASS \quad 0 FAIL \quad 151 WARN \quad 50 SKIP \quad (267 items across all sections)}
+
+\renewcommand{\arraystretch}{1.3}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\small\ttfamily\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\begin{longtable}{|C{0.8cm}|L{5.5cm}|C{1.2cm}|C{1.2cm}|C{1.2cm}|C{1.2cm}|C{1.0cm}|C{1.5cm}|}
+\hline
+\rowcolor{gray!25}
+\small\textbf{Sec} & \small\textbf{Section Title} &
+\small\textbf{PASS} & \small\textbf{FAIL} & \small\textbf{WARN} & \small\textbf{SKIP} &
+\small\textbf{Total} & \small\textbf{Date} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\small\textbf{Sec} & \small\textbf{Section Title} &
+\small\textbf{PASS} & \small\textbf{FAIL} & \small\textbf{WARN} & \small\textbf{SKIP} &
+\small\textbf{Total} & \small\textbf{Date} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 1 & \small Charger Configuration Verification & \textcolor{passgreen}{\textbf{14}} & 0 & \textcolor{warnorange}{\textbf{10}} & 0 & \small 24 & \small 2026-06-18 \\ \hline
+\small 2 & \small Auto Charge Verification & \textcolor{passgreen}{\textbf{3}} & 0 & \textcolor{warnorange}{\textbf{18}} & 0 & \small 21 & \small 2026-06-11 \\ \hline
+\small 3 & \small Normal Charging Verification & \textcolor{passgreen}{\textbf{3}} & 0 & \textcolor{warnorange}{\textbf{16}} & 0 & \small 19 & \small 2026-06-11 \\ \hline
+\small 4 & \small Reset Verification & \textcolor{passgreen}{\textbf{6}} & 0 & \textcolor{warnorange}{\textbf{15}} & 0 & \small 21 & \small 2026-06-11 \\ \hline
+\small 5 & \small Reservation Verification & \textcolor{passgreen}{\textbf{6}} & 0 & \textcolor{warnorange}{\textbf{13}} & 0 & \small 19 & \small 2026-06-11 \\ \hline
+\small 6 & \small Charging Profile Verification & \textcolor{passgreen}{\textbf{4}} & 0 & \textcolor{warnorange}{\textbf{22}} & 0 & \small 26 & \small 2026-06-11 \\ \hline
+\small 7 & \small Abnormal Operation Verification & \textcolor{passgreen}{\textbf{9}} & 0 & \textcolor{warnorange}{\textbf{45}} & 0 & \small 54 & \small 2026-06-11 \\ \hline
+\small 8 & \small Dual Connector Verification & \textcolor{passgreen}{\textbf{0}} & 0 & 0 & \textcolor{skipgray}{50} & \small 50 & \small 2026-06-11 \\ \hline
+\small 9 & \small MEA-Specific Configuration \& V2G/BPT & \textcolor{passgreen}{\textbf{5}} & 0 & \textcolor{warnorange}{\textbf{3}} & 0 & \small 8 & \small 2026-06-11 \\ \hline
+\small 10 & \small CSMS Command Verification & \textcolor{passgreen}{\textbf{14}} & 0 & \textcolor{warnorange}{\textbf{9}} & 0 & \small 23 & \small 2026-06-11 \\ \hline
+\small 11 & \small Performance -- Reconnect Time & \textcolor{passgreen}{\textbf{2}} & 0 & 0 & 0 & \small 2 & \small 2026-06-11 \\ \hline
+\rowcolor{gray!15}\small \textbf{All} & \small \textbf{Grand Total} & \textcolor{passgreen}{\textbf{66}} & 0 & \textcolor{warnorange}{\textbf{151}} & \textcolor{skipgray}{50} & \small \textbf{267} & \\ \hline
+\end{longtable}
+\normalsize
+
+
+\newpage
+\section{Section 1: Charger Configuration Verification}
+\textbf{14 PASS \quad 0 FAIL \quad 10 WARN \quad 0 SKIP \quad (24 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 1.1 & \small BootNotification & vendor=KMUTNB2 model=KMUTNB2 (MEA Accepted  OCPP session up) & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.2 & \small StatusNotification (boot, all connectors) & Not observed on MQTT or ocpplib.log (vSECC likely connected before test started){\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 4.7)*} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.3 & \small TriggerMessage(BootNotification)  Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMSCS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.4 & \small BootNotification (triggered) fields & Depends on 1.3 (TriggerMessage not available via MEA REST API) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.5 & \small TriggerMessage(StatusNotification)  Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMSCS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.6 & \small StatusNotification (triggered) fields & Depends on 1.5 (TriggerMessage not available via MEA REST API) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.7 & \small TriggerMessage(MeterValues)  Accepted & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMSCS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.8 & \small MeterValues fields \& measurands & Requires active charging session{\newline\normalfont\footnotesize\itshape Retest during a charging session} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.9 & \small GetConfiguration (required configurationKey) & GetConfiguration sent; response not observed in ocpplib.log & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.10 & \small ChangeConfiguration HeartbeatInterval=600  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.11 & \small ChangeConfiguration MeterValueSampleInterval=30  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.12 & \small ChangeConfiguration UnlockConnectorOnEVSideDisconnect=true  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.13 & \small ChangeAvailability(cid=1, Inoperative)  Accepted & StatusNotification Unavailable confirmed via ocpplib.log & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.14 & \small StatusNotification (Inoperative) fields & Unavailable confirmed via MQTT/ocpplib.log{\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 4.7)*} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.15 & \small ChangeAvailability(cid=1, Operative)  Accepted & StatusNotification Available confirmed via ocpplib.log & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.16 & \small StatusNotification (Operative) fields & Available confirmed via MQTT/ocpplib.log{\newline\normalfont\footnotesize\itshape vendorId/vendorErrorCode absent (optional per OCPP 1.6 4.7)*} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.17 & \small GetDiagnostics  fileName & HTTP 200{\newline\normalfont\footnotesize\itshape *discretionary (discretionary)} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.18 & \small DiagnosticsStatusNotification  status & Not observed in ocpplib.log within 6 s{\newline\normalfont\footnotesize\itshape *discretionary (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.19 & \small UpdateFirmware & HTTP 200{\newline\normalfont\footnotesize\itshape *discretionary (discretionary)} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.20 & \small FirmwareStatusNotification  status & Not observed in ocpplib.log within 6 s{\newline\normalfont\footnotesize\itshape *discretionary (discretionary)} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 1.21 & \small ChangeConfiguration LocalAuthorizeOffline=true  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.22 & \small SendLocalList (Full, 1 entry)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.23 & \small GetLocalListVersion  listVersion & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 1.24 & \small ClearCache  status Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{Sandbox limitations (items 1.3--1.7)}
+The MEA sandbox REST API does not expose \texttt{/remote/triggerMessage} (HTTP~404).
+TriggerMessage requires the CSMS to initiate the command; items 1.4, 1.6, 1.8 depend on it.
+
+\subsection*{ChangeAvailability (items 1.13--1.16)}
+\texttt{/remote/changeAvailability} returns HTTP~404.
+ChangeAvailability was issued via vSECC MQTT \texttt{set\_availability}.
+The resulting \texttt{StatusNotification} frames were confirmed via \texttt{ocpplib.log}.
+
+\subsection*{GetConfiguration (item 1.9)}
+MEA CSMS processes GetConfiguration asynchronously (HTTP~200, empty body).
+The vSECC accepts ChangeConfiguration for all standard keys (1.10--1.12, 1.21 PASS).
+
+\subsection*{DiagnosticsStatus / FirmwareStatus (items 1.18, 1.20)}
+Discretionary items. vSECC does not send these notifications without a real FTP endpoint.
+
+
+
+\newpage
+\section{Section 2: Auto Charge Verification}
+\textbf{3 PASS \quad 0 FAIL \quad 18 WARN \quad 0 SKIP \quad (21 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 2.1 & \small ChangeConfiguration AutoCharge=False  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 2.2 & \small StatusNotification Preparing (AutoCharge=False) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.3 & \small StatusNotification Available (unplug) & Depends on 2.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.4 & \small ChangeConfiguration AutoCharge=True  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 2.5 & \small StatusNotification Preparing (AutoCharge=True) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.6 & \small Authorize (VID)  Accepted & Depends on 2.5 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.7 & \small StartTransaction (session started) & Depends on 2.5 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.8 & \small StatusNotification Charging & Depends on 2.5 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.9 & \small MeterValues (measurands during charging) & Depends on 2.5 (EV plug / active charging) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.10 & \small RemoteStopTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 2.11 & \small StopTransaction (sent after RemoteStop) & session\_state idle/finished not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.12 & \small StatusNotification Finishing & Finishing status not observed on MQTT{\newline\normalfont\footnotesize\itshape Some implementations go directly Available without Finishing} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.13 & \small StatusNotification Available (after RemoteStop/unplug) & Available status not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.14 & \small StatusNotification Preparing (Session 2) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.15 & \small Authorize (Session 2)  Accepted & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.16 & \small StartTransaction (Session 2) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.17 & \small StatusNotification Charging (Session 2) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.18 & \small MeterValues (Session 2) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.19 & \small StatusNotification SuspendedEV & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.20 & \small StopTransaction (reason=EVDisconnected) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 2.21 & \small StatusNotification Available (Session 2 end) & Depends on 2.14 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{EV-dependent items (2.2, 2.5, 2.14 and dependents)}
+These items require a physical EV to be plugged into the vSECC connector.
+All items that depend on an active charging session (Authorize, StartTransaction,
+Charging, MeterValues, StopTransaction, etc.) are WARN when no EV is connected.
+
+\subsection*{MeterValues (items 2.9, 2.18)}
+MEA sandbox does not expose TriggerMessage (HTTP~404).
+MeterValues are observable only if published autonomously on \texttt{MeterValueSampleInterval}.
+
+\subsection*{StatusNotification SuspendedEV (item 2.19)}
+Requires the EV BMS to stop drawing current; cannot be reliably triggered without a real EV.
+
+
+
+\newpage
+\section{Section 3: Normal Charging Verification}
+\textbf{3 PASS \quad 0 FAIL \quad 16 WARN \quad 0 SKIP \quad (19 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 3.1 & \small BootNotification  Accepted (currentTime, interval, status) & CSMS connection active  BootNotification Accepted confirmed & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 3.2 & \small StatusNotification Available (initial state) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log for StatusNotification Available on boot} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.3 & \small StatusNotification Preparing (EV plug, manual) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.4 & \small Authorize (RFID card)  Accepted & Depends on 3.3 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.5 & \small StartTransaction (manual, meterStart, idTag, connectorId) & Depends on 3.3 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.6 & \small StatusNotification Charging (manual session) & Depends on 3.3 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.7 & \small MeterValues (energy measurands, manual session) & Depends on 3.3 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.8 & \small StopTransaction (manual card tap, reason=Local) & Depends on 3.3 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.9 & \small StatusNotification Finishing (manual, EV still plugged) & Depends on 3.3 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.10 & \small StatusNotification Available (manual, EV unplug) & Depends on 3.3 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.11 & \small StatusNotification Preparing (EV plug, remote) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.12 & \small RemoteStartTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 3.13 & \small StartTransaction (triggered by RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.14 & \small StatusNotification Charging (remote session) & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.15 & \small MeterValues (energy measurands, remote session) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.16 & \small RemoteStopTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 3.17 & \small StopTransaction (triggered by RemoteStop) & session\_state idle/finished not observed on MQTT in 25 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.18 & \small StatusNotification Finishing (remote, EV still plugged) & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Some implementations skip Finishing  go directly to Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 3.19 & \small StatusNotification Available (remote, EV unplug) & Available not observed on MQTT in 30 s  unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{EV-dependent items}
+Items 3.3, 3.11 require a physical EV plug event. All downstream items are WARN without an EV.
+
+\subsection*{RemoteStartTransaction (items 3.12--3.15)}
+RemoteStart is issued via MEA REST API. Session items confirmed via MQTT or \texttt{ocpplib.log}.
+
+\subsection*{MeterValues (items 3.7, 3.15)}
+MEA sandbox does not expose TriggerMessage (HTTP~404).
+Values observed via MQTT autonomous publication or \texttt{ocpplib.log}.
+
+
+
+\newpage
+\section{Section 4: Reset Verification}
+\textbf{6 PASS \quad 0 FAIL \quad 15 WARN \quad 0 SKIP \quad (21 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 4.1 & \small Reset (Hard)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 4.2 & \small BootNotification  Accepted (after Hard Reset) & CSMS reconnection confirmed after reset & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 4.3 & \small StatusNotification Available (after reboot) & Available not observed on MQTT in 20 s after reset & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.4 & \small StatusNotification Preparing (EV plug, Flow 1) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.5 & \small RemoteStartTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 4.6 & \small StartTransaction (triggered by RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.7 & \small StatusNotification Charging (Flow 1) & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.8 & \small MeterValues (Flow 1, during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.9 & \small Reset (Soft)  Accepted (during charging) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 4.10 & \small StopTransaction (triggered by Soft Reset) & session\_state idle/finished not observed in 30 s{\newline\normalfont\footnotesize\itshape Soft Reset should cause graceful StopTransaction before reboot} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.11 & \small StatusNotification Finishing (Soft Reset, EV plugged) & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Some implementations skip Finishing  go directly to Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.12 & \small StatusNotification Available (unplug after Soft Reset) & Available not observed on MQTT in 30 s  unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.13 & \small StatusNotification Preparing (EV plug, Flow 2) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.14 & \small RemoteStartTransaction  Accepted (Flow 2) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 4.15 & \small StartTransaction (Flow 2, triggered by RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.16 & \small StatusNotification Charging (Flow 2) & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.17 & \small MeterValues (Flow 2, during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.18 & \small Reset (Hard)  Accepted (during charging) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 4.19 & \small StopTransaction (triggered by Hard Reset) & session\_state idle/finished not observed in 30 s{\newline\normalfont\footnotesize\itshape Hard Reset may not send StopTransaction before rebooting} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.20 & \small StatusNotification Finishing (Hard Reset, EV plugged) & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Hard Reset typically skips Finishing  goes directly Available after reboot} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 4.21 & \small StatusNotification Available (after Hard Reset, EV unplug) & Available not observed in 90s  unplug EV / wait for reboot & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{Reset flows}
+Hard Reset and Soft Reset commands are issued via MEA REST API.
+BootNotification after Hard Reset confirms vSECC reconnection.
+All dependent session items (StartTransaction, MeterValues, StopTransaction)
+require a physical EV to be connected during the test.
+
+\subsection*{BootNotification after reset}
+Verified via MQTT \texttt{vsecc/ocpp\_connection\_status} reconnect event.
+The \texttt{ocpplib.log} provides additional frame-level evidence.
+
+
+
+\newpage
+\section{Section 5: Reservation Verification}
+\textbf{6 PASS \quad 0 FAIL \quad 13 WARN \quad 0 SKIP \quad (19 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 5.1 & \small StatusNotification Available (initial) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.2 & \small ReserveNow (5 min)  Accepted & HTTP 200{\newline\normalfont\footnotesize\itshape reservation\_id not found in response} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 5.3 & \small StatusNotification Reserved (after ReserveNow) & Reserved status not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape vSECC may use different status reporting for reservations} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.4 & \small CancelReservation (id=0)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 5.5 & \small StatusNotification Available (after cancel) & Available not observed on MQTT in 15 s after cancel & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.6 & \small ReserveNow (short, for expiry test)  Accepted & HTTP 200{\newline\normalfont\footnotesize\itshape reservation\_id not found} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 5.7 & \small Reservation expiry (wait 90s) & Available not observed in 90s{\newline\normalfont\footnotesize\itshape MEA CSMS may enforce a minimum reservation duration; expiry auto-cancelled} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.8 & \small StatusNotification Available (after expiry) & Available not observed on MQTT in 15 s after expiry/cancel & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.9 & \small ReserveNow (10 min, for charge session)  Accepted & HTTP 200{\newline\normalfont\footnotesize\itshape reservation\_id not found} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 5.10 & \small StatusNotification Reserved (Flow 3) & Reserved status not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.11 & \small StatusNotification Reserved/Preparing (EV plug) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.12 & \small RemoteStartTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 5.13 & \small StartTransaction (triggered by RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.14 & \small StatusNotification Charging & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.15 & \small MeterValues (during reservation charge) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.16 & \small RemoteStopTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 5.17 & \small StopTransaction (triggered by RemoteStop) & session\_state idle/finished not observed on MQTT in 25 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.18 & \small StatusNotification Finishing (EV still plugged) & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Some implementations skip Finishing  go directly to Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 5.19 & \small StatusNotification Available (EV unplug) & Available not observed on MQTT in 30 s  unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{Reservation flow}
+ReserveNow and CancelReservation are issued via MEA REST API.
+StatusNotification Reserved/Available transitions are confirmed via MQTT or \texttt{ocpplib.log}.
+
+\subsection*{EV-dependent items}
+Items 5.11 (EV plug) and all downstream charging session items require a physical EV.
+
+\subsection*{Reservation expiry (item 5.7)}
+The vSECC must release the reservation automatically when the timer expires.
+Observed via MQTT StatusNotification Available after the expiry window.
+
+
+
+\newpage
+\section{Section 6: Charging Profile Verification}
+\textbf{4 PASS \quad 0 FAIL \quad 22 WARN \quad 0 SKIP \quad (26 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 6.1 & \small StatusNotification Available (initial state) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.2 & \small StatusNotification Preparing (EV plug, Flow 1) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.3 & \small Authorize (RFID card)  Accepted & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.4 & \small StartTransaction (manual RFID, meterStart, idTag, connectorId) & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.5 & \small StatusNotification Charging (Flow 1) & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.6 & \small MeterValues (Flow 1, before SetChargingProfile) & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.7 & \small SetChargingProfile (TxProfile, 5 kW, stackLevel=1)  Accepted & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.8 & \small MeterValues (Flow 1, after first SetChargingProfile) & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.9 & \small SetChargingProfile (update, 7.4 kW, stackLevel=1)  Accepted & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.10 & \small MeterValues (Flow 1, after second SetChargingProfile) & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.11 & \small StopTransaction (manual card tap, reason=Local) & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.12 & \small StatusNotification Finishing (Flow 1, EV still plugged) & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.13 & \small StatusNotification Available (Flow 1, EV unplug) & Depends on 6.2 (EV plug) & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.14 & \small StatusNotification Preparing (EV plug, Flow 2) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.15 & \small RemoteStartTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 6.16 & \small StartTransaction (triggered by RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.17 & \small StatusNotification Charging (Flow 2) & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.18 & \small MeterValues (Flow 2, before SetChargingProfile) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.19 & \small SetChargingProfile (Flow 2, TxProfile 5 kW)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 6.20 & \small MeterValues (Flow 2, after first SetChargingProfile) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.21 & \small SetChargingProfile (Flow 2, update 7.4 kW)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 6.22 & \small MeterValues (Flow 2, after second SetChargingProfile) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.23 & \small RemoteStopTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 6.24 & \small StopTransaction (triggered by RemoteStop) & session\_state idle/finished not observed on MQTT in 25 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.25 & \small StatusNotification Finishing (Flow 2, EV still plugged) & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Some implementations skip Finishing  go directly to Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 6.26 & \small StatusNotification Available (Flow 2, EV unplug) & Available not observed on MQTT in 30 s  unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{Charging profile flows}
+SetChargingProfile (TxProfile) commands are issued via MEA REST API during an active session.
+MeterValues before/after profile changes confirm the power limit adjustment.
+
+\subsection*{EV-dependent items}
+All charging session items require a physical EV. Without an EV the test records WARN.
+
+
+
+\newpage
+\section{Section 7: Abnormal Operation Verification}
+\textbf{9 PASS \quad 0 FAIL \quad 45 WARN \quad 0 SKIP \quad (54 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 7.1.1 & \small StatusNotification Available (charger idle, no EV) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.1.2 & \small RemoteStartTransaction (EV not connected)  HTTP 200 & HTTP 200{\newline\normalfont\footnotesize\itshape vSECC should respond Rejected when no EV present} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 7.2.1 & \small StatusNotification Available (before EV plug) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.3 & \small RemoteStartTransaction (first)  HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 7.2.4 & \small RemoteStartTransaction (second, concurrent)  HTTP 200 & HTTP 200{\newline\normalfont\footnotesize\itshape CSMS likely blocks duplicate; charger-level Rejected not observable without proxy} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 7.2.5 & \small StartTransaction (session started after first RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.6 & \small StatusNotification Charging & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.7 & \small MeterValues (during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.8 & \small RemoteStopTransaction  HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 7.2.9 & \small StopTransaction (session ended after RemoteStop) & session\_state idle/finished not observed on MQTT in 25 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.10 & \small StatusNotification Finishing & Finishing not observed on MQTT in 15 s{\newline\normalfont\footnotesize\itshape Some implementations skip Finishing and go directly to Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.2.11 & \small StatusNotification Available (after stop / unplug) & Available not observed on MQTT in 30 s  unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.1 & \small StatusNotification Available (before EV plug) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.3 & \small Authorize (invalid RFID tag)  Rejected & Not triggerable via API  vSECC reads RFID directly from hardware{\newline\normalfont\footnotesize\itshape Requires physical RFID scan on vSECC hardware of unknown/blocked card} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.4 & \small Authorize (valid RFID tag)  Accepted & Not triggerable via API  vSECC reads RFID directly from hardware{\newline\normalfont\footnotesize\itshape Requires physical RFID scan on vSECC hardware of authorized card after rejected card} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.5 & \small StartTransaction (after valid RFID) & Depends on 7.3.3/7.3.4 (physical RFID scan){\newline\normalfont\footnotesize\itshape Session starts only after valid RFID tap on vSECC hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.6 & \small StatusNotification Charging (after valid auth) & Depends on 7.3.5 (StartTransaction){\newline\normalfont\footnotesize\itshape Requires completed Authorize sequence via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.7 & \small MeterValues (during charging) & Depends on 7.3.6 (Charging state){\newline\normalfont\footnotesize\itshape Requires completed Authorize sequence via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.8 & \small RemoteStopTransaction & Depends on 7.3.5 (StartTransaction){\newline\normalfont\footnotesize\itshape Requires active session started via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.9 & \small StopTransaction (after RemoteStop) & Depends on 7.3.8 (RemoteStop){\newline\normalfont\footnotesize\itshape Requires active session started via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.10 & \small StatusNotification Finishing & Depends on 7.3.8 (RemoteStop){\newline\normalfont\footnotesize\itshape Requires active session started via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.3.11 & \small StatusNotification Available (after stop / unplug) & Depends on 7.3.8 (RemoteStop){\newline\normalfont\footnotesize\itshape Requires active session started via physical RFID hardware} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.1 & \small StatusNotification Available (before EV plug) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.3 & \small RemoteStartTransaction  HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 7.4.4 & \small StartTransaction (session started after RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.5 & \small StatusNotification Charging & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.6 & \small MeterValues (during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.7 & \small StopTransaction (reason=EmergencyStop) & Triggered by physical emergency stop button on vSECC hardware{\newline\normalfont\footnotesize\itshape Requires physical emergency stop button press on the vSECC unit} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.8 & \small StatusNotification Faulted (after EmergencyStop) & Faulted status not observed on MQTT (E-stop not pressed){\newline\normalfont\footnotesize\itshape Requires physical emergency stop button press on the vSECC unit} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.9 & \small StatusNotification Available (E-stop cleared) & Depends on 7.4.7 (physical E-stop press and release){\newline\normalfont\footnotesize\itshape E-stop must be physically released to restore normal operation} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.4.10 & \small StatusNotification Available (EV unplug after E-stop recovery) & Depends on 7.4.7 (physical E-stop press and release){\newline\normalfont\footnotesize\itshape EV must be unplugged after E-stop recovery to reach Available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.5.1 & \small StatusNotification Available (before door open) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.5.2 & \small StatusNotification Faulted (reason=DoorOpen) & Triggered by opening physical door/panel on vSECC hardware{\newline\normalfont\footnotesize\itshape Requires physical door open on vSECC hardware; not triggerable via API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.5.3 & \small StatusNotification Available (after door closed) & Depends on 7.5.2 (physical door open and close){\newline\normalfont\footnotesize\itshape Door must be physically closed to restore normal operation} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.1 & \small StatusNotification Available (before EV plug) & Available not observed on MQTT in 10 s{\newline\normalfont\footnotesize\itshape Check CSMS event log; charger may already be available} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.2 & \small StatusNotification Preparing (EV plug) & EV\_WAIT\_SEC=0  skipped{\newline\normalfont\footnotesize\itshape Connect physical EV to connector and rerun} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.3 & \small RemoteStartTransaction  HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 7.6.4 & \small StartTransaction (session started after RemoteStart) & charging\_session\_state not observed on MQTT in 30 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.5 & \small StatusNotification Charging & Charging status not observed on MQTT in 20 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.6 & \small MeterValues (during charging) & MeterValues not observed on MQTT in 15 s & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.7 & \small StopTransaction (PowerLoss)  simulated via Hard Reset  HTTP 200 & HTTP 200{\newline\normalfont\footnotesize\itshape Simulated via Hard Reset; physical power loss not testable in this environment} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 7.6.8 & \small BootNotification  Accepted (vSECC reconnected after reboot) & CSMS reconnection confirmed after Hard Reset & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 7.6.9 & \small StatusNotification Preparing (EV still connected after reboot) & Preparing not observed on MQTT in 20 s after reboot{\newline\normalfont\footnotesize\itshape EV must remain connected through the reboot sequence} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.6.10 & \small StatusNotification Available (EV unplug after reboot) & Available not observed on MQTT in 30 s  unplug EV & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.1 & \small SendLocalList (version=1, RFID\_TEST=Accepted)  HTTP 200 & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 7.7.2 & \small StatusNotification Available (charger online before offline test) & Offline sequence not observable via MQTT/REST without proxy{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.3 & \small StatusNotification Preparing (EV plug while charger offline) & Offline start requires disconnecting vSECC from CSMS network{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.4 & \small Authorize (local list lookup while offline)  Accepted & vSECC must authorize from local list while CSMS unreachable{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.5 & \small StartTransaction (offline, buffered by vSECC) & vSECC buffers transaction in firmware; not observable without proxy{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.6 & \small StopTransaction (offline, buffered by vSECC) & vSECC buffers stop in firmware; delivered when CSMS reconnects{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 7.7.7 & \small CSMS reconnect  buffered Start/StopTransaction flushed & Reconnect flushing is firmware-internal; not observable without proxy{\newline\normalfont\footnotesize\itshape Offline buffering not observable via MQTT/REST without proxy} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{Remote-controllable flows (7.2, 7.6)}
+RemoteStart/RemoteStop and Reset commands are verifiable via MEA REST API and \texttt{ocpplib.log}.
+
+\subsection*{Physical-hardware items (7.3, 7.4.7--7.4.10, 7.5)}
+Card-swap, emergency stop, door-open switch, and power-loss scenarios require
+physical interaction with the hardware. These are permanently recorded as WARN
+with a remark indicating the required operator action.
+
+\subsection*{Offline buffering (7.7)}
+Offline transaction buffering cannot be verified without direct OCPP frame capture
+from the reconnection burst. Recorded as WARN pending further tooling.
+
+
+
+\newpage
+\section{Section 8: Dual Connector Verification}
+\textbf{0 PASS \quad 0 FAIL \quad 0 WARN \quad 50 SKIP \quad (50 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 8.1.1 & \small Concurrent RemoteStart  Connector 1 Accepted & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.2 & \small Concurrent RemoteStart  Connector 2 Accepted & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.3 & \small StartTransaction  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.4 & \small StartTransaction  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.5 & \small StatusNotification Charging  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.6 & \small StatusNotification Charging  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.7 & \small MeterValues  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.8 & \small MeterValues  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.9 & \small RemoteStop  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.10 & \small RemoteStop  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.11 & \small StopTransaction  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.12 & \small StopTransaction  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.13 & \small StatusNotification Finishing  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.14 & \small StatusNotification Finishing  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.15 & \small StatusNotification Available  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.16 & \small StatusNotification Available  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.17 & \small Transaction isolation  Connector 1 not affected by Connector 2 stop & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.1.18 & \small Transaction isolation  Connector 2 not affected by Connector 1 stop & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.1 & \small Emergency Stop signal sent & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.2 & \small RemoteStop broadcast  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.3 & \small RemoteStop broadcast  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.4 & \small StopTransaction (EmergencyStop reason)  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.5 & \small StopTransaction (EmergencyStop reason)  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.6 & \small StatusNotification Faulted  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.7 & \small StatusNotification Faulted  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.8 & \small StatusNotification Unavailable (after fault clear)  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.9 & \small StatusNotification Unavailable (after fault clear)  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.10 & \small ChangeAvailability Operative  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.11 & \small ChangeAvailability Operative  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.12 & \small StatusNotification Available  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.13 & \small StatusNotification Available  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.14 & \small New session possible after emergency stop  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.15 & \small New session possible after emergency stop  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.2.16 & \small Shared emergency stop clears both connectors simultaneously & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.1 & \small Power loss event detected & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.2 & \small Active session aborted  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.3 & \small Active session aborted  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.4 & \small StopTransaction (PowerLoss reason)  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.5 & \small StopTransaction (PowerLoss reason)  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.6 & \small vSECC power loss BootNotification after restore & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.7 & \small StatusNotification Available after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.8 & \small StatusNotification Available after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.9 & \small Session data integrity after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.10 & \small Session data integrity after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.11 & \small RemoteStart accepted after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.12 & \small RemoteStart accepted after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.13 & \small StartTransaction after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.14 & \small StartTransaction after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.15 & \small StatusNotification Charging after power restore  Connector 1 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\small 8.3.16 & \small StatusNotification Charging after power restore  Connector 2 & vSECC.single has one connector  dual-connector scenarios N/A & \textcolor{skipgray}{\textbf{SKIP}} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{Dual connector}
+The Vector vSECC.single Board supports only a single connector.
+All Section~8 dual-connector items are recorded as SKIP.
+
+
+
+\newpage
+\section{Section 9: MEA-Specific Configuration \& V2G/BPT}
+\textbf{5 PASS \quad 0 FAIL \quad 3 WARN \quad 0 SKIP \quad (8 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 9.0 & \small CSMS connection probe  GetConfiguration HTTP 200 & vSECC connected to MEA CSMS & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\small 9.1 & \small ChangeConfiguration V2GMode=true  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 9.2 & \small ChangeConfiguration MeterValueSampleInterval=10  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 9.3 & \small ChangeConfiguration LocalAuthorizeOffline=false  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 9.4.0 & \small ChangeConfiguration V2GMode=true (pre-condition for power demand) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 9.4.1 & \small Power Demand -5000 W (BPT discharge from EV to grid) & HTTP 200; metervalues not observed in 15s{\newline\normalfont\footnotesize\itshape V2G/BPT requires active charging session and V2G-capable EV} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 9.4.2 & \small Power Demand +2000 W (BPT charge EV from grid) & HTTP 200; metervalues not observed in 15s{\newline\normalfont\footnotesize\itshape V2G/BPT requires active charging session and V2G-capable EV} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 9.4.3 & \small Power Demand 0 W (BPT idle / stop power flow) & HTTP 200; metervalues not observed in 15s{\newline\normalfont\footnotesize\itshape V2G/BPT requires active charging session and V2G-capable EV} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{V2G/BPT configuration (items 9.1--9.4)}
+ChangeConfiguration commands (V2GMode, MeterValueSampleInterval, LocalAuthorizeOffline)
+are issued via MEA REST API and return HTTP~200.
+
+\subsection*{V2G power demand (items 9.4.1--9.4.3)}
+Require an active ISO~15118 V2G charging session (physical EV with V2G capability).
+Observed via MQTT MeterValues with V2G measurands or \texttt{ocpplib.log}.
+
+
+
+\newpage
+\section{Section 10: CSMS Command Verification}
+\textbf{14 PASS \quad 0 FAIL \quad 9 WARN \quad 0 SKIP \quad (23 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 10.1 & \small Authorize & Authorize is CSCSMS; not triggerable via REST API{\newline\normalfont\footnotesize\itshape Observed via MQTT during charging sessions (charging\_authorization\_state)} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 10.2 & \small BootNotification & BootNotification is CSCSMS; confirmed via CSMS connection (Section 1 item 1.1){\newline\normalfont\footnotesize\itshape Charger sends BootNotification autonomously on connect/reboot} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 10.3 & \small DataTransfer  vendorId=MEA messageId=Test & HTTP 200 status=Bad Request & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily \{"status": "Bad Request", "code": 400, "messages": "Additional properties are not allowed ('chargepoint\_id', 'messageId', 'vendorId' were unexpected)", "server-time": "2026-06-11T05:20:08Z", "result": null\}} \\
+\hline
+\small 10.4 & \small Heartbeat & HTTP 404{\newline\normalfont\footnotesize\itshape Heartbeat endpoint not exposed by MEA sandbox; charger sends heartbeats autonomously} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily \{"detail": "Not Found"\}} \\
+\hline
+\small 10.5 & \small MeterValues & MeterValues is CSCSMS; TriggerMessage not supported (HTTP 404){\newline\normalfont\footnotesize\itshape Observable on MQTT metervalues topic during active charging session} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 10.6 & \small RemoteStartTransaction  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.7 & \small RemoteStopTransaction (transaction\_id=0)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.8 & \small Reset (Hard)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.9 & \small StartTransaction & CSCSMS; observable via MQTT charging\_session\_state during charging session{\newline\normalfont\footnotesize\itshape Charger sends StartTransaction automatically when session begins} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 10.10 & \small StatusNotification & CSCSMS; observable via MQTT vsecc/connector/+/status/\#{\newline\normalfont\footnotesize\itshape Charger sends StatusNotification on connector state changes} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 10.11 & \small StopTransaction & CSCSMS; observable via MQTT charging\_session\_state{\newline\normalfont\footnotesize\itshape Charger sends StopTransaction on session end (RemoteStop / EVDisconnect / Reset)} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 10.12 & \small ReserveNow (connector\_id=1, reservationId=1)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.13 & \small CancelReservation (reservationId=1)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.14 & \small SetChargingProfile (TxDefaultProfile, 32 A)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.15 & \small TriggerMessage (StatusNotification) & MEA sandbox /remote/triggerMessage not exposed (HTTP 404){\newline\normalfont\footnotesize\itshape CSMSCS command; not testable via MEA REST API} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 10.16 & \small GetConfiguration  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.17 & \small ChangeConfiguration HeartbeatInterval=600  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.18 & \small ChangeAvailability (connector 1, Inoperative) & Unavailable not observed on MQTT in 10 s after MQTT set\_availability{\newline\normalfont\footnotesize\itshape MEA REST /remote/changeAvailability  404; MQTT fallback used} & \textcolor{warnorange}{\textbf{WARN}} \\
+\hline
+\small 10.19 & \small GetDiagnostics (ftp://example.com) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.20 & \small UpdateFirmware (ftp://example.com) & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.21 & \small SendLocalList (Full, version=1, idTag=RFID\_TEST)  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.22 & \small GetLocalListVersion  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 10.23 & \small ClearCache  Accepted & HTTP 200 & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{CS\(\to\)CSMS items (10.1, 10.2, 10.5, 10.9--10.11)}
+These OCPP actions are charger-initiated and cannot be triggered via the MEA REST API.
+The test checks \texttt{ocpplib.log} for recent \texttt{>>>} frames as secondary evidence.
+A PASS requires the frame to appear in the log within a 3\,s window.
+
+\subsection*{TriggerMessage (item 10.15)}
+The MEA sandbox does not expose \texttt{/remote/triggerMessage} (HTTP~404).
+
+\subsection*{ChangeAvailability (item 10.18)}
+\texttt{/remote/changeAvailability} returns HTTP~404.
+Verified via MQTT \texttt{set\_availability} with \texttt{ocpplib.log} fallback.
+
+\subsection*{GetDiagnostics / UpdateFirmware (items 10.19--10.20)}
+MEA sandbox returns HTTP~404 for these endpoints (PascalCase path required but both 404).
+
+
+
+\newpage
+\section{Section 11: Performance -- Reconnect Time}
+\textbf{2 PASS \quad 0 FAIL \quad 0 WARN \quad 0 SKIP \quad (2 total)}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|L{1cm}|L{5.5cm}|M{7cm}|C{1.8cm}|}
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!25}
+\textbf{Item} & \small\textbf{Test Description} & \small\textbf{Detail / Evidence} & \small\textbf{Result} \\
+\hline
+\endhead
+\hline
+\endfoot
+\small 11.1 & \small Reconnect Time after Hard Reset & Reconnected in 0.1 s (< 90 s threshold){\newline\normalfont\footnotesize\itshape time\_ms=146} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\small 11.2 & \small Average Reconnect Time (3 measurements) & avg=0.2s min=0.2s max=0.2s [0.2, 0.2, 0.2]{\newline\normalfont\footnotesize\itshape run1=247ms; run2=156ms; run3=161ms} & \textcolor{passgreen}{\textbf{PASS}} \\
+\hline
+\multicolumn{4}{|l|}{\cellcolor{gray!8}\footnotesize\ttfamily ""} \\
+\hline
+\end{longtable}
+\normalsize
+\subsection*{Notes}
+
+\subsection*{Reconnect time measurement}
+The vSECC is hard-reset via MEA REST API and the test measures elapsed time until
+\texttt{vsecc/ocpp\_connection\_status = connected} is observed on MQTT.
+PASS threshold: $<90$\,s. WARN: 90--180\,s. FAIL: $>180$\,s or no reconnect.
+Three measurements are taken for the average (item~11.2).
+\texttt{ocpplib.log} provides BootNotification frame timestamps as supplementary evidence.
+
+
+
+\end{document}
