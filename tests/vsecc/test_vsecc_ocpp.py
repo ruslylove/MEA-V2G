@@ -23,19 +23,18 @@ except ImportError:
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
-VSECC_BASE     = "http://192.168.111.166/api"
+VSECC_BASE     = "http://192.168.1.166/api"
 VSECC_USER     = "admin"
 VSECC_PASS     = "admin"
-MQTT_HOST      = "192.168.111.166"
+MQTT_HOST      = "192.168.1.166"
 MQTT_PORT      = 1883
 MQTT_USER      = "vector"
 MQTT_PASS      = "vector"
 
 CP_ID          = "rddQC4000001"
-# vSECC connects to the local WS proxy on the PC; proxy forwards to MEA CSMS
-# This avoids the need for internet routing/NAT on the PC's Ethernet interface.
-CSMS_BASE_URL  = "ws://192.168.111.185:9000/EV/Srv/JSON/1.6"
-CSMS_SEC_PROFILE = "0"  # 0 = no TLS for ws://
+# vSECC connects directly to MEA CSMS over TLS (no local proxy needed).
+CSMS_BASE_URL  = "wss://ocpp.measandbox.com:2930/EV/Srv/JSON/1.6"
+CSMS_SEC_PROFILE = "1"  # 1 = TLS for wss://
 
 MEA_API_BASE   = "https://ocppapi.measandbox.com/EV"
 MEA_USER       = "meaev.api.dev"
@@ -180,14 +179,12 @@ def start_mqtt_monitor():
             payload = msg.payload.decode()
         except Exception:
             payload = repr(msg.payload)
-        entry = f"[MQTT] {msg.topic} = {payload}"
+        ts = datetime.now().strftime("%H:%M:%S.%f")[:-3]
+        entry = f"[MQTT {ts}] {msg.topic} = {payload}"
         mqtt_log.append(entry)
-        topic = msg.topic
-        # Print key OCPP-related events
-        if any(k in topic for k in ["ocpp", "backend", "connection", "boot", "status", "auth"]):
-            print(f"  {entry}")
+        print(f"  {entry}")
         # Signal when backend connection is up
-        if "backend" in topic and "connect" in payload.lower():
+        if "backend" in msg.topic and "connect" in payload.lower():
             mqtt_connected.set()
 
     client = mqtt.Client()
@@ -262,7 +259,7 @@ def main():
     print("=" * 60)
     print("  vSECC OCPP Compliance Test vs MEA CSMS")
     print(f"  CP ID : {CP_ID}")
-    print(f"  CSMS  : {CSMS_BASE_URL}/{CP_ID}")
+    print(f"  CSMS  : {CSMS_BASE_URL}/{CP_ID} (direct)")
     print("=" * 60)
 
     vsecc = VseccApi()
@@ -284,11 +281,11 @@ def main():
     section("1. Configure vSECC OCPP → MEA CSMS")
 
     configs = [
-        (VARID_CSMS_URL,    CSMS_BASE_URL,    "CSMS URL (local proxy)"),
+        (VARID_CSMS_URL,    CSMS_BASE_URL,    "CSMS URL (direct)"),
         (VARID_URL_IDENT,   CP_ID,            "URL identity overwrite (CP ID)"),
         (VARID_IDENTITY,    CP_ID,            "Identity (CP ID)"),
         (VARID_BASIC_PASS,  "",               "Clear basic auth password"),
-        (VARID_SEC_PROFILE, CSMS_SEC_PROFILE, "Security profile (0=no TLS for ws://)"),
+        (VARID_SEC_PROFILE, CSMS_SEC_PROFILE, "Security profile (1=TLS for wss://)"),
         (VARID_BACKEND_ON,  "true",           "Backend communication activated"),
     ]
 

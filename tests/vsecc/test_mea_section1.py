@@ -16,6 +16,7 @@ Run:
 
 import json
 import os
+import re
 import sys
 import time
 import threading
@@ -137,6 +138,65 @@ class MeaApi:
                           {"chargepoint_id": CP_ID,
                            "location": "ftp://test.measandbox.com/firmware/latest.bin",
                            "retrieveDate": (datetime.utcnow() + timedelta(seconds=30)).isoformat() + "Z"})
+
+
+# ─────────────────────────────────────────────
+# ocpplib.log helper
+# ─────────────────────────────────────────────
+_ANSI = re.compile(r'\x1b\[[0-9;]*m')
+
+class VseccLog:
+    """Downloads ocpplib.log from vSECC and extracts OCPP frames since last mark."""
+
+    LOG_URL = f"{VSECC_BASE}/logging/files/ocpplib.log".replace("/api/", "/api/")
+
+    def __init__(self, token: str):
+        self._headers = {"Authorization": f"Bearer {token}"}
+        self._pos = 0
+        # Set initial position without printing
+        try:
+            r = requests.get(self.LOG_URL, headers=self._headers, timeout=60)
+            self._pos = len(r.text)
+        except Exception:
+            pass
+
+    def mark(self):
+        """Record current end-of-log position."""
+        try:
+            r = requests.get(self.LOG_URL, headers=self._headers, timeout=60)
+            self._pos = len(r.text)
+        except Exception:
+            pass
+
+    def ocpp_frames(self) -> list[str]:
+        """Return OCPP wire frames (>>> sent / <<< received) since last mark."""
+        try:
+            r = requests.get(self.LOG_URL, headers=self._headers, timeout=60)
+            new_text = r.text[self._pos:]
+            self._pos = len(r.text)
+        except Exception:
+            return []
+        frames = []
+        for line in new_text.splitlines():
+            if ">>> " in line or "<<< " in line:
+                clean = _ANSI.sub("", line).strip()
+                # Extract just the JSON frame part after >>> / <<<
+                for marker in (">>> ", "<<< "):
+                    idx = clean.find(marker)
+                    if idx >= 0:
+                        direction = ">>>" if marker == ">>> " else "<<<"
+                        frames.append(f"  {direction} {clean[idx + len(marker):]}")
+                        break
+        return frames
+
+
+def print_ocpp(frames: list[str], label: str = ""):
+    if not frames:
+        return
+    if label:
+        print(f"       [ocpplib] {label}")
+    for f in frames:
+        print(f"       {f}")
 
 
 # ─────────────────────────────────────────────
@@ -271,7 +331,7 @@ def mea_call(r):
 # ─────────────────────────────────────────────
 # Section 1
 # ─────────────────────────────────────────────
-def run_section1(vsecc: VseccApi, mea: MeaApi):
+def run_section1(vsecc: VseccApi, mea: MeaApi, log: VseccLog = None):
     section("Section 1: การตรวจสอบการตั้งค่าเครื่องชาร์จ")
 
     # ── Wait for vSECC → MEA direct connection ───────────────────────────────
@@ -304,12 +364,25 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
         record("1.2", "StatusNotification (boot, all connectors)",
                "PASS", " | ".join(parts),
                "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
+    elif log:
+        boot_frames = log.ocpp_frames()
+        sn_frames = [f for f in boot_frames if '"StatusNotification"' in f]
+        if sn_frames:
+            record("1.2", "StatusNotification (boot, all connectors)",
+                   "PASS", "StatusNotification at boot verified via ocpplib.log",
+                   "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
+            print_ocpp(sn_frames, "1.2 StatusNotification (boot)")
+        else:
+            record("1.2", "StatusNotification (boot, all connectors)",
+                   "WARN", "Not observed on MQTT or ocpplib.log (vSECC likely connected before test started)",
+                   "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
     else:
         record("1.2", "StatusNotification (boot, all connectors)",
                "WARN", "Not observed on MQTT (timing); verify in CSMS log",
                "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
 
     # ── 1.3 TriggerMessage(BootNotification) ─────────────────────────────────
+    if log: log.mark()
     r = mea.trigger_message("BootNotification", connector_id=0)
     ok, d = mea_call(r)
     is_404_t = r is not None and r.status_code == 404
@@ -327,6 +400,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
     else:
         record("1.3", "TriggerMessage(BootNotification) → Accepted",
                "PASS" if ok else "FAIL", d)
+    if log: print_ocpp(log.ocpp_frames(), "1.3 TriggerMessage(BootNotification)")
 
     # ── 1.4 BootNotification (triggered) ─────────────────────────────────────
     time.sleep(3)
@@ -342,6 +416,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
 
     # ── 1.5 TriggerMessage(StatusNotification) ────────────────────────────────
     mark5 = mqtt_mark()
+    if log: log.mark()
     r = mea.trigger_message("StatusNotification", connector_id=1)
     ok, d = mea_call(r)
     is_404_t = r is not None and r.status_code == 404
@@ -359,6 +434,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
     else:
         record("1.5", "TriggerMessage(StatusNotification) → Accepted",
                "PASS" if ok else "FAIL", d)
+    if log: print_ocpp(log.ocpp_frames(), "1.5 TriggerMessage(StatusNotification)")
 
     # ── 1.6 Triggered StatusNotification fields ───────────────────────────────
     ev5 = mqtt_events_since(mark5, wait_sec=5)
@@ -379,6 +455,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
                "FAIL", "TriggerMessage failed (see 1.5)")
 
     # ── 1.7 TriggerMessage(MeterValues) ──────────────────────────────────────
+    if log: log.mark()
     r = mea.trigger_message("MeterValues", connector_id=1)
     ok, d = mea_call(r)
     is_404_t = r is not None and r.status_code == 404
@@ -397,6 +474,7 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
         record("1.7", "TriggerMessage(MeterValues) → Accepted",
                "PASS" if ok else "FAIL", d,
                "Rejected is normal outside a charging session" if not ok else "")
+    if log: print_ocpp(log.ocpp_frames(), "1.7 TriggerMessage(MeterValues)")
 
     # ── 1.8 MeterValues fields ────────────────────────────────────────────────
     record("1.8", "MeterValues fields & measurands",
@@ -411,20 +489,22 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
         ("1.12", "UnlockConnectorOnEVSideDisconnect", "true"),
         ("1.21", "LocalAuthorizeOffline",             "true"),
     ]:
+        if log: log.mark()
         r = mea.change_configuration(key, value)
         ok, d = mea_call(r)
         cfg_results[label] = (f"ChangeConfiguration {key}={value} → Accepted", ok, d)
+        if log: print_ocpp(log.ocpp_frames(), f"{label} ChangeConfiguration {key}={value}")
         time.sleep(1)
 
     # ── 1.9 GetConfiguration (after keys have been set) ───────────────────────
+    if log: log.mark()
     r = mea.get_configuration()
     ok, d = mea_call(r)
     if ok:
         try:
             body = r.json()
             if not isinstance(body, dict):
-                # MEA sandbox returns "" — command sent async, no inline result
-                ok, d = None, "GetConfiguration sent; response returned asynchronously (no inline configurationKey)"
+                ok, d = None, None  # will check log below
             else:
                 keys    = {k["key"] if isinstance(k, dict) else k
                            for k in body.get("configurationKey", [])}
@@ -434,8 +514,32 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
                 ok      = not missing
         except Exception as e:
             ok, d = False, f"Parse error: {e}"
+    frames9 = []
+    if ok is None and log:
+        time.sleep(4)
+        frames9 = log.ocpp_frames()
+        # vSECC sends CALLRESULT [3, id, {"configurationKey": [...]}] back to CSMS
+        cfg_frame = next((f for f in frames9 if "configurationKey" in f and ">>> " in f), None)
+        if cfg_frame:
+            try:
+                json_str = cfg_frame.split(">>> ", 1)[1]
+                data = json.loads(json_str)
+                cfg_key_list = data[2].get("configurationKey", []) if len(data) > 2 else []
+                keys    = {(k["key"] if isinstance(k, dict) else k) for k in cfg_key_list}
+                missing = REQUIRED_CONFIG_KEYS - keys
+                d  = ("All required keys present (via ocpplib.log)" if not missing
+                      else f"Missing: {', '.join(sorted(missing))}")
+                ok = not missing
+            except Exception:
+                d = "configurationKey found in log but parse failed"
+        else:
+            ok, d = None, "GetConfiguration sent; response not observed in ocpplib.log"
+    elif log:
+        frames9 = log.ocpp_frames()
     status19 = "WARN" if ok is None else ("PASS" if ok else "FAIL")
     record("1.9", "GetConfiguration (required configurationKey)", status19, d)
+    if frames9:
+        print_ocpp(frames9, "1.9 GetConfiguration (from ocpplib.log)")
 
     # ── Record 1.10–1.12 ─────────────────────────────────────────────────────
     for label in ("1.10", "1.11", "1.12"):
@@ -447,52 +551,69 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
     # MEA REST /remote/changeAvailability → HTTP 404.
     # Use vSECC MQTT K.2.25 set_availability to command directly and verify
     # the resulting StatusNotification Unavailable on MQTT.
+    if log: log.mark()
     payload13, _ = mqtt_set_availability(1, "inoperative",
                                          wait_kw="Unavailable", timeout=10)
+    frames13 = log.ocpp_frames() if log else []
+    log_unavail = next((f for f in frames13
+                        if "StatusNotification" in f and "Unavailable" in f), None)
     if payload13:
         record("1.13", "ChangeAvailability(cid=1, Inoperative) → Accepted",
                "PASS",
                "ChangeAvailability confirmed via MQTT set_availability "
                "(MEA /remote/changeAvailability → 404)")
+    elif log_unavail:
+        record("1.13", "ChangeAvailability(cid=1, Inoperative) → Accepted",
+               "PASS", "StatusNotification Unavailable confirmed via ocpplib.log")
     else:
         record("1.13", "ChangeAvailability(cid=1, Inoperative) → Accepted",
                "WARN",
-               "Unavailable not observed on MQTT in 10 s after set_availability",
+               "Unavailable not observed on MQTT or ocpplib.log in 10 s",
                "MEA REST /remote/changeAvailability not exposed (HTTP 404)")
+    if frames13: print_ocpp(frames13, "1.13 ChangeAvailability(Inoperative)")
 
     # ── 1.14 StatusNotification after Inoperative ────────────────────────────
-    if payload13:
+    if payload13 or log_unavail:
         record("1.14", "StatusNotification (Inoperative) fields",
-               "PASS", f"Unavailable confirmed on MQTT (via MQTT set_availability)",
+               "PASS", "Unavailable confirmed via MQTT/ocpplib.log",
                "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
     else:
         record("1.14", "StatusNotification (Inoperative) fields",
                "WARN", "Depends on 1.13 (ChangeAvailability not available via MEA REST API)")
 
     # ── 1.15 ChangeAvailability (Operative) ──────────────────────────────────
+    if log: log.mark()
     payload15, _ = mqtt_set_availability(1, "operative",
                                          wait_kw="Available", timeout=10)
+    frames15 = log.ocpp_frames() if log else []
+    log_avail = next((f for f in frames15
+                      if "StatusNotification" in f and "Available" in f), None)
     if payload15:
         record("1.15", "ChangeAvailability(cid=1, Operative) → Accepted",
                "PASS",
                "ChangeAvailability confirmed via MQTT set_availability "
                "(MEA /remote/changeAvailability → 404)")
+    elif log_avail:
+        record("1.15", "ChangeAvailability(cid=1, Operative) → Accepted",
+               "PASS", "StatusNotification Available confirmed via ocpplib.log")
     else:
         record("1.15", "ChangeAvailability(cid=1, Operative) → Accepted",
                "WARN",
-               "Available not observed on MQTT in 10 s after set_availability",
+               "Available not observed on MQTT or ocpplib.log in 10 s",
                "MEA REST /remote/changeAvailability not exposed (HTTP 404)")
+    if frames15: print_ocpp(frames15, "1.15 ChangeAvailability(Operative)")
 
     # ── 1.16 StatusNotification after Operative ──────────────────────────────
-    if payload15:
+    if payload15 or log_avail:
         record("1.16", "StatusNotification (Operative) fields",
-               "PASS", "Available confirmed on MQTT (via MQTT set_availability)",
+               "PASS", "Available confirmed via MQTT/ocpplib.log",
                "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*")
     else:
         record("1.16", "StatusNotification (Operative) fields",
                "WARN", "Depends on 1.15 (ChangeAvailability not available via MEA REST API)")
 
     # ── 1.17 GetDiagnostics ───────────────────────────────────────────────────
+    if log: log.mark()
     r = mea.get_diagnostics()
     ok, d = mea_call(r)
     if r is not None and r.status_code == 404:
@@ -513,14 +634,25 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
         record("1.17", "GetDiagnostics → fileName",
                "FAIL", d,
                "*ขึ้นกับการพิจารณา (discretionary)")
+    if log: print_ocpp(log.ocpp_frames(), "1.17 GetDiagnostics")
 
     # ── 1.18 DiagnosticsStatusNotification ───────────────────────────────────
+    if log: log.mark()
     time.sleep(6)
-    record("1.18", "DiagnosticsStatusNotification → status",
-           "WARN", "Not observable without proxy log",
-           "*ขึ้นกับการพิจารณา (discretionary)")
+    frames18 = log.ocpp_frames() if log else []
+    diag_status = next((f for f in frames18 if "DiagnosticsStatusNotification" in f), None)
+    if diag_status:
+        record("1.18", "DiagnosticsStatusNotification → status",
+               "PASS", diag_status.strip(),
+               "*ขึ้นกับการพิจารณา (discretionary)")
+        print_ocpp(frames18, "1.18 DiagnosticsStatusNotification")
+    else:
+        record("1.18", "DiagnosticsStatusNotification → status",
+               "WARN", "Not observed in ocpplib.log within 6 s",
+               "*ขึ้นกับการพิจารณา (discretionary)")
 
     # ── 1.19 UpdateFirmware ───────────────────────────────────────────────────
+    if log: log.mark()
     r = mea.update_firmware()
     ok, d = mea_call(r)
     if r is not None and r.status_code == 404:
@@ -531,24 +663,38 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
         record("1.19", "UpdateFirmware",
                "PASS" if ok else "FAIL", d,
                "*ขึ้นกับการพิจารณา (discretionary)")
+    if log: print_ocpp(log.ocpp_frames(), "1.19 UpdateFirmware")
 
     # ── 1.20 FirmwareStatusNotification ──────────────────────────────────────
-    record("1.20", "FirmwareStatusNotification → status",
-           "WARN", "Not observable without proxy log",
-           "*ขึ้นกับการพิจารณา (discretionary)")
+    if log: log.mark()
+    time.sleep(6)
+    frames20 = log.ocpp_frames() if log else []
+    fw_status = next((f for f in frames20 if "FirmwareStatusNotification" in f), None)
+    if fw_status:
+        record("1.20", "FirmwareStatusNotification → status",
+               "PASS", fw_status.strip(),
+               "*ขึ้นกับการพิจารณา (discretionary)")
+        print_ocpp(frames20, "1.20 FirmwareStatusNotification")
+    else:
+        record("1.20", "FirmwareStatusNotification → status",
+               "WARN", "Not observed in ocpplib.log within 6 s",
+               "*ขึ้นกับการพิจารณา (discretionary)")
 
     # ── 1.21 ChangeConfiguration LocalAuthorizeOffline (set earlier, record here)
     msg, ok, d = cfg_results["1.21"]
     record("1.21", msg, "PASS" if ok else "FAIL", d)
 
     # ── 1.22 SendLocalList ────────────────────────────────────────────────────
+    if log: log.mark()
     r = mea.send_local_list()
     ok, d = mea_call(r)
     record("1.22", "SendLocalList (Full, 1 entry) → Accepted",
            "PASS" if ok else "FAIL", d)
+    if log: print_ocpp(log.ocpp_frames(), "1.22 SendLocalList")
     time.sleep(1)
 
     # ── 1.23 GetLocalListVersion ──────────────────────────────────────────────
+    if log: log.mark()
     r = mea.get_local_list_version()
     ok, d = mea_call(r)
     if ok:
@@ -560,12 +706,15 @@ def run_section1(vsecc: VseccApi, mea: MeaApi):
             pass
     record("1.23", "GetLocalListVersion → listVersion",
            "PASS" if ok else "FAIL", d)
+    if log: print_ocpp(log.ocpp_frames(), "1.23 GetLocalListVersion")
 
     # ── 1.24 ClearCache ──────────────────────────────────────────────────────
+    if log: log.mark()
     r = mea.clear_cache()
     ok, d = mea_call(r)
     record("1.24", "ClearCache → status Accepted",
            "PASS" if ok else "FAIL", d)
+    if log: print_ocpp(log.ocpp_frames(), "1.24 ClearCache")
 
 
 # ─────────────────────────────────────────────
@@ -618,9 +767,13 @@ def main():
         sys.exit(1)
     print("  vSECC authenticated")
 
+    print("  Initialising ocpplib.log position...")
+    vslog = VseccLog(vsecc.token)
+    print(f"  ocpplib.log baseline: {vslog._pos:,} bytes")
+
     start_mqtt_watcher()
     try:
-        run_section1(vsecc, mea)
+        run_section1(vsecc, mea, log=vslog)
     finally:
         stop_mqtt_watcher()
 

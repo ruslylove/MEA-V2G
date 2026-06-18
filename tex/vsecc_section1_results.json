@@ -2,7 +2,7 @@
   "section": 1,
   "title": "การตรวจสอบการตั้งค่าเครื่องชาร์จ",
   "cp_id": "rddQC4000001",
-  "timestamp": "2026-06-11T05:14:31.116779Z",
+  "timestamp": "2026-06-18T02:52:32.495097Z",
   "method": "direct-to-csms",
   "results": [
     {
@@ -17,7 +17,7 @@
       "item": "1.2",
       "message": "StatusNotification (boot, all connectors)",
       "status": "WARN",
-      "detail": "Not observed on MQTT (timing); verify in CSMS log",
+      "detail": "Not observed on MQTT or ocpplib.log (vSECC likely connected before test started)",
       "remark": "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*",
       "raw": ""
     },
@@ -73,7 +73,7 @@
       "item": "1.9",
       "message": "GetConfiguration (required configurationKey)",
       "status": "WARN",
-      "detail": "GetConfiguration sent; response returned asynchronously (no inline configurationKey)",
+      "detail": "GetConfiguration sent; response not observed in ocpplib.log",
       "remark": "",
       "raw": ""
     },
@@ -104,33 +104,33 @@
     {
       "item": "1.13",
       "message": "ChangeAvailability(cid=1, Inoperative) → Accepted",
-      "status": "WARN",
-      "detail": "Unavailable not observed on MQTT in 10 s after set_availability",
-      "remark": "MEA REST /remote/changeAvailability not exposed (HTTP 404)",
+      "status": "PASS",
+      "detail": "StatusNotification Unavailable confirmed via ocpplib.log",
+      "remark": "",
       "raw": ""
     },
     {
       "item": "1.14",
       "message": "StatusNotification (Inoperative) fields",
-      "status": "WARN",
-      "detail": "Depends on 1.13 (ChangeAvailability not available via MEA REST API)",
-      "remark": "",
+      "status": "PASS",
+      "detail": "Unavailable confirmed via MQTT/ocpplib.log",
+      "remark": "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*",
       "raw": ""
     },
     {
       "item": "1.15",
       "message": "ChangeAvailability(cid=1, Operative) → Accepted",
-      "status": "WARN",
-      "detail": "Available not observed on MQTT in 10 s after set_availability",
-      "remark": "MEA REST /remote/changeAvailability not exposed (HTTP 404)",
+      "status": "PASS",
+      "detail": "StatusNotification Available confirmed via ocpplib.log",
+      "remark": "",
       "raw": ""
     },
     {
       "item": "1.16",
       "message": "StatusNotification (Operative) fields",
-      "status": "WARN",
-      "detail": "Depends on 1.15 (ChangeAvailability not available via MEA REST API)",
-      "remark": "",
+      "status": "PASS",
+      "detail": "Available confirmed via MQTT/ocpplib.log",
+      "remark": "vendorId/vendorErrorCode absent (optional per OCPP 1.6 §4.7)*",
       "raw": ""
     },
     {
@@ -145,7 +145,7 @@
       "item": "1.18",
       "message": "DiagnosticsStatusNotification → status",
       "status": "WARN",
-      "detail": "Not observable without proxy log",
+      "detail": "Not observed in ocpplib.log within 6 s",
       "remark": "*ขึ้นกับการพิจารณา (discretionary)",
       "raw": ""
     },
@@ -161,7 +161,7 @@
       "item": "1.20",
       "message": "FirmwareStatusNotification → status",
       "status": "WARN",
-      "detail": "Not observable without proxy log",
+      "detail": "Not observed in ocpplib.log within 6 s",
       "remark": "*ขึ้นกับการพิจารณา (discretionary)",
       "raw": ""
     },
