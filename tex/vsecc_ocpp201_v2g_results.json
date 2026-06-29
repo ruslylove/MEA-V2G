@@ -1,0 +1,38 @@
+{
+  "test": "ocpp201_v2g",
+  "timestamp": "2026-06-29T07:54:03.606493Z",
+  "local_csms": "ws://192.168.1.200:9201",
+  "cp_id": "rddQC4000001",
+  "results": [
+    {
+      "item": "connect",
+      "message": "vSECC WebSocket connection (OCPP 2.0.1)",
+      "status": "PASS",
+      "detail": "Connected from ws://192.168.1.200:9201"
+    },
+    {
+      "item": "boot",
+      "message": "vSECC sent BootNotification (OCPP 2.0.1)",
+      "status": "PASS",
+      "detail": ""
+    },
+    {
+      "item": "scp_neg",
+      "message": "SetChargingProfile limit=-5000 W (V2G discharge)",
+      "status": "WARN",
+      "detail": "vSECC responded: Rejected (not Accepted)"
+    },
+    {
+      "item": "scp_pos",
+      "message": "SetChargingProfile limit=+3700 W (normal charge)",
+      "status": "WARN",
+      "detail": "vSECC responded: Rejected"
+    },
+    {
+      "item": "scp_zero",
+      "message": "SetChargingProfile limit=0 W (idle/stop)",
+      "status": "WARN",
+      "detail": "vSECC responded: Rejected"
+    }
+  ]
+}
